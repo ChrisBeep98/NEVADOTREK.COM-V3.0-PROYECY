@@ -1,138 +1,175 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Compass, Shield, Mountain, Map, Coffee, Users } from 'lucide-react';
+import { Leaf, Users, ShieldCheck, Map, ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function FeaturesGrid() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [activeId, setActiveId] = useState<number | null>(0);
 
-    const services = [
+    const features = [
         {
-            id: "01",
-            title: "LOCAL ORIGIN",
-            desc: "Guides born and raised in Salento. We don't just know the trails; we belong to them.",
-            icon: <Coffee className="w-5 h-5" />
+            id: 0,
+            title: "LOCAL ROOTS",
+            subtitle: "Guides from Salento",
+            desc: "Born in the coffee region. We don't use GPS; we use generations of memory.",
+            icon: <Users />,
+            img: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=1000&auto=format&fit=crop",
+            color: "bg-emerald-900"
         },
         {
-            id: "02",
-            title: "PRIVATE ACCESS",
-            desc: "Exclusive permits to private Cocora estates. We find the silence where others find crowds.",
-            icon: <Map className="w-5 h-5" />
+            id: 1,
+            title: "SECRET COCORA",
+            subtitle: "Private Access",
+            desc: "Unlock gates that are closed to others. See the wax palms in total solitude.",
+            icon: <Map />,
+            img: "https://images.unsplash.com/photo-1589407633195-6548a804473e?q=80&w=1000&auto=format&fit=crop",
+            color: "bg-cyan-900"
         },
         {
-            id: "03",
+            id: 2,
+            title: "ZERO TRACE",
+            subtitle: "Sustainable Trek",
+            desc: "We guard the Paramo. Our expeditions leave nothing but footprints behind.",
+            icon: <Leaf />,
+            img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop",
+            color: "bg-slate-900"
+        },
+        {
+            id: 3,
             title: "ELITE SAFETY",
-            desc: "Satellite tracking and professional alpine gear. Your safety is our technical obsession.",
-            icon: <Shield className="w-5 h-5" />
-        },
-        {
-            id: "04",
-            title: "EXPERT GUIDANCE",
-            desc: "Technical excellence for the Nevado del Tolima glacier. We lead the way home.",
-            icon: <Mountain className="w-5 h-5" />
+            subtitle: "Certified Protocol",
+            desc: "Satellite tech & alpine rescue gear. Your life is our absolute priority.",
+            icon: <ShieldCheck />,
+            img: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=1000&auto=format&fit=crop",
+            color: "bg-indigo-900"
         }
     ];
 
     useGSAP(() => {
-        const items = containerRef.current?.querySelectorAll('.feature-item');
-        
-        if (items) {
-            gsap.fromTo(items, 
-                { opacity: 0, y: 20 },
-                { 
-                    opacity: 1, y: 0, 
-                    stagger: 0.1,
-                    duration: 1,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top 80%",
-                    }
+        // Animación de entrada simple y ligera
+        gsap.fromTo(containerRef.current, 
+            { opacity: 0, y: 30 },
+            { 
+                opacity: 1, y: 0, 
+                duration: 0.8,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top 80%",
                 }
-            );
-        }
+            }
+        );
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="bg-slate-50 py-24 md:py-40 px-6 border-t border-slate-200">
-            <div className="max-w-7xl mx-auto">
-                
-                {/* Header Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 md:mb-32 items-end">
-                    <div className="flex flex-col gap-4">
-                        <span className="text-cyan-600 font-mono text-[10px] tracking-[0.5em] uppercase block">Nevado Trek Essentials</span>
-                        <h2 className="text-5xl md:text-8xl font-bold text-slate-950 tracking-tighter leading-none">
-                            THE <br/>ADVANTAGE.
-                        </h2>
-                    </div>
-                    
-                    {/* Minimalist Visual Element (Adapted for Light Mode) */}
-                    <div className="flex justify-end items-center md:ml-auto w-full md:w-auto">
-                        <div className="group relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center cursor-crosshair transition-transform duration-700 hover:scale-105">
-                            <div className="absolute inset-0 border border-slate-900/[0.05] rounded-full transition-colors duration-700 group-hover:border-slate-900/10"></div>
-                            <svg width="60%" height="60%" viewBox="0 0 100 100" className="relative z-10 overflow-visible">
-                                <path d="M0,80 L35,80 L50,20 L65,80 L100,80" fill="none" stroke="rgba(15,23,42,0.1)" strokeWidth="0.5" />
-                                <path d="M35,80 L50,20 L65,80" fill="none" stroke="#0891b2" strokeWidth="1.5" strokeLinecap="round" className="opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
-                                <circle cx="50" cy="20" r="1.5" fill="#0891b2" />
-                                <g className="animate-[spin_8s_linear_infinite] origin-[50px_50px] group-hover:animate-[spin_3s_linear_infinite] transition-all">
-                                    <circle cx="50" cy="0" r="1" fill="#0f172a" className="opacity-10 group-hover:opacity-30" />
-                                </g>
-                            </svg>
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-2 bg-slate-900/10 group-hover:bg-cyan-600 group-hover:h-4 transition-all duration-700"></div>
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1px] h-2 bg-slate-900/10 group-hover:bg-cyan-600 group-hover:h-4 transition-all duration-700"></div>
-                            <div className="absolute left-0 top-1/2 -translate-y-1/2 h-[1px] w-2 bg-slate-900/10 group-hover:bg-cyan-600 group-hover:w-4 transition-all duration-700"></div>
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[1px] w-2 bg-slate-900/10 group-hover:bg-cyan-600 group-hover:w-4 transition-all duration-700"></div>
-                        </div>
-                    </div>
+        <section ref={containerRef} className="bg-white py-20 md:py-32 px-4 md:px-12 border-t border-slate-100">
+            
+            <div className="max-w-[1400px] mx-auto mb-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
+                <div>
+                    <span className="text-cyan-600 font-mono text-[10px] tracking-[0.4em] uppercase block mb-4">Why Choose Nevado</span>
+                    <h2 className="text-4xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                        THE NEVADO <br/> DIFFERENCE.
+                    </h2>
                 </div>
+                <p className="text-slate-500 max-w-md text-sm md:text-base font-light italic hidden md:block">
+                    "More than a tour agency, we are the guardians of the Salento heritage and the high Andean peaks."
+                </p>
+            </div>
 
-                {/* Features List */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-16 md:gap-y-32">
-                    {services.map((service, i) => (
-                        <div key={i} className="feature-item group flex flex-col gap-6">
-                            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-cyan-600">
-                                        {service.icon}
-                                    </div>
-                                    <span className="text-[10px] font-mono tracking-widest text-slate-400">
-                                        PROTOCOL // {service.id}
-                                    </span>
-                                </div>
-                                <span className="text-xs font-bold text-slate-300 group-hover:text-cyan-600 transition-colors">
-                                    0{i + 1}
+            {/* 
+               OPTIMIZACIÓN CLAVE:
+               1. 'will-change-[flex-grow]': Prepara al navegador para la animación de tamaño.
+               2. 'transform-gpu': Fuerza el renderizado en la GPU.
+               3. Imágenes optimizadas con 'loading="lazy"'.
+            */}
+            <div className="w-full h-[800px] md:h-[700px] flex flex-col md:flex-row gap-2 md:gap-4 overflow-hidden rounded-3xl transform-gpu">
+                {features.map((f) => (
+                    <div 
+                        key={f.id}
+                        onClick={() => setActiveId(f.id)} // Tap instantáneo en móvil
+                        onMouseEnter={() => setActiveId(f.id)} // Hover en desktop
+                        className={`
+                            panel-item relative overflow-hidden rounded-2xl cursor-pointer group 
+                            transition-[flex-grow] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] will-change-[flex-grow]
+                            ${activeId === f.id ? 'flex-[8] md:flex-[10]' : 'flex-[1] grayscale hover:grayscale-0'}
+                        `}
+                    >
+                        {/* Background Image - Static to reduce repaint */}
+                        <div className="absolute inset-0 z-0">
+                            <img 
+                                src={f.img} 
+                                alt={f.title} 
+                                className="w-full h-full object-cover transition-transform duration-[1.5s] scale-100 group-hover:scale-105" 
+                                loading="lazy"
+                                decoding="async"
+                            />
+                            {/* Static overlay - Removed dynamic blend modes for performance */}
+                            <div className={`absolute inset-0 bg-black/40 transition-opacity duration-500 ${activeId === f.id ? 'opacity-20' : 'opacity-60'}`}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent"></div>
+                        </div>
+
+                        {/* Content Container */}
+                        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10 pointer-events-none">
+                            
+                            {/* Inactive Labels */}
+                            <div className={`transition-opacity duration-300 absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2 
+                                ${activeId === f.id ? 'opacity-0' : 'opacity-100 delay-200'}
+                                left-6 bottom-6 md:auto
+                            `}>
+                                {/* Mobile: Horizontal Title */}
+                                <span className="md:hidden text-white/90 font-bold tracking-widest text-sm uppercase block drop-shadow-md">
+                                    {f.title}
+                                </span>
+                                {/* Desktop: Vertical Title */}
+                                <span className="hidden md:block text-white font-bold tracking-widest text-xl whitespace-nowrap rotate-180 [writing-mode:vertical-rl]">
+                                    {f.title}
                                 </span>
                             </div>
 
-                            <div>
-                                <h3 className="text-2xl md:text-4xl font-bold text-slate-950 mb-4 tracking-tight">
-                                    {service.title}
+                            {/* Active Content */}
+                            <div className={`transition-all duration-500 transform
+                                ${activeId === f.id ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 translate-y-4'}
+                            `}>
+                                <div className="flex items-center gap-3 mb-3 text-cyan-400">
+                                    <div className="p-2 md:p-3 bg-white/10 rounded-lg md:rounded-xl border border-white/20">
+                                        {React.cloneElement(f.icon as React.ReactElement, { className: "w-5 h-5 md:w-6 md:h-6" })}
+                                    </div>
+                                    <span className="font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase drop-shadow-sm">{f.subtitle}</span>
+                                </div>
+                                
+                                <h3 className="text-3xl md:text-6xl font-black text-white tracking-tight mb-4 leading-none drop-shadow-lg">
+                                    {f.title}
                                 </h3>
-                                <p className="text-slate-600 text-base md:text-lg font-light leading-relaxed max-w-md">
-                                    {service.desc}
-                                </p>
+                                
+                                <div className={`overflow-hidden transition-all duration-500
+                                     ${activeId === f.id ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}
+                                `}>
+                                    <p className="text-slate-200 text-sm md:text-xl font-light leading-relaxed max-w-xl italic mb-4 md:mb-6 drop-shadow-md">
+                                        "{f.desc}"
+                                    </p>
+                                    
+                                    <div className="flex items-center gap-2 text-white/50 text-[10px] md:text-xs font-mono tracking-widest uppercase">
+                                        <span>Discover</span>
+                                        <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-                    ))}
-                </div>
-
-                {/* Bottom Detail */}
-                <div className="mt-32 pt-16 border-t border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 opacity-60">
-                    <div className="flex items-center gap-4">
-                        <Users className="w-4 h-4 text-slate-950" />
-                        <span className="text-[10px] font-mono tracking-[0.3em] text-slate-950">100% LOCAL OPERATION</span>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-mono tracking-[0.3em] text-slate-950 uppercase">Est. 1998 // Quindío, Colombia</span>
-                    </div>
-                </div>
-
+                ))}
             </div>
+
+            <div className="mt-6 md:hidden text-center opacity-40">
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase">Tap to expand details</span>
+            </div>
+
         </section>
     );
 }
