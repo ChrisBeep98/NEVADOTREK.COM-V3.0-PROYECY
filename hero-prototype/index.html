@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALPINIST | Beyond the Summit</title>
+    <title>NEVADO TREK | Beyond the Summit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     
@@ -40,7 +40,7 @@
     <nav class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-8 mix-blend-difference text-white">
         <div class="flex items-center gap-2">
             <iconify-icon icon="lucide:mountain-snow" width="24" stroke-width="1.5"></iconify-icon>
-            <span class="font-bold tracking-tighter text-xl">ALPINIST</span>
+            <span class="font-bold tracking-tighter text-xl">NEVADO TREK</span>
         </div>
         
         <div class="hidden md:flex items-center gap-12 text-sm font-medium tracking-wide">
@@ -66,15 +66,15 @@
         <!-- 2. The Atmosphere (Deeper Mystery) -->
         <div id="atmosphere-layer" class="absolute inset-0 z-10 bg-slate-950/95 transition-opacity duration-700"></div>
 
-        <!-- 2.5 Cinematic Lens Flare (Full Spectral Ring) -->
-        <div id="cinematic-flare" class="absolute top-0 left-0 z-15 w-[450px] h-[450px] rounded-full pointer-events-none mix-blend-screen opacity-0"
+        <!-- 2.5 Cinematic Lens Flare (Full Spectral Ring - Majestic) -->
+        <div id="cinematic-flare" class="absolute top-0 left-0 z-15 w-[600px] h-[600px] rounded-full pointer-events-none mix-blend-screen opacity-0"
              style="box-shadow: 
-                inset 0 0 50px 10px rgba(40, 60, 255, 0.7), 
-                inset 0 0 30px 5px rgba(255, 50, 150, 0.3),
-                0 0 60px 20px rgba(255, 80, 50, 0.2),
-                0 0 40px 10px rgba(255, 200, 50, 0.15); 
+                inset 0 0 80px 20px rgba(40, 80, 255, 0.6), 
+                inset 0 0 50px 10px rgba(255, 50, 200, 0.4),
+                0 0 80px 30px rgba(255, 50, 0, 0.3),
+                0 0 60px 20px rgba(255, 220, 0, 0.2); 
                 transform: translate(-50%, -50%); 
-                filter: blur(30px);">
+                filter: blur(45px);">
         </div>
 
         <!-- 3. Cinematic Grain -->
@@ -141,8 +141,8 @@
             const circleX = gsap.quickTo(circle, "x", {duration: 1, ease: "power3.out"});
             const circleY = gsap.quickTo(circle, "y", {duration: 1, ease: "power3.out"});
             
-            const flareX = gsap.quickTo(flare, "x", {duration: 0.6, ease: "power2.out"}); // Slightly faster than circle
-            const flareY = gsap.quickTo(flare, "y", {duration: 0.6, ease: "power2.out"});
+            const flareX = gsap.quickTo(flare, "x", {duration: 1.2, ease: "power2.out"}); // Increased duration for cinematic inertia
+            const flareY = gsap.quickTo(flare, "y", {duration: 1.2, ease: "power2.out"});
 
             // Fade in flare on load
             gsap.to(flare, {opacity: 1, duration: 1.5, delay: 0.5});
@@ -423,7 +423,7 @@
                 <div class="col-span-2 md:col-span-1">
                     <span class="text-white font-medium tracking-tighter text-lg flex items-center gap-1 mb-6">
                         <iconify-icon icon="lucide:mountain-snow" width="18"></iconify-icon>
-                        ALPINIST
+                        NEVADO TREK
                     </span>
                     <p class="text-slate-500 text-xs leading-relaxed max-w-[200px]">
                         Diseñado para aquellos que encuentran paz en la altitud y propósito en el esfuerzo.
@@ -461,7 +461,7 @@
             </div>
 
             <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-[10px] text-slate-600">
-                <p>© 2024 Alpinist Expeditions. All rights reserved.</p>
+                <p>© 2024 Nevado Trek Expeditions. All rights reserved.</p>
                 <div class="flex gap-6 mt-4 md:mt-0">
                     <a href="#" class="hover:text-slate-400">Privacy Policy</a>
                     <a href="#" class="hover:text-slate-400">Terms of Service</a>
