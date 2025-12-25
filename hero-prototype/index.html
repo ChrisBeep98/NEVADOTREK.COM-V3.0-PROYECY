@@ -308,46 +308,52 @@
                 }
             });
 
-            // --- 2. SCROLL REVEAL (The "Tunnel" Effect) ---
+            // --- 2. SCROLL REVEAL (The Monolith Expansion) ---
             const heroTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: "#hero-section",
                     start: "top top",
-                    end: scrollDistance, 
-                    pin: true,
-                    scrub: 1,
+                    end: "+=100%", // Scroll distance to complete animation
+                    pin: true,     // Pin the hero section while animating
+                    scrub: 1,      // Smooth scrubbing linked to scroll
                 }
             });
 
-            // A. The Circle enters the camera
-            heroTl.to(circle, {
-                scale: 4, 
-                opacity: 0, 
-                filter: "blur(20px)",
+            // A. Expand the Monolith to Full Screen
+            heroTl.to("#monolith", {
+                width: "100vw",
+                height: "100vh",
+                borderRadius: "0px",
                 ease: "power2.inOut",
-                duration: 0.6 
+                duration: 1
             }, 0);
 
-            // B. UI Elements clean up (Elevate as they fade)
-            heroTl.to(["#hero-subtitle", "#scroll-indicator", "#cinematic-flare", "#mouse-compass", "#hero-background-text"], {
+            // B. Hide Decoration Elements (Text, Compass, Tickers)
+            heroTl.to(["#text-front", "#mouse-compass", ".absolute.bottom-12", "#monolith-status", "#monolith-data", ".absolute.bottom-8", ".absolute.bottom-10"], {
                 opacity: 0,
-                y: -100, // Move UP
-                scale: 1.05,
-                duration: 0.4,
-                ease: "power2.in"
+                scale: 1.1,
+                ease: "power2.out",
+                duration: 0.5
             }, 0);
 
-            // C. Atmosphere Lifts
-            heroTl.to("#atmosphere-layer", {
+            // C. Fade out the blurred background layer (reveal pure black behind or just hide it)
+            heroTl.to("#hero-video", { // The blurred background video
                 opacity: 0,
-                ease: "power1.inOut",
-                duration: 0.8
-            }, 0.1);
+                duration: 0.5
+            }, 0);
 
-            // D. Video Zoom (Clearer)
-            heroTl.to("#hero-video", {
-                scale: 1.15, 
-                ease: "power1.out",
+            // D. Ensure Monolith Video scales nicely
+            heroTl.to("#monolith-video", {
+                scale: 1, // Reset scale from 1.5 to 1 (fit screen)
+                ease: "power2.inOut",
+                duration: 1
+            }, 0);
+            
+            // E. Reset 3D Tilt (Flatten it so it looks like a normal screen)
+            heroTl.to("#monolith-wrapper", {
+                rotationX: 0,
+                rotationY: 0,
+                ease: "power2.inOut",
                 duration: 1
             }, 0);
 
