@@ -1,0 +1,231 @@
+"use client";
+
+import React, { useRef, useState, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import { MountainSnow, ArrowUpRight, Calendar, MapPin, Users, Thermometer, Activity, HeartPulse, ShieldCheck, Tent, Instagram, Twitter, Youtube, Check } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+export default function HeroMonolith() {
+    // Refs for animation targets
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const monolithRef = useRef<HTMLDivElement>(null);
+    const textFrontRef = useRef<HTMLHeadingElement>(null);
+    const compassRef = useRef<HTMLDivElement>(null);
+    const gaugeDotRef = useRef<HTMLDivElement>(null);
+    const pitchValRef = useRef<HTMLSpanElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const heroSectionRef = useRef<HTMLElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null); // Main scope for GSAP
+
+    // Data Ticker State
+    const [statusData, setStatusData] = useState("ALT: 4500M");
+    
+    useEffect(() => {
+        const statusMessages = ["ALT: 4500M", "TEMP: -15C", "WIND: 40KT", "O2: 88%"];
+        let statusIdx = 0;
+        const interval = setInterval(() => {
+            statusIdx = (statusIdx + 1) % statusMessages.length;
+            setStatusData(statusMessages[statusIdx]);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useGSAP(() => {
+        const wrapper = wrapperRef.current;
+        const monolith = monolithRef.current;
+        const textFront = textFrontRef.current;
+        const compass = compassRef.current;
+        const gaugeDot = gaugeDotRef.current;
+        const pitchVal = pitchValRef.current;
+        const video = videoRef.current;
+
+        if (!wrapper || !monolith || !textFront || !compass) return;
+
+        // --- 1. MOUSE INTERACTION SETUP ---
+        const rotateX = gsap.quickTo(wrapper, "rotationX", {duration: 0.8, ease: "power2.out"});
+        const rotateY = gsap.quickTo(wrapper, "rotationY", {duration: 0.8, ease: "power2.out"});
+        const frontX = gsap.quickTo(textFront, "x", {duration: 1, ease: "power2.out"});
+        const compX = gsap.quickTo(compass, "x", {duration: 0.2, ease: "power2.out"});
+        const compY = gsap.quickTo(compass, "y", {duration: 0.2, ease: "power2.out"});
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const { clientX, clientY } = e;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            // Move Compass
+            compX(clientX + 20);
+            compY(clientY + 20);
+            gsap.to(compass, {opacity: 1});
+
+            // Tilt Calculation
+            const xNorm = (clientX / width - 0.5) * 2;
+            const yNorm = (clientY / height - 0.5) * 2;
+
+            // Apply Tilt
+            rotateY(xNorm * 15);
+            rotateX(-yNorm * 15);
+
+            // Parallax Text
+            frontX(xNorm * -80);
+
+            // Update Compass Gauge
+            if (pitchVal && gaugeDot) {
+                const pitch = Math.round(yNorm * 15);
+                pitchVal.innerText = `${pitch}°`;
+                gsap.to(gaugeDot, {
+                    x: xNorm * 10,
+                    y: yNorm * 10,
+                    duration: 0.1
+                });
+            }
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+
+        // --- 2. SCROLL ANIMATION (THE TUNNEL) ---
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: heroSectionRef.current,
+                start: "top top",
+                end: "+=100%",
+                pin: true,
+                scrub: 1,
+            }
+        });
+
+        // Expand Monolith
+        tl.to(monolith, {
+            width: "100vw",
+            height: "100vh",
+            borderRadius: "0px",
+            ease: "power2.inOut",
+            duration: 1
+        }, 0);
+
+        // Hide UI Elements
+        tl.to([textFront, compass, ".monolith-ui"], {
+            opacity: 0,
+            scale: 1.1,
+            ease: "power2.out",
+            duration: 0.5
+        }, 0);
+
+        // Hide Background Video (if visible, currently it's behind)
+        // Adjust Monolith Video Scale
+        tl.to(video, {
+            scale: 1,
+            ease: "power2.inOut",
+            duration: 1
+        }, 0);
+
+        // Reset Tilt
+        tl.to(wrapper, {
+            rotationX: 0,
+            rotationY: 0,
+            ease: "power2.inOut",
+            duration: 1
+        }, 0);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+
+    }, { scope: containerRef }); // Scope ensures GSAP only targets elements inside this component
+
+    return (
+        <div ref={containerRef} className="relative bg-slate-950 text-slate-300 antialiased overflow-x-hidden">
+             
+             {/* Navigation (Simplified for Demo) */}
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-8 mix-blend-difference text-white">
+                <div className="flex items-center gap-2">
+                    <MountainSnow width={24} strokeWidth={1.5} />
+                    <span className="font-bold tracking-tighter text-xl">NEVADO TREK</span>
+                </div>
+                <div className="hidden md:flex items-center gap-12 text-sm font-medium tracking-wide">
+                    <a href="#" className="hover:text-cyan-400 transition-colors">EXPEDICIONES</a>
+                    <a href="#" className="hover:text-cyan-400 transition-colors">FILOSOFÍA</a>
+                    <button className="border border-white/20 px-6 py-2 rounded-full hover:bg-white hover:text-slate-950 transition-all">
+                        UNIRSE
+                    </button>
+                </div>
+            </nav>
+
+            {/* HERO SECTION */}
+            <header ref={heroSectionRef} id="hero-section" className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-slate-950">
+                
+                {/* Background Video (Blurred) */}
+                <div className="absolute inset-0 z-0 select-none pointer-events-none">
+                     <video autoPlay muted loop playsInline className="w-full h-full object-cover scale-[1.1] blur-xl opacity-40">
+                        <source src="https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4" type="video/mp4" />
+                    </video>
+                </div>
+
+                {/* Mouse Tracking Compass */}
+                <div ref={compassRef} id="mouse-compass" className="fixed top-0 left-0 z-50 pointer-events-none opacity-0 hidden md:block mix-blend-difference">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-[1px] bg-white/50"></div>
+                        <div className="relative w-10 h-10 border border-white/50 rounded-full flex items-center justify-center">
+                            <div ref={gaugeDotRef} className="w-1 h-1 bg-white rounded-full"></div>
+                        </div>
+                        <div className="flex flex-col text-[8px] font-mono text-white leading-tight">
+                            <span className="opacity-50">PITCH</span>
+                            <span ref={pitchValRef}>0°</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 3D SCENE */}
+                <div className="relative z-20 w-full h-full flex items-center justify-center perspective-container" style={{perspective: '1200px'}}>
+                    
+                    <div ref={wrapperRef} id="monolith-wrapper" className="relative flex items-center justify-center transform-style-3d will-change-transform" style={{transformStyle: 'preserve-3d'}}>
+                        
+                        {/* MONOLITH */}
+                        <div ref={monolithRef} id="monolith" className="relative w-[30vw] h-[60vh] md:w-[28vw] md:h-[65vh] bg-slate-900 rounded-sm overflow-hidden shadow-2xl z-10"
+                             style={{transform: 'translateZ(0px)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)'}}>
+                            
+                            <div className="absolute inset-0">
+                                <video ref={videoRef} autoPlay muted loop playsInline className="w-full h-full object-cover scale-150">
+                                    <source src="https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4" type="video/mp4" />
+                                </video>
+                            </div>
+
+                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-50 mix-blend-overlay"></div>
+
+                            {/* UI Elements inside Monolith (Class for easy hiding) */}
+                            <div className="monolith-ui absolute top-6 right-6 flex flex-col items-end">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+                                    <span className="text-[9px] font-mono text-white tracking-widest uppercase">LIVE FEED</span>
+                                </div>
+                                <span className="text-[9px] font-mono text-white/60 tracking-wider mt-1">{statusData}</span>
+                            </div>
+
+                            <div className="monolith-ui absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
+                            <div className="monolith-ui absolute bottom-8 left-8 h-8 w-[1px] bg-white/20"></div>
+                            <span className="monolith-ui absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest">EXP. 2025</span>
+                        </div>
+
+                        {/* TREK TEXT */}
+                        <h1 ref={textFrontRef} id="text-front" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-black tracking-tighter text-white leading-none select-none pointer-events-none mix-blend-overlay z-20"
+                            style={{transform: 'translateZ(100px)'}}>
+                            TREK
+                        </h1>
+
+                    </div>
+                </div>
+
+                {/* Scroll Indicator */}
+                 <div className="monolith-ui absolute bottom-12 left-12 flex items-center gap-4 opacity-60 mix-blend-difference z-30 hidden md:flex">
+                    <div className="w-[1px] h-12 bg-white/50 origin-bottom animate-[scale-y_2s_ease-in-out_infinite]"></div>
+                    <span className="text-[9px] tracking-[0.3em] font-mono text-white -rotate-90 origin-left translate-y-3">SCROLL TO EXPLORE</span>
+                </div>
+
+            </header>
+        </div>
+    );
+}
