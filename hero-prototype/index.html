@@ -63,8 +63,19 @@
             </video>
         </div>
 
-        <!-- 2. The Atmosphere (Darkness + Flashlight Mask) -->
-        <div id="atmosphere-layer" class="absolute inset-0 z-10 bg-slate-950/90 transition-opacity duration-700"></div>
+        <!-- 2. The Atmosphere (Deeper Mystery) -->
+        <div id="atmosphere-layer" class="absolute inset-0 z-10 bg-slate-950/95 transition-opacity duration-700"></div>
+
+        <!-- 2.5 Cinematic Lens Flare (Full Spectral Ring) -->
+        <div id="cinematic-flare" class="absolute top-0 left-0 z-15 w-[450px] h-[450px] rounded-full pointer-events-none mix-blend-screen opacity-0"
+             style="box-shadow: 
+                inset 0 0 50px 10px rgba(40, 60, 255, 0.7), 
+                inset 0 0 30px 5px rgba(255, 50, 150, 0.3),
+                0 0 60px 20px rgba(255, 80, 50, 0.2),
+                0 0 40px 10px rgba(255, 200, 50, 0.15); 
+                transform: translate(-50%, -50%); 
+                filter: blur(30px);">
+        </div>
 
         <!-- 3. Cinematic Grain -->
         <div class="absolute inset-0 z-10 opacity-[0.07] pointer-events-none mix-blend-overlay" 
@@ -107,9 +118,9 @@
     </header>
 
     <style>
+        /* Atmosphere is now solid dark by default, no hole */
         #atmosphere-layer {
-            mask-image: radial-gradient(circle 300px at 50% 50%, transparent 0%, black 100%);
-            -webkit-mask-image: radial-gradient(circle 300px at 50% 50%, transparent 0%, black 100%);
+            /* mask-image removed to prevent static hole */
         }
     </style>
 
@@ -121,43 +132,46 @@
             // Balanced scroll distance for a punchy reveal
             const scrollDistance = "+=120%"; 
 
-            // --- 1. MAGNETIC CIRCLE (Mouse Follow) ---
+            // --- 1. SETUP ELEMENTS ---
             const circle = document.getElementById('magnetic-circle');
-            const xTo = gsap.quickTo(circle, "x", {duration: 1, ease: "power3.out"});
-            const yTo = gsap.quickTo(circle, "y", {duration: 1, ease: "power3.out"});
+            const flare = document.getElementById('cinematic-flare');
+            const layer = document.getElementById('atmosphere-layer');
+
+            // QuickTo for high performance movement
+            const circleX = gsap.quickTo(circle, "x", {duration: 1, ease: "power3.out"});
+            const circleY = gsap.quickTo(circle, "y", {duration: 1, ease: "power3.out"});
+            
+            const flareX = gsap.quickTo(flare, "x", {duration: 0.6, ease: "power2.out"}); // Slightly faster than circle
+            const flareY = gsap.quickTo(flare, "y", {duration: 0.6, ease: "power2.out"});
+
+            // Fade in flare on load
+            gsap.to(flare, {opacity: 1, duration: 1.5, delay: 0.5});
             
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
 
-            // Mouse Move Listener (Flashlight + Magnetic)
+            // Mouse Move Listener (Magnetic + Flare ONLY - No Flashlight)
             window.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
 
-                // A. Flashlight Effect on Atmosphere
-                const layer = document.getElementById('atmosphere-layer');
-                const gradient = `radial-gradient(circle 350px at ${mouseX}px ${mouseY}px, transparent 5%, black 100%)`;
-                gsap.to(layer, {
-                    '--mask-gradient': gradient,
-                    webkitMaskImage: gradient,
-                    maskImage: gradient,
-                    duration: 0.2,
-                    overwrite: 'auto'
-                });
+                // REMOVED: Flashlight Effect (caused white stain)
+                
+                // B. Move Cinematic Flare
+                flareX(mouseX);
+                flareY(mouseY);
 
-                // B. Magnetic Pull (Only works well on desktop)
+                // C. Magnetic Pull (Only works well on desktop)
                 if (window.innerWidth > 768) {
+                    // ... existing magnetic logic ...
                     const rect = circle.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    
-                    // Calculate distance from center of circle to mouse
-                    const distX = mouseX - (window.innerWidth / 2); // Relative to screen center for stability
+                    // We need screen center relative calculation for the magnetic pull
+                    // independent of the circle's current transform
+                    const distX = mouseX - (window.innerWidth / 2); 
                     const distY = mouseY - (window.innerHeight / 2);
                     
-                    // Move circle slightly towards mouse (factor 0.15 = 15% movement)
-                    xTo(distX * 0.15);
-                    yTo(distY * 0.15);
+                    circleX(distX * 0.15);
+                    circleY(distY * 0.15);
                 }
             });
 
@@ -166,40 +180,39 @@
                 scrollTrigger: {
                     trigger: "#hero-section",
                     start: "top top",
-                    end: scrollDistance, // Increased scroll length
+                    end: scrollDistance, 
                     pin: true,
                     scrub: 1,
                 }
             });
 
-            // A. The Circle enters the camera (Zoom In/Fade Out)
+            // A. The Circle enters the camera
             heroTl.to(circle, {
-                scale: 3, // Gets huge
-                opacity: 0, // Fades out as it passes "behind" viewer
+                scale: 4, 
+                opacity: 0, 
                 filter: "blur(20px)",
                 ease: "power2.inOut",
-                duration: 0.6 // Happens in first 60% of scroll
+                duration: 0.6 
             }, 0);
 
-            // B. Subtitle & Indicator clean up
-            heroTl.to(["#hero-subtitle", "#scroll-indicator"], {
+            // B. UI Elements clean up (Flare leaves too)
+            heroTl.to(["#hero-subtitle", "#scroll-indicator", "#cinematic-flare"], {
                 opacity: 0,
                 y: 50,
                 duration: 0.3
             }, 0);
 
-            // C. Atmosphere Lifts (Revealing the sharp video)
-            // Starts slightly later so text fades first
+            // C. Atmosphere Lifts
             heroTl.to("#atmosphere-layer", {
                 opacity: 0,
                 ease: "power1.inOut",
                 duration: 0.8
             }, 0.1);
 
-            // D. Video Zoom (Final immersion)
+            // D. Video Zoom
             heroTl.to("#hero-video", {
-                scale: 1.25, // Subtle zoom in
-                filter: "brightness(0.8) contrast(1.1)", // Normalize brightness for reading next section
+                scale: 1.25, 
+                filter: "brightness(0.8) contrast(1.1)", 
                 ease: "power1.out",
                 duration: 1
             }, 0);
