@@ -211,7 +211,7 @@ export default function HeroMonolith() {
                         </div>
 
                         {/* TREK TEXT */}
-                        <h1 ref={textFrontRef} id="text-front" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-black tracking-tighter text-white leading-none select-none pointer-events-none mix-blend-overlay z-20"
+                        <h1 ref={textFrontRef} id="text-front" className="absolute top-[58%] left-[52%] text-[16vw] font-bold tracking-tighter text-white leading-none select-none pointer-events-none mix-blend-overlay z-20"
                             style={{transform: 'translateZ(100px)'}}>
                             TREK
                         </h1>
