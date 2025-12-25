@@ -37,12 +37,10 @@ Based on "Modern Tech" Standard (Linear/Vercel) + "Andean Nature".
 
 ## 2. Typography
 
-*   **Display Font:** `Space Grotesk` (Google Fonts).
-    *   *Why?* It has quirky ink traps that look "techy" but also organic/carved like rock. Modern and distinct.
-    *   *Usage:* Headings (H1-H3), Big Numbers (e.g., "5000 MSNM").
-*   **Body Font:** `Inter` or `Geist Sans`.
-    *   *Why?* Unbeatable readability for itinerary details.
-    *   *Usage:* Paragraphs, UI elements, Buttons.
+*   **Display Font:** `Syne` (Google Fonts).
+    *   *Why?* Es una fuente diseñada originalmente para una galería de arte. Su peso "Extra Bold" es excepcionalmente ancho, lo que le da un carácter arquitectónico y monumental, ideal para representar la inmensidad de los volcanes.
+    *   *Usage:* Headings (H1-H3), Big Numbers, y frases de impacto.
+*   **Body Font:** `Inter` o `Geist Sans`.
 
 ## 3. Spacing System (4px Grid)
 

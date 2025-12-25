@@ -8,7 +8,7 @@ We are not just a booking engine. We are the Sherpa.
 ## 2. Design Principles
 
 ### A. Atmosphere over Information
-Don't just say "It's cold". Make the UI *feel* cold using cool blues, white text, and frosted glass.
+Don't just say "It's cold". Make the UI *feel* energized using energy dark blues, white text, and frosted glass.
 Don't just say "It's sunny". Use the Frailejón Gold glow.
 
 ### B. Motion simulates the Trek

@@ -12,7 +12,7 @@ High visibility, used for "Book Now" or "See Itinerary".
     *   Click: Scale down (`scale-95`).
 
 ```jsx
-<button className="bg-amber-500 text-slate-950 px-6 py-3 rounded-xl font-bold font-space-grotesk 
+<button className="bg-amber-500 text-slate-950 px-6 py-3 rounded-xl font-bold font-display 
                    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/20 
                    active:scale-95 transition-all duration-200">
   Reservar Cupo
@@ -44,7 +44,7 @@ Designed to hold beautiful photography + key data (Altitude, Difficulty).
   {/* Content Overlay */}
   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-6 flex flex-col justify-end">
      <span className="text-amber-400 text-xs font-mono mb-2">3 DÍAS / 2 NOCHES</span>
-     <h3 className="text-2xl font-space-grotesk text-white mb-1">Cima del Tolima</h3>
+     <h3 className="text-2xl font-display text-white mb-1">Cima del Tolima</h3>
      <p className="text-slate-300 text-sm line-clamp-2">Experiencia de alta montaña para caminantes expertos.</p>
   </div>
 </div>
@@ -57,7 +57,7 @@ Floating navigation bar (Mac OS Dock style or Floating Island).
 *   **Style:** Heavy Blur Glass (`backdrop-blur-xl`).
 *   **Border:** High contrast border (`border-white/20`).
 
-## 4. Typography Scale (Space Grotesk)
+## 4. Typography Scale (Syne)
 
 *   **H1 (Hero):** `text-5xl md:text-7xl font-bold tracking-tighter`.
 *   **H2 (Section):** `text-3xl md:text-4xl font-bold`.
