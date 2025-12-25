@@ -57,7 +57,7 @@ Floating navigation bar (Mac OS Dock style or Floating Island).
 *   **Style:** Heavy Blur Glass (`backdrop-blur-xl`).
 *   **Border:** High contrast border (`border-white/20`).
 
-## 4. Typography Scale (Syne)
+## 4. Typography Scale (Montserrat)
 
 *   **H1 (Hero):** `text-5xl md:text-7xl font-bold tracking-tighter`.
 *   **H2 (Section):** `text-3xl md:text-4xl font-bold`.

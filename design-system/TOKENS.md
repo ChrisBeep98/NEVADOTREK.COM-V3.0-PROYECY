@@ -37,7 +37,7 @@ Based on "Modern Tech" Standard (Linear/Vercel) + "Andean Nature".
 
 ## 2. Typography
 
-*   **Display Font:** `Syne` (Google Fonts).
+*   **Display Font:** `Montserrat` (Google Fonts).
     *   *Why?* Es una fuente diseñada originalmente para una galería de arte. Su peso "Extra Bold" es excepcionalmente ancho, lo que le da un carácter arquitectónico y monumental, ideal para representar la inmensidad de los volcanes.
     *   *Usage:* Headings (H1-H3), Big Numbers, y frases de impacto.
 *   **Body Font:** `Inter` o `Geist Sans`.
