@@ -58,13 +58,13 @@
         
         <!-- 1. The Raw Video (Background) -->
         <div class="absolute inset-0 z-0 select-none pointer-events-none">
-            <video autoplay muted loop playsinline class="w-full h-full object-cover scale-[1.1]" id="hero-video">
+            <video autoplay muted loop playsinline class="w-full h-full object-cover scale-[1.05]" id="hero-video">
                 <source src="https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4" type="video/mp4">
             </video>
         </div>
 
-        <!-- 2. The Atmosphere (Deeper Mystery) -->
-        <div id="atmosphere-layer" class="absolute inset-0 z-10 bg-slate-950/95 transition-opacity duration-700"></div>
+        <!-- 2. The Atmosphere (Clear for now) -->
+        <div id="atmosphere-layer" class="absolute inset-0 z-10 bg-transparent transition-opacity duration-700"></div>
 
         <!-- 2.5 Cinematic Lens Flare (Full Spectral Ring - Majestic) -->
         <div id="cinematic-flare" class="absolute top-0 left-0 z-15 w-[600px] h-[600px] rounded-full pointer-events-none mix-blend-screen opacity-0"
@@ -121,7 +121,7 @@
             </div>
 
             <!-- Subtitle -->
-            <p id="hero-subtitle" class="text-slate-400 font-serif italic text-lg md:text-xl mt-16 opacity-60">
+            <p id="hero-subtitle" class="text-white font-serif italic text-lg md:text-2xl mt-16 opacity-100 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]">
                 "El silencio es la única respuesta."
             </p>
 
@@ -243,10 +243,9 @@
                 duration: 0.8
             }, 0.1);
 
-            // D. Video Zoom
+            // D. Video Zoom (Clearer)
             heroTl.to("#hero-video", {
-                scale: 1.25, 
-                filter: "brightness(0.8) contrast(1.1)", 
+                scale: 1.15, 
                 ease: "power1.out",
                 duration: 1
             }, 0);
