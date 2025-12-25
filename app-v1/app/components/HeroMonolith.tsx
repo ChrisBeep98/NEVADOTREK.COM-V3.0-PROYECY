@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { MountainSnow, ArrowUpRight, Calendar, MapPin, Users, Thermometer, Activity, HeartPulse, ShieldCheck, Tent, Instagram, Twitter, Youtube, Check } from 'lucide-react';
+import { MountainSnow } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -18,11 +18,61 @@ export default function HeroMonolith() {
     const pitchValRef = useRef<HTMLSpanElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const heroSectionRef = useRef<HTMLElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null); // Main scope for GSAP
+    const containerRef = useRef<HTMLDivElement>(null); 
+    const wordWrapperRef = useRef<HTMLSpanElement>(null);
 
     // Data Ticker State
     const [statusData, setStatusData] = useState("ALT: 4500M");
+    const [wordIndex, setWordIndex] = useState(0);
+    const words = ["SILENCE", "ORIGIN", "LIMITS", "SPIRIT"];
     
+    // Word Cycle Logic
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!wordWrapperRef.current) return;
+            
+            // 1. Animate OUT current letters
+            const ctx = gsap.context(() => {
+                gsap.to(".letter", {
+                    y: -20,
+                    opacity: 0,
+                    filter: "blur(8px)",
+                    stagger: 0.03,
+                    duration: 0.5,
+                    ease: "power3.in",
+                    onComplete: () => {
+                        setWordIndex((prev) => (prev + 1) % words.length);
+                    }
+                });
+            }, wordWrapperRef); // Scope to word wrapper
+
+            return () => ctx.revert();
+        }, 4000);
+        return () => clearInterval(interval);
+    }, []);
+
+    // Animate IN new letters when index changes
+    useGSAP(() => {
+        if (!wordWrapperRef.current) return;
+        
+        gsap.fromTo(".letter", 
+            { 
+                y: 30, 
+                opacity: 0, 
+                filter: "blur(12px)",
+                willChange: "transform, opacity, filter"
+            },
+            { 
+                y: 0, 
+                opacity: 1, 
+                filter: "blur(0px)",
+                stagger: 0.05, 
+                duration: 1.2, 
+                ease: "expo.out" 
+            }
+        );
+    }, { dependencies: [wordIndex], scope: wordWrapperRef });
+
     useEffect(() => {
         const statusMessages = ["ALT: 4500M", "TEMP: -15C", "WIND: 40KT", "O2: 88%"];
         let statusIdx = 0;
@@ -41,6 +91,7 @@ export default function HeroMonolith() {
         const gaugeDot = gaugeDotRef.current;
         const pitchVal = pitchValRef.current;
         const video = videoRef.current;
+        // Removed dynamicWordRef from here as it's handled separately now
 
         if (!wrapper || !monolith || !textFront || !compass) return;
 
@@ -107,15 +158,14 @@ export default function HeroMonolith() {
             duration: 1
         }, 0);
 
-        // Hide UI Elements
-        tl.to([textFront, compass, ".monolith-ui"], {
+        // Hide UI Elements (Including the new message)
+        tl.to([textFront, compass, ".monolith-ui", "#dynamic-message"], {
             opacity: 0,
             scale: 1.1,
             ease: "power2.out",
             duration: 0.5
         }, 0);
 
-        // Hide Background Video (if visible, currently it's behind)
         // Adjust Monolith Video Scale
         tl.to(video, {
             scale: 1,
@@ -135,12 +185,12 @@ export default function HeroMonolith() {
             window.removeEventListener('mousemove', handleMouseMove);
         };
 
-    }, { scope: containerRef }); // Scope ensures GSAP only targets elements inside this component
+    }, { scope: containerRef });
 
     return (
         <div ref={containerRef} className="relative bg-slate-950 text-slate-300 antialiased overflow-x-hidden">
              
-             {/* Navigation (Simplified for Demo) */}
+             {/* Navigation */}
             <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-8 mix-blend-difference text-white">
                 <div className="flex items-center gap-2">
                     <MountainSnow width={24} strokeWidth={1.5} />
@@ -196,7 +246,7 @@ export default function HeroMonolith() {
 
                             <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-50 mix-blend-overlay"></div>
 
-                            {/* UI Elements inside Monolith (Class for easy hiding) */}
+                            {/* UI Elements inside Monolith */}
                             <div className="monolith-ui absolute top-6 right-6 flex flex-col items-end">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
@@ -219,8 +269,22 @@ export default function HeroMonolith() {
                     </div>
                 </div>
 
+                {/* DYNAMIC MESSAGE (Middle Left) */}
+                <div id="dynamic-message" className="absolute top-[45%] left-8 md:left-24 z-30 max-w-[320px] pointer-events-none mix-blend-difference overflow-hidden py-2">
+                    <p className="text-sm md:text-base font-light italic leading-relaxed text-white/80">
+                        Beyond the edge of the known world, we find our 
+                        <span ref={wordWrapperRef} className="inline-flex font-bold text-cyan-300 ml-2 tracking-wider overflow-hidden">
+                            {words[wordIndex].split("").map((char, i) => (
+                                <span key={`${wordIndex}-${i}`} className="letter inline-block">
+                                    {char}
+                                </span>
+                            ))}
+                        </span>
+                    </p>
+                </div>
+
                 {/* Scroll Indicator */}
-                 <div className="monolith-ui absolute bottom-12 left-12 flex items-center gap-4 opacity-60 mix-blend-difference z-30 hidden md:flex">
+                 <div className="monolith-ui absolute bottom-12 left-8 md:left-12 flex items-center gap-4 opacity-60 mix-blend-difference z-30 hidden md:flex">
                     <div className="w-[1px] h-12 bg-white/50 origin-bottom animate-[scale-y_2s_ease-in-out_infinite]"></div>
                     <span className="text-[9px] tracking-[0.3em] font-mono text-white -rotate-90 origin-left translate-y-3">SCROLL TO EXPLORE</span>
                 </div>
