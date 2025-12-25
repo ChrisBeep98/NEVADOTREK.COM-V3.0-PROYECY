@@ -13,6 +13,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --hero-text-color: #ffffff;
+            --hero-text-shadow: 0 4px 12px rgba(0, 0, 0, 1);
+            --hero-glow-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #020617; /* Slate 950 */
@@ -25,6 +31,12 @@
             background: rgba(15, 23, 42, 0.6); /* Slate 900 with opacity */
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Hero unified styles */
+        .hero-element-style {
+            color: var(--hero-text-color);
+            filter: drop-shadow(var(--hero-text-shadow));
         }
 
         /* Custom Scrollbar */
@@ -83,17 +95,17 @@
         </div>
 
         <!-- 3.5 Mouse Tracking Compass HUD -->
-        <div id="mouse-compass" class="fixed top-0 left-0 z-50 pointer-events-none opacity-0 transition-opacity duration-500 hidden md:block">
+        <div id="mouse-compass" class="fixed top-0 left-0 z-50 pointer-events-none opacity-0 transition-opacity duration-500 hidden md:block hero-element-style">
             <div class="relative flex items-center justify-center">
                 <!-- Outer Ring -->
-                <svg class="w-16 h-16 opacity-30" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="48" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="2 6" />
+                <svg class="w-16 h-16 opacity-80" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 6" />
                 </svg>
                 <!-- Compass Needle -->
-                <div id="compass-needle" class="absolute h-8 w-[1px] bg-cyan-400 origin-bottom will-change-transform"></div>
+                <div id="compass-needle" class="absolute h-8 w-[2px] bg-white origin-bottom will-change-transform" style="box-shadow: var(--hero-glow-shadow);"></div>
                 <!-- Coordinates -->
-                <div class="absolute left-10 whitespace-nowrap font-mono text-[7px] tracking-[0.2em] text-white/40 flex flex-col gap-0.5">
-                    <span>DIR. TRACKING</span>
+                <div class="absolute left-10 whitespace-nowrap font-mono text-[9px] tracking-[0.2em] font-bold flex flex-col gap-0.5">
+                    <span class="opacity-80">DIR. TRACKING</span>
                     <span id="coord-display">000° N</span>
                 </div>
             </div>
@@ -121,16 +133,16 @@
             </div>
 
             <!-- Subtitle -->
-            <p id="hero-subtitle" class="text-white font-serif italic text-lg md:text-2xl mt-16 opacity-100 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]">
+            <p id="hero-subtitle" class="font-serif italic text-lg md:text-2xl mt-16 opacity-100 hero-element-style">
                 "El silencio es la única respuesta."
             </p>
 
         </div>
 
         <!-- Scroll Indicator -->
-        <div id="scroll-indicator" class="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-40 mix-blend-difference">
-            <span class="text-[10px] tracking-widest uppercase text-white">Explorar</span>
-            <div class="w-[1px] h-12 bg-white/50"></div>
+        <div id="scroll-indicator" class="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 hero-element-style">
+            <span class="text-[10px] tracking-widest uppercase font-bold">Explorar</span>
+            <div class="w-[1.5px] h-12 bg-white"></div>
         </div>
     </header>
 
