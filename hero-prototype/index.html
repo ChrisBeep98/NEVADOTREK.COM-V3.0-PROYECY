@@ -82,6 +82,23 @@
              style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');">
         </div>
 
+        <!-- 3.5 Mouse Tracking Compass HUD -->
+        <div id="mouse-compass" class="fixed top-0 left-0 z-50 pointer-events-none opacity-0 transition-opacity duration-500 hidden md:block">
+            <div class="relative flex items-center justify-center">
+                <!-- Outer Ring -->
+                <svg class="w-16 h-16 opacity-30" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="2 6" />
+                </svg>
+                <!-- Compass Needle -->
+                <div id="compass-needle" class="absolute h-8 w-[1px] bg-cyan-400 origin-bottom will-change-transform"></div>
+                <!-- Coordinates -->
+                <div class="absolute left-10 whitespace-nowrap font-mono text-[7px] tracking-[0.2em] text-white/40 flex flex-col gap-0.5">
+                    <span>DIR. TRACKING</span>
+                    <span id="coord-display">000° N</span>
+                </div>
+            </div>
+        </div>
+
         <!-- 4. The Magnetic Portal (Circle) -->
         <div class="relative z-20 flex flex-col items-center justify-center">
             
@@ -136,6 +153,9 @@
             const circle = document.getElementById('magnetic-circle');
             const flare = document.getElementById('cinematic-flare');
             const layer = document.getElementById('atmosphere-layer');
+            const compass = document.getElementById('mouse-compass');
+            const needle = document.getElementById('compass-needle');
+            const coordDisplay = document.getElementById('coord-display');
 
             // QuickTo for high performance movement
             const circleX = gsap.quickTo(circle, "x", {duration: 1, ease: "power3.out"});
@@ -143,6 +163,10 @@
             
             const flareX = gsap.quickTo(flare, "x", {duration: 1.2, ease: "power2.out"}); // Increased duration for cinematic inertia
             const flareY = gsap.quickTo(flare, "y", {duration: 1.2, ease: "power2.out"});
+
+            const compassX = gsap.quickTo(compass, "x", {duration: 0.5, ease: "power2.out"});
+            const compassY = gsap.quickTo(compass, "y", {duration: 0.5, ease: "power2.out"});
+            const needleRotate = gsap.quickTo(needle, "rotation", {duration: 0.7, ease: "power1.out"});
 
             // Fade in flare on load
             gsap.to(flare, {opacity: 1, duration: 1.5, delay: 0.5});
@@ -155,20 +179,30 @@
                 mouseX = e.clientX;
                 mouseY = e.clientY;
 
-                // REMOVED: Flashlight Effect (caused white stain)
-                
+                // Move Compass HUD
+                compassX(mouseX);
+                compassY(mouseY);
+                gsap.to(compass, {opacity: 1, duration: 1});
+
+                // Calculate Rotation for Needle (points to center of screen)
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI);
+                const finalAngle = angle + 90;
+                needleRotate(finalAngle);
+
+                // Update Degree Display
+                const displayAngle = Math.round((finalAngle + 360) % 360);
+                coordDisplay.innerText = `${displayAngle.toString().padStart(3, '0')}° N`;
+
                 // B. Move Cinematic Flare
                 flareX(mouseX);
                 flareY(mouseY);
 
                 // C. Magnetic Pull (Only works well on desktop)
                 if (window.innerWidth > 768) {
-                    // ... existing magnetic logic ...
-                    const rect = circle.getBoundingClientRect();
-                    // We need screen center relative calculation for the magnetic pull
-                    // independent of the circle's current transform
-                    const distX = mouseX - (window.innerWidth / 2); 
-                    const distY = mouseY - (window.innerHeight / 2);
+                    const distX = mouseX - centerX; 
+                    const distY = mouseY - centerY;
                     
                     circleX(distX * 0.15);
                     circleY(distY * 0.15);
@@ -196,7 +230,7 @@
             }, 0);
 
             // B. UI Elements clean up (Flare leaves too)
-            heroTl.to(["#hero-subtitle", "#scroll-indicator", "#cinematic-flare"], {
+            heroTl.to(["#hero-subtitle", "#scroll-indicator", "#cinematic-flare", "#mouse-compass"], {
                 opacity: 0,
                 y: 50,
                 duration: 0.3
