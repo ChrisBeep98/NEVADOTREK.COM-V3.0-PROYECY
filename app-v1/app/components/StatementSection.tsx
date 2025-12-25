@@ -9,71 +9,76 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function StatementSection() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const textRef = useRef<HTMLParagraphElement>(null);
-
-    const sentence = "The mountain doesn't ask for your strength. It demands your presence. In the absolute silence of the ascent, we leave behind who we were, to finally discover who we are meant to be.";
-    const words = sentence.split(" ");
 
     useGSAP(() => {
-        const wordsElements = containerRef.current?.querySelectorAll('.word');
+        const blocks = containerRef.current?.querySelectorAll('.text-block');
         
-        if (wordsElements && wordsElements.length > 0) {
-            gsap.fromTo(wordsElements, 
-                { 
-                    opacity: 0.1, 
-                    color: "rgba(100, 116, 139, 0.5)", // Slate 500 faded
-                    filter: "blur(2px)"
-                }, 
-                {
-                    opacity: 1,
-                    color: "#ffffff",
-                    filter: "blur(0px)",
-                    stagger: 0.1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top 75%",
-                        end: "bottom 45%",
-                        scrub: 1,
+        if (blocks) {
+            blocks.forEach((block) => {
+                gsap.fromTo(block, 
+                    { opacity: 0.1, y: 30, filter: "blur(10px)" },
+                    { 
+                        opacity: 1, y: 0, filter: "blur(0px)",
+                        duration: 1.5,
+                        scrollTrigger: {
+                            trigger: block,
+                            start: "top 85%",
+                            end: "top 45%",
+                            scrub: true,
+                        }
                     }
-                }
-            );
+                );
+            });
         }
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="relative py-48 px-6 flex justify-center items-center min-h-screen overflow-hidden bg-[#020617]">
+        <section ref={containerRef} className="relative py-24 px-6 flex flex-col items-center bg-[#020617] overflow-hidden">
             
-            {/* --- STUDIO LIGHTING BACKGROUND (MESH) --- */}
-            
-            {/* Ambient Background Noise Overlay */}
-            <div className="absolute inset-0 z-10 opacity-[0.05] pointer-events-none mix-blend-overlay"
-                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+            {/* Ambient Atmosphere */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-slate-900/20 rounded-full blur-[120px]"></div>
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+                </div>
             </div>
 
-            {/* Mesh 1: Top Left Glow */}
-            <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-indigo-900/20 rounded-full blur-[120px] mix-blend-screen opacity-50"></div>
-            
-            {/* Mesh 2: Center Bottom Accent */}
-            <div className="absolute bottom-[-20%] left-1/2 -translate-x-1/2 w-[70vw] h-[40vw] bg-blue-950/40 rounded-[100%] blur-[100px] mix-blend-multiply opacity-80"></div>
+            <div className="relative z-10 w-full max-w-5xl flex flex-col gap-24 md:gap-32">
+                
+                {/* 01. THE SILENCE */}
+                <div className="text-block flex flex-col items-start">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">PHILOSOPHY</span>
+                    <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-none">
+                        THE SILENCE
+                    </h2>
+                    <p className="text-slate-500 text-base md:text-lg font-light italic mt-4 max-w-sm leading-relaxed">
+                        Where the wind stops being a sound and starts being a voice you can finally understand.
+                    </p>
+                </div>
 
-            {/* Mesh 3: Right Side Warmth */}
-            <div className="absolute top-[20%] right-[-15%] w-[50vw] h-[50vw] bg-slate-800/20 rounded-full blur-[150px] mix-blend-overlay opacity-40"></div>
+                {/* 02. THE ASCENT */}
+                <div className="text-block flex flex-col items-end text-right ml-auto">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">CHALLENGE</span>
+                    <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-none">
+                        THE ASCENT
+                    </h2>
+                    <p className="text-slate-500 text-base md:text-lg font-light italic mt-4 max-w-sm leading-relaxed">
+                        A negotiation with gravity. Every breath is a victory, every step a promise to the peak.
+                    </p>
+                </div>
 
-            {/* Content Container */}
-            <div className="max-w-5xl mx-auto text-center relative z-20">
-                <p ref={textRef} className="text-3xl md:text-5xl lg:text-7xl font-medium leading-tight md:leading-[1.15] tracking-tight text-white/10 selection:bg-cyan-500/30">
-                    {words.map((word, i) => (
-                        <span key={i} className="word inline-block mr-[0.25em] will-change-[opacity,color,filter]">
-                            {word}
-                        </span>
-                    ))}
-                </p>
+                {/* 03. THE LIMIT */}
+                <div className="text-block flex flex-col items-center text-center mx-auto">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">DESTINY</span>
+                    <h2 className="text-5xl md:text-8xl font-bold text-white tracking-tight leading-none">
+                        THE BORDER
+                    </h2>
+                    <p className="text-slate-400 text-lg md:text-xl font-medium mt-8 max-w-lg leading-snug">
+                        There is no glory in conquering peaks, only in the courage to return transformed.
+                    </p>
+                </div>
+
             </div>
-
-            {/* Decorative Edge Glow */}
-            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-            <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
 
         </section>
     );
