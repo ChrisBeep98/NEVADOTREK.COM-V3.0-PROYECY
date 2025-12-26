@@ -3,7 +3,7 @@ import { ArrowUpRight, Calendar, MapPin, Users, Thermometer, Activity } from 'lu
 
 export default function ExpeditionsGrid() {
     return (
-        <section className="py-32 px-6 max-w-7xl mx-auto bg-slate-950">
+        <section className="py-32 px-frame max-w-7xl mx-auto bg-slate-950">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                 <div>
                     {/* TOKEN: DISPLAY XL (Variant) */}

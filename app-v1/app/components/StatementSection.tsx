@@ -33,7 +33,7 @@ export default function StatementSection() {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="relative py-24 md:py-48 px-6 flex flex-col items-center bg-[#020617] overflow-hidden border-t border-white/5">
+        <section ref={containerRef} className="relative py-24 md:py-48 px-frame flex flex-col items-center bg-[#020617] overflow-hidden border-t border-white/5">
             
             {/* Ambient Atmosphere */}
             <div className="absolute inset-0 z-0">

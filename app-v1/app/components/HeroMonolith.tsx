@@ -191,7 +191,7 @@ export default function HeroMonolith() {
         <div ref={containerRef} className="relative bg-slate-950 text-slate-300 antialiased overflow-x-hidden">
              
              {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-8 mix-blend-difference text-white">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-frame mix-blend-difference text-white">
                 <div className="flex items-center gap-2">
                     <MountainSnow width={24} strokeWidth={1.5} />
                     <span className="font-bold tracking-tighter text-xl">NEVADO TREK</span>

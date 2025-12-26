@@ -63,7 +63,7 @@ export default function TestimonialsSection() {
         <section ref={sectionRef} className="relative h-screen bg-[#020617] overflow-hidden">
             
             {/* Header */}
-            <div className="absolute top-12 left-12 md:left-24 z-20">
+            <div className="absolute top-12 left-frame z-20">
                 {/* TOKEN: SUB-LABEL */}
                 <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">
                     Expedition Logs
@@ -75,7 +75,7 @@ export default function TestimonialsSection() {
             </div>
 
             {/* Progress Bar */}
-            <div className="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 h-[1px] bg-white/10 z-20 overflow-hidden">
+            <div className="absolute bottom-12 left-frame right-frame h-[1px] bg-white/10 z-20 overflow-hidden">
                 <div ref={progressRef} className="absolute inset-0 bg-cyan-500 shadow-[0_0_10px_cyan]"></div>
             </div>
 

@@ -4,7 +4,21 @@ Este archivo es la **Única Fuente de Verdad (Single Source of Truth)** para el 
 
 ---
 
-## 📐 1. TYPOGRAPHY TOKENS (Tailwind)
+## 🖼️ 1. MARCOS Y MÁRGENES (The Page Frame)
+
+Esta es la regla más importante para la consistencia visual. Todas las secciones deben usar la variable global de espaciado **`frame`** para sus márgenes laterales (`px-frame`, `left-frame`, etc.).
+
+| Dispositivo | Valor Real | Variable CSS | Descripción |
+| :--- | :--- | :--- | :--- |
+| **Móvil** | **12px** | `--page-frame: 0.75rem` | Margen compacto para pantallas pequeñas. |
+| **Tablet** | **32px** | `--page-frame: 2rem` | Ajuste proporcional para tablets. |
+| **Desktop** | **96px** | `--page-frame: 6rem` | Margen máximo de inmersión. |
+
+> **Nota Técnica:** En Tailwind v4, usa la clase `px-frame` para aplicar estos márgenes de forma automática y responsiva.
+
+---
+
+## 📐 2. TYPOGRAPHY TOKENS (Tailwind)
 
 | Token | Categoría | Tailwind Classes | Uso Principal |
 | :--- | :--- | :--- | :--- |
@@ -16,7 +30,25 @@ Este archivo es la **Única Fuente de Verdad (Single Source of Truth)** para el 
 
 ---
 
-## 🎨 2. COLOR PALETTE
+## 📱 3. RESPONSIVE LAYOUT TOKENS
+
+### A. Espaciado Vertical (Section Padding)
+- **Compact:** `py-20 md:py-32` - Para secciones de datos o grids.
+- **Narrative:** `py-32 md:py-48 lg:py-60` - Para Statement y Hero donde el scroll debe respirar.
+
+### B. Contenedores (Max-Width)
+- **Standard:** `max-w-7xl` (1280px) - Para la mayoría de las secciones.
+- **Cinematic:** `max-w-[1400px]` - Para secciones con mucho impacto visual.
+- **Reading:** `max-w-4xl` (896px) - Para bloques de texto largo o manifiestos.
+
+### C. Gaps (Grids & Stacks)
+- **Micro:** `gap-4 md:gap-6` - Entre iconos y textos.
+- **Component:** `gap-10 md:gap-16` - Entre tarjetas de un grid.
+- **Section Flow:** `gap-24 md:gap-32` - Entre bloques grandes de contenido.
+
+---
+
+## 🎨 4. COLOR PALETTE
 
 - **Atmosphere Dark:** `#020617` (Slate-950) - Fondo principal para inmersión.
 - **Atmosphere Light:** `#ffffff` / `#f8fafc` (Slate-50) - Fondos editoriales limpios.
@@ -25,7 +57,7 @@ Este archivo es la **Única Fuente de Verdad (Single Source of Truth)** para el 
 
 ---
 
-## 🛠 3. UI CONVENTIONS
+## 🛠 5. UI CONVENTIONS
 
 - **Borders:** `border-white/10` (Dark) o `border-slate-100` (Light).
 - **Rounding:** `rounded-2xl` para tarjetas estándar, `rounded-[2.5rem]` para elementos masivos.
@@ -34,11 +66,13 @@ Este archivo es la **Única Fuente de Verdad (Single Source of Truth)** para el 
 
 ---
 
-## 🤖 4. AI PROMPT GUIDE (Instrucciones para la IA)
+## 🤖 6. AI PROMPT GUIDE (Instrucciones para la IA)
 
-> **"Actúa como el Director de Diseño de Nevado Trek. Cada vez que crees o refactorices una UI, DEBES leer los tokens definidos en `NEVADO-DESIGN-SYSTEM.md`. No inventes tamaños nuevos. Respeta estrictamente el tracking-tighter en títulos masivos y el espaciado mono en los sub-labels. Si una nueva sección requiere un estilo que no existe en este inventario, DETENTE, propón el nuevo token al usuario y, tras su aprobación, actualiza este archivo antes de escribir código."**
+> **"Actúa como el Director de Diseño de Nevado Trek. Cada vez que crees o refactorices una UI, DEBES leer los tokens definidos en `NEVADO-DESIGN-SYSTEM.md`. No inventes tamaños de texto ni márgenes nuevos. Respeta estrictamente la regla de los Marcos (px-6 / 24px en mobile). Si una nueva sección requiere un estilo que no existe en este inventario, DETENTE, propón el nuevo token al usuario y, tras su aprobación, actualiza este archivo antes de escribir código."**
 
 ---
 
-## 📝 5. LOG DE ACTUALIZACIONES
+## 📝 7. LOG DE ACTUALIZACIONES
+- **2025-12-25:** Promoción de los **Marcos laterales (24px mobile)** a regla de primer nivel.
+- **2025-12-25:** Añadida sección de **Responsive Layout Tokens**.
 - **2025-12-25:** Creación inicial del sistema. Estandarización de 5 niveles tipográficos y paleta base.

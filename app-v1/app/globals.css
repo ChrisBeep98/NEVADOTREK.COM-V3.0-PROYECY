@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* NEVADO DESIGN SYSTEM: PAGE FRAME TOKENS */
+  --page-frame: 0.75rem; /* 12px mobile */
 }
 
 @theme inline {
@@ -10,6 +13,21 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Adding custom spacing for the page frame */
+  --spacing-frame: var(--page-frame);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-frame: 2rem; /* 32px tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-frame: 6rem; /* 96px desktop */
+  }
 }
 
 @media (prefers-color-scheme: dark) {
