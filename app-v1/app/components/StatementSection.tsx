@@ -33,7 +33,7 @@ export default function StatementSection() {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="relative py-24 px-6 flex flex-col items-center bg-[#020617] overflow-hidden">
+        <section ref={containerRef} className="relative py-24 md:py-48 px-6 flex flex-col items-center bg-[#020617] overflow-hidden border-t border-white/5">
             
             {/* Ambient Atmosphere */}
             <div className="absolute inset-0 z-0">
@@ -47,33 +47,39 @@ export default function StatementSection() {
                 
                 {/* 01. THE SILENCE */}
                 <div className="text-block flex flex-col items-start">
-                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">PHILOSOPHY</span>
-                    <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-none">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
+                        01 // Philosophy
+                    </span>
+                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                         THE SILENCE
                     </h2>
-                    <p className="text-slate-500 text-base md:text-lg font-light italic mt-4 max-w-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm md:text-lg font-light italic mt-6 max-w-sm leading-relaxed">
                         Where the wind stops being a sound and starts being a voice you can finally understand.
                     </p>
                 </div>
 
                 {/* 02. THE ASCENT */}
                 <div className="text-block flex flex-col items-end text-right ml-auto">
-                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">CHALLENGE</span>
-                    <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-none">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
+                        02 // Challenge
+                    </span>
+                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                         THE ASCENT
                     </h2>
-                    <p className="text-slate-500 text-base md:text-lg font-light italic mt-4 max-w-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm md:text-lg font-light italic mt-6 max-w-sm leading-relaxed">
                         A negotiation with gravity. Every breath is a victory, every step a promise to the peak.
                     </p>
                 </div>
 
                 {/* 03. THE LIMIT */}
                 <div className="text-block flex flex-col items-center text-center mx-auto">
-                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.5em] mb-4">DESTINY</span>
-                    <h2 className="text-5xl md:text-8xl font-bold text-white tracking-tight leading-none">
+                    <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
+                        03 // Destiny
+                    </span>
+                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                         THE BORDER
                     </h2>
-                    <p className="text-slate-400 text-lg md:text-xl font-medium mt-8 max-w-lg leading-snug">
+                    <p className="text-slate-300 text-sm md:text-lg font-light mt-8 max-w-lg leading-relaxed">
                         There is no glory in conquering peaks, only in the courage to return transformed.
                     </p>
                 </div>
