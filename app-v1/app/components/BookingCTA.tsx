@@ -50,22 +50,23 @@ export default function BookingCTA() {
         const slides = gsap.utils.toArray<HTMLElement>('.animal-slide');
         
         // --- ESTADO INICIAL ---
-        gsap.set(slides, { autoAlpha: 0, z: -100, force3D: true });
-        gsap.set(slides[0], { autoAlpha: 1, z: 0 });
+        gsap.set(slides, { autoAlpha: 0, scale: 0.95, z: -50, force3D: true });
+        gsap.set(slides[0], { autoAlpha: 1, scale: 1, z: 0 });
 
-        // --- DESKTOP: THE FOCUS VAULT (Anclaje absoluto) ---
+        // --- DESKTOP: CINEMATIC SMOOTH VAULT ---
         mm.add("(min-width: 768px)", () => {
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=500%", // Más recorrido para zonas de descanso más largas
+                    end: "+=500%", 
                     pin: true,
-                    scrub: 0.1,
+                    scrub: 0.8, // Suavidad extrema (Inercia premium)
                     snap: {
                         snapTo: [0, 0.5, 1],
-                        duration: 0.6,
-                        delay: 0
+                        duration: { min: 0.4, max: 0.8 },
+                        delay: 0.1,
+                        ease: "sine.inOut"
                     },
                     onUpdate: (self) => {
                         if (progressRef.current) {
@@ -75,26 +76,35 @@ export default function BookingCTA() {
                 }
             });
 
-            // Slide 0 -> 1 (Transición rápida)
-            tl.to(slides[0], { autoAlpha: 0, scale: 1.1, z: 50, duration: 1 }, 0.5)
-              .fromTo(slides[1], { autoAlpha: 0, scale: 0.9, z: -50 }, { autoAlpha: 1, scale: 1, z: 0, duration: 1 }, 0.5)
-              .fromTo(slides[1].querySelectorAll('.text-reveal'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.1, duration: 0.8 }, 0.8);
+            // Slide 0 -> 1
+            tl.to(slides[0], { autoAlpha: 0, scale: 1.05, z: 30, duration: 1.5, ease: "sine.inOut" }, 0.5)
+              .to(slides[0].querySelectorAll('.text-reveal'), { y: -30, autoAlpha: 0, duration: 0.8 }, 0.5)
+              .fromTo(slides[1], 
+                { autoAlpha: 0, scale: 0.95, z: -30 }, 
+                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 0.5)
+              .fromTo(slides[1].querySelectorAll('.text-reveal'), 
+                { y: 30, autoAlpha: 0 }, 
+                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 1);
 
-            // MESETA DE LA DANTA (Se queda quieta un buen rato en el scroll)
-            tl.to({}, { duration: 1.5 }); 
+            // ZONA DE DESCANSO (Danta sólida)
+            tl.to({}, { duration: 1 }); 
 
             // Slide 1 -> 2
-            tl.to(slides[1], { autoAlpha: 0, scale: 1.1, z: 50, duration: 1 }, 3)
-              .fromTo(slides[2], { autoAlpha: 0, scale: 0.9, z: -50 }, { autoAlpha: 1, scale: 1, z: 0, duration: 1 }, 3)
-              .fromTo(slides[2].querySelectorAll('.text-reveal'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.1, duration: 0.8 }, 3.3);
+            tl.to(slides[1], { autoAlpha: 0, scale: 1.05, z: 30, duration: 1.5, ease: "sine.inOut" }, 2.5)
+              .to(slides[1].querySelectorAll('.text-reveal'), { y: -30, autoAlpha: 0, duration: 0.8 }, 2.5)
+              .fromTo(slides[2], 
+                { autoAlpha: 0, scale: 0.95, z: -30 }, 
+                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 2.5)
+              .fromTo(slides[2].querySelectorAll('.text-reveal'), 
+                { y: 30, autoAlpha: 0 }, 
+                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 3);
 
-            // Final CTA
-            tl.fromTo(".final-cta", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 4.2);
+            // Final CTA (Entrada sutil)
+            tl.fromTo(".final-cta", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1, ease: "sine.out" }, 4.2);
         });
 
-        // --- MOBILE: THE SHUTTER REVEAL (Diagonal Peel) ---
+        // --- MOBILE: THE DOWNWARD PEEL (Top to Bottom) ---
         mm.add("(max-width: 767px)", () => {
-            // En móvil, los slides están apilados. El scroll "pela" el actual.
             gsap.set(slides, { autoAlpha: 1, z: 0, clipPath: 'inset(0% 0% 0% 0%)' });
             
             const tl = gsap.timeline({
@@ -107,28 +117,11 @@ export default function BookingCTA() {
                 }
             });
 
-            // Peel Slide 0 to reveal 1 (Top to Bottom)
-            tl.to(slides[0], { 
-                clipPath: 'inset(100% 0% 0% 0%)', 
-                duration: 1,
-                ease: "power1.inOut"
-            })
-            .fromTo(slides[1].querySelectorAll('.text-reveal'), 
-                { opacity: 0, y: 20 }, 
-                { opacity: 1, y: 0, duration: 0.5 }, 0.5);
-
-            // Peel Slide 1 to reveal 2
-            tl.to(slides[1], { 
-                clipPath: 'inset(100% 0% 0% 0%)',
-                duration: 1,
-                ease: "power1.inOut"
-            }, 1)
-            .fromTo(slides[2].querySelectorAll('.text-reveal'), 
-                { opacity: 0, y: 20 }, 
-                { opacity: 1, y: 0, duration: 0.5 }, 1.5);
-
-            // Final Button
-            tl.fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
+            tl.to(slides[0], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" })
+              .fromTo(slides[1].querySelectorAll('.text-reveal'), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, 0.5)
+              .to(slides[1], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" }, 1)
+              .fromTo(slides[2].querySelectorAll('.text-reveal'), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, 1.5)
+              .fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
         });
 
     }, { scope: sectionRef });
@@ -147,24 +140,23 @@ export default function BookingCTA() {
                     <div 
                         key={animal.id}
                         className={`animal-slide absolute inset-0 w-full h-full flex items-center justify-center will-change-[clip-path,transform,opacity]`}
-                        style={{ zIndex: FAUNA.length - i }} // Stack for mobile peel
+                        style={{ zIndex: FAUNA.length - i }}
                     >
                         {/* BACKGROUND IMAGE */}
                         <div className="absolute inset-0 z-0 overflow-hidden">
                             <img 
                                 src={animal.img} 
                                 alt={animal.name}
-                                className="w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7]"
+                                className="w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7] will-change-transform"
                                 style={{
                                     maskImage: 'radial-gradient(circle at center, black 35%, transparent 85%)',
                                     WebkitMaskImage: 'radial-gradient(circle at center, black 35%, transparent 85%)'
                                 }}
                             />
-                            {/* Mobile legibility gradient */}
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10 md:hidden"></div>
                         </div>
 
-                        {/* CONTENT OVERLAY */}
+                        {/* CONTENT */}
                         <div className="relative z-20 w-full h-full px-frame flex flex-col justify-end md:justify-center pb-32 md:pb-0">
                             <div className="max-w-[1400px] mx-auto w-full grid grid-cols-12">
                                 <div className="col-span-12 md:col-span-6 space-y-4 md:space-y-6 md:pl-12">
@@ -188,7 +180,7 @@ export default function BookingCTA() {
 
                                     <div className="flex items-center gap-3 text-white/60 font-mono text-[9px] md:text-xs pt-2 md:pt-4 text-reveal font-bold">
                                         <MapPin className="w-4 h-4 text-cyan-500" />
-                                        <span className="tracking-widest uppercase">{animal.location}</span>
+                                        <span className="tracking-widest uppercase drop-shadow-sm">{animal.location}</span>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +197,7 @@ export default function BookingCTA() {
                 </button>
             </div>
 
-            {/* GLOBAL GRAIN */}
+            {/* GRAIN */}
             <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay z-[100] h-full"
                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
             </div>
