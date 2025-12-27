@@ -26,11 +26,11 @@
 
 /* TYPOGRAPHY TOKENS - SEMANTIC UTILITIES */
 @utility text-display-xl {
-  @apply text-5xl md:text-7xl lg:text-8xl font-bold tracking-normal leading-[1.1];
+  @apply text-5xl md:text-7xl lg:text-8xl font-bold tracking-normal leading-[1.3];
 }
 
 @utility text-heading-xl {
-  @apply text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] uppercase;
+  @apply text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.3] uppercase;
 }
 
 @utility text-statement {

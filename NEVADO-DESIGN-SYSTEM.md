@@ -36,8 +36,8 @@ Define los márgenes superiores e inferiores de cada bloque de contenido.
 
 | Token | Clase CSS | Estilos Base (Sincronizados) |
 | :--- | :--- | :--- |
-| **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-normal leading-[1.1]` |
-| **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] uppercase` |
+| **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-normal leading-[1.3]` |
+| **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.3] uppercase` |
 | **STATEMENT** | `.text-statement` | `text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-relaxed` |
 | **SUB-LABEL** | `.text-sub-label` | `font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500` |
 | **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-tight` |

@@ -178,7 +178,7 @@ export default function BookingCTA() {
                                         <div className="h-px bg-white/20 w-12"></div>
                                     </div>
 
-                                    <h2 className="text-5xl md:text-7xl font-bold text-white leading-[0.9] tracking-tighter text-reveal uppercase drop-shadow-2xl">
+                                    <h2 className="text-display-xl text-white text-reveal uppercase drop-shadow-2xl">
                                         {animal.name}
                                     </h2>
 
