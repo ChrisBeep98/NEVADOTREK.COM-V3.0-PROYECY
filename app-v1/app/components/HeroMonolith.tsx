@@ -91,7 +91,6 @@ export default function HeroMonolith() {
         const gaugeDot = gaugeDotRef.current;
         const pitchVal = pitchValRef.current;
         const video = videoRef.current;
-        // Removed dynamicWordRef from here as it's handled separately now
 
         if (!wrapper || !monolith || !textFront || !compass) return;
 
