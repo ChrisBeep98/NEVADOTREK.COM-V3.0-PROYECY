@@ -184,7 +184,7 @@ export default function BookingCTA() {
                             <img 
                                 src={animal.img} 
                                 alt={animal.name}
-                                className={`w-full h-full object-cover grayscale contrast-[1.25] brightness-[0.7] ${animal.position}`}
+                                className={`w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7] ${animal.position}`}
                                 style={{
                                     maskImage: 'radial-gradient(circle at 70% center, black 35%, transparent 85%)',
                                     WebkitMaskImage: 'radial-gradient(circle at 70% center, black 35%, transparent 85%)'
@@ -243,7 +243,7 @@ export default function BookingCTA() {
                             <img 
                                 src={animal.img} 
                                 alt={animal.name}
-                                className={`w-full h-full object-cover grayscale contrast-[1.3] brightness-[0.7] ${animal.position}`}
+                                className={`w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7] ${animal.position}`}
                                 style={{
                                     maskImage: 'linear-gradient(to top, black 40%, transparent 100%)',
                                     WebkitMaskImage: 'linear-gradient(to top, black 40%, transparent 100%)'
