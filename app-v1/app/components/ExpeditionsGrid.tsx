@@ -5,6 +5,8 @@ export default function ExpeditionsGrid() {
     return (
         <section className="bg-slate-950 section-v-spacing">
             <div className="px-frame max-w-7xl mx-auto">
+                
+                {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
                         <h2 className="text-display-xl text-white mb-4">
@@ -20,19 +22,31 @@ export default function ExpeditionsGrid() {
                     </a>
                 </div>
 
+                {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[500px]">
-                    {/* Card 1 */}
+                    
+                    {/* Card 1: Patagonia */}
                     <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer">
                         <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" alt="Patagonia" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
+                        
                         <div className="absolute top-6 right-6 z-20">
-                            <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white">HARD</span>
+                            <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white">
+                                HARD
+                            </span>
                         </div>
+
                         <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <span className="text-sub-label text-cyan-400 mb-3 block">01 // PATAGONIA</span>
-                            <h3 className="text-heading-l text-white mb-2">Torres del Silencio</h3>
+                            <span className="text-sub-label text-cyan-400 mb-3 block">
+                                01 // PATAGONIA
+                            </span>
+                            <h3 className="text-heading-l text-white mb-2">
+                                Torres del Silencio
+                            </h3>
                             <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
-                                <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">Travesía técnica por glaciares antiguos donde el silencio es absoluto.</p>
+                                <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
+                                    Travesía técnica por glaciares antiguos donde el silencio es absoluto.
+                                </p>
                                 <div className="flex items-center gap-4 text-tech-caption text-slate-300">
                                     <span className="flex items-center gap-1.5"><Calendar width={12} className="text-cyan-500" /> Nov - Mar</span>
                                     <span className="flex items-center gap-1.5"><MapPin width={12} className="text-cyan-500" /> Chile</span>
@@ -40,15 +54,97 @@ export default function ExpeditionsGrid() {
                             </div>
                         </div>
                     </div>
-                    {/* ... Resto de tarjetas simplificadas para brevedad ... */}
+
+                    {/* Card 2: Himalaya (Span 2) */}
                     <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 md:col-span-2 cursor-pointer">
-                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80" alt="Himalaya" />
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" alt="Himalaya" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
-                        <div className="absolute bottom-0 left-0 p-8 z-20 w-full md:w-2/3">
-                            <span className="text-sub-label text-blue-400 mb-3 block">02 // HIMALAYA</span>
-                            <h3 className="text-heading-l text-white mb-2">La Corona de Hielo</h3>
+                        
+                        <div className="absolute top-6 right-6 z-20">
+                            <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white">
+                                EXTREME
+                            </span>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 p-8 z-20 w-full md:w-2/3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <span className="text-sub-label text-blue-400 mb-3 block">
+                                02 // HIMALAYA
+                            </span>
+                            <h3 className="text-heading-l text-white mb-2">
+                                La Corona de Hielo
+                            </h3>
+                            <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
+                                <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
+                                    Ascenso estratégico a la zona de la muerte a 7,000m. Oxígeno suplementario opcional. Solo veteranos.
+                                </p>
+                                <div className="flex items-center gap-4 text-tech-caption text-slate-300">
+                                    <span className="flex items-center gap-1.5"><Calendar width={12} className="text-blue-500" /> Apr - May</span>
+                                    <span className="flex items-center gap-1.5"><Users width={12} className="text-blue-500" /> Max 6</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    {/* Card 3: Alps */}
+                    <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1549880181-56a44cf4a9a5?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" alt="Alps" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
+                        
+                        <div className="absolute top-6 right-6 z-20">
+                            <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white">
+                                MODERATE
+                            </span>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <span className="text-sub-label text-orange-400 mb-3 block">
+                                03 // ALPS
+                            </span>
+                            <h3 className="text-heading-l text-white mb-2">
+                                La Ruta Haute
+                            </h3>
+                            <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
+                                <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
+                                    Esquí de travesía clásico de Chamonix a Zermatt. Refugios de alta montaña y perfección alpina.
+                                </p>
+                                <div className="flex items-center gap-4 text-tech-caption text-slate-300">
+                                    <span className="flex items-center gap-1.5"><Calendar width={12} className="text-orange-500" /> Feb - Apr</span>
+                                    <span className="flex items-center gap-1.5"><Thermometer width={12} className="text-orange-500" /> -15°C</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     {/* Card 4: Dolomites (Span 2) */}
+                     <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer md:col-span-2">
+                        <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=1368&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" alt="Dolomites" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
+                        
+                        <div className="absolute top-6 right-6 z-20">
+                            <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white">
+                                TECHNICAL
+                            </span>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <span className="text-sub-label text-purple-400 mb-3 block">
+                                04 // DOLOMITES
+                            </span>
+                            <h3 className="text-heading-l text-white mb-2">
+                                Vertical Limit
+                            </h3>
+                            <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
+                                <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
+                                    Escalada en roca pura y Vía Ferratas en el corazón de Italia. Exposiciones verticales impresionantes.
+                                </p>
+                                 <div className="flex items-center gap-4 text-tech-caption text-slate-300">
+                                    <span className="flex items-center gap-1.5"><Calendar width={12} className="text-purple-500" /> Jun - Sep</span>
+                                    <span className="flex items-center gap-1.5"><Activity width={12} className="text-purple-500" /> Elite Level</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
