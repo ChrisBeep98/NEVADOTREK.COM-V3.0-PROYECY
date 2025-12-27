@@ -16,9 +16,8 @@ const FAUNA = [
         role: "EL RELOJ DE LA MONTAÑA",
         desc: "Su canto marca el tiempo en los cafetales de niebla. Un destello turquesa en la penumbra.",
         location: "1.900M // VALLE DE COCORA",
-        // Visualmente idéntico: Kingfisher vibrante
         img: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2000&auto=format&fit=crop", 
-        accentClass: "text-cyan-500",
+        accentClass: "text-cyan-400 drop-shadow-md", // Brighter accent + Shadow
         position: "object-center"
     },
     {
@@ -28,9 +27,8 @@ const FAUNA = [
         role: "EL ARQUITECTO DEL BOSQUE",
         desc: "Jardinera solitaria de las alturas. Abre caminos ancestrales entre los frailejones.",
         location: "3.200M // ALTO QUINDÍO",
-        // Tapir en entorno natural
         img: "https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=2000&auto=format&fit=crop",
-        accentClass: "text-orange-500",
+        accentClass: "text-orange-400 drop-shadow-md",
         position: "object-center"
     },
     {
@@ -40,9 +38,8 @@ const FAUNA = [
         role: "EL GUARDIÁN DE AGUA",
         desc: "Espíritu sagrado de los Andes. Donde él camina, nace la vida.",
         location: "3.600M // ROMERALES",
-        // Nueva imagen: Oso Negro Americano en entorno boscoso (mejor silueta)
         img: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=2000&auto=format&fit=crop",
-        accentClass: "text-purple-500",
+        accentClass: "text-purple-400 drop-shadow-md",
         position: "object-center"
     }
 ];
@@ -54,7 +51,7 @@ export default function BookingCTA() {
     useGSAP(() => {
         const mm = gsap.matchMedia();
         
-        // --- DESKTOP CINEMATIC SCROLL (Pinned) ---
+        // --- DESKTOP CINEMATIC SCROLL ---
         mm.add("(min-width: 768px)", () => {
             const slides = gsap.utils.toArray('.desktop-slide');
             
@@ -62,14 +59,14 @@ export default function BookingCTA() {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=350%",
+                    end: "+=300%",
                     pin: true,
-                    scrub: 0.8,
+                    scrub: 0.5, // Reduced from 0.8 for tighter control
                     snap: {
                         snapTo: 1 / (slides.length - 1),
-                        duration: { min: 0.4, max: 0.8 },
-                        delay: 0.1,
-                        ease: "power2.inOut"
+                        duration: { min: 0.2, max: 0.4 }, // Faster snap
+                        delay: 0.05, // Almost instant snap
+                        ease: "power1.out" // More linear snap, less 'drift'
                     },
                     onUpdate: (self) => {
                         if (progressRef.current) {
@@ -87,30 +84,30 @@ export default function BookingCTA() {
                     const nextTextElements = (nextSlide as HTMLElement).querySelectorAll('.text-reveal');
                     
                     tl.to(slide as HTMLElement, {
-                        scale: 1.2, 
+                        scale: 1.15, 
                         opacity: 0,
-                        filter: "blur(20px)",
-                        duration: 1.2,
-                        ease: "power2.in"
+                        filter: "blur(15px)",
+                        duration: 1,
+                        ease: "power1.in"
                     });
                     
                     tl.to(textElements, {
                         y: -20,
                         opacity: 0,
-                        duration: 0.5,
+                        duration: 0.4,
                         stagger: 0.05
                     }, "<");
 
                     tl.fromTo(nextSlide as HTMLElement, 
-                        { opacity: 0, scale: 0.9, filter: "blur(15px)", zIndex: i + 2 },
-                        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.2, ease: "power2.out" }, 
+                        { opacity: 0, scale: 0.95, filter: "blur(10px)", zIndex: i + 2 },
+                        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1, ease: "power1.out" }, 
                         "<+=0.1" 
                     );
 
                     tl.fromTo(nextTextElements, 
                         { y: 30, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" },
-                        "<+=0.4"
+                        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" },
+                        "<+=0.3"
                     );
                 }
             });
@@ -122,7 +119,7 @@ export default function BookingCTA() {
             );
         });
 
-        // --- MOBILE ANIMATIONS (Vertical Scroll Reveal) ---
+        // --- MOBILE ANIMATIONS ---
         mm.add("(max-width: 767px)", () => {
             const mobileSlides = gsap.utils.toArray('.mobile-slide');
             
@@ -131,10 +128,9 @@ export default function BookingCTA() {
                 const text = el.querySelectorAll('.text-reveal-mobile');
                 const img = el.querySelector('img');
 
-                // Image Parallax Effect
                 gsap.to(img, {
-                    scale: 1.15,
-                    y: "10%", // Slight parallax movement
+                    scale: 1.1,
+                    y: "5%", 
                     ease: "none",
                     scrollTrigger: {
                         trigger: el,
@@ -144,17 +140,16 @@ export default function BookingCTA() {
                     }
                 });
 
-                // Text Reveal Animation
                 gsap.fromTo(text, 
-                    { y: 40, opacity: 0 },
+                    { y: 30, opacity: 0 },
                     {
                         y: 0, opacity: 1,
-                        duration: 0.8,
+                        duration: 0.6,
                         stagger: 0.1,
                         ease: "power2.out",
                         scrollTrigger: {
                             trigger: el,
-                            start: "top 65%", // Trigger when element is 65% up the viewport
+                            start: "top 60%",
                             toggleActions: "play none none reverse"
                         }
                     }
@@ -170,7 +165,6 @@ export default function BookingCTA() {
             {/* --- DESKTOP LAYOUT --- */}
             <div className="hidden md:block w-full h-screen relative">
                 
-                {/* PROGRESS BAR */}
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/5 z-50">
                     <div ref={progressRef} className="w-full bg-cyan-500 shadow-[0_0_10px_cyan]"></div>
                 </div>
@@ -231,48 +225,48 @@ export default function BookingCTA() {
                 </div>
             </div>
 
-            {/* --- MOBILE LAYOUT (Parallax Reveal) --- */}
+            {/* --- MOBILE LAYOUT --- */}
             <div className="md:hidden block">
                 {FAUNA.map((animal, i) => (
                     <div 
                         key={animal.id} 
                         className="mobile-slide relative w-full h-[85vh] overflow-hidden flex flex-col justify-end pb-24 border-b border-white/5 bg-slate-950"
                     >
-                        {/* Image Background */}
                         <div className="absolute inset-0 z-0">
                             <img 
                                 src={animal.img} 
                                 alt={animal.name}
                                 className={`w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7] ${animal.position}`}
                                 style={{
-                                    maskImage: 'linear-gradient(to top, black 40%, transparent 100%)',
-                                    WebkitMaskImage: 'linear-gradient(to top, black 40%, transparent 100%)'
+                                    maskImage: 'linear-gradient(to top, black 50%, transparent 100%)', // Increased gradient height for legibility
+                                    WebkitMaskImage: 'linear-gradient(to top, black 50%, transparent 100%)'
                                 }}
                             />
+                            {/* Extra Gradient Layer for Text Contrast */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent z-10 pointer-events-none"></div>
                         </div>
                         
-                        {/* Text Content */}
-                        <div className="relative z-10 px-frame space-y-4">
+                        <div className="relative z-20 px-frame space-y-4">
                             <div className="text-reveal-mobile">
-                                <span className={`text-tech-caption ${animal.accentClass} block`}>
+                                {/* Increased brightness and drop shadow for legibility */}
+                                <span className={`text-tech-caption ${animal.accentClass} block drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-bold`}>
                                     0{i + 1} // {animal.role}
                                 </span>
                             </div>
-                            <h2 className="text-5xl font-bold text-white leading-none tracking-tighter text-reveal-mobile uppercase drop-shadow-lg">
+                            <h2 className="text-5xl font-bold text-white leading-none tracking-tighter text-reveal-mobile uppercase drop-shadow-xl">
                                 {animal.name}
                             </h2>
-                            <p className="text-sm text-slate-300 font-light text-reveal-mobile max-w-[90%]">
+                            <p className="text-sm text-slate-200 font-light text-reveal-mobile max-w-[90%] drop-shadow-md">
                                 "{animal.desc}"
                             </p>
-                            <div className="flex items-center gap-2 text-white/40 pt-2 text-reveal-mobile">
-                                <MapPin className="w-3 h-3" />
-                                <span className="text-tech-caption">{animal.location}</span>
+                            <div className="flex items-center gap-2 text-white/70 pt-2 text-reveal-mobile font-medium drop-shadow-md">
+                                <MapPin className="w-3 h-3 text-cyan-400" />
+                                <span className="text-tech-caption text-white">{animal.location}</span>
                             </div>
                         </div>
                     </div>
                 ))}
                 
-                {/* Mobile CTA (Standard Block) */}
                 <div className="py-20 px-frame bg-slate-950 flex flex-col justify-center items-center z-[50]">
                     <h3 className="text-white text-xl font-bold uppercase tracking-tight mb-6">Tu viaje comienza aquí</h3>
                     <button className="w-full bg-white py-5 flex items-center justify-center gap-4">
@@ -282,7 +276,6 @@ export default function BookingCTA() {
                 </div>
             </div>
 
-            {/* GLOBAL GRAIN */}
             <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay z-[100] sticky top-0 h-screen"
                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
             </div>
