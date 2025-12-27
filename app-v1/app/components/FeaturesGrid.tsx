@@ -68,11 +68,11 @@ export default function FeaturesGrid() {
             <div className="max-w-[1400px] mx-auto mb-16 md:mb-24 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
                 <div>
                     {/* TOKEN: SUB-LABEL */}
-                    <span className="text-cyan-600 font-mono text-[10px] tracking-[0.4em] uppercase block mb-6">
+                    <span className="text-sub-label text-cyan-600 block mb-6">
                         Why Choose Nevado
                     </span>
                     {/* TOKEN: DISPLAY XL */}
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 tracking-tighter leading-[0.9]">
+                    <h2 className="text-display-xl text-slate-900">
                         THE NEVADO <br/> DIFFERENCE.
                     </h2>
                 </div>

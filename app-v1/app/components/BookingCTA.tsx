@@ -8,8 +8,8 @@ export default function BookingCTA() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
             <div className="relative z-10 max-w-xl mx-auto text-center p-10 rounded-3xl border border-white/10 bg-slate-900/80 backdrop-blur-xl">
-                <h2 className="text-3xl font-medium tracking-tighter text-white mb-4">La montaña te llama.</h2>
-                <p className="text-slate-400 text-sm mb-8">Únete a la lista de espera para la temporada 2025. Plazas extremadamente limitadas.</p>
+                <h2 className="text-heading-l text-white mb-4">La montaña te llama.</h2>
+                <p className="text-body-lead text-slate-400 mb-8">Únete a la lista de espera para la temporada 2025. Plazas extremadamente limitadas.</p>
                 
                 <form className="flex flex-col gap-4">
                     <div className="relative group">

@@ -7,11 +7,11 @@ export default function ExpeditionsGrid() {
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                 <div>
                     {/* TOKEN: DISPLAY XL (Variant) */}
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[0.9] mb-4">
+                    <h2 className="text-display-xl text-white mb-4">
                         SELECT <br/>EXPEDITIONS.
                     </h2>
                     {/* TOKEN: BODY LEAD */}
-                    <p className="text-slate-400 text-sm md:text-lg font-light leading-relaxed max-w-md">
+                    <p className="text-body-lead text-slate-400 max-w-md">
                         Meticulously curated routes for those seeking silence, challenge, and raw beauty.
                     </p>
                 </div>
