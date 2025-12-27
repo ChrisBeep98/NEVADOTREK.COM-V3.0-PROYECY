@@ -99,7 +99,7 @@ export default function StatementSection() {
                 </div>
             </div>
 
-            <div className="relative z-10 w-full pl-frame pr-[20vw] md:pr-frame max-w-[1400px] mx-auto">
+            <div className="relative z-10 w-full pl-frame pr-[20vw] md:pr-frame max-w-[1400px]">
                 <div className="mb-6 md:mb-12 flex items-center gap-4 opacity-20">
                     <span className="text-tech-caption text-cyan-500">Mission_Briefing</span>
                     <div className="w-8 md:w-20 h-px bg-white"></div>
