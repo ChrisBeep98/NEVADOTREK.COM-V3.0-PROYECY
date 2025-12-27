@@ -4,46 +4,42 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Mountain, Compass, ShieldCheck, Users, ArrowUpRight } from 'lucide-react';
+import { Mountain, Compass, ShieldCheck, Users, ArrowUpRight, Target } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const FEATURES_DATA = [
+const FEATURES = [
     {
         id: 0,
         title: "ALTA MONTAÑA",
-        tag: "LOGÍSTICA TÉCNICA",
-        desc: "Dominamos el ascenso al Nevado del Tolima con estándares internacionales de alpinismo y equipo técnico de élite.",
+        subtitle: "SUMMIT_GEAR",
+        desc: "Dominamos el ascenso al Nevado del Tolima con estándares internacionales de alpinismo.",
         icon: Mountain,
-        img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop",
-        accent: "text-cyan-400"
+        img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop"
     },
     {
         id: 1,
         title: "GUÍAS NATIVOS",
-        tag: "HERENCIA LOCAL",
-        desc: "Expertos nacidos en Salento. Conocemos cada secreto del bosque de niebla y los caminos ancestrales del Páramo.",
+        subtitle: "LOCAL_HERITAGE",
+        desc: "Expertos nacidos en Salento. Conocemos cada secreto del bosque de niebla.",
         icon: Compass,
-        img: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1000&auto=format&fit=crop",
-        accent: "text-orange-400"
+        img: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=800&auto=format&fit=crop"
     },
     {
         id: 2,
         title: "SEGURIDAD ELITE",
-        tag: "PROTOCOLO CERO RIESGO",
-        desc: "Protocolos de rescate certificados y comunicación satelital constante. Tu integridad es nuestra única prioridad.",
+        subtitle: "SAFETY_PROTOCOL",
+        desc: "Protocolos de rescate certificados y comunicación satelital constante.",
         icon: ShieldCheck,
-        img: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=1000&auto=format&fit=crop",
-        accent: "text-blue-400"
+        img: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop"
     },
     {
         id: 3,
         title: "CULTURA ANDINA",
-        tag: "EXPERIENCIA HUMANA",
-        desc: "Experiencias de inmersión auténtica con las comunidades locales, respetando la herencia y el ecosistema.",
+        subtitle: "COMMUNITY",
+        desc: "Experiencias de inmersión auténtica con las comunidades locales.",
         icon: Users,
-        img: "https://images.unsplash.com/photo-1549880181-56a44cf4a9a5?q=80&w=1000&auto=format&fit=crop",
-        accent: "text-purple-400"
+        img: "https://images.unsplash.com/photo-1549880181-56a44cf4a9a5?q=80&w=800&auto=format&fit=crop"
     }
 ];
 
@@ -52,36 +48,39 @@ export default function FeaturesGrid() {
     const [activeId, setActiveId] = useState<number>(0);
 
     useGSAP(() => {
-        // Entrada elegante de la sección
-        gsap.fromTo(".feature-intro", 
-            { opacity: 0, y: 30 },
+        // Solo animamos el header con GSAP para mantener el hilo principal libre para las imágenes
+        gsap.fromTo(".feature-header-anim", 
+            { opacity: 0, y: 20 },
             { 
                 opacity: 1, y: 0, 
-                duration: 1.2,
-                ease: "power3.out",
-                scrollTrigger: { trigger: containerRef.current, start: "top 85%" }
+                duration: 0.8,
+                ease: "power2.out",
+                scrollTrigger: { 
+                    trigger: containerRef.current, 
+                    start: "top 90%",
+                }
             }
         );
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="bg-slate-950 section-v-spacing border-t border-white/5 overflow-hidden">
+        <section 
+            ref={containerRef} 
+            className="bg-slate-950 section-v-spacing border-t border-white/5 overflow-hidden"
+            style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }} // Pro-tip: content-visibility
+        >
             
-            {/* Header: Design System Synced */}
-            <div className="px-frame max-w-[1400px] mx-auto mb-16 md:mb-24 feature-intro">
-                <span className="text-sub-label mb-6 block font-bold">
-                    ESTÁNDAR DE EXPEDICIÓN
-                </span>
-                <h2 className="text-display-xl text-white">
-                    EL DIFERENCIAL <br/> DE CUMBRE.
+            <div className="px-frame max-w-[1400px] mx-auto mb-12 md:mb-20 feature-header-anim">
+                <span className="text-sub-label mb-4 block opacity-40">TECNOLOGÍA DE EXPEDICIÓN</span>
+                <h2 className="text-display-xl text-white uppercase leading-tight">
+                    DIFERENCIAL <br/> <span className="text-white/20">TÁCTICO.</span>
                 </h2>
             </div>
 
-            {/* Interactive Grid: High Performance */}
             <div className="px-frame max-w-[1600px] mx-auto">
-                <div className="flex flex-col md:flex-row h-[800px] md:h-[700px] gap-3 md:gap-4 items-stretch">
+                <div className="flex flex-col md:flex-row h-[750px] md:h-[650px] gap-3 items-stretch">
                     
-                    {FEATURES_DATA.map((f) => {
+                    {FEATURES.map((f) => {
                         const Icon = f.icon;
                         const isActive = activeId === f.id;
                         
@@ -91,71 +90,66 @@ export default function FeaturesGrid() {
                                 onMouseEnter={() => setActiveId(f.id)}
                                 onClick={() => setActiveId(f.id)}
                                 className={`
-                                    relative overflow-hidden cursor-pointer rounded-[2rem] border border-white/5
-                                    transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
-                                    will-change-[flex,height] transform-gpu
-                                    ${isActive 
-                                        ? 'flex-grow-[12] md:flex-[12] border-white/20 shadow-2xl' 
-                                        : 'h-16 md:h-auto md:flex-1 border-white/5 hover:border-white/10'
-                                    }
+                                    relative overflow-hidden cursor-pointer border border-white/5 
+                                    transition-[flex-grow,height,border-color] duration-[500ms] ease-out
+                                    rounded-[2rem] transform-gpu
+                                    ${isActive ? 'flex-grow-[10] md:flex-[12] border-white/20' : 'h-16 md:h-auto md:flex-1'}
                                 `}
                                 style={{ transform: 'translateZ(0)' }}
                             >
-                                {/* BACKGROUND IMAGE: Optimized (No dynamic filters) */}
-                                <div className="absolute inset-0 z-0 transform-gpu overflow-hidden">
+                                {/* BACKGROUND - Optimized opacity mapping */}
+                                <div className="absolute inset-0 z-0 transform-gpu overflow-hidden bg-slate-900">
                                     <img 
                                         src={f.img} 
-                                        alt={f.title} 
+                                        alt={f.title}
+                                        decoding="async"
+                                        loading="lazy"
                                         className={`
-                                            w-full h-full object-cover transition-all duration-1000 transform-gpu
+                                            w-full h-full object-cover transition-all duration-700
                                             ${isActive ? 'opacity-60 scale-105' : 'opacity-20 scale-100'}
                                         `}
-                                        style={{ transform: 'translateZ(0)' }}
                                     />
-                                    {/* Overlay for depth without expensive blend modes */}
-                                    <div className={`absolute inset-0 transition-opacity duration-700 ${isActive ? 'opacity-40' : 'opacity-80'} bg-slate-950`}></div>
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10"></div>
                                 </div>
 
-                                {/* CONTENT: Tactical Layout */}
-                                <div className={`absolute inset-0 p-6 md:p-12 flex flex-col z-20 pointer-events-none transition-all duration-500 ${isActive ? 'justify-end' : 'justify-center md:justify-end'}`}>
+                                {/* CONTENT - Minimalist and light */}
+                                <div className={`absolute inset-0 p-6 md:p-10 flex flex-col z-20 pointer-events-none transition-all duration-500 ${isActive ? 'justify-between' : 'justify-center md:justify-end'}`}>
                                     
-                                    {/* Mobile Collapsed Label (Exactly 64px visual) */}
+                                    <div className={`flex items-start justify-between transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 bg-slate-900/90 rounded-2xl border border-white/10">
+                                                <Icon className="w-5 h-5 text-cyan-400" />
+                                            </div>
+                                            <span className="text-tech-caption font-bold text-white tracking-widest">{f.subtitle}</span>
+                                        </div>
+                                    </div>
+
                                     {!isActive && (
-                                        <div className="flex md:hidden items-center justify-between w-full opacity-40">
+                                        <div className="flex md:hidden items-center justify-between w-full opacity-30">
                                             <span className="text-[10px] font-bold tracking-[0.2em] text-white uppercase">{f.title}</span>
-                                            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                            <Target className="w-3 h-3 text-cyan-500" />
                                         </div>
                                     )}
 
-                                    {/* Active Details (Icon & Tag) */}
-                                    <div className={`hidden md:flex items-center gap-4 mb-6 transition-all duration-700 
-                                        ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                                        <div className="p-3 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-xl">
-                                            <Icon className="w-6 h-6 text-white" />
+                                    <div className="flex flex-col gap-4">
+                                        <div className={`transition-transform duration-500 ${isActive ? 'translate-y-0' : 'hidden md:block md:rotate-[-90deg] md:-translate-y-20 opacity-20'}`}>
+                                            <h3 className={`font-bold tracking-tighter uppercase transition-all duration-500
+                                                ${isActive ? 'text-4xl md:text-6xl text-white' : 'text-xl text-white'}
+                                            `}>
+                                                {f.title}
+                                            </h3>
                                         </div>
-                                        <span className="text-tech-caption text-white font-bold tracking-widest">{f.tag}</span>
-                                    </div>
 
-                                    {/* Title Section: Responsive & Stable */}
-                                    <div className={`transition-all duration-700 ${isActive ? 'mb-4' : 'hidden md:block md:rotate-[-90deg] md:-translate-y-20'}`}>
-                                        <h3 className={`font-bold tracking-tight uppercase transition-all duration-700
-                                            ${isActive ? 'text-3xl md:text-6xl text-white' : 'text-xl text-white/20'}
+                                        <div className={`overflow-hidden transition-all duration-500
+                                            ${isActive ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}
                                         `}>
-                                            {f.title}
-                                        </h3>
-                                    </div>
-
-                                    {/* Description: GPU Accelerated Reveal */}
-                                    <div className={`overflow-hidden transition-all duration-700 delay-100
-                                        ${isActive ? 'max-h-60 opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}
-                                    `}>
-                                        <p className="text-sm md:text-body-lead text-slate-300 max-w-lg mb-8 font-light leading-relaxed border-l border-cyan-500/50 pl-6 italic">
-                                            "{f.desc}"
-                                        </p>
-                                        <div className="flex items-center gap-3 text-cyan-400 font-bold">
-                                            <span className="text-[10px] uppercase tracking-widest">Protocolo Activo</span>
-                                            <ArrowUpRight className="w-4 h-4" />
+                                            <p className="text-body-std text-slate-300 max-w-lg mb-8 leading-relaxed border-l border-cyan-500/30 pl-6 italic">
+                                                "{f.desc}"
+                                            </p>
+                                            <div className="flex items-center gap-2 text-cyan-400">
+                                                <span className="text-[10px] font-mono tracking-widest uppercase">Protocol_Active</span>
+                                                <ArrowUpRight className="w-3 h-3" />
+                                            </div>
                                         </div>
                                     </div>
 
