@@ -51,6 +51,15 @@
   @apply font-mono text-[9px] tracking-[0.2em] uppercase opacity-60;
 }
 
+@utility section-v-spacing {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  @media (min-width: 768px) {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+}
+
 @media (min-width: 768px) {
   :root {
     --page-frame: 2rem; /* 32px tablet */

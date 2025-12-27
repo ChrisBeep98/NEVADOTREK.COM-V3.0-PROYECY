@@ -17,7 +17,17 @@ Usa siempre la variable `--spacing-frame` para consistencia.
 | :--- | :--- | :--- |
 | **Móvil** | **12px** | `px-frame` |
 | **Tablet** | **32px** | `px-frame` |
-| **Desktop** | **96px** | `px-frame` |
+| Desktop | 96px | `px-frame` |
+
+---
+
+## 📏 1.2 ESPACIADO VERTICAL (Section Padding)
+Define los márgenes superiores e inferiores de cada bloque de contenido.
+
+| Escenario | Valor Real | Clase CSS |
+| :--- | :--- | :--- |
+| **Móvil** | **80px** | `.section-v-spacing` |
+| **Desktop** | **160px** | `.section-v-spacing` |
 
 ---
 

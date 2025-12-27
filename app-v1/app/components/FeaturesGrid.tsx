@@ -63,7 +63,7 @@ export default function FeaturesGrid() {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="bg-white py-24 md:py-40 px-frame border-t border-slate-100">
+        <section ref={containerRef} className="bg-white section-v-spacing px-frame border-t border-slate-100">
             
             <div className="max-w-[1400px] mx-auto mb-16 md:mb-24 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
                 <div>
