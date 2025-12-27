@@ -47,21 +47,25 @@ export default function BookingCTA() {
 
     useGSAP(() => {
         const mm = gsap.matchMedia();
-        const slides = gsap.utils.toArray<HTMLElement>('.desktop-slide');
+        const slides = gsap.utils.toArray<HTMLElement>('.animal-slide');
         
+        // --- ESTADO INICIAL ---
+        gsap.set(slides, { autoAlpha: 0, z: -100, force3D: true });
+        gsap.set(slides[0], { autoAlpha: 1, z: 0 });
+
+        // --- DESKTOP: THE FOCUS VAULT (Anclaje absoluto) ---
         mm.add("(min-width: 768px)", () => {
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top top",
-                    end: "+=400%", // Más espacio de scroll = más suavidad
+                    end: "+=500%", // Más recorrido para zonas de descanso más largas
                     pin: true,
-                    scrub: 0.8, // Inercia aumentada para suavidad total
+                    scrub: 0.1,
                     snap: {
-                        snapTo: [0, 0.48, 0.92, 1],
-                        duration: { min: 0.4, max: 0.8 },
-                        delay: 0.1,
-                        ease: "sine.inOut" // Snap mucho más fluido
+                        snapTo: [0, 0.5, 1],
+                        duration: 0.6,
+                        delay: 0
                     },
                     onUpdate: (self) => {
                         if (progressRef.current) {
@@ -71,174 +75,138 @@ export default function BookingCTA() {
                 }
             });
 
-            gsap.set(slides, { transformPerspective: 1000, force3D: true });
+            // Slide 0 -> 1 (Transición rápida)
+            tl.to(slides[0], { autoAlpha: 0, scale: 1.1, z: 50, duration: 1 }, 0.5)
+              .fromTo(slides[1], { autoAlpha: 0, scale: 0.9, z: -50 }, { autoAlpha: 1, scale: 1, z: 0, duration: 1 }, 0.5)
+              .fromTo(slides[1].querySelectorAll('.text-reveal'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.1, duration: 0.8 }, 0.8);
 
-            // --- SECUENCIA 0 -> 1 (Suavizada) ---
-            tl.to(slides[0], { 
-                autoAlpha: 0, 
-                scale: 1.1, 
-                z: 50, 
-                duration: 1.5, 
-                ease: "sine.inOut" 
-            }, 0)
-            .to(slides[0].querySelectorAll('.text-reveal'), { 
-                y: -30, 
-                autoAlpha: 0, 
-                stagger: 0.05,
-                duration: 0.8 
-            }, 0)
-            .fromTo(slides[1], 
-                { autoAlpha: 0, scale: 0.95, z: -50 },
-                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 0.2)
-            .fromTo(slides[1].querySelectorAll('.text-reveal'), 
-                { y: 30, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 0.6);
+            // MESETA DE LA DANTA (Se queda quieta un buen rato en el scroll)
+            tl.to({}, { duration: 1.5 }); 
 
-            // --- SECUENCIA 1 -> 2 (Suavizada) ---
-            tl.to(slides[1], { 
-                autoAlpha: 0, 
-                scale: 1.1, 
-                z: 50, 
-                duration: 1.5, 
-                ease: "sine.inOut" 
-            }, 2)
-            .to(slides[1].querySelectorAll('.text-reveal'), { 
-                y: -30, 
-                autoAlpha: 0, 
-                stagger: 0.05,
-                duration: 0.8 
-            }, 2)
-            .fromTo(slides[2], 
-                { autoAlpha: 0, scale: 0.95, z: -50 },
-                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 2.2)
-            .fromTo(slides[2].querySelectorAll('.text-reveal'), 
-                { y: 30, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 2.6);
+            // Slide 1 -> 2
+            tl.to(slides[1], { autoAlpha: 0, scale: 1.1, z: 50, duration: 1 }, 3)
+              .fromTo(slides[2], { autoAlpha: 0, scale: 0.9, z: -50 }, { autoAlpha: 1, scale: 1, z: 0, duration: 1 }, 3)
+              .fromTo(slides[2].querySelectorAll('.text-reveal'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.1, duration: 0.8 }, 3.3);
 
-            // FINAL CTA (Suave)
-            tl.fromTo(".final-cta", 
-                { autoAlpha: 0, y: 30 }, 
-                { autoAlpha: 1, y: 0, duration: 0.8, ease: "sine.out" }, 3.2);
+            // Final CTA
+            tl.fromTo(".final-cta", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 4.2);
         });
 
-        // MOBILE REVEAL (Suave)
+        // --- MOBILE: THE SHUTTER REVEAL (Diagonal Peel) ---
         mm.add("(max-width: 767px)", () => {
-            gsap.utils.toArray<HTMLElement>('.mobile-slide').forEach((slide) => {
-                gsap.fromTo(slide.querySelectorAll('.text-reveal-mobile'), 
-                    { y: 20, autoAlpha: 0 },
-                    {
-                        y: 0, autoAlpha: 1,
-                        stagger: 0.1,
-                        duration: 1,
-                        ease: "sine.out",
-                        scrollTrigger: {
-                            trigger: slide,
-                            start: "top 80%",
-                            toggleActions: "play none none reverse"
-                        }
-                    }
-                );
+            // En móvil, los slides están apilados. El scroll "pela" el actual.
+            gsap.set(slides, { autoAlpha: 1, z: 0, clipPath: 'inset(0% 0% 0% 0%)' });
+            
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top top",
+                    end: "+=300%",
+                    pin: true,
+                    scrub: 0.5,
+                }
             });
+
+            // Peel Slide 0 to reveal 1 (Top to Bottom)
+            tl.to(slides[0], { 
+                clipPath: 'inset(100% 0% 0% 0%)', 
+                duration: 1,
+                ease: "power1.inOut"
+            })
+            .fromTo(slides[1].querySelectorAll('.text-reveal'), 
+                { opacity: 0, y: 20 }, 
+                { opacity: 1, y: 0, duration: 0.5 }, 0.5);
+
+            // Peel Slide 1 to reveal 2
+            tl.to(slides[1], { 
+                clipPath: 'inset(100% 0% 0% 0%)',
+                duration: 1,
+                ease: "power1.inOut"
+            }, 1)
+            .fromTo(slides[2].querySelectorAll('.text-reveal'), 
+                { opacity: 0, y: 20 }, 
+                { opacity: 1, y: 0, duration: 0.5 }, 1.5);
+
+            // Final Button
+            tl.fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
         });
 
     }, { scope: sectionRef });
 
     return (
-        <section ref={sectionRef} className="relative w-full bg-slate-950 overflow-hidden">
+        <section ref={sectionRef} className="relative w-full h-screen bg-slate-950 overflow-hidden">
             
-            <div className="hidden md:block w-full h-screen relative">
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/5 z-50">
-                    <div ref={progressRef} className="w-full bg-cyan-500 shadow-[0_0_15px_#06b6d4]"></div>
-                </div>
+            {/* PROGRESS BAR */}
+            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/5 z-50">
+                <div ref={progressRef} className="w-full bg-cyan-500 shadow-[0_0_15px_#06b6d4]"></div>
+            </div>
 
+            {/* SLIDES STACK */}
+            <div className="relative w-full h-full">
                 {FAUNA.map((animal, i) => (
                     <div 
                         key={animal.id}
-                        className={`desktop-slide absolute inset-0 w-full h-full flex items-center justify-center will-change-[transform,opacity] ${i === 0 ? 'visible' : 'invisible'}`}
+                        className={`animal-slide absolute inset-0 w-full h-full flex items-center justify-center will-change-[clip-path,transform,opacity]`}
+                        style={{ zIndex: FAUNA.length - i }} // Stack for mobile peel
                     >
-                        <div className="absolute inset-0 z-0">
+                        {/* BACKGROUND IMAGE */}
+                        <div className="absolute inset-0 z-0 overflow-hidden">
                             <img 
                                 src={animal.img} 
                                 alt={animal.name}
-                                className="w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7] will-change-transform"
+                                className="w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.7]"
                                 style={{
-                                    maskImage: 'radial-gradient(circle at 70% center, black 35%, transparent 85%)',
-                                    WebkitMaskImage: 'radial-gradient(circle at 70% center, black 35%, transparent 85%)'
+                                    maskImage: 'radial-gradient(circle at center, black 35%, transparent 85%)',
+                                    WebkitMaskImage: 'radial-gradient(circle at center, black 35%, transparent 85%)'
                                 }}
                             />
+                            {/* Mobile legibility gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10 md:hidden"></div>
                         </div>
 
-                        <div className="relative z-10 w-full h-full px-frame flex flex-col justify-center">
+                        {/* CONTENT OVERLAY */}
+                        <div className="relative z-20 w-full h-full px-frame flex flex-col justify-end md:justify-center pb-32 md:pb-0">
                             <div className="max-w-[1400px] mx-auto w-full grid grid-cols-12">
-                                <div className="col-span-6 space-y-6 pl-12">
+                                <div className="col-span-12 md:col-span-6 space-y-4 md:space-y-6 md:pl-12">
                                     <div className="flex items-center gap-4 text-reveal">
-                                        <span className={`text-tech-caption ${animal.accentClass} tracking-[0.4em] font-black`}>
+                                        <span className={`text-[10px] font-mono tracking-[0.4em] ${animal.accentClass} font-black uppercase drop-shadow-md`}>
                                             0{i + 1} // {animal.role}
                                         </span>
-                                        <div className="h-px bg-white/20 w-12"></div>
+                                        <div className="h-px bg-white/20 w-12 hidden md:block"></div>
                                     </div>
 
-                                    <h2 className="text-display-xl text-white text-reveal uppercase drop-shadow-2xl">
+                                    <h2 className="text-display-xl text-white leading-[1.3] text-reveal uppercase drop-shadow-2xl">
                                         {animal.name}
                                     </h2>
 
                                     <div className="text-reveal">
-                                        <span className="text-tech-caption text-white/40 block mb-2 italic font-mono">{animal.sciName}</span>
-                                        <p className="text-body-lead text-slate-200 max-w-sm drop-shadow-lg leading-relaxed">
+                                        <span className="text-[10px] font-mono text-white/40 block mb-2 italic">{animal.sciName}</span>
+                                        <p className="text-body-std md:text-body-lead text-slate-200 max-w-sm drop-shadow-lg leading-relaxed">
                                             "{animal.desc}"
                                         </p>
                                     </div>
 
-                                    <div className="flex items-center gap-3 text-white/60 font-mono text-xs pt-4 text-reveal font-bold">
+                                    <div className="flex items-center gap-3 text-white/60 font-mono text-[9px] md:text-xs pt-2 md:pt-4 text-reveal font-bold">
                                         <MapPin className="w-4 h-4 text-cyan-500" />
-                                        <span className="tracking-widest">{animal.location}</span>
+                                        <span className="tracking-widest uppercase">{animal.location}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 ))}
-
-                <div className="final-cta absolute bottom-24 left-0 w-full z-50 flex justify-center pointer-events-none opacity-0">
-                    <button className="pointer-events-auto group bg-white px-10 py-5 flex items-center gap-4 hover:bg-cyan-500 transition-all duration-500 rounded-sm">
-                        <span className="text-black font-bold tracking-widest text-sm uppercase group-hover:text-white">Reservar Expedición</span>
-                        <ArrowRight className="text-black w-4 h-4 group-hover:text-white transition-transform group-hover:translate-x-1" />
-                    </button>
-                </div>
             </div>
 
-            <div className="md:hidden block">
-                {FAUNA.map((animal, i) => (
-                    <div key={animal.id} className="mobile-slide relative w-full h-[85vh] overflow-hidden flex flex-col justify-end pb-24 border-b border-white/5 bg-slate-950">
-                        <div className="absolute inset-0 z-0">
-                            <img src={animal.img} alt={animal.name} className="w-full h-full object-cover saturate-[0.7] sepia-[0.15] contrast-[1.1] brightness-[0.6]" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent z-10"></div>
-                        </div>
-                        
-                        <div className="relative z-20 px-frame space-y-4">
-                            <div className="text-reveal-mobile">
-                                <span className={`text-[10px] font-mono tracking-[0.3em] ${animal.accentClass} block font-black uppercase drop-shadow-lg`}>
-                                    0{i + 1} // {animal.role}
-                                </span>
-                            </div>
-                            <h2 className="text-5xl font-bold text-white leading-none tracking-tighter text-reveal-mobile uppercase drop-shadow-2xl">{animal.name}</h2>
-                            <p className="text-sm text-slate-200 font-medium text-reveal-mobile max-w-[90%] drop-shadow-lg">"{animal.desc}"</p>
-                            <div className="flex items-center gap-2 text-white pt-2 text-reveal-mobile font-bold drop-shadow-lg">
-                                <MapPin className="w-3 h-3 text-cyan-400" />
-                                <span className="text-[9px] font-mono tracking-[0.2em]">{animal.location}</span>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                <div className="py-20 px-frame bg-slate-950 flex flex-col justify-center items-center z-[50]">
-                    <button className="w-full bg-white py-5 flex items-center justify-center gap-4 active:scale-95 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                         <span className="text-black font-bold tracking-widest uppercase text-xs">Solicitar Acceso</span>
-                         <ArrowRight className="text-black w-4 h-4" />
-                    </button>
-                </div>
+            {/* FINAL CTA */}
+            <div className="final-cta absolute bottom-12 md:bottom-24 left-0 w-full z-[60] flex justify-center px-frame pointer-events-none opacity-0">
+                <button className="pointer-events-auto w-full md:w-auto group bg-white px-10 py-5 flex items-center justify-center gap-4 hover:bg-cyan-500 transition-all duration-500 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                    <span className="text-black font-bold tracking-widest text-xs md:text-sm uppercase group-hover:text-white">Reservar Expedición</span>
+                    <ArrowRight className="text-black w-4 h-4 group-hover:text-white transition-transform group-hover:translate-x-1" />
+                </button>
             </div>
 
-            <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay z-[100] sticky top-0 h-screen"
+            {/* GLOBAL GRAIN */}
+            <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay z-[100] h-full"
                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
             </div>
 
