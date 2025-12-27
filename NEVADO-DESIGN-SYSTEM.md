@@ -26,10 +26,13 @@ Usa siempre la variable `--spacing-frame` para consistencia.
 
 | Token | Clase CSS | Estilos Base (Sincronizados) |
 | :--- | :--- | :--- |
-| **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9]` |
+| **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-normal leading-[1.1]` |
+| **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] uppercase` |
+| **STATEMENT** | `.text-statement` | `text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-relaxed` |
 | **SUB-LABEL** | `.text-sub-label` | `font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500` |
 | **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-tight` |
 | **BODY LEAD** | `.text-body-lead` | `text-sm md:text-lg font-light leading-relaxed` |
+| **BODY STANDARD** | `.text-body-std` | `text-xs md:text-base font-light leading-relaxed opacity-70` |
 | **TECH CAPTION** | `.text-tech-caption` | `font-mono text-[9px] tracking-[0.2em] uppercase opacity-60` |
 
 ---
@@ -59,6 +62,9 @@ Usa siempre la variable `--spacing-frame` para consistencia.
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2025-12-26:** Creación del token `HEADING XL` (text-7xl uppercase) para encabezados creativos de alto impacto.
+- **2025-12-26:** Creación del token `STATEMENT` (text-5xl) para manifiestos tipográficos sin títulos.
+- **2025-12-26:** Adición del token `BODY STANDARD` para bloques de texto largos y minimalistas.
 - **2025-12-26:** Estandarización técnica: Mapeo de tokens a clases CSS semánticas en `globals.css`.
 - **2025-12-26:** Refinamiento estético: Reducción de peso tipográfico (Display XL -> Bold, Heading L -> Medium).
 - **2025-12-25:** Creación inicial.
