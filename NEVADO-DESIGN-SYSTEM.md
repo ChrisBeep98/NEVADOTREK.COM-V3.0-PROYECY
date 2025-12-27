@@ -49,7 +49,10 @@ Define los márgenes superiores e inferiores de cada bloque de contenido.
 
 ## 🎨 3. COLOR PALETTE
 - **Atmosphere Dark:** `--color-slate-950` (`#020617`)
-- **Electric Accent:** `--color-cyan-500`
+- **Electric Accent (Primary):** `--color-cyan-500` (`#06b6d4`)
+- **Technical Blue (Himalaya):** `--color-blue-500` (`#3b82f6`)
+- **Safety Orange (Alps):** `--color-orange-500` (`#f97316`)
+- **Vertical Purple (Dolomites):** `--color-purple-500` (`#a855f7`)
 
 ---
 
@@ -72,6 +75,7 @@ Define los márgenes superiores e inferiores de cada bloque de contenido.
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2025-12-26:** Expansión de la paleta cromática: Adición de Blue, Orange y Purple como acentos técnicos secundarios.
 - **2025-12-26:** Creación del token `HEADING XL` (text-7xl uppercase) para encabezados creativos de alto impacto.
 - **2025-12-26:** Creación del token `STATEMENT` (text-5xl) para manifiestos tipográficos sin títulos.
 - **2025-12-26:** Adición del token `BODY STANDARD` para bloques de texto largos y minimalistas.
