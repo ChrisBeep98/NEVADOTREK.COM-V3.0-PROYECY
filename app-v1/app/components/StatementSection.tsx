@@ -50,7 +50,7 @@ export default function StatementSection() {
                     <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
                         01 // Philosophy
                     </span>
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+                    <h2 className="text-display-xl text-white">
                         THE SILENCE
                     </h2>
                     <p className="text-slate-400 text-sm md:text-lg font-light italic mt-6 max-w-sm leading-relaxed">
@@ -63,7 +63,7 @@ export default function StatementSection() {
                     <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
                         02 // Challenge
                     </span>
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+                    <h2 className="text-display-xl text-white">
                         THE ASCENT
                     </h2>
                     <p className="text-slate-400 text-sm md:text-lg font-light italic mt-6 max-w-sm leading-relaxed">
@@ -76,7 +76,7 @@ export default function StatementSection() {
                     <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-6 block">
                         03 // Destiny
                     </span>
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+                    <h2 className="text-display-xl text-white">
                         THE BORDER
                     </h2>
                     <p className="text-slate-300 text-sm md:text-lg font-light mt-8 max-w-lg leading-relaxed">

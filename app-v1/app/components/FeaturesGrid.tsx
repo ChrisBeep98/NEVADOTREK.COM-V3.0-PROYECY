@@ -72,7 +72,7 @@ export default function FeaturesGrid() {
                         Why Choose Nevado
                     </span>
                     {/* TOKEN: DISPLAY XL */}
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tighter leading-[0.9]">
+                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 tracking-tighter leading-[0.9]">
                         THE NEVADO <br/> DIFFERENCE.
                     </h2>
                 </div>
@@ -107,7 +107,7 @@ export default function FeaturesGrid() {
                                 ${activeId === f.id ? 'opacity-0' : 'opacity-100 delay-200'}
                                 left-8 bottom-8
                             `}>
-                                <span className="text-white font-bold tracking-[0.2em] text-sm uppercase md:rotate-180 md:[writing-mode:vertical-rl] whitespace-nowrap">
+                                <span className="text-white font-medium tracking-[0.2em] text-sm uppercase md:rotate-180 md:[writing-mode:vertical-rl] whitespace-nowrap">
                                     {f.title}
                                 </span>
                             </div>
@@ -124,7 +124,7 @@ export default function FeaturesGrid() {
                                 </div>
                                 
                                 {/* TOKEN: HEADING L (Upscaled for panel) */}
-                                <h3 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-6 leading-none uppercase">
+                                <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tighter mb-6 leading-none uppercase">
                                     {f.title}
                                 </h3>
                                 

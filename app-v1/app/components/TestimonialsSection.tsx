@@ -1,121 +1,236 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Star } from 'lucide-react';
+import { Quote, ArrowRight, CornerRightDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+interface Review {
+    id: string;
+    name: string;
+    role: string;
+    trip: string;
+    altitude: string;
+    quote: string;
+    image: string;
+    date: string;
+}
+
+const ALL_REVIEWS: Review[] = [
+    {
+        id: "01",
+        name: "HUGO BESNARD",
+        role: "SENDERISTA",
+        trip: "EXPEDICIÓN PÁRAMO",
+        altitude: "3,800M",
+        date: "HACE 1 SEMANA",
+        quote: "Muchas gracias a David y al equipo de Nevado Trek por organizar esta aventura extraordinaria en el Páramo. Caminamos durante 4 días y fue absolutamente impresionante. Son muy atentos y se adaptan a tus expectativas.",
+        image: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        id: "02",
+        name: "CÈLIA NISARRE",
+        role: "EXPLORADORA",
+        trip: "LA CARBONERA",
+        altitude: "2,900M",
+        date: "HACE 2 MESES",
+        quote: "¡La ruta por La Carbonera ha sido simplemente increíble! El mejor paisaje de Colombia por ahora. Si buscas una experiencia de naturaleza pura, no puedes perdértelo. Todo fue rápido y muy confiable.",
+        image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        id: "03",
+        name: "GUSTAVO FAJARDO",
+        role: "MONTAÑISTA",
+        trip: "NEVADO DEL TOLIMA",
+        altitude: "5,220M",
+        date: "HACE 3 MESES",
+        quote: "Logré la cumbre a pesar de una lesión de espalda gracias a la paciencia y ayuda de los guías. Están preparados para cualquier situación y son extremadamente serviciales. Me sentí seguro en todo momento.",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+        id: "04",
+        name: "DEBBIE PENG",
+        role: "VIAJERA",
+        trip: "PARAMILLO DEL QUINDÍO",
+        altitude: "4,400M",
+        date: "HACE 1 MES",
+        quote: "Fue una caminata desafiante pero gratificante. Nuestro guía Andrés fue fantástico y nos ayudó mucho en las zonas de humedales. Los frailejones y las vistas son simplemente impresionantes.",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        id: "05",
+        name: "RENATA BUTI",
+        role: "SENDERISTA",
+        trip: "LA CARBONERA",
+        altitude: "3,100M",
+        date: "HACE 2 MESES",
+        quote: "Una experiencia completamente diferente a lo habitual. Aprendimos mucho sobre el santuario y la palma de cera. Es una experiencia recomendada a ojo cerrado junto a Nevado Trek.",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        id: "06",
+        name: "SIMON RITTER",
+        role: "AVENTURERO",
+        trip: "TREKKING PARAMILLO",
+        altitude: "4,000M",
+        date: "HACE 4 MESES",
+        quote: "¡Una gran aventura! Organización espontánea y perfecta para nuestra caminata de 3 días. Gracias al equipo por un viaje tan divertido y hermoso.",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+    }
+];
+
 export default function TestimonialsSection() {
-    const sectionRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
-    const progressRef = useRef<HTMLDivElement>(null);
+    const [displayedReviews, setDisplayedReviews] = useState<Review[]>(ALL_REVIEWS.slice(0, 3));
+    const [hasMore, setHasMore] = useState(true);
 
-    const reviews = [
-        {
-            name: "MARCUS CHEN",
-            trip: "TOLIMA GLACIER",
-            text: "Nevado Trek transformed a simple climb into a technical masterpiece.",
-            img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop"
-        },
-        {
-            name: "SARAH JENKINS",
-            trip: "PRIVATE COCORA",
-            text: "The silence I found in the private palm forests is something I will carry forever.",
-            img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop"
-        },
-        {
-            name: "LUCAS MARTINEZ",
-            trip: "PARAMO EXPEDITION",
-            text: "Authentic, raw, and professional. Seeing the Frailejones changed my perspective.",
-            img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
-        }
-    ];
+    const loadMore = () => {
+        const currentLength = displayedReviews.length;
+        const nextBatch = ALL_REVIEWS.slice(currentLength, currentLength + 5);
+        if (nextBatch.length > 0) setDisplayedReviews(prev => [...prev, ...nextBatch]);
+        if (currentLength + nextBatch.length >= ALL_REVIEWS.length) setHasMore(false);
+    };
 
-    useGSAP(() => {
+    useLayoutEffect(() => {
         const track = trackRef.current;
-        const section = sectionRef.current;
-        if (!track || !section) return;
+        const container = containerRef.current;
+        if (!track || !container) return;
 
-        gsap.to(track, {
-            x: () => -(track.scrollWidth - window.innerWidth),
-            ease: "none",
-            scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: () => `+=${track.scrollWidth}`,
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true,
+        const oldTriggers = ScrollTrigger.getAll();
+        oldTriggers.forEach(t => { if (t.vars.trigger === container) t.kill(); });
+
+        let ctx = gsap.context(() => {
+            const totalWidth = track.scrollWidth;
+            const windowWidth = window.innerWidth;
+            const scrollAmount = totalWidth - windowWidth;
+
+            if (scrollAmount > 0) {
+                gsap.to(track, {
+                    x: -scrollAmount,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top top",
+                        end: () => `+=${scrollAmount + 200}`,
+                        pin: true,
+                        scrub: 1,
+                        invalidateOnRefresh: true,
+                    }
+                });
             }
-        });
+        }, containerRef);
 
-        gsap.fromTo(progressRef.current, 
-            { scaleX: 0, transformOrigin: "left" },
-            { scaleX: 1, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: () => `+=${track.scrollWidth}`, scrub: 1 } }
-        );
-
-    }, { scope: sectionRef });
+        return () => ctx.revert();
+    }, [displayedReviews]);
 
     return (
-        <section ref={sectionRef} className="relative h-screen bg-[#020617] overflow-hidden">
+        <section ref={containerRef} className="relative h-screen bg-[#020617] text-white overflow-hidden selection:bg-cyan-500 selection:text-black">
             
-            {/* Header */}
-            <div className="absolute top-12 left-frame z-20">
-                {/* TOKEN: SUB-LABEL */}
-                <span className="text-cyan-500 font-mono text-[10px] tracking-[0.4em] uppercase mb-4 block">
-                    Expedition Logs
-                </span>
-                {/* TOKEN: DISPLAY XL */}
-                <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9]">
-                    THE ECHOES.
-                </h2>
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute inset-0 opacity-[0.04]"
+                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+                </div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="absolute bottom-12 left-frame right-frame h-[1px] bg-white/10 z-20 overflow-hidden">
-                <div ref={progressRef} className="absolute inset-0 bg-cyan-500 shadow-[0_0_10px_cyan]"></div>
+            {/* FIXED HEADER - Adjusted for Mobile Spacing */}
+            <div className="absolute top-16 md:top-24 left-0 w-full z-20 px-[var(--page-frame)] flex justify-between items-start pointer-events-none">
+                <div className="mt-4 md:mt-0">
+                    <span className="text-sub-label mb-2 block">
+                        Bitácora de Expedición
+                    </span>
+                    <h2 className="text-display-xl text-slate-100">
+                        LOS ECOS
+                    </h2>
+                </div>
+                <div className="hidden md:flex flex-col items-end">
+                     <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">
+                        Estado de Ruta
+                    </span>
+                    <div className="flex gap-1 mt-1">
+                        {[1,2,3,4,5].map(i => <div key={i} className="w-1 h-4 bg-cyan-500/80"></div>)}
+                    </div>
+                </div>
             </div>
 
-            {/* THE TRACK */}
-            <div ref={trackRef} className="flex flex-nowrap h-full items-center px-[10vw] gap-24 md:gap-48">
-                {reviews.map((review, i) => (
-                    <div key={i} className="flex-shrink-0 w-[300px] md:w-[700px] flex flex-col gap-10">
+            {/* HORIZONTAL TRACK - Adjusted PT for Mobile */}
+            <div ref={trackRef} className="flex h-full items-center pl-[var(--page-frame)] pr-[20vw] md:pr-[50vw]">
+                
+                {/* INTRO BLOCK */}
+                <div className="flex-shrink-0 w-[85vw] md:w-[25vw] mr-20 md:mr-32 flex flex-col justify-center z-10 pt-40 md:pt-20">
+                    <p className="font-mono text-[10px] md:text-sm text-cyan-500 tracking-widest mb-4 md:mb-6">
+                        // TESTIMONIOS_CLIENTE
+                    </p>
+                    <p className="text-lg md:text-xl font-light leading-relaxed text-slate-300">
+                        Explorando las vivencias de quienes alcanzaron la cumbre con nosotros.
+                    </p>
+                    <div className="mt-8 flex items-center gap-4 text-xs font-mono text-white/50">
+                        <ArrowRight className="w-4 h-4 text-cyan-500" />
+                        DESLIZA PARA EXPLORAR
+                    </div>
+                </div>
+
+                {/* CARDS LOOP - More Spacing in Mobile */}
+                {displayedReviews.map((review) => (
+                    <div key={review.id} className="flex-shrink-0 relative group flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16 mr-20 md:mr-24 w-[85vw] md:w-[65vw] lg:w-[50vw] pt-40 md:pt-20">
                         
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden border border-white/10 grayscale hover:grayscale-0 transition-all duration-700">
-                                <img src={review.img} alt={review.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex flex-col">
-                                <div className="flex gap-1 mb-2">
-                                    {[...Array(5)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-cyan-400 text-cyan-400" />)}
-                                </div>
-                                {/* TOKEN: HEADING L */}
-                                <span className="text-white font-bold tracking-tight text-xl md:text-3xl">{review.name}</span>
-                                {/* TOKEN: TECH CAPTION */}
-                                <span className="text-[10px] font-mono text-cyan-500 tracking-widest uppercase opacity-80">{review.trip}</span>
+                        <div className="relative w-full md:w-[45%] aspect-[16/9] md:aspect-[4/5] overflow-hidden rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700 ease-out shrink-0 bg-white/5">
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent z-10"></div>
+                            <img src={review.image} alt={review.name} className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                            <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 z-20 flex justify-between items-end font-mono text-[9px] tracking-widest text-white/80">
+                                <span className="uppercase">{review.date}</span>
+                                <span className="text-cyan-500">{review.altitude}</span>
                             </div>
                         </div>
 
-                        {/* TOKEN: BODY LEAD (Large for Quotes) */}
-                        <p className="text-2xl md:text-5xl lg:text-6xl font-light text-white leading-tight italic tracking-tighter">
-                            "{review.text}"
-                        </p>
-
-                        {/* TOKEN: TECH CAPTION */}
-                        <div className="font-mono text-[9px] text-white/20 tracking-[0.5em] uppercase">
-                            Expedition_Log // 0{i + 1}
+                        <div className="w-full md:w-[55%] flex flex-col items-start relative z-10">
+                            <Quote className="w-6 h-6 md:w-12 md:h-12 text-cyan-500/20 mb-3 md:mb-4 transform -scale-x-100" />
+                            <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-slate-200 mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
+                                "{review.quote}"
+                            </h3>
+                            <div className="flex items-center gap-4 border-t border-white/10 pt-4 w-full">
+                                <div className="font-mono text-xs">
+                                    <div className="text-cyan-500 font-bold tracking-widest">{review.name}</div>
+                                    <div className="text-white/40 mt-1 uppercase text-[10px]">{review.role} // {review.trip}</div>
+                                </div>
+                                <div className="ml-auto font-mono text-[9px] text-white/20">
+                                    REF_{review.id}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 ))}
+
+                {/* LOAD MORE */}
+                <div className="flex-shrink-0 w-[80vw] md:w-[30vw] flex items-center justify-center ml-12 md:ml-24 pt-40 md:pt-20">
+                    {hasMore ? (
+                         <button onClick={loadMore} className="group relative flex items-center gap-4 md:gap-6 px-8 py-5 md:px-10 md:py-6 overflow-hidden border border-white/10 hover:border-cyan-500/30 transition-colors duration-500">
+                            <div className="absolute inset-0 bg-cyan-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30 group-hover:border-cyan-500 transition-colors"></div>
+                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30 group-hover:border-cyan-500 transition-colors"></div>
+                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] text-white group-hover:text-cyan-400 group-hover:tracking-[0.3em] transition-all duration-500 whitespace-nowrap">
+                                VER MÁS HISTORIAS
+                            </span>
+                            <CornerRightDown className="relative z-10 w-4 h-4 text-white/50 group-hover:text-cyan-500 transition-colors duration-300" />
+                        </button>
+                    ) : (
+                        <div className="text-center">
+                            <div className="text-4xl md:text-9xl leading-none font-bold text-white/5 select-none tracking-tighter">
+                                FIN_RUTA
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+            </div>
+            
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-white/5">
+                 <div className="h-full bg-gradient-to-r from-cyan-500 to-transparent w-[30%] opacity-50"></div>
             </div>
 
-            {/* Grain Overlay */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay z-50"
-                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
-            </div>
         </section>
     );
 }

@@ -7,7 +7,7 @@ export default function ExpeditionsGrid() {
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                 <div>
                     {/* TOKEN: DISPLAY XL (Variant) */}
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[0.9] mb-4">
                         SELECT <br/>EXPEDITIONS.
                     </h2>
                     {/* TOKEN: BODY LEAD */}
@@ -41,7 +41,7 @@ export default function ExpeditionsGrid() {
                             01 // PATAGONIA
                         </span>
                         {/* TOKEN: HEADING L */}
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
+                        <h3 className="text-2xl md:text-3xl font-medium text-white mb-2 tracking-tight">
                             Torres del Silencio
                         </h3>
                         <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
@@ -72,7 +72,7 @@ export default function ExpeditionsGrid() {
                         <span className="text-[10px] text-blue-400 font-mono mb-3 block tracking-[0.4em] uppercase">
                             02 // HIMALAYA
                         </span>
-                        <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight">
+                        <h3 className="text-2xl md:text-4xl font-medium text-white mb-2 tracking-tight">
                             La Corona de Hielo
                         </h3>
                         <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
@@ -102,7 +102,7 @@ export default function ExpeditionsGrid() {
                         <span className="text-[10px] text-orange-400 font-mono mb-3 block tracking-[0.4em] uppercase">
                             03 // ALPS
                         </span>
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
+                        <h3 className="text-2xl md:text-3xl font-medium text-white mb-2 tracking-tight">
                             La Ruta Haute
                         </h3>
                         <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
@@ -132,7 +132,7 @@ export default function ExpeditionsGrid() {
                         <span className="text-[10px] text-purple-400 font-mono mb-3 block tracking-[0.4em] uppercase">
                             04 // DOLOMITES
                         </span>
-                        <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 tracking-tight">
+                        <h3 className="text-2xl md:text-4xl font-medium text-white mb-2 tracking-tight">
                             Vertical Limit
                         </h3>
                         <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
