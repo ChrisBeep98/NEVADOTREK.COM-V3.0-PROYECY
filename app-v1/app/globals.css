@@ -18,20 +18,21 @@
   --spacing-frame: var(--page-frame);
 }
 
+/* TYPOGRAPHY TOKENS - SEMANTIC UTILITIES */
 @utility text-display-xl {
-  @apply text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9];
+  @apply text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.85];
 }
 
 @utility text-sub-label {
-  @apply font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500;
+  @apply font-mono text-[10px] md:text-xs tracking-[0.4em] uppercase text-cyan-500;
 }
 
 @utility text-heading-l {
-  @apply text-2xl md:text-3xl font-medium tracking-tight;
+  @apply text-2xl md:text-4xl font-medium tracking-tight leading-tight;
 }
 
 @utility text-body-lead {
-  @apply text-sm md:text-lg font-light leading-relaxed;
+  @apply text-base md:text-xl font-light leading-relaxed;
 }
 
 @utility text-tech-caption {
@@ -52,7 +53,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #020617;
     --foreground: #ededed;
   }
 }
