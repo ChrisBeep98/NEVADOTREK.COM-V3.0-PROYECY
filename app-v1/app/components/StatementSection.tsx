@@ -17,16 +17,17 @@ export default function StatementSection() {
         const words = containerRef.current?.querySelectorAll('.word');
         if (words) {
             gsap.fromTo(words, 
-                { opacity: 0.1, color: "rgba(255, 255, 255, 0.1)" },
+                { opacity: 0.1, y: 15, filter: "blur(8px)" },
                 { 
                     opacity: 1,
-                    color: "rgba(255, 255, 255, 1)",
-                    stagger: 0.01,
+                    y: 0,
+                    filter: "blur(0px)",
+                    stagger: 0.03,
                     scrollTrigger: {
                         trigger: containerRef.current,
                         start: "top 90%",
                         end: "bottom 60%",
-                        scrub: 0.5,
+                        scrub: 1.5,
                     }
                 }
             );
@@ -45,7 +46,7 @@ export default function StatementSection() {
                 <div ref={containerRef} className="w-full">
                     <p className="block">
                         {manifesto.split(" ").map((word, i) => (
-                            <span key={i} className="word text-statement leading-[1.3] inline-block mr-[0.3em] font-medium text-white/10 will-change-opacity">
+                            <span key={i} className="word text-statement leading-[1.3] inline-block mr-[0.3em] font-medium text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-500 will-change-transform will-change-opacity">
                                 {word}
                             </span>
                         ))}
