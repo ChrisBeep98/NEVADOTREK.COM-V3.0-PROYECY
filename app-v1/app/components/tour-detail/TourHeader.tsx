@@ -76,10 +76,10 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-transparent"></div>
             </div>
 
-            {/* 2. THE CURTAIN (Architectural Slider) */}
+            {/* 2. THE CURTAIN (Architectural Slider) - Reduced width to 35vw to show more image */}
             <div 
                 ref={curtainRef}
-                className="absolute left-0 top-0 h-full w-[45vw] bg-slate-950 z-10 border-r border-white/5 shadow-[20px_0_60px_rgba(0,0,0,0.8)]"
+                className="absolute left-0 top-0 h-full w-[35vw] bg-slate-950 z-10 border-r border-white/5 shadow-[20px_0_100px_rgba(0,0,0,0.8)]"
             >
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.05]"></div>
             </div>
@@ -126,13 +126,13 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                         <div className="flex gap-16 pt-4">
                             <div className="flex flex-col gap-2">
                                 <span className="text-journal-data text-slate-500 uppercase">Elevation</span>
-                                <span className="text-heading-l !font-light text-white/90 tracking-tight">{tour.altitude.es}</span>
+                                <span className="text-body-lead !font-light text-white/90 tracking-tight">{tour.altitude.es}</span>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <span className="text-journal-data text-slate-500 uppercase">Intensity</span>
                                 <div className="flex items-center gap-3">
                                     <div className={`w-1.5 h-1.5 rounded-full ${tour.difficulty === 'Hard' ? 'bg-orange-500 shadow-[0_0_10px_#f97316]' : 'bg-cyan-500 shadow-[0_0_10px_#06b6d4]'}`}></div>
-                                    <span className="text-heading-l !font-light text-white/90 tracking-tight uppercase">{tour.difficulty}</span>
+                                    <span className="text-body-lead !font-light text-white/90 tracking-tight uppercase">{tour.difficulty}</span>
                                 </div>
                             </div>
                         </div>
