@@ -14,8 +14,8 @@ export default function Home() {
         <StatementSection />
         <ExpeditionsGrid />
         <FeaturesGrid />
-        <TestimonialsSection />
         <BookingCTA />
+        <TestimonialsSection />
         <Footer />
       </div>
     </main>

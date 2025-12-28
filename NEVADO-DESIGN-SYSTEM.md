@@ -40,7 +40,7 @@ Define los márgenes superiores e inferiores de cada bloque de contenido.
 | **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.3] uppercase` |
 | **STATEMENT** | `.text-statement` | `text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-relaxed` |
 | **SUB-LABEL** | `.text-sub-label` | `font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500` |
-| **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-tight` |
+| **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-wide` |
 | **BODY LEAD** | `.text-body-lead` | `text-sm md:text-lg font-light leading-relaxed` |
 | **BODY STANDARD** | `.text-body-std` | `text-xs md:text-base font-light leading-relaxed opacity-70` |
 | **JOURNAL DATA** | `.text-journal-data` | `font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 italic` |

@@ -42,7 +42,7 @@
 }
 
 @utility text-heading-l {
-  @apply text-2xl md:text-4xl font-medium tracking-tight leading-tight;
+  @apply text-2xl md:text-4xl font-medium tracking-wide leading-tight;
 }
 
 @utility text-body-lead {
