@@ -4,7 +4,6 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Cloud, Map, Compass } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -18,9 +17,10 @@ export default function StatementSection() {
         const words = containerRef.current?.querySelectorAll('.word');
         if (words) {
             gsap.fromTo(words, 
-                { opacity: 0.1 },
+                { opacity: 0.1, color: "rgba(255, 255, 255, 0.1)" },
                 { 
                     opacity: 1,
+                    color: "rgba(255, 255, 255, 1)",
                     stagger: 0.01,
                     scrollTrigger: {
                         trigger: containerRef.current,
@@ -42,19 +42,6 @@ export default function StatementSection() {
         >
             <div className="relative z-10 w-full px-frame max-w-[1400px] mx-auto">
                 
-                {/* Journal Header - Auténtico Montañismo */}
-                <div className="mb-12 md:mb-20 flex items-center gap-6 opacity-30">
-                    <div className="flex items-center gap-3">
-                        <Map className="w-4 h-4 text-cyan-500" />
-                        <span className="text-[10px] font-mono tracking-[0.4em] text-white uppercase font-bold">Ruta // El Tolima</span>
-                    </div>
-                    <div className="h-px w-12 bg-white/20"></div>
-                    <div className="flex items-center gap-3">
-                        <Cloud className="w-4 h-4 text-white/40" />
-                        <span className="text-[10px] font-mono tracking-[0.4em] text-white/40 uppercase">Clima: Despejado</span>
-                    </div>
-                </div>
-
                 <div ref={containerRef} className="w-full">
                     <p className="block">
                         {manifesto.split(" ").map((word, i) => (
@@ -63,25 +50,6 @@ export default function StatementSection() {
                             </span>
                         ))}
                     </p>
-                </div>
-
-                {/* Journal Footer - Detalles de Guianza */}
-                <div className="mt-20 md:mt-32 flex flex-wrap gap-12 opacity-20">
-                    <div className="flex flex-col gap-2">
-                        <span className="text-[8px] font-mono tracking-[0.5em] text-white uppercase">Hito de Altitud</span>
-                        <span className="text-xl font-bold text-white tracking-tighter">1.900m <span className="text-cyan-500 text-xs">▲</span></span>
-                    </div>
-                    <div className="flex flex-col gap-2 border-l border-white/10 pl-12">
-                        <span className="text-[8px] font-mono tracking-[0.5em] text-white uppercase">Guía de Cabeza</span>
-                        <span className="text-sm font-bold text-white tracking-widest uppercase">Salento Heritage</span>
-                    </div>
-                    <div className="flex flex-col gap-2 border-l border-white/10 pl-12">
-                        <span className="text-[8px] font-mono tracking-[0.5em] text-white uppercase">Orientación</span>
-                        <div className="flex items-center gap-2">
-                            <Compass className="w-4 h-4 text-cyan-500 animate-spin-slow" />
-                            <span className="text-xs font-mono text-white/60">NORTE_SÉCURO</span>
-                        </div>
-                    </div>
                 </div>
 
             </div>
