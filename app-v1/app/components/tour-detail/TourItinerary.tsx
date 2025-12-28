@@ -46,7 +46,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
     }, { scope: containerRef });
 
     return (
-        <section id="itinerary" ref={containerRef} className="bg-slate-950 py-32 md:py-48 px-frame border-t border-white/5 relative">
+        <section id="itinerary" ref={containerRef} className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative">
             
             <div className="max-w-6xl mx-auto">
                 {/* Header de Sección */}

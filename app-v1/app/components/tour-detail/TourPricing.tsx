@@ -16,7 +16,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
     const sortedPricing = pricing ? [...pricing].sort((a, b) => a.minPax - b.minPax) : [];
 
     return (
-        <section id="pricing" className="bg-slate-950 py-32 md:py-48 px-frame border-t border-white/5">
+        <section id="pricing" className="bg-slate-950 section-v-spacing px-frame border-t border-white/5">
             <div className="max-w-7xl mx-auto">
                 
                 <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">

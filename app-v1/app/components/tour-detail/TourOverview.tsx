@@ -33,7 +33,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     }, { scope: containerRef });
 
     return (
-        <section id="overview" ref={containerRef} className="bg-slate-950 text-slate-200 py-32 md:py-48 px-frame relative">
+        <section id="overview" ref={containerRef} className="bg-slate-950 text-slate-200 section-v-spacing px-frame relative">
             <div className="max-w-6xl mx-auto overview-start">
                 
                 {/* 1. Header & Hook - MÁS AIRE Y JERARQUÍA */}

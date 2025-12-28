@@ -36,7 +36,7 @@ export default function TourGallery({ images }: { images: string[] }) {
     }, { scope: containerRef });
 
     return (
-        <section id="gallery" ref={containerRef} className="py-32 md:py-48 px-frame bg-slate-950 border-t border-white/5">
+        <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-slate-950 border-t border-white/5">
              <div className="max-w-6xl mx-auto">
                 <div className="mb-12 flex items-baseline justify-between">
                      <span className="text-sub-label text-slate-500">VISUAL DIARY</span>

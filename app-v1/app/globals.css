@@ -58,11 +58,11 @@
 }
 
 @utility section-v-spacing {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 2.5rem;   /* 40px -> Gap Total: 80px */
+  padding-bottom: 2.5rem;
   @media (min-width: 768px) {
-    padding-top: 10rem;
-    padding-bottom: 10rem;
+    padding-top: 5rem;   /* 80px -> Gap Total: 160px */
+    padding-bottom: 5rem;
   }
 }
 

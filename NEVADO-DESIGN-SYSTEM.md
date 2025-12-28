@@ -22,12 +22,13 @@ Usa siempre la variable `--spacing-frame` para consistencia.
 ---
 
 ## 📏 1.2 ESPACIADO VERTICAL (Section Padding)
-Define los márgenes superiores e inferiores de cada bloque de contenido.
+Define el **ritmo vertical** entre bloques de contenido.
+*Estrategia: Split Padding (Mitad arriba / Mitad abajo) para que la suma entre secciones genere el espacio correcto.*
 
-| Escenario | Valor Real | Clase CSS |
-| :--- | :--- | :--- |
-| **Móvil** | **80px** | `.section-v-spacing` |
-| **Desktop** | **160px** | `.section-v-spacing` |
+| Escenario | Espacio Total Deseado | Implementación (Split) | Clase CSS |
+| :--- | :--- | :--- | :--- |
+| **Móvil** | **80px** | `py-[40px]` | `.section-v-spacing` |
+| **Desktop** | **160px** | `py-[80px]` | `.section-v-spacing` |
 
 ---
 
