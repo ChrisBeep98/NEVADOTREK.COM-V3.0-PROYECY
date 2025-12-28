@@ -25,6 +25,14 @@
 }
 
 /* TYPOGRAPHY TOKENS - SEMANTIC UTILITIES */
+@utility text-h-expedition {
+  @apply text-7xl md:text-9xl lg:text-[6.4vw] font-semibold tracking-tighter leading-none;
+}
+
+@utility text-hero-title {
+  @apply text-6xl md:text-8xl lg:text-[9vw] font-semibold tracking-tighter leading-[0.9];
+}
+
 @utility text-display-xl {
   @apply text-5xl md:text-8xl font-bold tracking-normal leading-[1.3];
 }
