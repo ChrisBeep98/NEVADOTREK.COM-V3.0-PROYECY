@@ -6,6 +6,7 @@ import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Tour } from '../types/api';
+import Link from 'next/link';
 
 // Registrar plugins solo en el cliente
 if (typeof window !== 'undefined') {
@@ -19,7 +20,7 @@ interface TourCardProps {
 }
 
 export default function TourCard({ tour, index, className = '' }: TourCardProps) {
-    const cardRef = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLAnchorElement>(null);
 
     // Animación On-Reveal (Mantenemos la optimización de performance)
     useGSAP(() => {
@@ -61,9 +62,10 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
     const { accent: accentColor, badge: badgeColor } = getThemeColors();
 
     return (
-        <div 
+        <Link 
+            href={`/tours/${tour.tourId}`}
             ref={cardRef}
-            className={`group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer will-change-transform ${className}`}
+            className={`group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer block will-change-transform ${className}`}
         >
             {/* Imagen Original con Hover scale sutil */}
             <img 
@@ -115,6 +117,6 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }

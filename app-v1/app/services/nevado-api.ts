@@ -26,3 +26,13 @@ export async function getTours(): Promise<Tour[]> {
         return [];
     }
 }
+
+/**
+ * Fetches a single tour by ID.
+ * Since the API doesn't support fetching by ID, we fetch all and find.
+ * This benefits from the Next.js fetch cache of getTours().
+ */
+export async function getTourById(id: string): Promise<Tour | undefined> {
+    const tours = await getTours();
+    return tours.find(t => t.tourId === id);
+}

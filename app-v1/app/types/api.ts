@@ -17,9 +17,9 @@ export interface PricingTier {
 }
 
 export interface ItineraryDay {
-    day: number;
+    dayNumber: number; // Changed from day
     title: LocalizedText;
-    description: LocalizedText;
+    activities: LocalizedText[]; // Changed from description
 }
 
 export interface FAQ {
@@ -40,9 +40,9 @@ export interface Tour {
     temperature: LocalizedText;
     images: string[];
     pricingTiers: PricingTier[];
-    inclusions: LocalizedList;
-    exclusions: LocalizedList;
-    itinerary: ItineraryDay[];
+    inclusions: LocalizedText[]; // Changed from LocalizedList
+    exclusions: LocalizedText[]; // Changed from LocalizedList
+    itinerary: { days: ItineraryDay[] }; // Changed from ItineraryDay[]
     faqs: FAQ[];
     recommendations: LocalizedList;
     isActive: boolean;
