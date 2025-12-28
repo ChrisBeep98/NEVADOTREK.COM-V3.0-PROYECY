@@ -43,16 +43,16 @@ Define los márgenes superiores e inferiores de cada bloque de contenido.
 | **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-tight` |
 | **BODY LEAD** | `.text-body-lead` | `text-sm md:text-lg font-light leading-relaxed` |
 | **BODY STANDARD** | `.text-body-std` | `text-xs md:text-base font-light leading-relaxed opacity-70` |
-| **TECH CAPTION** | `.text-tech-caption` | `font-mono text-[9px] tracking-[0.2em] uppercase opacity-60` |
+| **JOURNAL DATA** | `.text-journal-data` | `font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 italic` |
 
 ---
 
 ## 🎨 3. COLOR PALETTE
 - **Atmosphere Dark:** `--color-slate-950` (`#020617`)
-- **Electric Accent (Primary):** `--color-cyan-500` (`#06b6d4`)
-- **Technical Blue (Himalaya):** `--color-blue-500` (`#3b82f6`)
-- **Safety Orange (Alps):** `--color-orange-500` (`#f97316`)
-- **Vertical Purple (Dolomites):** `--color-purple-500` (`#a855f7`)
+- **Summit Cyan (Accent):** `--color-cyan-500` (`#06b6d4`)
+- **Glacier Blue:** `--color-blue-500` (`#3b82f6`)
+- **Páramo Orange:** `--color-orange-500` (`#f97316`)
+- **Vertical Purple:** `--color-purple-500` (`#a855f7`)
 
 ---
 
