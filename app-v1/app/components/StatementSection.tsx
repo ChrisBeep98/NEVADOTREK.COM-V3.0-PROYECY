@@ -10,10 +10,12 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 export default function StatementSection() {
     const sectionRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const graphicRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         if (!sectionRef.current) return;
 
+        // Text Reveal
         const words = containerRef.current?.querySelectorAll('.word');
         if (words) {
             gsap.fromTo(words, 
@@ -32,6 +34,19 @@ export default function StatementSection() {
                 }
             );
         }
+
+        // Compass Rotation
+        if (graphicRef.current) {
+            gsap.to(graphicRef.current, {
+                rotation: 180,
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 2,
+                }
+            });
+        }
     }, { scope: sectionRef });
 
     const manifesto = "Dejamos atrás el ruido del valle para encontrar la señal de la montaña. Construimos el umbral hacia lo salvaje, donde el aire escasea y la claridad mental se vuelve absoluta. Aquí, cada paso es una promesa de regreso transformado.";
@@ -41,9 +56,9 @@ export default function StatementSection() {
             ref={sectionRef} 
             className="relative h-auto section-v-spacing bg-slate-950 overflow-hidden flex items-center transform-gpu"
         >
-            <div className="relative z-10 w-full px-frame max-w-[1400px] mx-auto">
+            <div className="relative z-10 w-full px-frame flex justify-between items-center gap-12">
                 
-                <div ref={containerRef} className="w-full">
+                <div ref={containerRef} className="w-full max-w-6xl">
                     <p className="block">
                         {manifesto.split(" ").map((word, i) => (
                             <span key={i} className="word text-statement leading-[1.3] inline-block mr-[0.3em] font-medium text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-500 will-change-transform will-change-opacity">
@@ -51,6 +66,21 @@ export default function StatementSection() {
                             </span>
                         ))}
                     </p>
+                </div>
+
+                {/* Right Visual Detail - Rotating Compass Ring */}
+                <div ref={graphicRef} className="hidden lg:flex items-center justify-center opacity-30 mix-blend-screen">
+                    <svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-cyan-500">
+                        {/* Outer Ring */}
+                        <circle cx="120" cy="120" r="119" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="opacity-40" />
+                        {/* Middle Ring */}
+                        <circle cx="120" cy="120" r="80" stroke="white" strokeWidth="1" className="opacity-20" />
+                        {/* Inner Cross */}
+                        <path d="M120 40V200" stroke="currentColor" strokeWidth="1" className="opacity-50" />
+                        <path d="M40 120H200" stroke="currentColor" strokeWidth="1" className="opacity-50" />
+                        {/* North Marker */}
+                        <path d="M120 20L125 35H115L120 20Z" fill="white" />
+                    </svg>
                 </div>
 
             </div>
