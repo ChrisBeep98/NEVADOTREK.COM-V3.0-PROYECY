@@ -77,7 +77,7 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
             
             {/* Badge Original (Top Right) */}
             <div className="absolute top-6 right-6 z-20">
-                <span className="text-tech-caption px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white uppercase">
+                <span className="text-journal-data px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white uppercase">
                     {tour.difficulty}
                 </span>
             </div>
@@ -101,7 +101,7 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
                     </p>
                     
                     {/* Iconos Originales */}
-                    <div className="flex items-center gap-4 text-tech-caption text-slate-300">
+                    <div className="flex items-center gap-4 text-journal-data text-slate-300">
                         <span className="flex items-center gap-1.5">
                             <Calendar width={12} className={badgeColor} /> {tour.totalDays} Días
                         </span>

@@ -26,7 +26,7 @@
 
 /* TYPOGRAPHY TOKENS - SEMANTIC UTILITIES */
 @utility text-display-xl {
-  @apply text-5xl md:text-7xl lg:text-8xl font-bold tracking-normal leading-[1.3];
+  @apply text-5xl md:text-8xl font-bold tracking-normal leading-[1.3];
 }
 
 @utility text-heading-xl {
@@ -38,11 +38,11 @@
 }
 
 @utility text-sub-label {
-  @apply font-mono text-[10px] md:text-xs tracking-[0.4em] uppercase text-cyan-500;
+  @apply font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500;
 }
 
 @utility text-heading-l {
-  @apply text-2xl md:text-4xl font-medium tracking-wide leading-tight;
+  @apply text-2xl md:text-3xl font-medium tracking-wide leading-tight;
 }
 
 @utility text-body-lead {
@@ -53,8 +53,8 @@
   @apply text-xs md:text-base font-light leading-relaxed opacity-70;
 }
 
-@utility text-tech-caption {
-  @apply font-mono text-[9px] tracking-[0.2em] uppercase opacity-60;
+@utility text-journal-data {
+  @apply font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 italic;
 }
 
 @utility section-v-spacing {

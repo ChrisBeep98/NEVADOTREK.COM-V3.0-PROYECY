@@ -115,7 +115,7 @@ export default function FeaturesGrid() {
                                         <div className="p-3 bg-blue-950 text-white rounded-xl shadow-xl">
                                             <Icon className="w-5 h-5" />
                                         </div>
-                                        <span className="text-tech-caption font-bold text-white tracking-[0.2em] drop-shadow-md">{f.tag}</span>
+                                        <span className="text-journal-data font-bold text-white tracking-[0.2em] drop-shadow-md">{f.tag}</span>
                                     </div>
 
                                     {/* Mobile Centered Bar */}
