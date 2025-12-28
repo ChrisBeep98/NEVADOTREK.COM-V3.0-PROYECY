@@ -1,167 +1,221 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ItineraryDay } from '../../types/api';
-import { Target, MapPin, MoveRight, ChevronRight } from 'lucide-react';
+import { MapPin, ChevronRight, Clock, Info } from 'lucide-react';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
 const THEME_COLORS = [
+    '#06b6d4', // Summit Cyan
     '#f97316', // Páramo Orange
     '#3b82f6', // Glacier Blue
     '#a855f7', // Vertical Purple
-    '#06b6d4', // Summit Cyan
 ];
 
 export default function TourItinerary({ itinerary }: { itinerary: { days: ItineraryDay[] } }) {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const pinRef = useRef<HTMLDivElement>(null);
-    const railRef = useRef<HTMLDivElement>(null);
+    const [activeDay, setActiveDay] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const tabsRef = useRef<HTMLDivElement>(null);
 
+    // Filter valid days just in case
+    const days = itinerary?.days || [];
+
+    // Animation when activeDay changes
     useGSAP(() => {
-        const days = itinerary.days;
-        if (!days || days.length === 0) return;
+        if (!contentRef.current) return;
 
-        const totalWidth = railRef.current?.scrollWidth || 0;
-        const containerWidth = pinRef.current?.offsetWidth || 0;
-        const scrollDistance = totalWidth - containerWidth;
+        // Animate Content Entry
+        gsap.fromTo(contentRef.current.children, 
+            { y: 20, opacity: 0 },
+            { 
+                y: 0, 
+                opacity: 1, 
+                duration: 0.6, 
+                stagger: 0.05, 
+                ease: "power3.out",
+                clearProps: "all" 
+            }
+        );
 
-        if (scrollDistance > 0) {
-            // PINNING THE WHOLE CONTENT (Pinned at the absolute top of viewport during scroll)
-            gsap.to(railRef.current, {
-                x: -scrollDistance,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: pinRef.current,
-                    pin: true,
-                    start: "top top", // Pegado al borde superior del navegador
-                    end: `+=${totalWidth}`,
-                    scrub: 1,
-                    invalidateOnRefresh: true,
-                }
-            });
+        // Animate Active Tab Indicator/Scale (Optional polish)
+        const activeTab = tabsRef.current?.children[activeDay];
+        if (activeTab) {
+            gsap.to(tabsRef.current?.children, { opacity: 0.4, scale: 0.95, duration: 0.3 });
+            gsap.to(activeTab, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" });
         }
 
-        // Animated reveal for content blocks
-        days.forEach((_, index) => {
-            gsap.fromTo(`.day-slab-${index} .reveal-item`, 
-                { opacity: 0, x: 20 },
-                { 
-                    opacity: 1, x: 0, duration: 0.8, stagger: 0.05,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: `.day-slab-${index}`,
-                        start: "top 90%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
+    }, { scope: containerRef, dependencies: [activeDay] });
 
-    }, { scope: sectionRef, dependencies: [itinerary] });
+    // Initial Scroll Trigger for the whole section Title
+    useGSAP(() => {
+        gsap.fromTo(".itinerary-header",
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top 80%",
+                }
+            }
+        );
+    }, { scope: containerRef });
+
+    if (days.length === 0) return null;
+
+    const currentDayData = days[activeDay];
+    const currentColor = THEME_COLORS[activeDay % THEME_COLORS.length];
 
     return (
-        <section id="itinerary" ref={sectionRef} className="bg-slate-950 pb-[80px] md:pb-[160px] px-frame border-t border-white/5 overflow-hidden">
+        <section id="itinerary" ref={containerRef} className="bg-slate-950 py-[80px] md:py-[160px] px-frame border-t border-white/5 relative overflow-hidden min-h-screen flex flex-col">
             
-            {/* Contenedor sin padding superior (pt-0) para reducir el margen top durante el pin */}
-            <div ref={pinRef} className="max-w-6xl mx-auto h-[70vh] flex flex-col justify-start pt-0">
+            {/* Background Gradient - Organic Depth */}
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-slate-900/0 via-slate-900/0 to-slate-900/50 pointer-events-none"></div>
+
+            <div className="max-w-7xl mx-auto w-full z-10">
                 
-                {/* 1. TÍTULO FIJO - Máxima proximidad al tope de la sección */}
-                <div className="mb-8 md:mb-10 pt-8 md:pt-12">
-                    <span className="text-sub-label text-cyan-500 mb-2 block">THE JOURNEY</span>
+                {/* 1. SECTION HEADER */}
+                <div className="mb-16 md:mb-24 itinerary-header">
+                    <span className="text-sub-label text-cyan-500 mb-2 block">TU EXPERIENCIA</span>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight leading-none">
                         ITINERARIO <br/>
                         <span className="text-slate-600">PASO A PASO</span>
                     </h2>
                 </div>
 
-                {/* 2. CARRUSEL HORIZONTAL (Tarjetas Ultra-Anchas) */}
-                <div className="relative flex-grow flex items-start">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
                     
-                    {/* Línea de horizonte técnica */}
-                    <div className="absolute top-0 left-0 w-full h-px bg-white/5 z-0"></div>
+                    {/* 2. TABS NAVIGATOR */}
+                    <div className="lg:w-1/3 flex-shrink-0">
+                        
+                        {/* Mobile Label */}
+                        <div className="lg:hidden mb-4 flex items-center justify-between text-slate-500">
+                            <span className="text-journal-data">EXPLORA LA RUTA</span>
+                            <span className="text-journal-data">{activeDay + 1} / {days.length}</span>
+                        </div>
 
-                    <div 
-                        ref={railRef} 
-                        className="flex flex-nowrap gap-0 items-start pt-6"
-                    >
-                        {itinerary?.days?.map((day, index) => {
-                            const color = THEME_COLORS[index % THEME_COLORS.length];
-                            
-                            return (
-                                <div 
-                                    key={day.dayNumber || index}
-                                    className={`day-slab-${index} flex-shrink-0 w-[90vw] md:w-[850px] pr-16 md:pr-32`}
-                                >
-                                    {/* Contenedor Panorámico */}
-                                    <div className="flex flex-col border-l border-white/5 pl-8 md:pl-16 relative h-full">
-                                        
-                                        {/* Marca de agua de día */}
+                        {/* Scrollable Container */}
+                        <div 
+                            ref={tabsRef}
+                            className="flex lg:flex-col gap-4 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide snap-x"
+                            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                        >
+                            {days.map((day, index) => {
+                                const isActive = index === activeDay;
+                                const tabColor = THEME_COLORS[index % THEME_COLORS.length];
+
+                                return (
+                                    <button
+                                        key={index}
+                                        onClick={() => setActiveDay(index)}
+                                        className={`
+                                            group relative flex-shrink-0 snap-start flex items-center gap-6 p-4 md:p-6 rounded-sm border transition-all duration-300 w-[240px] lg:w-full text-left
+                                            ${isActive 
+                                                ? 'bg-white/[0.03] border-white/20' 
+                                                : 'bg-transparent border-transparent hover:bg-white/[0.01] hover:border-white/5'
+                                            }
+                                        `}
+                                    >
+                                        {/* Active Indicator Line (Left) */}
+                                        <div className={`absolute left-0 top-0 bottom-0 w-1 transition-colors duration-300 ${isActive ? '' : 'bg-transparent'}`} style={{ backgroundColor: isActive ? tabColor : 'transparent' }}></div>
+
+                                        {/* Day Number */}
                                         <span 
-                                            className="absolute -left-4 top-0 text-[140px] font-bold opacity-[0.02] select-none pointer-events-none italic"
-                                            style={{ color: color }}
+                                            className={`text-4xl md:text-5xl font-bold tracking-tighter leading-none transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-700 group-hover:text-slate-600'}`}
                                         >
-                                            0{day.dayNumber}
+                                            {day.dayNumber < 10 ? `0${day.dayNumber}` : day.dayNumber}
                                         </span>
 
-                                        <div className="reveal-item flex items-center gap-4 mb-8 relative z-10">
-                                            <div className="w-2 h-2 rounded-full shadow-[0_0_10px_currentColor]" style={{ backgroundColor: color, color: color }}></div>
-                                            <span className="text-journal-data" style={{ color: color }}>EXPEDITION_NODE_STAGE_0{day.dayNumber}</span>
+                                        {/* Label */}
+                                        <div className="flex flex-col gap-1">
+                                            <span className={`text-[11px] font-bold tracking-wider uppercase ${isActive ? 'text-cyan-500' : 'text-slate-600'}`}>
+                                                DÍA
+                                            </span>
+                                            <span className={`text-sm font-medium line-clamp-1 ${isActive ? 'text-slate-300' : 'text-slate-600'}`}>
+                                                {day.title?.es || `Día ${day.dayNumber}`}
+                                            </span>
                                         </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
 
-                                        <h3 className="reveal-item text-2xl md:text-3xl font-medium text-white mb-8 relative z-10 leading-tight">
-                                            {day.title?.es}
-                                        </h3>
+                    {/* 3. CONTENT DISPLAY (Right Side) */}
+                    <div className="lg:w-2/3 min-h-[500px] relative">
+                        {/* Decorative background line */}
+                        <div className="absolute left-0 top-0 bottom-0 w-px bg-white/5 hidden lg:block"></div>
 
-                                        {/* Contenedor de Texto con tipografía más pequeña (sm/base) */}
-                                        <div className="reveal-item space-y-5 mb-12 relative z-10 w-full">
-                                            {day.activities?.map((act, i) => (
-                                                <div key={i} className="flex gap-5 items-start group">
-                                                    <ChevronRight className="w-3.5 h-3.5 mt-1 text-slate-700 group-hover:text-cyan-500 transition-colors shrink-0" />
-                                                    <p className="text-sm md:text-base font-light text-slate-400 group-hover:text-slate-200 transition-colors leading-relaxed">
-                                                        {act.es}
-                                                    </p>
-                                                </div>
-                                            ))}
+                        <div ref={contentRef} className="lg:pl-12">
+                            
+                            {/* Dynamic Header */}
+                            <div className="mb-10 pb-8 border-b border-white/5 relative">
+                                <div className="flex items-center gap-3 mb-4 opacity-70">
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: currentColor }}></div>
+                                    <span className="text-journal-data" style={{ color: currentColor }}>
+                                        ETAPA {currentDayData.dayNumber}
+                                    </span>
+                                </div>
+                                
+                                <h3 className="text-3xl md:text-5xl font-medium text-white mb-6 leading-tight">
+                                    {currentDayData.title?.es}
+                                </h3>
+
+                                {/* Optional Description */}
+                                {currentDayData.description?.es && (
+                                    <p className="text-body-lead text-slate-400 max-w-2xl">
+                                        {currentDayData.description.es}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Activities List */}
+                            <div className="space-y-6">
+                                <span className="text-sub-label text-slate-600 mb-4 block">DETALLES DE LA JORNADA</span>
+                                
+                                {currentDayData.activities?.map((activity, i) => (
+                                    <div key={i} className="group flex gap-6 items-start p-4 rounded-lg hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
+                                        <div className="mt-1 shrink-0 p-2 rounded-full bg-slate-900 border border-white/10 group-hover:border-cyan-500/30 transition-colors">
+                                            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
                                         </div>
-
-                                        <div className="reveal-item mt-auto pt-8 border-t border-white/5 flex items-center justify-between opacity-40 hover:opacity-100 transition-opacity duration-700">
-                                            <div className="flex items-center gap-4">
-                                                <div className="p-2.5 rounded-full bg-white/5">
-                                                    <MapPin className="w-3.5 h-3.5" style={{ color: color }} />
-                                                </div>
-                                                <div>
-                                                    <span className="block text-[9px] font-mono text-slate-500 uppercase tracking-widest">Sector_Verified</span>
-                                                    <span className="text-white/60 text-[10px] font-mono uppercase tracking-tighter italic">Nevado_Node_{index + 1}</span>
-                                                </div>
-                                            </div>
-                                            <Target className="w-5 h-5" style={{ color: color }} />
+                                        <div className="flex-1">
+                                            <p className="text-base md:text-lg font-light text-slate-300 group-hover:text-white transition-colors leading-relaxed">
+                                                {activity.es}
+                                            </p>
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                ))}
 
-                        {/* Summit Visual Anchor */}
-                        <div className="flex-shrink-0 w-[400px] flex flex-col justify-center border-l border-white/5 pl-16 opacity-10 hover:opacity-100 transition-all duration-1000">
-                            <div className="w-16 h-16 rounded-full border border-dashed border-white/20 flex items-center justify-center mb-6">
-                                <MoveRight className="w-8 h-8 text-white rotate-[-45deg]" />
+                                {(!currentDayData.activities || currentDayData.activities.length === 0) && (
+                                    <div className="flex items-center gap-4 p-6 rounded-lg border border-dashed border-white/10 bg-white/[0.01]">
+                                        <Info className="w-5 h-5 text-slate-600" />
+                                        <span className="text-slate-500 font-light italic">Información detallada no disponible.</span>
+                                    </div>
+                                )}
                             </div>
-                            <h4 className="text-heading-xl text-white tracking-tighter leading-none">THE<br/>SUMMIT</h4>
-                            <span className="text-sub-label text-[10px] mt-4">ASCENT_AUTHORIZED</span>
+
+                            {/* Footer / Stats for the day */}
+                            <div className="mt-12 pt-8 border-t border-white/5 flex flex-wrap gap-8 opacity-60">
+                                <div className="flex items-center gap-3">
+                                    <Clock className="w-4 h-4 text-slate-500" />
+                                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Duración: Día Completo</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <MapPin className="w-4 h-4 text-slate-500" />
+                                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Zona: PNN Los Nevados</span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* Espacio de salida */}
-            <div className="h-[10vh]"></div>
-
         </section>
     );
 }

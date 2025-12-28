@@ -46,11 +46,11 @@
 }
 
 @utility text-sub-label {
-  @apply font-mono text-[10px] tracking-[0.4em] uppercase text-cyan-500;
+  @apply font-bold text-[11px] tracking-[0.15em] uppercase text-cyan-500;
 }
 
 @utility text-heading-l {
-  @apply text-2xl md:text-3xl font-medium tracking-wide leading-tight;
+  @apply text-2xl md:text-3xl font-medium tracking-wide;
 }
 
 @utility text-body-lead {
@@ -62,7 +62,7 @@
 }
 
 @utility text-journal-data {
-  @apply font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 italic;
+  @apply font-semibold text-[10px] tracking-[0.05em] uppercase opacity-70;
 }
 
 @utility section-v-spacing {
