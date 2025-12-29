@@ -30,28 +30,26 @@ export default function TourDepartures({ departures }: { departures: Departure[]
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: frame,
-                    start: "top 90%", // Starts sooner
-                    end: "top 20%",   // Ends sooner
-                    scrub: 0.5,       // Faster reaction
+                    start: "top 85%", // Triggers when item is near the bottom of viewport
+                    toggleActions: "play none none none" // Plays once and stays
                 }
             });
 
-            // The "Merged Bracket" animation with subtle colors and faster speed
+            // Reveal Animation: Ultra-fast and snappy
             tl.fromTo(frame.querySelector('.bracket-line-top'), 
                 { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
-                { width: "100%", backgroundColor: `${color}4D`, duration: 0.6 } // 4D = 30% opacity
+                { width: "100%", backgroundColor: `${color}4D`, duration: 0.5, ease: "power2.out" }
             )
             .fromTo(frame.querySelector('.frame-content'),
-                { opacity: 0.2, x: -10 },
-                { opacity: 1, x: 0, duration: 0.4 }, "-=0.4"
+                { opacity: 0, x: -10 },
+                { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }, "-=0.3"
             );
 
-            // If it's the last one, animate the bottom closing line too
             const bottomLine = frame.querySelector('.bracket-line-bottom');
             if (bottomLine) {
                 tl.fromTo(bottomLine,
                     { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
-                    { width: "100%", backgroundColor: `${color}4D`, duration: 0.6 }, 0
+                    { width: "100%", backgroundColor: `${color}4D`, duration: 0.5, ease: "power2.out" }, 0
                 );
             }
         });
