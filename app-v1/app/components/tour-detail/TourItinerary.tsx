@@ -101,8 +101,8 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                         className={`
                                             group relative flex-shrink-0 snap-start flex items-center gap-4 p-3 md:p-4 rounded-sm border transition-all duration-300 w-[140px] lg:w-full text-left
                                             ${isActive 
-                                                ? 'bg-white/[0.03] border-white/10' 
-                                                : 'bg-transparent border-transparent hover:bg-white/[0.01]'
+                                                ? 'bg-white/[0.05] border-white/20' 
+                                                : 'bg-white/[0.01] border-white/5 hover:border-white/10'
                                             }
                                         `}
                                     >
@@ -134,8 +134,8 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
 
                         <div ref={contentRef} className="lg:pl-16">
                             
-                            {/* Dynamic Header - Reduced Scale */}
-                            <div className="mb-8 pb-6 border-b border-white/5 relative">
+                            {/* Dynamic Header - Hidden on Mobile to avoid redundancy with Tabs */}
+                            <div className="hidden lg:block mb-8 pb-6 border-b border-white/5 relative">
                                 <div className="flex items-center gap-3 mb-3 opacity-70">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentColor }}></div>
                                     <span className="text-journal-data" style={{ color: currentColor }}>
@@ -146,13 +146,14 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                 <h3 className="text-2xl md:text-4xl font-medium text-white mb-4 leading-tight">
                                     {currentDayData.title?.es}
                                 </h3>
-
-                                {currentDayData.description?.es && (
-                                    <p className="text-body-std text-slate-400 max-w-2xl">
-                                        {currentDayData.description.es}
-                                    </p>
-                                )}
                             </div>
+
+                            {/* Optional Description - Always visible if exists */}
+                            {currentDayData.description?.es && (
+                                <p className="text-body-std text-slate-400 max-w-2xl mb-8 lg:mb-0">
+                                    {currentDayData.description.es}
+                                </p>
+                            )}
 
                             {/* Activities List - Compact */}
                             <div className="space-y-4">
