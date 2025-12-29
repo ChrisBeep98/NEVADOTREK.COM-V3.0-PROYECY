@@ -119,7 +119,7 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                     
                     <div 
                         ref={imageWrapperRef}
-                        className="relative w-full h-[65vh] md:h-[900px] bg-slate-900 will-change-[clip-path,transform]"
+                        className="relative w-full h-[65vh] md:h-[900px] bg-slate-950 will-change-[clip-path,transform]"
                         style={{ 
                             clipPath: "inset(0% 26% 0% 0%)",
                             transform: 'translateZ(0)' // GPU Acceleration
