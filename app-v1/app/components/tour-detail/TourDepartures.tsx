@@ -36,14 +36,14 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                 }
             });
 
-            // The "Merged Bracket" animation
+            // The "Merged Bracket" animation with subtle colors and faster speed
             tl.fromTo(frame.querySelector('.bracket-line-top'), 
                 { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
-                { width: "100%", backgroundColor: color, duration: 1 }
+                { width: "100%", backgroundColor: `${color}4D`, duration: 0.6 } // 4D = 30% opacity
             )
             .fromTo(frame.querySelector('.frame-content'),
                 { opacity: 0.2, x: -10 },
-                { opacity: 1, x: 0, duration: 0.5 }, "-=0.8"
+                { opacity: 1, x: 0, duration: 0.4 }, "-=0.4"
             );
 
             // If it's the last one, animate the bottom closing line too
@@ -51,7 +51,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
             if (bottomLine) {
                 tl.fromTo(bottomLine,
                     { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
-                    { width: "100%", backgroundColor: color, duration: 1 }, 0
+                    { width: "100%", backgroundColor: `${color}4D`, duration: 0.6 }, 0
                 );
             }
         });
@@ -79,7 +79,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                     </div>
                 </div>
 
-                {/* 2. THE MERGED FRAMES (No space-y to merge borders) */}
+                {/* 2. THE MERGED FRAMES */}
                 <div className="flex flex-col">
                     {departures.map((dep, index) => {
                         const date = new Date(dep.date._seconds * 1000);
@@ -94,10 +94,10 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                 data-available={available}
                                 className="expedition-frame relative py-10 md:py-14 group"
                             >
-                                {/* Top Line (Shares with previous item's bottom) */}
+                                {/* Top Line */}
                                 <div className="bracket-line-top absolute top-0 left-0 h-px bg-white/5 origin-left"></div>
                                 
-                                {/* Bottom Line ONLY for the last item to close the grid */}
+                                {/* Bottom Line ONLY for the last item */}
                                 {isLast && (
                                     <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right"></div>
                                 )}
@@ -138,9 +138,9 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         </div>
                                     </div>
 
-                                    {/* Interaction - Refactored for a more premium technical look */}
-                                    <button className="flex items-center gap-4 group/btn self-start md:self-center bg-white/[0.02] border border-white/5 hover:border-white/20 px-6 py-3 rounded-full transition-all duration-500">
-                                        <span className="text-[10px] font-bold tracking-[0.2em] text-white/40 group-hover:text-white transition-all uppercase">
+                                    {/* Interaction - Responsive Button */}
+                                    <button className="flex items-center gap-4 group/btn self-end md:self-center bg-white/[0.02] border border-white/5 hover:border-white/20 px-4 md:px-6 py-3 rounded-full transition-all duration-500">
+                                        <span className="text-[10px] font-bold tracking-[0.2em] text-white/40 group-hover:text-white transition-all uppercase hidden md:inline">
                                             UNIRSE AL GRUPO
                                         </span>
                                         <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white group-hover:text-slate-950 transition-all duration-500">
