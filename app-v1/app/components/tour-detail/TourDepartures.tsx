@@ -67,7 +67,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
         <section id="dates" ref={containerRef} className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative">
             <div className="max-w-6xl mx-auto w-full">
                 
-                {/* 1. Header Updated */}
+                {/* 1. Header */}
                 <div className="mb-12 md:mb-24 flex items-end justify-between">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
@@ -84,7 +84,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                     </div>
                 </div>
 
-                {/* 2. The List */}
+                {/* 2. The Grid */}
                 <div className="flex flex-col">
                     {departures.map((dep, index) => {
                         const date = new Date(dep.date._seconds * 1000);
@@ -107,10 +107,10 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                     <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right hidden md:block"></div>
                                 )}
 
-                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-5 md:gap-8 transition-all duration-500">
+                                <div className="frame-content flex flex-col md:grid md:grid-cols-4 md:items-center gap-5 md:gap-0 transition-all duration-500">
                                     
-                                    {/* Date Block */}
-                                    <div className="flex items-center gap-5 min-w-[160px] md:min-w-[220px] relative">
+                                    {/* Column 1: Date */}
+                                    <div className="flex items-center gap-5 min-w-[160px] md:min-w-0 relative">
                                         <span className="text-5xl md:text-6xl font-bold text-white tracking-tighter tabular-nums leading-none">
                                             {day < 10 ? `0${day}` : day}
                                         </span>
@@ -127,8 +127,9 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         </div>
                                     </div>
 
-                                    {/* Tech Data Grid - Balanced for Desktop */}
-                                    <div className="grid grid-cols-2 md:flex md:flex-1 md:items-center gap-6 md:gap-24 border-t border-white/5 pt-5 md:border-none md:pt-0">
+                                    {/* md:contents allows the direct children to be columns of the parent grid */}
+                                    <div className="grid grid-cols-2 md:contents border-t border-white/5 pt-5 md:border-none md:pt-0">
+                                        {/* Column 2: Availability */}
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
                                                 {isHot ? <Flame className="w-3.5 h-3.5 text-orange-500 animate-pulse" /> : <Users className="w-3.5 h-3.5 text-white" />}
@@ -138,6 +139,8 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                                 {available} <span className="text-[10px] md:text-xs opacity-50 font-medium tracking-normal">{isHot ? '¡ÚLTIMOS!' : 'CUPOS'}</span>
                                             </span>
                                         </div>
+
+                                        {/* Column 3: Price */}
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
                                                 <Tag className="w-3.5 h-3.5 text-white hidden md:block" />
@@ -149,12 +152,12 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         </div>
                                     </div>
 
-                                    {/* Desktop Action */}
-                                    <div className="hidden md:block">
+                                    {/* Column 4: Desktop Action */}
+                                    <div className="hidden md:flex flex-col items-end">
                                         <div className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-white group-hover:text-slate-950">
                                             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                                         </div>
-                                        <span className="mt-2 text-[8px] font-black tracking-[0.2em] text-white/20 uppercase text-center block">Join</span>
+                                        <span className="mt-2 text-[8px] font-black tracking-[0.2em] text-white/20 uppercase text-center w-10 block">Join</span>
                                     </div>
 
                                 </div>
