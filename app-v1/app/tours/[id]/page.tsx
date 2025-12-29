@@ -1,11 +1,12 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getTours, getTourById } from '../../services/nevado-api';
+import { getTours, getTourById, getDeparturesByTourId } from '../../services/nevado-api';
 import TourHeader from '../../components/tour-detail/TourHeader';
 import TourOverview from '../../components/tour-detail/TourOverview';
 import TourItinerary from '../../components/tour-detail/TourItinerary';
 import TourPricing from '../../components/tour-detail/TourPricing';
 import TourGallery from '../../components/tour-detail/TourGallery';
+import TourDepartures from '../../components/tour-detail/TourDepartures';
 import TourNavigation from '../../components/tour-detail/TourNavigation';
 import Footer from '../../components/Footer';
 
@@ -45,8 +46,10 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
         notFound();
     }
 
+    // Fetch departures for this specific tour
+    const departures = await getDeparturesByTourId(id);
+
     // Imágenes restantes para la galería (omitiendo la primera que es del hero)
-    // Si solo hay 1 imagen total, la galería recibirá un array vacío
     const galleryImages = tour.images.length > 1 ? tour.images.slice(1) : [];
 
     return (
@@ -72,6 +75,9 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
 
                     {/* ITINERARY: The Journey */}
                     <TourItinerary itinerary={tour.itinerary} />
+
+                    {/* DEPARTURES: Scheduled Dates */}
+                    <TourDepartures departures={departures} tourId={id} />
 
                     {/* PRICING & CTA */}
                     <TourPricing pricing={tour.pricingTiers} tourId={tour.tourId} />

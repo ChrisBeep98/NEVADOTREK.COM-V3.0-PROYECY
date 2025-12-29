@@ -50,3 +50,15 @@ export interface Tour {
     createdAt: { _seconds: number; _nanoseconds: number };
     updatedAt: { _seconds: number; _nanoseconds: number };
 }
+
+export interface Departure {
+    departureId: string;
+    tourId: string;
+    date: { _seconds: number; _nanoseconds: number };
+    type: 'public' | 'private';
+    status: 'open' | 'closed' | 'completed' | 'cancelled';
+    maxPax: number;
+    currentPax: number;
+    pricingSnapshot: PricingTier[];
+    createdAt: { _seconds: number; _nanoseconds: number };
+}

@@ -1,3 +1,19 @@
+/**
+ * TOUR ITINERARY COMPONENT
+ * ------------------------
+ * This component manages the multi-day expedition plan.
+ * 
+ * DESIGN PHILOSOPHY:
+ * - Editorial & Cinematic: High-contrast typography and generous negative space.
+ * - Tabbed Navigation: Allows exploration of complex schedules without excessive scrolling.
+ * - Mobile-First: Navigation switches from sidebar (desktop) to a compact horizontal chip-bar (mobile) 
+ *   to maximize vertical readability.
+ * 
+ * INTERACTION LOGIC:
+ * - State-driven: 'activeDay' controls both the content display and GSAP triggers.
+ * - GSAP: Staggered entry animations for text and activities on day change.
+ * - Symmetrical Spacing: Uses 'px-frame' and 'section-v-spacing' tokens for layout consistency.
+ */
 'use client';
 
 import React, { useState, useRef } from 'react';
