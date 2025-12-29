@@ -99,7 +99,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                             <div 
                                 key={dep.departureId} 
                                 data-available={available}
-                                className="expedition-frame relative p-5 md:py-14 md:px-4 mb-3 md:mb-0 group cursor-pointer bg-white/[0.03] md:bg-transparent border border-white/5 md:border-none rounded-[6px] md:rounded-none transition-all duration-500 md:hover:bg-white/[0.01] active:scale-[0.98] md:active:scale-100"
+                                className="expedition-frame relative py-8 md:py-14 px-6 md:px-4 mb-3 md:mb-0 group cursor-pointer bg-white/[0.03] md:bg-transparent border border-white/5 md:border-none rounded-[6px] md:rounded-none transition-all duration-500 md:hover:bg-white/[0.01] active:scale-[0.98] md:active:scale-100 md:hover:translate-x-2"
                             >
                                 {/* Desktop Separators */}
                                 <div className="bracket-line-top absolute top-0 left-0 h-px bg-white/5 origin-left hidden md:block"></div>
@@ -107,10 +107,10 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                     <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right hidden md:block"></div>
                                 )}
 
-                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-5 md:gap-8 transition-all duration-500 md:group-hover:translate-x-2">
+                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-5 md:gap-8 transition-all duration-500">
                                     
                                     {/* Date Block */}
-                                    <div className="flex items-center gap-5 min-w-[160px] md:min-w-[180px] relative">
+                                    <div className="flex items-center gap-5 min-w-[160px] md:min-w-[220px] relative">
                                         <span className="text-5xl md:text-6xl font-bold text-white tracking-tighter tabular-nums leading-none">
                                             {day < 10 ? `0${day}` : day}
                                         </span>
@@ -121,30 +121,30 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                             <span className="text-[9px] font-mono text-slate-600 uppercase tracking-[0.2em] mt-1">Season 2025</span>
                                         </div>
 
-                                        {/* Mobile Action: Centered with Date vertically */}
+                                        {/* Mobile Action */}
                                         <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2">
                                             <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white transition-colors" />
                                         </div>
                                     </div>
 
-                                    {/* Tech Data Grid */}
-                                    <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-6 md:gap-12 border-t border-white/5 pt-5 md:border-none md:pt-0">
+                                    {/* Tech Data Grid - Balanced for Desktop */}
+                                    <div className="grid grid-cols-2 md:flex md:flex-1 md:items-center gap-6 md:gap-24 border-t border-white/5 pt-5 md:border-none md:pt-0">
                                         <div className="flex flex-col">
-                                            <div className="flex items-center gap-2 mb-1 opacity-30 md:opacity-40">
-                                                {isHot ? <Flame className="w-3 h-3 text-orange-500 animate-pulse" /> : <Users className="w-3 h-3 text-white" />}
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white">Cupos</span>
+                                            <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
+                                                {isHot ? <Flame className="w-3.5 h-3.5 text-orange-500 animate-pulse" /> : <Users className="w-3.5 h-3.5 text-white" />}
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white">Disponibilidad</span>
                                             </div>
-                                            <span className={`text-xs font-bold ${isHot ? 'text-orange-500' : 'text-emerald-400'}`}>
-                                                {available} {isHot ? '¡ÚLTIMOS!' : ''}
+                                            <span className={`text-xs md:text-xl font-bold leading-none ${isHot ? 'text-orange-500' : 'text-emerald-400'} tabular-nums`}>
+                                                {available} <span className="text-[10px] md:text-xs opacity-50 font-medium tracking-normal">{isHot ? '¡ÚLTIMOS!' : 'CUPOS'}</span>
                                             </span>
                                         </div>
                                         <div className="flex flex-col">
-                                            <div className="flex items-center gap-2 mb-1 opacity-30 md:opacity-40">
-                                                <Tag className="w-3 h-3 text-white hidden md:block" />
+                                            <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
+                                                <Tag className="w-3.5 h-3.5 text-white hidden md:block" />
                                                 <span className="text-[8px] font-bold uppercase tracking-widest text-white hidden md:block">Precio por persona</span>
                                             </div>
-                                            <span className="text-base md:text-lg font-bold text-slate-300 uppercase tracking-tight">
-                                                {currentPrice} <span className="text-[9px] text-slate-600 font-medium">COP</span>
+                                            <span className="text-base md:text-xl font-bold text-slate-300 uppercase tracking-tight tabular-nums leading-none">
+                                                {currentPrice} <span className="text-[9px] md:text-[11px] text-slate-600 font-medium">COP</span>
                                             </span>
                                         </div>
                                     </div>
