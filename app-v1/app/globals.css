@@ -33,6 +33,10 @@
   @apply text-6xl md:text-8xl lg:text-[9vw] font-semibold tracking-tighter leading-[0.9];
 }
 
+@utility text-h-tour-title {
+  @apply text-6xl md:text-8xl lg:text-[6vw] font-medium tracking-tighter leading-[0.95];
+}
+
 @utility text-display-xl {
   @apply text-5xl md:text-8xl font-bold tracking-normal leading-[1.3];
 }

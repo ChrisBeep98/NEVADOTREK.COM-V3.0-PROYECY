@@ -39,6 +39,7 @@ Define el **ritmo vertical** entre bloques de contenido.
 | :--- | :--- | :--- |
 | **H-EXPEDITION** | `.text-h-expedition` | `text-7xl md:text-9xl lg:text-[6.4vw] font-semibold tracking-tighter leading-none` |
 | **HERO TITLE** | `.text-hero-title` | `text-6xl md:text-8xl lg:text-[9vw] font-semibold tracking-tighter leading-[0.9]` |
+| **H-TOUR-TITLE** | `.text-h-tour-title` | `text-6xl md:text-8xl lg:text-[6vw] font-medium tracking-tighter leading-[0.95]` |
 | **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-normal leading-[1.3]` |
 | **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.3] uppercase` |
 | **STATEMENT** | `.text-statement` | `text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-relaxed` |
@@ -78,6 +79,7 @@ Define el **ritmo vertical** entre bloques de contenido.
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2025-12-29:** Creación del token `H-TOUR-TITLE` (text-8vw font-medium) para títulos de detalle de tour con peso visual equilibrado.
 - **2025-12-26:** Expansión de la paleta cromática: Adición de Blue, Orange y Purple como acentos técnicos secundarios.
 - **2025-12-26:** Creación del token `HEADING XL` (text-7xl uppercase) para encabezados creativos de alto impacto.
 - **2025-12-26:** Creación del token `STATEMENT` (text-5xl) para manifiestos tipográficos sin títulos.

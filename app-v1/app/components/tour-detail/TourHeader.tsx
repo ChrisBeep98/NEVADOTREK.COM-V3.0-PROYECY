@@ -5,8 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour } from '../../types/api';
-import { Mountain, Clock, Trophy, ArrowDown } from 'lucide-react';
-import Header from '../Header'; // Import Global Header
+import Header from '../Header';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +18,6 @@ export default function TourHeader({ tour }: { tour: Tour }) {
 
     useGSAP(() => {
         // --- 1. INTRO ANIMATION (Load) ---
-        // Asymmetrical Entry: Starts with gap on RIGHT, expands slightly but keeps gap.
         const introTl = gsap.timeline();
         
         introTl.fromTo(".hero-text-element", 
@@ -27,10 +25,11 @@ export default function TourHeader({ tour }: { tour: Tour }) {
             { x: 0, opacity: 1, duration: 1.2, stagger: 0.1, ease: "power3.out" }
         )
         // Image Entry: Starts aligned LEFT.
-        // From: 40% gap on right. To: 20% gap on right.
+        // Target: 74% width (26% right gap). 
+        // We start slightly narrower (40%) and animate TO 26%.
         .fromTo(imageWrapperRef.current,
             { clipPath: "inset(0% 40% 0% 0%)", opacity: 0 }, 
-            { clipPath: "inset(0% 20% 0% 0%)", opacity: 1, duration: 1.5, ease: "expo.out" },
+            { clipPath: "inset(0% 26% 0% 0%)", opacity: 1, duration: 1.5, ease: "expo.out" },
             "-=0.8"
         )
         // Inner Zoom
@@ -39,41 +38,42 @@ export default function TourHeader({ tour }: { tour: Tour }) {
             { scale: 1.1, duration: 1.5, ease: "expo.out" },
             "<"
         )
-        // Chips stagger in
-        .fromTo(".glass-chip",
+        .fromTo(".scroll-hint-wrapper",
             { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "back.out(1.2)" },
-            "-=1.0"
+            { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+            "-=0.5"
         );
 
         // --- 2. SCROLL ANIMATION ---
         const scrollTl = gsap.timeline({
             scrollTrigger: {
                 trigger: headerRef.current,
-                start: "top top",     
-                end: "+=40%", // Fast expansion
-                scrub: 0.5,           
+                start: "top top",
+                end: "+=40%",
+                scrub: 0.5,
             }
         });
 
         scrollTl
-            // Expand Clip Path to FULL WIDTH (fill the right gap)
             .to(imageWrapperRef.current, {
                 clipPath: "inset(0% 0% 0% 0%)", 
                 ease: "none"
             })
-            // Scale Down Image (From 1.1 to 1.0) & Parallax
             .to(imageRef.current, {
                 scale: 1.0,
                 yPercent: 10,
                 ease: "none"
+            }, 0)
+            .to(".scroll-hint-wrapper", {
+                opacity: 0,
+                y: 20,
+                ease: "power1.in"
             }, 0);
 
     }, { scope: headerRef });
 
     return (
         <>
-            {/* GLOBAL NAVIGATION HEADER */}
             <Header />
 
             <header 
@@ -81,11 +81,7 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                 className="relative w-full bg-slate-950 font-sans overflow-hidden"
             >
                 {/* --- 1. TYPOGRAPHY HEADER --- */}
-                {/* 
-                    Desktop: Left aligned but indented (pl-[15vw]) for editorial look.
-                    Mobile: Standard px-frame padding.
-                */}
-                <div className="pt-[20vh] pb-[8vh] px-frame md:pl-[15vw] flex flex-col items-start text-left z-20 relative">
+                <div className="pt-[20vh] pb-[8vh] px-frame md:pl-[15vw] flex flex-col items-start text-left z-20 relative text-white">
                     
                     <div className="overflow-hidden mb-6">
                          <span className="hero-text-element block text-sub-label text-cyan-500">
@@ -93,12 +89,11 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                          </span>
                     </div>
                     
-                    {/* TOKEN: text-hero-title + font-semibold (Reduced weight) */}
-                    <h1 className="hero-text-element text-hero-title font-semibold text-white mb-8 max-w-5xl break-words">
+                    {/* H-TOUR-TITLE: Now 8.5vw / 6xl font-medium */}
+                    <h1 className="hero-text-element text-h-tour-title mb-8 max-w-5xl break-words uppercase">
                         {tour.name.es}
                     </h1>
 
-                    {/* TOKEN: text-body-lead */}
                     <p className="hero-text-element text-body-lead text-slate-400 max-w-2xl opacity-80">
                         {tour.subtitle?.es || "Explora los límites de lo posible en una travesía inolvidable."}
                     </p>
@@ -106,14 +101,13 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                 </div>
 
                 {/* --- 2. IMAGE MONOLITH --- */}
-                {/* Justify Start ensures strict Left Alignment from initial render */}
                 <div className="relative w-full flex justify-start pb-0">
                     
                     <div 
                         ref={imageWrapperRef}
                         className="relative w-full h-[60vh] md:h-[900px] bg-slate-900 will-change-[clip-path]"
-                        // Initial State: Gap on the RIGHT side only (Left Aligned)
-                        style={{ clipPath: "inset(0% 20% 0% 0%)" }}
+                        // Initial State: 26% gap on right = 74% width
+                        style={{ clipPath: "inset(0% 26% 0% 0%)" }}
                     >
                         <img 
                             ref={imageRef}
@@ -123,56 +117,17 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                         />
                         
                         {/* Gradient Overlay */}
-                        <div className="absolute inset-x-0 bottom-0 h-2/3 md:h-1/2 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
 
-                        {/* --- HUD GLASS CHIPS --- */}
-                        <div className="absolute bottom-0 left-0 w-full px-frame py-8 md:py-16 z-10">
-                            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
-                                
-                                {/* Stats Chips Container */}
-                                <div className="flex flex-wrap gap-4 w-full md:w-auto">
-                                    
-                                    {/* Chip 1: Altitude */}
-                                    <div className="glass-chip flex items-center gap-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-6 py-2 hover:bg-white/10 transition-colors duration-300">
-                                        <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                                            <Mountain className="w-4 h-4 text-cyan-400" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">Altitud</span>
-                                            <span className="text-sm font-bold text-white tracking-tight">{tour.altitude.es}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Chip 2: Level */}
-                                    <div className="glass-chip flex items-center gap-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-6 py-2 hover:bg-white/10 transition-colors duration-300">
-                                        <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                                            <Trophy className="w-4 h-4 text-orange-400" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">Nivel</span>
-                                            <span className="text-sm font-bold text-white tracking-tight uppercase">{tour.difficulty}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Chip 3: Time */}
-                                    <div className="glass-chip flex items-center gap-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-6 py-2 hover:bg-white/10 transition-colors duration-300">
-                                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                                            <Clock className="w-4 h-4 text-blue-400" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[9px] uppercase tracking-widest text-white/50 font-bold">Tiempo</span>
-                                            <span className="text-sm font-bold text-white tracking-tight">{tour.totalDays} Días</span>
-                                        </div>
-                                    </div>
-
+                        {/* --- SCROLL HINT --- */}
+                        <div className="scroll-hint-wrapper absolute bottom-12 left-0 w-full px-frame md:pl-[15vw] z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="relative w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
+                                    <div className="w-1 h-2 bg-cyan-500 rounded-full animate-bounce"></div>
                                 </div>
-
-                                {/* Scroll Hint */}
-                                <div className="glass-chip hidden md:flex items-center gap-3 text-white/40 animate-pulse bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/5">
-                                    <span className="text-journal-data">SCROLL TO EXPLORE</span>
-                                    <ArrowDown className="w-4 h-4" />
-                                </div>
-
+                                <span className="text-[10px] font-mono tracking-[0.3em] text-white/40 uppercase">
+                                    Scroll to explore
+                                </span>
                             </div>
                         </div>
 
