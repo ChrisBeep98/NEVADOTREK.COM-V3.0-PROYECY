@@ -90,18 +90,18 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                             <div 
                                 key={dep.departureId} 
                                 data-available={available}
-                                className="expedition-frame relative py-10 md:py-14 group"
+                                className="expedition-frame relative py-8 md:py-14 px-6 md:px-2 mb-4 md:mb-0 group cursor-pointer bg-white/[0.02] md:bg-transparent border border-white/5 md:border-none rounded-xl md:rounded-none transition-all duration-300 hover:bg-white/[0.04] md:hover:bg-transparent"
                             >
-                                {/* Top Line */}
-                                <div className="bracket-line-top absolute top-0 left-0 h-px bg-white/5 origin-left"></div>
+                                {/* Top Line - Hidden in mobile as we use card borders */}
+                                <div className="bracket-line-top absolute top-0 left-0 h-px bg-white/5 origin-left hidden md:block"></div>
                                 
-                                {/* Bottom Line ONLY for the last item */}
+                                {/* Bottom Line ONLY for the last item in desktop */}
                                 {isLast && (
-                                    <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right"></div>
+                                    <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right hidden md:block"></div>
                                 )}
 
                                 {/* Content */}
-                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-8 px-2 transition-all duration-500">
+                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 transition-all duration-500">
                                     
                                     {/* Date */}
                                     <div className="flex items-center gap-6 min-w-[180px]">
@@ -136,13 +136,13 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         </div>
                                     </div>
 
-                                    {/* Interaction - Responsive Button */}
-                                    <button className="flex items-center gap-4 group/btn self-end md:self-center bg-white/[0.02] border border-white/5 hover:border-white/20 px-4 md:px-6 py-3 rounded-full transition-all duration-500">
+                                    {/* Interaction - Fixed for mobile bubble issue */}
+                                    <button className="flex items-center gap-4 group/btn self-end md:self-center bg-white/5 md:bg-white/[0.02] border border-white/5 hover:border-white/20 p-3 md:px-6 md:py-3 rounded-full transition-all duration-500">
                                         <span className="text-[10px] font-bold tracking-[0.2em] text-white/40 group-hover:text-white transition-all uppercase hidden md:inline">
                                             UNIRSE AL GRUPO
                                         </span>
-                                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white group-hover:text-slate-950 transition-all duration-500">
-                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                                        <div className="flex items-center justify-center md:w-8 md:h-8 md:rounded-full md:bg-white/5 group-hover:md:bg-white group-hover:md:text-slate-950 transition-all duration-500">
+                                            <ArrowRight className="w-4 h-4 md:group-hover:translate-x-0.5 transition-transform" />
                                         </div>
                                     </button>
 
