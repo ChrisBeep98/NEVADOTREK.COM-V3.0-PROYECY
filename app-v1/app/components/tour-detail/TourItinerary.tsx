@@ -102,14 +102,14 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                             group relative flex-shrink-0 snap-start flex items-center gap-4 p-3 md:p-4 rounded-sm border transition-all duration-300 w-[140px] lg:w-full text-left
                                             ${isActive 
                                                 ? 'bg-white/[0.05] border-white/20' 
-                                                : 'bg-white/[0.01] border-white/5 hover:border-white/10'
+                                                : 'bg-white/[0.01] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'
                                             }
                                         `}
                                     >
                                         <div className={`absolute left-0 top-0 bottom-0 w-1 transition-colors duration-300 ${isActive ? '' : 'bg-transparent'}`} style={{ backgroundColor: isActive ? tabColor : 'transparent' }}></div>
 
                                         <span 
-                                            className={`text-2xl md:text-3xl font-bold tracking-tighter leading-none transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-700 group-hover:text-slate-600'}`}
+                                            className={`text-2xl md:text-3xl font-bold tracking-tighter leading-none transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-700 group-hover:text-slate-400'}`}
                                         >
                                             {day.dayNumber < 10 ? `0${day.dayNumber}` : day.dayNumber}
                                         </span>
@@ -161,7 +161,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                 
                                 {currentDayData.activities?.map((activity, i) => (
                                     <div key={i} className="group flex gap-4 items-start p-3 rounded-lg hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/5">
-                                        <div className="mt-1 shrink-0 p-1.5 rounded-full bg-slate-900 border border-white/10 group-hover:border-cyan-500/30 transition-colors">
+                                        <div className="mt-1 shrink-0 p-1.5 rounded-full bg-slate-900 border border-white/10 group-hover:border-cyan-500/30 transition-colors hidden md:block">
                                             <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 transition-colors" />
                                         </div>
                                         <div className="flex-1">
