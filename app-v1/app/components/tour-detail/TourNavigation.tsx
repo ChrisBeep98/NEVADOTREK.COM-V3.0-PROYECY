@@ -13,6 +13,7 @@ const SECTIONS = [
     { id: 'overview', label: 'RESUMEN' },
     { id: 'gallery', label: 'GALERÍA' },
     { id: 'itinerary', label: 'ITINERARIO' },
+    { id: 'dates', label: 'SALIDAS' },
     { id: 'pricing', label: 'TARIFAS' }
 ];
 
