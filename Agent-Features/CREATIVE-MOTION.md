@@ -2,7 +2,7 @@
 
 > "Don't just build the design. Direct the experience."
 
-This skill outlines the philosophy of creating "Awwwards-level" web experiences. It encourages breaking away from standard grids and safe choices to implement surprising, cinematic, and technically impressive motion.
+This skill outlines the philosophy of creating "Awwwards-level" web experiences for Nevado Trek. It encourages breaking away from standard grids and safe choices to implement surprising, cinematic, and technically impressive motion.
 
 ## 1. The Core Philosophy: Surprise & Delight
 Static websites are functional; moving websites are emotional. To truly impress:
@@ -11,7 +11,7 @@ Static websites are functional; moving websites are emotional. To truly impress:
 - **Fearless Scale:** Use typography that is "too big". Crop images aggressively. Make bold choices that feel editorial, not utilitarian.
 - **Micro-Choreography:** Every interaction (hover, scroll, click) must return energy. A dead interface is a failed interface.
 
-## 2. Key Techniques
+## 2. Key Techniques for Nevado Trek
 
 ### The "Scroll Pin" (Horizontal Scroll)
 *Technique:* Use GSAP `ScrollTrigger` with `pin: true` and `xPercent`.
@@ -30,12 +30,16 @@ Static websites are functional; moving websites are emotional. To truly impress:
 *Why:* Plain text on a video is standard. Text that *is* the window to the video, or text that inverts the video colors, creates an immediate "high-fashion" or "cinema" aesthetic.
 
 ### The "Inertia" (Smooth Scroll)
-*Technique:* Lenis or Locomotive Scroll.
+*Technique:* Use Lenis or GSAP ScrollSmoother (if available).
 *Why:* Browser scrolling is jagged. Adding inertia/damping (smoothing) makes everything feel heavier and more premium. It turns a "webpage" into a "software experience".
 
-### Parallax & Depth
+### Parallax & Depth (The "Nevado" Signature)
 *Technique:* Move background elements at different speeds (`scrub: true`, `y: "30%"`).
-*Why:* Screens are flat. Parallax creates an illusion of depth that makes the screen feel like a window into a 3D space.
+*Why:* Screens are flat. Parallax creates an illusion of depth that makes the screen feel like a window into a 3D space, mimicking the depth of a mountain range.
+
+### Image Reveals (The "Curtain")
+*Technique:* Use `clip-path` animation. Start with `inset(100% 0% 0% 0%)` (hidden) and animate to `inset(0% 0% 0% 0%)`.
+*Why:* It feels like a curtain rising or a shutter opening, much more elegant than a simple fade-in.
 
 ## 3. Implementation Mindset
 - **Don't ask "Is this standard?"** Ask "Is this memorable?"

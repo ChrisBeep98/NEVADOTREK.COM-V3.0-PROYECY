@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { MountainSnow } from 'lucide-react';
+import Header from './Header';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -190,19 +190,7 @@ export default function HeroMonolith() {
         <div ref={containerRef} className="relative bg-slate-950 text-slate-300 antialiased overflow-x-hidden">
              
              {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-frame mix-blend-difference text-white">
-                <div className="flex items-center gap-2">
-                    <MountainSnow width={24} strokeWidth={1.5} />
-                    <span className="font-bold tracking-tighter text-xl">NEVADO TREK</span>
-                </div>
-                <div className="hidden md:flex items-center gap-12 text-sm font-medium tracking-wide">
-                    <a href="#" className="hover:text-cyan-400 transition-colors">EXPEDICIONES</a>
-                    <a href="#" className="hover:text-cyan-400 transition-colors">FILOSOFÍA</a>
-                    <button className="border border-white/20 px-6 py-2 rounded-full hover:bg-white hover:text-slate-950 transition-all">
-                        UNIRSE
-                    </button>
-                </div>
-            </nav>
+            <Header />
 
             {/* HERO SECTION */}
             <header ref={heroSectionRef} id="hero-section" className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-slate-950">
