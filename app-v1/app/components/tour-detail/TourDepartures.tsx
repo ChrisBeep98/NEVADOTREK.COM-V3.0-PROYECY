@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Departure } from '../../types/api';
-import { Users, ArrowRight, Activity, Flame, Tag } from 'lucide-react';
+import { Users, ArrowRight, Activity, Flame, Tag, Zap } from 'lucide-react';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +20,6 @@ const THEME_COLORS = {
 export default function TourDepartures({ departures }: { departures: Departure[]; tourId: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Helper to calculate price based on next person joining
     const getDynamicPrice = (currentPax: number, tiers: any[]) => {
         const nextPaxCount = currentPax + 1;
         const tier = tiers.find(t => nextPaxCount >= t.minPax && nextPaxCount <= t.maxPax) || tiers[0];
@@ -42,7 +41,6 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                 }
             });
 
-            // Reveal Animation: Snappy & Technical
             tl.fromTo(frame.querySelector('.bracket-line-top'), 
                 { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
                 { width: "100%", backgroundColor: `${color}4D`, duration: 0.5, ease: "power2.out" }
@@ -69,13 +67,15 @@ export default function TourDepartures({ departures }: { departures: Departure[]
         <section id="dates" ref={containerRef} className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative">
             <div className="max-w-6xl mx-auto w-full">
                 
-                {/* Header */}
-                <div className="mb-16 md:mb-24 flex items-end justify-between">
+                {/* 1. Header Updated */}
+                <div className="mb-12 md:mb-24 flex items-end justify-between">
                     <div>
-                        <span className="text-sub-label text-cyan-500 mb-2 block uppercase tracking-widest">Temporal Log</span>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Zap className="w-3.5 h-3.5 text-cyan-500" />
+                            <span className="text-sub-label text-cyan-500 block uppercase tracking-widest">Únete a la cordada</span>
+                        </div>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight uppercase leading-none">
-                            PROGRAMACIÓN <br/>
-                            <span className="text-slate-600">DE SALIDAS</span>
+                            PRÓXIMAS SALIDAS
                         </h2>
                     </div>
                     <div className="hidden md:flex items-center gap-2 opacity-20">
@@ -84,7 +84,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                     </div>
                 </div>
 
-                {/* The Grid */}
+                {/* 2. The List */}
                 <div className="flex flex-col">
                     {departures.map((dep, index) => {
                         const date = new Date(dep.date._seconds * 1000);
@@ -99,60 +99,63 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                             <div 
                                 key={dep.departureId} 
                                 data-available={available}
-                                className="expedition-frame relative py-8 md:py-14 px-6 md:px-4 mb-4 md:mb-0 group cursor-pointer bg-white/[0.02] md:bg-transparent border border-white/5 md:border-none rounded-xl md:rounded-none transition-all duration-500 md:hover:bg-white/[0.01]"
+                                className="expedition-frame relative p-5 md:py-14 md:px-4 mb-3 md:mb-0 group cursor-pointer bg-white/[0.03] md:bg-transparent border border-white/5 md:border-none rounded-[6px] md:rounded-none transition-all duration-500 md:hover:bg-white/[0.01] active:scale-[0.98] md:active:scale-100"
                             >
-                                {/* Separator Lines (Desktop) */}
+                                {/* Desktop Separators */}
                                 <div className="bracket-line-top absolute top-0 left-0 h-px bg-white/5 origin-left hidden md:block"></div>
                                 {isLast && (
                                     <div className="bracket-line-bottom absolute bottom-0 right-0 h-px bg-white/5 origin-right hidden md:block"></div>
                                 )}
 
-                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 transition-all duration-500 md:group-hover:translate-x-2">
+                                <div className="frame-content flex flex-col md:flex-row md:items-center justify-between gap-5 md:gap-8 transition-all duration-500 md:group-hover:translate-x-2">
                                     
                                     {/* Date Block */}
-                                    <div className="flex items-center gap-6 min-w-[180px]">
-                                        <span className="text-5xl md:text-6xl font-bold text-white tracking-tighter tabular-nums">
+                                    <div className="flex items-center gap-5 min-w-[160px] md:min-w-[180px] relative">
+                                        <span className="text-5xl md:text-6xl font-bold text-white tracking-tighter tabular-nums leading-none">
                                             {day < 10 ? `0${day}` : day}
                                         </span>
                                         <div className="flex flex-col">
-                                            <span className="text-base md:text-lg font-bold text-white tracking-widest uppercase">
+                                            <span className="text-base md:text-lg font-bold text-white tracking-widest uppercase leading-none">
                                                 {month}
                                             </span>
-                                            <span className="text-[9px] font-mono text-slate-600 uppercase tracking-[0.2em]">Season 2025</span>
+                                            <span className="text-[9px] font-mono text-slate-600 uppercase tracking-[0.2em] mt-1">Season 2025</span>
+                                        </div>
+
+                                        {/* Mobile Action: Centered with Date vertically */}
+                                        <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2">
+                                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white transition-colors" />
                                         </div>
                                     </div>
 
-                                    {/* Tech Data */}
-                                    <div className="flex flex-wrap items-center gap-8 md:gap-12">
+                                    {/* Tech Data Grid */}
+                                    <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-6 md:gap-12 border-t border-white/5 pt-5 md:border-none md:pt-0">
                                         <div className="flex flex-col">
-                                            <div className="flex items-center gap-2 mb-1 opacity-30">
+                                            <div className="flex items-center gap-2 mb-1 opacity-30 md:opacity-40">
                                                 {isHot ? <Flame className="w-3 h-3 text-orange-500 animate-pulse" /> : <Users className="w-3 h-3 text-white" />}
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white">Disponibilidad</span>
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white">Cupos</span>
                                             </div>
                                             <span className={`text-xs font-bold ${isHot ? 'text-orange-500' : 'text-emerald-400'}`}>
-                                                {available} / {dep.maxPax} {isHot ? '¡ÚLTIMOS CUPOS!' : 'DISPONIBLES'}
+                                                {available} {isHot ? '¡ÚLTIMOS!' : ''}
                                             </span>
                                         </div>
                                         <div className="flex flex-col">
-                                            <div className="flex items-center gap-2 mb-1 opacity-30">
-                                                <Tag className="w-3 h-3 text-white" />
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white">Precio por persona</span>
+                                            <div className="flex items-center gap-2 mb-1 opacity-30 md:opacity-40">
+                                                <Tag className="w-3 h-3 text-white hidden md:block" />
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-white hidden md:block">Precio por persona</span>
                                             </div>
-                                            <span className="text-sm md:text-lg font-bold text-slate-300 uppercase tracking-tight">
-                                                {currentPrice} <span className="text-[10px] text-slate-600 font-medium">COP</span>
+                                            <span className="text-base md:text-lg font-bold text-slate-300 uppercase tracking-tight">
+                                                {currentPrice} <span className="text-[9px] text-slate-600 font-medium">COP</span>
                                             </span>
                                         </div>
                                     </div>
 
-                                    {/* Action Button */}
-                                    <button className="flex items-center gap-4 group/btn self-end md:self-center bg-white/5 md:bg-white/[0.02] border border-white/5 hover:border-white/20 p-3 md:px-6 md:py-3 rounded-full transition-all duration-500">
-                                        <span className="text-[10px] font-bold tracking-[0.2em] text-white/40 group-hover:text-white transition-all uppercase hidden md:inline">
-                                            UNIRSE AL GRUPO
-                                        </span>
-                                        <div className="flex items-center justify-center md:w-8 md:h-8 md:rounded-full md:bg-white/5 group-hover:md:bg-white group-hover:md:text-slate-950 transition-all duration-500">
-                                            <ArrowRight className="w-4 h-4 md:group-hover:translate-x-0.5 transition-transform" />
+                                    {/* Desktop Action */}
+                                    <div className="hidden md:block">
+                                        <div className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-white group-hover:text-slate-950">
+                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                                         </div>
-                                    </button>
+                                        <span className="mt-2 text-[8px] font-black tracking-[0.2em] text-white/20 uppercase text-center block">Join</span>
+                                    </div>
 
                                 </div>
                             </div>
