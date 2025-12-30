@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,15 +10,19 @@ if (typeof window !== 'undefined') {
 }
 
 const SECTIONS = [
-    { id: 'overview', label: 'RESUMEN' },
-    { id: 'gallery', label: 'GALERÍA' },
-    { id: 'itinerary', label: 'ITINERARIO' },
-    { id: 'dates', label: 'SALIDAS' },
-    { id: 'pricing', label: 'TARIFAS' }
+    { id: 'overview', label: 'Resumen' },
+    { id: 'gallery', label: 'Galería' },
+    { id: 'itinerary', label: 'Itinerario' },
+    { id: 'dates', label: 'Salidas' },
+    { id: 'pricing', label: 'Tarifas' }
 ];
 
 export default function TourNavigation() {
     const [activeSection, setActiveSection] = useState('overview');
+    const indicatorRef = useRef<HTMLDivElement>(null);
+    const navItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
+    
+    const INDICATOR_HEIGHT = 16; // Short technical bar
 
     useGSAP(() => {
         SECTIONS.forEach(section => {
@@ -32,6 +36,22 @@ export default function TourNavigation() {
         });
     }, []);
 
+    // Animate the short sliding bar to center with active text
+    useEffect(() => {
+        const activeIndex = SECTIONS.findIndex(s => s.id === activeSection);
+        const targetElement = navItemsRef.current[activeIndex];
+        
+        if (targetElement && indicatorRef.current) {
+            const centerY = targetElement.offsetTop + (targetElement.offsetHeight / 2) - (INDICATOR_HEIGHT / 2);
+            
+            gsap.to(indicatorRef.current, {
+                y: centerY,
+                duration: 0.6,
+                ease: "expo.out"
+            });
+        }
+    }, [activeSection]);
+
     const scrollTo = (id: string) => {
         const el = document.getElementById(id);
         if (el) {
@@ -44,20 +64,36 @@ export default function TourNavigation() {
             <span className="text-journal-data text-white mb-2">
                 Índice de ruta
             </span>
-            <div className="flex flex-col gap-4 border-l border-white/20 pl-6">
-                {SECTIONS.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => scrollTo(item.id)}
-                        className={`text-left text-xs tracking-widest uppercase transition-all duration-300 ${
-                            activeSection === item.id 
-                                ? 'text-white font-bold translate-x-2' 
-                                : 'text-slate-500 hover:text-slate-300'
-                        }`}
-                    >
-                        {item.label}
-                    </button>
-                ))}
+            
+            <div className="relative pl-6">
+                
+                {/* 1. Static Rail */}
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10"></div>
+                
+                {/* 2. Short Technical Indicator */}
+                <div 
+                    ref={indicatorRef}
+                    className="absolute left-[-1px] w-[3px] bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] rounded-full z-10"
+                    style={{ height: `${INDICATOR_HEIGHT}px` }}
+                ></div>
+
+                {/* 3. Compact Navigation Links */}
+                <div className="flex flex-col gap-3">
+                    {SECTIONS.map((item, index) => (
+                        <button
+                            key={item.id}
+                            ref={el => { navItemsRef.current[index] = el }}
+                            onClick={() => scrollTo(item.id)}
+                            className={`text-left text-sm tracking-widest transition-all duration-500 py-0.5 ${
+                                activeSection === item.id 
+                                    ? 'text-white font-medium translate-x-3' 
+                                    : 'text-slate-500 hover:text-slate-300'
+                            }`}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );
