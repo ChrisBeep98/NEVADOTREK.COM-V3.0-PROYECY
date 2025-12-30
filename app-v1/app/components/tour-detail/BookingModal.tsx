@@ -129,7 +129,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     {tour.pricingTiers?.map((tier, idx) => (
                                         <div 
                                             key={idx} 
-                                            className="relative p-3.5 md:p-5 rounded-lg border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/10 transition-all duration-300 group"
+                                            className="relative p-3.5 md:p-5 rounded-lg border border-white/5 bg-white/[0.01]"
                                         >
                                             <div className="flex items-center justify-between relative z-10">
                                                 
@@ -137,7 +137,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <div className="flex flex-col gap-1 md:gap-1.5">
                                                     <div className="flex items-center gap-2">
                                                         <div className={`w-0.5 md:w-1 h-2.5 md:h-3 rounded-full ${tier.minPax === 1 ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.4)]' : 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]'}`}></div>
-                                                        <span className="text-xs md:text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
+                                                        <span className="text-xs md:text-sm font-medium text-slate-200">
                                                             {tier.minPax === tier.maxPax 
                                                                 ? `${tier.minPax} Pasajero` 
                                                                 : `${tier.minPax} - ${tier.maxPax} Personas`
@@ -151,7 +151,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                                 {/* Right: Price Focus */}
                                                 <div className="text-right">
-                                                    <span className="block text-base md:text-xl font-bold text-white tracking-tighter tabular-nums group-hover:text-emerald-400 transition-colors">
+                                                    <span className="block text-base md:text-xl font-bold text-white tracking-tighter tabular-nums">
                                                         $ {tier.priceCOP.toLocaleString()}
                                                     </span>
                                                     <span className="text-[8px] md:text-[9px] font-mono text-slate-600 block mt-0.5 uppercase tracking-widest">COP / pax</span>
