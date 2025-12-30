@@ -43,7 +43,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         <span className="text-sub-label text-cyan-400">THE EXPERIENCE</span>
                     </div>
                     
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white mb-12 reveal-content leading-[1.1] max-w-4xl">
+                    <h2 className="text-h-section-title text-white mb-12 reveal-content max-w-4xl">
                         {hook}
                     </h2>
 

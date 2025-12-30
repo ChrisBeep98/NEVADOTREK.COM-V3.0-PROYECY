@@ -19,6 +19,7 @@
   --color-blue-500: #3b82f6;
   --color-orange-500: #f97316;
   --color-purple-500: #a855f7;
+  --color-emerald-400: #34d399; /* Andean Green */
   
   /* Adding custom spacing for the page frame */
   --spacing-frame: var(--page-frame);
@@ -35,6 +36,10 @@
 
 @utility text-h-tour-title {
   @apply text-6xl md:text-8xl lg:text-[6vw] font-medium tracking-tighter leading-[0.95];
+}
+
+@utility text-h-section-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.2];
 }
 
 @utility text-display-xl {

@@ -83,9 +83,9 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                 {/* 1. SECTION HEADER - Title stays the same as you liked it */}
                 <div className="mb-12 md:mb-20 itinerary-header">
                     <span className="text-sub-label text-cyan-500 mb-2 block">TU EXPERIENCIA</span>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight leading-none uppercase">
-                        ITINERARIO <br/>
-                        <span className="text-slate-600">PASO A PASO</span>
+                    <h2 className="text-h-section-title text-white">
+                        Itinerario <br/>
+                        <span className="text-slate-600">paso a paso</span>
                     </h2>
                 </div>
 

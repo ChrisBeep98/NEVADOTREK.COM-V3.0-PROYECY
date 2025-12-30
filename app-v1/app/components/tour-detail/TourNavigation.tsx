@@ -41,8 +41,8 @@ export default function TourNavigation() {
 
     return (
         <div className="hidden lg:flex flex-col gap-6 sticky top-32 w-48 z-40 mix-blend-difference">
-            <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/50 mb-2">
-                ÍNDICE DE RUTA
+            <span className="text-journal-data text-white mb-2">
+                Índice de ruta
             </span>
             <div className="flex flex-col gap-4 border-l border-white/20 pl-6">
                 {SECTIONS.map((item) => (

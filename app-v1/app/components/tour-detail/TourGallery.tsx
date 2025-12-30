@@ -38,9 +38,9 @@ export default function TourGallery({ images }: { images: string[] }) {
     return (
         <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-slate-950 border-t border-white/5">
              <div className="max-w-6xl mx-auto">
-                <div className="mb-12 flex items-baseline justify-between">
-                     <span className="text-sub-label text-slate-500">VISUAL DIARY</span>
-                     <span className="text-journal-data text-slate-700 hidden md:inline">CAPTURING THE SUMMIT</span>
+                <div className="mb-12">
+                     <span className="text-sub-label text-cyan-500 mb-2 block">Visual Diary</span>
+                     <h2 className="text-h-section-title text-white">Capturando la cima</h2>
                 </div>
                 
                 {/* Grid Layout - Mosaico Asimétrico */}

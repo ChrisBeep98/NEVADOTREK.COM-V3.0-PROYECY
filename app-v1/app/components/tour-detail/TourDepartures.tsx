@@ -74,8 +74,8 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                             <Zap className="w-3.5 h-3.5 text-cyan-500" />
                             <span className="text-sub-label text-cyan-500 block uppercase tracking-widest">Únete a la cordada</span>
                         </div>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white tracking-tight uppercase leading-none">
-                            PRÓXIMAS SALIDAS
+                        <h2 className="text-h-section-title text-white">
+                            Próximas salidas
                         </h2>
                     </div>
                     <div className="hidden md:flex items-center gap-2 opacity-20">
