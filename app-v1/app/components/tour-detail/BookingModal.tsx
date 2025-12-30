@@ -115,55 +115,55 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     <div className="grid grid-cols-1 lg:grid-cols-12 min-h-full divide-y lg:divide-y-0 lg:divide-x divide-white/5">
 
                         {/* LEFT COL: PRICING (Technical Data Grid) */}
-                        <div className="lg:col-span-5 p-6 md:p-10 bg-slate-900 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col">
+                        <div className="lg:col-span-5 p-5 md:p-10 bg-slate-900 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col">
                             
                             <div className="flex-1 flex flex-col justify-center w-full">
                                 {/* Title Anchor */}
-                                <div className="mb-6 flex items-center justify-between opacity-50 px-1">
+                                <div className="mb-4 md:mb-6 flex items-center justify-between opacity-50 px-1">
                                     <span className="text-journal-data text-white uppercase">Tabla de Precios</span>
-                                    <div className="h-px bg-white/20 w-12"></div>
+                                    <div className="h-px bg-white/20 w-8 md:w-12"></div>
                                 </div>
 
                                 {/* Balanced Cards Layout */}
-                                <div className="flex flex-col gap-3 w-full">
+                                <div className="flex flex-col gap-2.5 md:gap-3 w-full">
                                     {tour.pricingTiers?.map((tier, idx) => (
                                         <div 
                                             key={idx} 
-                                            className="relative p-5 rounded-lg border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/10 transition-all duration-300 group"
+                                            className="relative p-3.5 md:p-5 rounded-lg border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/10 transition-all duration-300 group"
                                         >
                                             <div className="flex items-center justify-between relative z-10">
                                                 
                                                 {/* Left: Pax Configuration */}
-                                                <div className="flex flex-col gap-1.5">
+                                                <div className="flex flex-col gap-1 md:gap-1.5">
                                                     <div className="flex items-center gap-2">
-                                                        <div className={`w-1 h-3 rounded-full ${tier.minPax === 1 ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.4)]' : 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]'}`}></div>
-                                                        <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
+                                                        <div className={`w-0.5 md:w-1 h-2.5 md:h-3 rounded-full ${tier.minPax === 1 ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.4)]' : 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]'}`}></div>
+                                                        <span className="text-xs md:text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
                                                             {tier.minPax === tier.maxPax 
                                                                 ? `${tier.minPax} Pasajero` 
                                                                 : `${tier.minPax} - ${tier.maxPax} Personas`
                                                             }
                                                         </span>
                                                     </div>
-                                                    <span className="text-journal-data text-slate-600 pl-3">
-                                                        {tier.minPax === 1 ? 'Expedición Privada' : 'Grupo Estándar'}
+                                                    <span className="text-[9px] font-semibold tracking-wider text-slate-600 uppercase pl-2.5 md:pl-3">
+                                                        {tier.minPax === 1 ? 'Privada' : 'Grupal'}
                                                     </span>
                                                 </div>
 
                                                 {/* Right: Price Focus */}
                                                 <div className="text-right">
-                                                    <span className="block text-lg md:text-xl font-bold text-white tracking-tighter tabular-nums group-hover:text-emerald-400 transition-colors">
+                                                    <span className="block text-base md:text-xl font-bold text-white tracking-tighter tabular-nums group-hover:text-emerald-400 transition-colors">
                                                         $ {tier.priceCOP.toLocaleString()}
                                                     </span>
-                                                    <span className="text-[9px] font-mono text-slate-600 block mt-0.5 uppercase tracking-widest">COP / pax</span>
+                                                    <span className="text-[8px] md:text-[9px] font-mono text-slate-600 block mt-0.5 uppercase tracking-widest">COP / pax</span>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                                 
-                                <div className="mt-10 px-1 flex gap-4 items-start opacity-40 group hover:opacity-100 transition-opacity duration-500">
-                                    <Info className="w-4 h-4 text-cyan-500 shrink-0 mt-0.5" />
-                                    <p className="text-xs leading-relaxed text-slate-400 font-medium italic">
+                                <div className="mt-8 md:mt-10 px-1 flex gap-3 md:gap-4 items-start opacity-40 group hover:opacity-100 transition-opacity duration-500">
+                                    <Info className="w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-500 shrink-0 mt-0.5" />
+                                    <p className="text-[10px] md:text-xs leading-relaxed text-slate-400 font-medium italic">
                                         El precio final se ajustará automáticamente según el número de personas seleccionadas en el siguiente paso.
                                     </p>
                                 </div>
