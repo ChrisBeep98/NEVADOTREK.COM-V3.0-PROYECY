@@ -112,14 +112,22 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                 </span>
             </div>
 
-            {/* --- MOBILE STICKY CTA BAR --- */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] p-4 bg-slate-950/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-between">
-                <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest leading-none mb-1">Próxima salida</span>
-                    <span className="text-sm font-bold text-white tracking-tight">Cupos disponibles</span>
+            {/* --- MOBILE STICKY CTA BAR (Liquid Glass) --- */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] px-6 py-4 bg-white/10 backdrop-blur-xl border-t border-white/20 flex items-center gap-6 shadow-[0_-20px_40px_rgba(0,0,0,0.4)]">
+                <div className="flex flex-col shrink-0">
+                    <span className="text-[11px] font-medium text-emerald-400 leading-none mb-1">desde</span>
+                    <div className="flex flex-col">
+                        <span className="text-xl font-bold text-white tracking-tighter leading-none">
+                            $ {((tour.pricingTiers?.length ? Math.min(...tour.pricingTiers.map(p => p.priceCOP)) : 0)).toLocaleString()}
+                        </span>
+                        <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mt-1">COP</span>
+                    </div>
                 </div>
-                <button onClick={scrollToDates} className="bg-white text-slate-950 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest active:scale-95 transition-transform">
-                    Reservar
+                <button 
+                    onClick={scrollToDates} 
+                    className="btn-primary flex-1 normal-case tracking-normal px-4 py-3 text-sm shadow-lg shadow-white/5 border border-white/10"
+                >
+                    Reservar <Calendar className="w-4 h-4" />
                 </button>
             </div>
 
