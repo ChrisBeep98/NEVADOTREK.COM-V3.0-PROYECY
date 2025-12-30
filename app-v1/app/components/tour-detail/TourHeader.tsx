@@ -1,27 +1,26 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Tour } from '../../types/api';
+import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
 import { Calendar } from 'lucide-react';
+import BookingModal from './BookingModal';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function TourHeader({ tour }: { tour: Tour }) {
+export default function TourHeader({ tour, departures }: { tour: Tour; departures: Departure[] }) {
     const headerRef = useRef<HTMLDivElement>(null);
     const imageWrapperRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const scrollHintRef = useRef<HTMLDivElement>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const scrollToDates = () => {
-        const el = document.getElementById('dates');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-    };
+    const openBooking = () => setIsModalOpen(true);
 
     useGSAP(() => {
         // --- 1. CINEMATIC INTRO (Load) ---
@@ -104,7 +103,7 @@ export default function TourHeader({ tour }: { tour: Tour }) {
 
             {/* --- 0. FLOATING CTA (Viewport Fixed) --- */}
             <div className="hero-cta hidden md:block fixed top-[88px] right-frame z-50 w-48 mix-blend-normal pointer-events-auto">
-                <button onClick={scrollToDates} className="btn-primary shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                <button onClick={openBooking} className="btn-primary shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
                     Reservar tour <Calendar className="w-4 h-4" />
                 </button>
                 <span className="block text-right text-[9px] font-mono text-white/50 mt-2 tracking-widest uppercase bg-black/20 backdrop-blur-sm py-1 px-2 rounded-md">
@@ -124,19 +123,25 @@ export default function TourHeader({ tour }: { tour: Tour }) {
                     </div>
                 </div>
                 <button 
-                    onClick={scrollToDates} 
+                    onClick={openBooking} 
                     className="btn-primary flex-1 normal-case tracking-normal px-4 py-3 text-sm shadow-lg shadow-white/5 border border-white/10"
                 >
                     Reservar <Calendar className="w-4 h-4" />
                 </button>
             </div>
 
+            <BookingModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                tour={tour} 
+                departures={departures}
+            />
+
             <header 
                 ref={headerRef} 
                 className="relative w-full bg-slate-950 font-sans overflow-hidden select-none"
                 style={{ perspective: '1000px' }} // Enables 3D rotations for intro
             >
-                {/* --- 1. TEXT LAYER --- */}
                 <div className="pt-[22vh] pb-[10vh] px-frame md:pl-[15vw] flex flex-col items-start text-left z-20 relative will-change-transform">
                     
                     <div className="overflow-hidden mb-6">

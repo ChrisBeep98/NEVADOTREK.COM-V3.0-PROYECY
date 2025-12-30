@@ -55,7 +55,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
     return (
         <main className="bg-slate-950 min-h-screen text-slate-200 selection:bg-cyan-500/30">
             {/* 1. HERO: Fullscreen Impact */}
-            <TourHeader tour={tour} />
+            <TourHeader tour={tour} departures={departures} />
 
             <div className="flex flex-col lg:flex-row relative">
                 
