@@ -28,10 +28,10 @@ if (typeof window !== 'undefined') {
 }
 
 const THEME_COLORS = [
-    '#06b6d4', // Summit Cyan
-    '#f97316', // Páramo Orange
-    '#3b82f6', // Glacier Blue
-    '#a855f7', // Vertical Purple
+    'var(--color-cyan-500)',
+    'var(--color-orange-500)',
+    'var(--color-blue-500)',
+    'var(--color-purple-500)',
 ];
 
 export default function TourItinerary({ itinerary }: { itinerary: { days: ItineraryDay[] } }) {

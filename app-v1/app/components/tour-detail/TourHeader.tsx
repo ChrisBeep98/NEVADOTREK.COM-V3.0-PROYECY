@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour } from '../../types/api';
 import Header from '../Header';
+import { Calendar } from 'lucide-react';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,11 @@ export default function TourHeader({ tour }: { tour: Tour }) {
     const imageWrapperRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const scrollHintRef = useRef<HTMLDivElement>(null);
+
+    const scrollToDates = () => {
+        const el = document.getElementById('dates');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
 
     useGSAP(() => {
         // --- 1. CINEMATIC INTRO (Load) ---
@@ -34,6 +40,12 @@ export default function TourHeader({ tour }: { tour: Tour }) {
             { clipPath: "inset(0% 50% 0% 0%)", opacity: 0 }, 
             { clipPath: "inset(0% 26% 0% 0%)", opacity: 1, duration: 1.8 },
             "-=1.2"
+        )
+        // CTA Reveal (New)
+        .fromTo(".hero-cta",
+            { opacity: 0, x: 20 },
+            { opacity: 1, x: 0, duration: 1 },
+            "-=1"
         )
         // Counter-Zoom
         .fromTo(imageRef.current,
@@ -89,6 +101,27 @@ export default function TourHeader({ tour }: { tour: Tour }) {
     return (
         <>
             <Header />
+
+            {/* --- 0. FLOATING CTA (Viewport Fixed) --- */}
+            <div className="hero-cta hidden md:block fixed top-[88px] right-frame z-50 w-48 mix-blend-normal pointer-events-auto">
+                <button onClick={scrollToDates} className="btn-primary shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+                    Reservar tour <Calendar className="w-4 h-4" />
+                </button>
+                <span className="block text-right text-[9px] font-mono text-white/50 mt-2 tracking-widest uppercase bg-black/20 backdrop-blur-sm py-1 px-2 rounded-md">
+                    Cupos limitados
+                </span>
+            </div>
+
+            {/* --- MOBILE STICKY CTA BAR --- */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] p-4 bg-slate-950/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-between">
+                <div className="flex flex-col">
+                    <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest leading-none mb-1">Próxima salida</span>
+                    <span className="text-sm font-bold text-white tracking-tight">Cupos disponibles</span>
+                </div>
+                <button onClick={scrollToDates} className="bg-white text-slate-950 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-widest active:scale-95 transition-transform">
+                    Reservar
+                </button>
+            </div>
 
             <header 
                 ref={headerRef} 

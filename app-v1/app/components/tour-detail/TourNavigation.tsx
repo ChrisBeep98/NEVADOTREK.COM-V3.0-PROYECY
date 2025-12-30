@@ -78,13 +78,13 @@ export default function TourNavigation() {
                 ></div>
 
                 {/* 3. Compact Navigation Links */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1.5">
                     {SECTIONS.map((item, index) => (
                         <button
                             key={item.id}
                             ref={el => { navItemsRef.current[index] = el }}
                             onClick={() => scrollTo(item.id)}
-                            className={`text-left text-sm tracking-widest transition-all duration-500 py-0.5 ${
+                            className={`text-left text-sm tracking-widest transition-all duration-500 ${
                                 activeSection === item.id 
                                     ? 'text-white font-medium translate-x-3' 
                                     : 'text-slate-500 hover:text-slate-300'

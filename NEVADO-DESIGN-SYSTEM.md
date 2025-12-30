@@ -23,71 +23,52 @@ Usa siempre la variable `--spacing-frame` para consistencia.
 
 ## 📏 1.2 ESPACIADO VERTICAL (Section Padding)
 Define el **ritmo vertical** entre bloques de contenido.
-*Estrategia: Split Padding (Mitad arriba / Mitad abajo) para que la suma entre secciones genere el espacio correcto.*
 
-| Escenario | Espacio Total Deseado | Implementación (Split) | Clase CSS |
-| :--- | :--- | :--- | :--- |
-| **Móvil** | **80px** | `py-[40px]` | `.section-v-spacing` |
-| **Desktop** | **160px** | `py-[80px]` | `.section-v-spacing` |
+| Escenario | Espacio Total Deseado | Clase CSS |
+| :--- | :--- | :--- |
+| **Móvil** | **80px** | `.section-v-spacing` |
+| **Desktop** | **160px** | `.section-v-spacing` |
 
 ---
 
 ## 📐 2. TYPOGRAPHY TOKENS (Semánticos)
-*No uses clases manuales de font-weight o size en componentes. Usa estos tokens:*
 
-| Token | Clase CSS | Estilos Base (Sincronizados) |
+| Token | Clase CSS | Estilos Base |
 | :--- | :--- | :--- |
-| **H-EXPEDITION** | `.text-h-expedition` | `text-7xl md:text-9xl lg:text-[6.4vw] font-semibold tracking-tighter leading-none` |
-| **HERO TITLE** | `.text-hero-title` | `text-6xl md:text-8xl lg:text-[9vw] font-semibold tracking-tighter leading-[0.9]` |
 | **H-TOUR-TITLE** | `.text-h-tour-title` | `text-6xl md:text-8xl lg:text-[6vw] font-medium tracking-tighter leading-[0.95]` |
 | **H-SECTION-TITLE** | `.text-h-section-title` | `text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.2]` |
-| **DISPLAY XL** | `.text-display-xl` | `text-5xl md:text-8xl font-bold tracking-normal leading-[1.3]` |
-| **HEADING XL** | `.text-heading-xl` | `text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.3] uppercase` |
-| **STATEMENT** | `.text-statement` | `text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-relaxed` |
 | **SUB-LABEL** | `.text-sub-label` | `font-bold text-[11px] tracking-[0.15em] uppercase text-cyan-500` |
-| **HEADING L** | `.text-heading-l` | `text-2xl md:text-3xl font-medium tracking-wide` |
-| **BODY LEAD** | `.text-body-lead` | `text-sm md:text-lg font-light leading-relaxed` |
-| **BODY STANDARD** | `.text-body-std` | `text-xs md:text-base font-light leading-relaxed opacity-70` |
 | **JOURNAL DATA** | `.text-journal-data` | `font-semibold text-[10px] tracking-[0.05em] uppercase opacity-70` |
 
 ---
 
 ## 🎨 3. COLOR PALETTE
 - **Atmosphere Dark:** `--color-slate-950` (`#020617`)
-- **Summit Cyan (Accent):** `--color-cyan-500` (`#06b6d4`)
-- **Glacier Blue:** `--color-blue-500` (`#3b82f6`)
+- **Summit Cyan:** `--color-cyan-500` (`#06b6d4`)
+- **Andean Green:** `--color-emerald-400` (`#34d399`)
 - **Páramo Orange:** `--color-orange-500` (`#f97316`)
-- **Vertical Purple:** `--color-purple-500` (`#a855f7`)
-- **Andean Green (Status/Success):** `--color-emerald-400` (`#34d399`)
 
 ---
 
-## 🤖 4. AI PROMPT & SYNC RULE (Regla de Oro)
+## 🔘 4. INTERACTIVE COMPONENTS
 
-> **"Actúa como el Guardián del Sistema de Diseño. Cuando el usuario pida un cambio visual (ej: 'baja el peso de los títulos'), DEBES realizar una acción doble obligatoria:
-> 1. Actualizar este archivo (`NEVADO-DESIGN-SYSTEM.md`) con el nuevo valor.
-> 2. Actualizar inmediatamente `app-v1/app/globals.css` en las secciones `@theme` o `@utility`.
-> NUNCA modifiques clases manuales en los componentes para cambios globales. Si un componente no usa tokens semánticos, tu primera tarea es refactorizarlo para que los use."**
+### **BTN-PRIMARY** (`.btn-primary`)
+El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
+- **Fondo:** `White` (#FFFFFF)
+- **Texto:** `Slate-950` (#020617)
+- **Tipografía:** `font-bold text-[11px] tracking-[0.2em] uppercase`
+- **Forma:** `Pill (rounded-full)`
+- **Efecto Hover:** Fondo `Cyan-400`, Sombra `Cyan-500/20`, icon shift.
+- **Efecto Active:** `Scale 95%`.
 
 ---
 
-## 🛑 REGLA DE ORO PARA LA IA (AI PROTOCOL)
-> **"Si estás leyendo esto para realizar un cambio visual: DETENTE. No edites clases de Tailwind directamente en los archivos `.tsx`. 
-> 1. Identifica el token semántico que el componente está usando (ej: `text-display-xl`).
-> 2. Realiza el cambio en el valor del token dentro de `app-v1/app/globals.css` bajo la directiva `@utility`.
-> 3. Refleja el cambio en este documento.
-> De esta forma, un solo cambio actualizará toda la plataforma de manera consistente."**
+## 🤖 5. AI PROMPT & SYNC RULE
+> **"Si vas a crear un botón o elemento interactivo, verifica siempre la sección 4 de este documento."**
 
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
-- **2025-12-29:** Creación del token `H-SECTION-TITLE` para estandarizar títulos de secciones internas (Overview, Itinerary, etc.).
-- **2025-12-29:** Oficialización del color `Andean Green` (emerald-400) en la paleta.
-- **2025-12-29:** Creación del token `H-TOUR-TITLE` (text-8vw font-medium) para títulos de detalle de tour con peso visual equilibrado.
-- **2025-12-26:** Expansión de la paleta cromática: Adición de Blue, Orange y Purple como acentos técnicos secundarios.
-- **2025-12-26:** Creación del token `HEADING XL` (text-7xl uppercase) para encabezados creativos de alto impacto.
-- **2025-12-26:** Creación del token `STATEMENT` (text-5xl) para manifiestos tipográficos sin títulos.
-- **2025-12-26:** Adición del token `BODY STANDARD` para bloques de texto largos y minimalistas.
-- **2025-12-26:** Estandarización técnica: Mapeo de tokens a clases CSS semánticas en `globals.css`.
-- **2025-12-26:** Refinamiento estético: Reducción de peso tipográfico (Display XL -> Bold, Heading L -> Medium).
-- **2025-12-25:** Creación inicial.
+- **2025-12-29:** Refinamiento visual del token `BTN-PRIMARY` (especificaciones de sombra y tipografía).
+- **2025-12-29:** Creación del token `H-SECTION-TITLE` (Leading 1.2).
+- **2025-12-29:** Adición de `Andean Green`.
