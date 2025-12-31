@@ -36,14 +36,14 @@ export default async function ExpeditionsGrid() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
-                        <h2 className="text-display-xl text-white mb-4">
+                        <h2 className="text-display-xl text-foreground mb-4">
                             SELECT <br/>EXPEDITIONS.
                         </h2>
-                        <p className="text-body-lead text-slate-400 max-w-md">
+                        <p className="text-body-lead text-muted max-w-md">
                             Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.
                         </p>
                     </div>
-                    <a href="#" className="text-sub-label text-white flex items-center gap-2 hover:text-cyan-400 transition-colors pb-1 border-b border-white/10 hover:border-cyan-400">
+                    <a href="#" className="text-sub-label text-foreground flex items-center gap-2 hover:text-cyan-400 transition-colors pb-1 border-b border-border hover:border-cyan-400">
                         VER CATÁLOGO COMPLETO
                         <ArrowUpRight width={14} strokeWidth={1.5} />
                     </a>

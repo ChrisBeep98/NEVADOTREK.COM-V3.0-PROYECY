@@ -1,5 +1,4 @@
 import HeroMonolith from "./components/HeroMonolith";
-import StatementSection from "./components/StatementSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
 import FeaturesGrid from "./components/FeaturesGrid";
 import TestimonialsSection from "./components/TestimonialsSection";
@@ -11,7 +10,7 @@ export default function Home() {
     <main className="bg-background">
       <HeroMonolith />
       <div className="relative z-30">
-        <StatementSection />
+        
         <ExpeditionsGrid />
         <BookingCTA />
         <FeaturesGrid />

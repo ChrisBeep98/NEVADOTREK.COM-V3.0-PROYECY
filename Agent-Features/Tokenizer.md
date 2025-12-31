@@ -17,9 +17,14 @@ When analyzing any UI file (React/Next.js components, CSS), you must verify the 
 *   **Hierarchy:** Does the visual weight match the content importance as defined in the DS?
 
 ### 3. 🎨 CHROMATIC DIMENSION (Colors & Atmosphere)
-*   **Palette:** Are colors strictly from the defined palette (Slate-950, Cyan-500, Emerald-400, etc.)?
+*   **Theme Readiness [CRITICAL]:** Check for HARDCODED dark values.
+    *   ❌ `bg-slate-950` -> ✅ `bg-background`
+    *   ❌ `text-white` -> ✅ `text-foreground`
+    *   ❌ `border-white/10` -> ✅ `border-border`
+    *   ❌ `text-slate-400` -> ✅ `text-muted`
+*   **Palette:** Are colors strictly from the defined palette?
 *   **Usage:** Are semantic colors used correctly (e.g., Emerald for Success/Status, Orange for Warning)?
-*   **Opacity:** Are transparencies consistent (e.g., `text-white/60`)?
+*   **Opacity:** Use semantic opacity variables (`bg-surface`) instead of raw `bg-white/5`.
 
 ### 4. 🧩 COMPONENT DIMENSION (Radius & Effects)
 *   **Borders:** Is `border-radius` consistent (e.g., `rounded-[6px]` for technical elements)?

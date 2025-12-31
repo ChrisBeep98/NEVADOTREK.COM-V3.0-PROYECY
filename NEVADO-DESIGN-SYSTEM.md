@@ -44,19 +44,27 @@ Define el **ritmo vertical** entre bloques de contenido.
 ---
 
 ## 🎨 3. COLOR PALETTE & MODES
-Nevado Trek utiliza **Tokens Semánticos** para asegurar la compatibilidad con Light y Dark Mode.
+Nevado Trek utiliza **Tokens Semánticos** para asegurar la compatibilidad con Light y Dark Mode. 
+**PROHIBIDO:** Usar clases hardcoded como `bg-slate-950` o `text-white` en layouts principales. Usar variables semánticas.
 
-### 3.1 NÚCLEO ATMOSFÉRICO
-| Token | Dark Mode (Default) | Light Mode (Próximamente) | Uso |
-| :--- | :--- | :--- | :--- |
-| **`color-background`** | `#040918` (Deep Mountain Navy) | `#F8FAFC` | Fondo principal de sección |
-| **`color-foreground`** | `#EDEDED` | `#0F172A` | Texto base |
-| **`color-surface`** | `rgba(255,255,255,0.02)` | `rgba(0,0,0,0.02)` | Contenedores sutiles |
+### 3.1 NÚCLEO ATMOSFÉRICO (Semantic Mapping)
 
-### 3.2 BRAND ACCENTS
+| Variable CSS | Token Tailwind | Dark Mode (Night Camp) 🌑 | Light Mode (Glacial Day) ☀️ | Uso |
+| :--- | :--- | :--- | :--- | :--- |
+| `--background` | `bg-background` | `#040918` (Deep Navy) | `#F8FAFC` (Ice White) | Lienzo principal |
+| `--foreground` | `text-foreground` | `#EDEDED` (Off White) | `#050B1A` (Deep Blue Slate) | Texto principal (Títulos) |
+| `--muted` | `text-muted` | `#94A3B8` (Slate 400) | `#64748B` (Slate 500) | Textos secundarios / Lead |
+| `--border` | `border-border` | `rgba(255,255,255,0.1)` | `rgba(0,0,0,0.1)` | Líneas divisorias sutiles |
+| `--surface` | `bg-surface` | `rgba(255,255,255,0.03)` | `rgba(0,0,0,0.03)` | Tarjetas / Paneles base |
+| `--glass` | `bg-glass` | `rgba(2,6,23,0.7)` | `rgba(255,255,255,0.7)` | Fondos con backdrop-blur |
+
+### 3.2 BRAND ACCENTS (Universal)
+Estos colores mantienen su vibrancia en ambos modos, pero su percepción cambia por contraste.
 - **Summit Cyan:** `--color-cyan-500` (`#06b6d4`)
 - **Andean Green:** `--color-emerald-400` (`#34d399`)
 - **Páramo Orange:** `--color-orange-500` (`#f97316`)
+
+> **Nota de Diseño Light Mode:** En modo claro, los acentos cian/naranja deben usarse con moderación para no competir con el fondo blanco. Preferir bordes o textos pequeños sobre fondos sólidos grandes.
 
 ---
 
