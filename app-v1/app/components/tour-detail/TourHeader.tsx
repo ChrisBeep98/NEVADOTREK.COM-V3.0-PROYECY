@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Mountain, ArrowRight, Activity, Map, Compass } from 'lucide-react';
+import { Mountain, ArrowRight, Activity, Map, Compass, Flame, Zap } from 'lucide-react';
 import BookingModal from './BookingModal';
 
 if (typeof window !== 'undefined') {
@@ -39,7 +39,6 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
         );
 
         // 2. EFECTO SCROLL (Parallax & Fade)
-        // La imagen se mueve más lento que el scroll para dar profundidad
         gsap.to(imageRef.current, {
             yPercent: 20,
             ease: "none",
@@ -51,7 +50,6 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
             }
         });
 
-        // El contenido se desvanece y sube ligeramente al hacer scroll
         gsap.to(contentRef.current, {
             y: -100,
             opacity: 0,
@@ -78,7 +76,6 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     alt={tour.name.es} 
                     className="w-full h-[120%] object-cover object-center absolute -top-[10%] opacity-60"
                 />
-                {/* Degradados cinemáticos para legibilidad */}
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950"></div>
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/20 to-transparent"></div>
             </div>
@@ -90,16 +87,16 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     
                     {/* LEFT: Main Typography */}
                     <div className="flex-1">
-                        {/* Meta Badge */}
+                        {/* Meta Badge - LIQUID GLASS UPDATE */}
                         <div className="flex items-center gap-4 mb-6 hero-text-reveal">
-                            <div className="flex items-center gap-2 px-3 py-1.5 border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md rounded-full">
-                                <Activity className="w-3.5 h-3.5 text-cyan-400" />
-                                <span className="text-[10px] font-bold tracking-[0.2em] text-cyan-300 uppercase">
-                                    Expedición Activa
+                            <div className="h-10 px-5 flex items-center gap-3 rounded-full bg-white/[0.02] border border-white/10 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
+                                <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/20" />
+                                <span className="text-sm font-medium tracking-[0.04em] text-slate-300">
+                                    Tour muy solicitado
                                 </span>
                             </div>
-                            <span className="hidden md:block text-xs font-mono text-slate-400 tracking-widest uppercase">
-                                Season 2025 • High Altitude
+                            <span className="hidden md:block text-xs font-mono text-slate-500 tracking-widest">
+                                Season 2025 • high altitude
                             </span>
                         </div>
 
@@ -116,46 +113,66 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         </p>
                     </div>
 
-                    {/* RIGHT: Technical Dashboard (HUD) */}
-                    <div className="w-full lg:w-80 xl:w-96 bg-slate-950/40 backdrop-blur-sm border border-white/10 p-5 md:p-6 rounded-xl hero-text-reveal shrink-0">
-                        <div className="flex items-center justify-between mb-5 border-b border-white/10 pb-3">
-                            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-[0.2em]">Datos Técnicos</span>
-                            <Compass className="w-3.5 h-3.5 text-cyan-500 animate-[spin_10s_linear_infinite]" />
+                    {/* RIGHT: Technical Dashboard (Refactored Spec Sheet) */}
+                    <div className="w-full lg:w-72 bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-lg hero-text-reveal shrink-0 overflow-hidden group hover:border-white/20 transition-colors duration-500">
+                        
+                        {/* Status Header */}
+                        <div className="bg-white/[0.03] p-4 flex items-center justify-between border-b border-white/5">
+                            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">Estado</span>
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <span className="text-[9px] font-bold text-emerald-400 tracking-wider uppercase">Confirmado</span>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-2">
-                            <div className="flex flex-col">
-                                <div className="flex items-center gap-2 mb-1 opacity-60">
-                                    <Mountain className="w-3 h-3 text-white" />
-                                    <span className="text-[9px] uppercase tracking-widest text-slate-300">Cumbre</span>
+                        {/* Specs List */}
+                        <div className="p-4 flex flex-col gap-4">
+                            
+                            {/* Altitude */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3 opacity-60">
+                                    <Mountain className="w-3.5 h-3.5 text-white" />
+                                    <span className="text-[10px] uppercase tracking-widest text-slate-300">Cumbre</span>
                                 </div>
-                                <span className="text-xl md:text-2xl font-bold text-white tabular-nums tracking-tight">
+                                <span className="text-sm font-bold text-white tabular-nums tracking-wide">
                                     {tour.altitude.es}
                                 </span>
                             </div>
 
-                            <div className="flex flex-col">
-                                <div className="flex items-center gap-2 mb-1 opacity-60">
-                                    <Map className="w-3 h-3 text-white" />
-                                    <span className="text-[9px] uppercase tracking-widest text-slate-300">Distancia</span>
+                            {/* Divider */}
+                            <div className="h-px bg-white/5 w-full"></div>
+
+                            {/* Distance */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3 opacity-60">
+                                    <Map className="w-3.5 h-3.5 text-white" />
+                                    <span className="text-[10px] uppercase tracking-widest text-slate-300">Ruta</span>
                                 </div>
-                                <span className="text-xl md:text-2xl font-bold text-white tabular-nums tracking-tight">
+                                <span className="text-sm font-bold text-white tabular-nums tracking-wide">
                                     {tour.distance}
                                 </span>
                             </div>
 
-                            <div className="flex flex-col col-span-2 mt-2">
-                                <div className="flex items-center gap-2 mb-2 opacity-60">
-                                    <div className={`w-1.5 h-1.5 rounded-full ${tour.difficulty === 'Extreme' ? 'bg-purple-500' : 'bg-orange-500'}`}></div>
-                                    <span className="text-[9px] uppercase tracking-widest text-slate-300">Exigencia</span>
+                             {/* Divider */}
+                             <div className="h-px bg-white/5 w-full"></div>
+
+                            {/* Difficulty - Compact Bar */}
+                            <div className="flex flex-col gap-2 pt-1">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3 opacity-60">
+                                        <Zap className="w-3.5 h-3.5 text-white" />
+                                        <span className="text-[10px] uppercase tracking-widest text-slate-300">Nivel</span>
+                                    </div>
+                                    <span className={`text-[9px] font-bold uppercase tracking-widest ${tour.difficulty === 'Extreme' ? 'text-purple-400' : tour.difficulty === 'Hard' ? 'text-orange-400' : 'text-emerald-400'}`}>
+                                        {tour.difficulty}
+                                    </span>
                                 </div>
-                                <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                                <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden mt-1">
                                     <div 
                                         className={`h-full ${tour.difficulty === 'Extreme' ? 'bg-purple-500' : tour.difficulty === 'Hard' ? 'bg-orange-500' : 'bg-emerald-500'}`}
                                         style={{ width: tour.difficulty === 'Extreme' ? '95%' : tour.difficulty === 'Hard' ? '75%' : '50%' }}
                                     ></div>
                                 </div>
-                                <span className="text-[10px] font-mono text-right mt-1 text-slate-500 uppercase">{tour.difficulty}</span>
                             </div>
                         </div>
                     </div>

@@ -39,6 +39,7 @@ Define el **ritmo vertical** entre bloques de contenido.
 | **H-SECTION-TITLE** | `.text-h-section-title` | `text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.2]` |
 | **SUB-LABEL** | `.text-sub-label` | `font-bold text-[11px] tracking-[0.15em] uppercase text-cyan-500` |
 | **JOURNAL DATA** | `.text-journal-data` | `font-semibold text-[10px] tracking-[0.05em] uppercase opacity-70` |
+| **TEXT-SM** | `.text-sm` (Utility) | `text-sm tracking-[0.04em] leading-relaxed` |
 
 ---
 
