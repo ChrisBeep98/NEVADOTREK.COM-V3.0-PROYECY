@@ -37,9 +37,9 @@ export default function TourGallery({ images }: { images: string[] }) {
     }, { scope: containerRef });
 
     return (
-        <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-background border-t border-white/5 relative overflow-hidden">
+        <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-background border-t border-border relative overflow-hidden transition-colors duration-500">
              
-             {/* Background Element */}
+             {/* Background Element - Sutil en ambos modos */}
              <div className="absolute -right-24 top-1/4 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
              <div className="max-w-6xl mx-auto">
@@ -48,21 +48,22 @@ export default function TourGallery({ images }: { images: string[] }) {
                         <Camera className="w-3.5 h-3.5 text-cyan-500" />
                         <span className="text-sub-label">Visual diary</span>
                      </div>
-                     <h2 className="text-h-section-title text-white">Capturando la cima</h2>
+                     <h2 className="text-h-section-title text-foreground">Capturando la cima</h2>
                 </div>
                 
                 {/* Grid Layout - Mosaico Asimétrico */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px] md:auto-rows-[450px]">
                     
                     {/* Imagen Principal */}
-                    <div className="md:col-span-8 relative overflow-hidden rounded-[6px] group gallery-img border border-white/5">
+                    <div className="md:col-span-8 relative overflow-hidden rounded-[6px] group gallery-img border border-[#040918]/20 shadow-2xl bg-surface">
+                         <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/40 via-transparent to-transparent z-10"></div>
                          <img 
                             src={images[0]} 
                             alt="Gallery Moment" 
-                            className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
+                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
                         />
-                        <div className="absolute bottom-6 left-6 flex items-center gap-3">
-                            <span className="text-[10px] font-mono text-white/40 tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                        <div className="absolute bottom-6 left-6 flex items-center gap-3 z-20">
+                            <span className="text-[10px] font-mono text-white/60 tracking-[0.2em] uppercase bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                                 01 / Journal
                             </span>
                         </div>
@@ -70,14 +71,15 @@ export default function TourGallery({ images }: { images: string[] }) {
 
                     {/* Segunda Imagen */}
                     {images[1] && (
-                        <div className="md:col-span-4 relative overflow-hidden rounded-[6px] group gallery-img border border-white/5">
+                        <div className="md:col-span-4 relative overflow-hidden rounded-[6px] group gallery-img border border-[#040918]/20 shadow-2xl bg-surface">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/40 via-transparent to-transparent z-10"></div>
                             <img 
                                 src={images[1]} 
                                 alt="Gallery Moment" 
-                                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
                             />
-                            <div className="absolute bottom-6 left-6">
-                                <span className="text-[10px] font-mono text-white/40 tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                            <div className="absolute bottom-6 left-6 z-20">
+                                <span className="text-[10px] font-mono text-white/60 tracking-[0.2em] uppercase bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                                     02
                                 </span>
                             </div>
@@ -86,14 +88,15 @@ export default function TourGallery({ images }: { images: string[] }) {
 
                     {/* Tercera Imagen */}
                     {images[2] && (
-                        <div className="md:col-span-12 relative overflow-hidden rounded-[6px] group gallery-img md:h-[400px] border border-white/5">
+                        <div className="md:col-span-12 relative overflow-hidden rounded-[6px] group gallery-img md:h-[400px] border border-[#040918]/20 shadow-2xl bg-surface">
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/40 via-transparent to-transparent z-10"></div>
                             <img 
                                 src={images[2]} 
                                 alt="Gallery Moment" 
-                                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
+                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
                             />
-                            <div className="absolute bottom-6 left-6">
-                                <span className="text-[10px] font-mono text-white/40 tracking-[0.2em] uppercase bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                            <div className="absolute bottom-6 left-6 z-20">
+                                <span className="text-[10px] font-mono text-white/60 tracking-[0.2em] uppercase bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                                     03 / Panorama
                                 </span>
                             </div>
