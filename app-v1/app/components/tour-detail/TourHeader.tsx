@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Calendar } from 'lucide-react';
+import { Calendar, Mountain, ArrowDown, MapPin, Wind } from 'lucide-react';
 import BookingModal from './BookingModal';
 
 if (typeof window !== 'undefined') {
@@ -14,198 +14,132 @@ if (typeof window !== 'undefined') {
 }
 
 export default function TourHeader({ tour, departures }: { tour: Tour; departures: Departure[] }) {
-    const headerRef = useRef<HTMLDivElement>(null);
-    const imageWrapperRef = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLImageElement>(null);
-    const scrollHintRef = useRef<HTMLDivElement>(null);
+    const scopeRef = useRef<HTMLDivElement>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const openBooking = () => setIsModalOpen(true);
 
     useGSAP(() => {
-        // --- 1. CINEMATIC INTRO (Load) ---
-        const introTl = gsap.timeline({
-            defaults: { ease: "expo.out", duration: 1.6 }
-        });
+        // 1. INTRO: Revelado Editorial
+        const introTl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.5 } });
         
         introTl
-        // Title Reveal: Rise, Rotate and Unblur
-        .fromTo(".hero-text-element", 
-            { y: 100, opacity: 0, rotateX: -15, filter: "blur(10px)" },
-            { y: 0, opacity: 1, rotateX: 0, filter: "blur(0px)", stagger: 0.12 }
-        )
-        // Image Monolith: Precise 74% width landing (26% inset right)
-        .fromTo(imageWrapperRef.current,
-            { clipPath: "inset(0% 50% 0% 0%)", opacity: 0 }, 
-            { clipPath: "inset(0% 26% 0% 0%)", opacity: 1, duration: 1.8 },
-            "-=1.2"
-        )
-        // CTA Reveal (New)
-        .fromTo(".hero-cta",
-            { opacity: 0, x: 20 },
-            { opacity: 1, x: 0, duration: 1 },
-            "-=1"
-        )
-        // Counter-Zoom
-        .fromTo(imageRef.current,
-            { scale: 1.4 },
-            { scale: 1.1, duration: 1.8 },
-            "<"
-        )
-        // Persistent Scroll Hint
-        .fromTo(scrollHintRef.current,
-            { opacity: 0, scale: 0.8 },
-            { opacity: 1, scale: 1, duration: 1 },
-            "-=1"
-        );
+            .fromTo(".fj-title-box", 
+                { y: 50, opacity: 0, filter: "blur(15px)" },
+                { y: 0, opacity: 1, filter: "blur(0px)", delay: 0.3 }
+            )
+            .fromTo(".fj-image-shutter",
+                { clipPath: "inset(100% 0% 0% 0%)" }, // Cortina cerrada (abajo)
+                { clipPath: "inset(0% 0% 0% 0%)", duration: 2, ease: "power3.inOut" },
+                "-=1.2"
+            )
+            .fromTo(".fj-main-img",
+                { scale: 1.2 },
+                { scale: 1.1, duration: 2.5 },
+                "<"
+            );
 
-        // --- 2. SCROLL CHOREOGRAPHY ---
+        // 2. SCROLL: Parallax Cinematográfico
         const scrollTl = gsap.timeline({
             scrollTrigger: {
-                trigger: headerRef.current,
+                trigger: ".fj-hero-section",
                 start: "top top",
-                end: "+=60%", // Extended for better feel
-                scrub: 1,     // Slightly more lag for "heavy" cinematic feel
+                end: "bottom top",
+                scrub: 1,
             }
         });
 
         scrollTl
-            // Expand Image to fill the 26% gap
-            .to(imageWrapperRef.current, {
-                clipPath: "inset(0% 0% 0% 0%)", 
-                ease: "power2.inOut"
+            // El texto sube a velocidad normal
+            .to(".fj-title-box", {
+                y: -100,
+                opacity: 0,
+                ease: "none"
             })
-            // Parallax & Settle
-            .to(imageRef.current, {
-                scale: 1.0,
-                yPercent: 12,
-                ease: "power2.inOut"
-            }, 0)
-            // Title subtle movement
-            .to(".hero-text-element", {
-                y: -40,
-                opacity: 0.5,
-                stagger: 0.05,
+            // La montaña sube más lento (Parallax real)
+            .to(".fj-main-img", {
+                yPercent: 15,
                 ease: "none"
             }, 0)
-            // Scroll Hint: Fades but stays as a ghost element
-            .to(scrollHintRef.current, {
-                opacity: 0.2,
-                y: 40,
+            // Sutil desvanecimiento de la base
+            .to(".fj-image-overlay", {
+                opacity: 1,
                 ease: "none"
             }, 0);
 
-    }, { scope: headerRef });
+    }, { scope: scopeRef });
 
     return (
-        <>
+        <div ref={scopeRef} className="fj-root bg-background">
             <Header />
 
-            {/* --- 0. FLOATING CTA (Viewport Fixed) --- */}
-            <div className="hero-cta hidden md:block fixed top-[88px] right-frame z-50 w-48 mix-blend-normal pointer-events-auto">
-                <button onClick={openBooking} className="btn-primary shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-                    Reservar tour <Calendar className="w-4 h-4" />
-                </button>
-                <span className="block text-right text-[9px] font-mono text-white/50 mt-2 tracking-widest uppercase bg-black/20 backdrop-blur-sm py-1 px-2 rounded-md">
-                    Cupos limitados
-                </span>
-            </div>
-
-            {/* --- MOBILE STICKY CTA BAR (Liquid Glass) --- */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] px-6 py-4 bg-white/10 backdrop-blur-xl border-t border-white/20 flex items-center gap-6 shadow-[0_-20px_40px_rgba(0,0,0,0.4)]">
-                <div className="flex flex-col shrink-0">
-                    <span className="text-[11px] font-medium text-emerald-400 leading-none mb-1">desde</span>
-                    <div className="flex flex-col">
-                        <span className="text-xl font-bold text-white tracking-tighter leading-none">
-                            $ {((tour.pricingTiers?.length ? Math.min(...tour.pricingTiers.map(p => p.priceCOP)) : 0)).toLocaleString()}
-                        </span>
-                        <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mt-1">COP</span>
+            {/* CTA ACCIÓN - ESTILO BOUTIQUE */}
+            <div className="hidden md:block fixed top-24 right-frame z-[100] mix-blend-difference pointer-events-auto">
+                <button onClick={openBooking} className="group flex flex-col items-end gap-3">
+                    <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-md group-hover:bg-white group-hover:text-black transition-all duration-500 shadow-2xl">
+                        <Calendar className="w-5 h-5" />
                     </div>
-                </div>
-                <button 
-                    onClick={openBooking} 
-                    className="btn-primary flex-1 normal-case tracking-normal px-4 py-3 text-sm shadow-lg shadow-white/5 border border-white/10"
-                >
-                    Reservar <Calendar className="w-4 h-4" />
+                    <span className="text-[10px] font-black tracking-[0.3em] text-white uppercase opacity-40 group-hover:opacity-100 transition-opacity">
+                        Reservar
+                    </span>
                 </button>
             </div>
 
-            <BookingModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                tour={tour} 
-                departures={departures}
-            />
+            <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} tour={tour} departures={departures} />
 
-            <header 
-                ref={headerRef} 
-                className="relative w-full bg-background font-sans overflow-hidden select-none"
-                style={{ perspective: '1000px' }} // Enables 3D rotations for intro
-            >
-                <div className="pt-[22vh] pb-[10vh] px-frame md:pl-[15vw] flex flex-col items-start text-left z-20 relative will-change-transform">
-                    
-                    <div className="overflow-hidden mb-6">
-                         <span className="hero-text-element block text-sub-label text-cyan-500 tracking-[0.3em]">
-                            THE EXPEDITION
-                         </span>
+            <section className="fj-hero-section relative w-full flex flex-col pt-[120px] md:pt-[160px] overflow-hidden">
+                
+                {/* 1. HEADER (EDITORIAL) */}
+                <div className="fj-title-box relative z-20 px-frame max-w-7xl mx-auto w-full text-left md:text-center mb-16 md:mb-24">
+                    <div className="flex items-center justify-start md:justify-center gap-4 mb-8">
+                        <div className="w-8 h-px bg-cyan-500/40"></div>
+                        <span className="text-sub-label text-cyan-500 tracking-[0.4em] uppercase">Expedición de Alta Ruta</span>
+                        <div className="w-8 h-px bg-cyan-500/40 hidden md:block"></div>
                     </div>
                     
-                    <h1 className="hero-text-element text-h-tour-title text-white mb-10 max-w-5xl break-words uppercase leading-none will-change-[transform,opacity]">
+                    <h1 className="text-5xl md:text-8xl lg:text-[8vw] font-black text-white tracking-tighter uppercase leading-[0.85] mb-10 drop-shadow-2xl">
                         {tour.name.es}
                     </h1>
-
-                    <p className="hero-text-element text-body-lead text-slate-400 max-w-2xl opacity-70 font-light leading-relaxed">
-                        {tour.subtitle?.es || "Explora los límites de lo posible en una travesía inolvidable."}
+                    
+                    <p className="text-body-lead text-slate-400 max-w-2xl mx-auto font-light leading-relaxed opacity-80 md:text-center">
+                        {tour.subtitle?.es}
                     </p>
-
                 </div>
 
-                {/* --- 2. IMAGE MONOLITH --- */}
-                <div className="relative w-full flex justify-start pb-0 overflow-hidden">
-                    
+                {/* 2. THE IMAGE CANVAS (Fijo 1000px) */}
+                <div className="relative w-full flex justify-center items-start overflow-visible">
                     <div 
-                        ref={imageWrapperRef}
-                        className="relative w-full h-[65vh] md:h-[900px] bg-background will-change-[clip-path,transform]"
-                        style={{ 
-                            clipPath: "inset(0% 26% 0% 0%)",
-                            transform: 'translateZ(0)' // GPU Acceleration
-                        }}
+                        className="fj-image-shutter relative w-full h-[60vh] md:h-[1000px] overflow-hidden bg-slate-900 will-change-[clip-path]"
                     >
                         <img 
-                            ref={imageRef}
                             src={tour.images[0]} 
                             alt={tour.name.es} 
-                            className="w-full h-full object-cover origin-center will-change-transform" 
-                            style={{ transform: 'scale(1.1) translateZ(0)' }}
+                            className="fj-main-img w-full h-[120%] object-cover absolute top-[-10%] left-0 will-change-transform"
                         />
                         
-                        {/* Dramatic Atmospheric Gradient */}
-                        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none"></div>
+                        {/* Capas de fundido orgánico */}
+                        <div className="fj-image-overlay absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-20 bg-background z-20"></div>
 
-                        {/* --- PERSISTENT SCROLL INDICATOR --- */}
-                        <div 
-                            ref={scrollHintRef}
-                            className="scroll-hint-wrapper absolute bottom-12 left-0 w-full px-frame md:pl-[15vw] z-30 pointer-events-none"
-                        >
-                            <div className="flex items-center gap-5">
-                                <div className="relative w-[30px] h-[50px] border border-white/10 rounded-full flex justify-center p-1.5 bg-white/5 backdrop-blur-sm">
-                                    <div className="w-1 h-3 bg-cyan-500 rounded-full animate-[bounce_2s_infinite] shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-[9px] font-mono tracking-[0.4em] text-white/60 uppercase">
-                                        Discovery Track
-                                    </span>
-                                    <span className="text-[8px] font-mono tracking-[0.2em] text-white/20 uppercase">
-                                        Scroll to reveal details
-                                    </span>
-                                </div>
+                        {/* Annotations (Bitácora) */}
+                        <div className="absolute top-12 left-12 z-30 hidden md:flex flex-col gap-6 text-white/20 font-mono text-[10px] tracking-[0.4em] uppercase">
+                            <div className="flex items-center gap-3">
+                                <Mountain className="w-3 h-3" /> Peak Elev: {tour.altitude.es}
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Wind className="w-3 h-3" /> Air_Conditions: Stable
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-            </header>
-        </>
+                {/* 3. SCROLL INDICATOR */}
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20">
+                    <span className="text-[8px] font-bold tracking-[0.4em] text-white uppercase">Explorar Crónica</span>
+                    <ArrowDown className="w-4 h-4 animate-bounce" />
+                </div>
+
+            </section>
+        </div>
     );
 }
