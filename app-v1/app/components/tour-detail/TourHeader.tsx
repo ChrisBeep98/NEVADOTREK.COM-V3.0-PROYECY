@@ -86,10 +86,10 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
             {/* --- CONTENT LAYER (The HUD) --- */}
             <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-6 md:px-10 flex flex-col justify-end pb-12 md:pb-20">
                 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                <div className="flex flex-col lg:flex-row justify-between items-end gap-10">
                     
                     {/* LEFT: Main Typography */}
-                    <div className="lg:col-span-7 xl:col-span-8">
+                    <div className="flex-1">
                         {/* Meta Badge */}
                         <div className="flex items-center gap-4 mb-6 hero-text-reveal">
                             <div className="flex items-center gap-2 px-3 py-1.5 border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-md rounded-full">
@@ -104,7 +104,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         </div>
 
                         {/* Massive Title */}
-                        <h1 className="text-5xl md:text-7xl lg:text-[7rem] xl:text-[8rem] font-black text-white leading-[0.85] tracking-tighter uppercase mb-8 hero-text-reveal drop-shadow-2xl">
+                        <h1 className="text-5xl md:text-7xl lg:text-[7rem] xl:text-[8rem] font-bold text-white leading-[0.85] tracking-tighter uppercase mb-8 hero-text-reveal drop-shadow-2xl">
                             {tour.name.es}
                         </h1>
 
@@ -117,7 +117,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     </div>
 
                     {/* RIGHT: Technical Dashboard (HUD) */}
-                    <div className="lg:col-span-4 xl:col-span-3 bg-slate-950/40 backdrop-blur-sm border border-white/10 p-5 md:p-6 rounded-xl hero-text-reveal">
+                    <div className="w-full lg:w-80 xl:w-96 bg-slate-950/40 backdrop-blur-sm border border-white/10 p-5 md:p-6 rounded-xl hero-text-reveal shrink-0">
                         <div className="flex items-center justify-between mb-5 border-b border-white/10 pb-3">
                             <span className="text-[9px] font-mono text-slate-400 uppercase tracking-[0.2em]">Datos Técnicos</span>
                             <Compass className="w-3.5 h-3.5 text-cyan-500 animate-[spin_10s_linear_infinite]" />
