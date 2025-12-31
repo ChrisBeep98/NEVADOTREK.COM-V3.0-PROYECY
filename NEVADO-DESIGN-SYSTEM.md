@@ -44,8 +44,10 @@ Define el **ritmo vertical** entre bloques de contenido.
 ---
 
 ## 🎨 3. COLOR PALETTE & MODES
-Nevado Trek utiliza **Tokens Semánticos** para asegurar la compatibilidad con Light y Dark Mode. 
-**PROHIBIDO:** Usar clases hardcoded como `bg-slate-950` o `text-white` en layouts principales. Usar variables semánticas.
+
+### 3.0 FILOSOFÍA ATMOSFÉRICA (The Mood Direction)
+- **🌑 NIGHT CAMP (Dark Mode):** Direccionalidad hacia adentro. Evoca misterio, seguridad en el refugio y la inmensidad del cielo nocturno. El contraste se logra mediante **Glows** (resplandores) y **Blurs**.
+- **☀️ GLACIAL DAY (Light Mode):** Direccionalidad hacia afuera. Evoca la pureza del hielo, el aire nítido de la cumbre y la escala monumental de la montaña. El contraste se logra mediante **Sombras Finas** y **Tipografía Profunda** (#050B1A).
 
 ### 3.1 NÚCLEO ATMOSFÉRICO (Semantic Mapping)
 

@@ -35,6 +35,7 @@ Static websites are functional; moving websites are emotional. To truly impress:
 
 ### Parallax & Depth (The "Nevado" Signature)
 *Technique:* Move background elements at different speeds (`scrub: true`, `y: "30%"`).
+*Theme Detail:* In **Night Camp**, use glows and blurs. In **Glacial Day**, use crisp shadows (`shadow-black/5`) and sharp lines to define depth.
 *Why:* Screens are flat. Parallax creates an illusion of depth that makes the screen feel like a window into a 3D space, mimicking the depth of a mountain range.
 
 ### Image Reveals (The "Curtain")

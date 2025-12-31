@@ -28,7 +28,10 @@ Then implement working code (HTML/CSS/JS, React, Vue, etc.) that is:
 
 Focus on:
 - **Typography**: STRICTLY use the defined typography tokens from `NEVADO-DESIGN-SYSTEM.md` and `globals.css` (e.g., `text-h-expedition`, `text-hero-title`). Do not use raw Tailwind sizes unless absolutely necessary for a custom effect. Typography should be treated as a graphical element.
-- **Color & Theme**: Commit to the **Nevado Brand Palette**. Use `slate-950` (Atmosphere Dark) as the primary background. Use Accents (`cyan-500`, `orange-500`, `blue-500`) sparingly but sharply to guide attention.
+- **Color & Theme**: Commit to the **Nevado Dual Atmosphere**. 
+    - **Night Camp (Dark Mode)**: Use `slate-950` (#040918) as the primary canvas for depth and mystery.
+    - **Glacial Day (Light Mode)**: Use `glacial-white` (#F8FAFC) and `deep-blue-slate` (#050B1A) for clarity and sharpness.
+    - **Mandate**: NEVER hardcode colors. Use semantic tokens (`bg-background`, `text-foreground`). Accents (`cyan-500`, `orange-500`, `purple-500`) must adapt their intensity via opacity based on the active theme.
 - **Motion (The "Creative Motion" Standard)**: 
     - Use **GSAP** for all complex animations. 
     - Prioritize **ScrollTrigger** for revealing content. Elements should not just "appear"; they should enter the stage.

@@ -43,7 +43,7 @@ A beautiful animation that lags is a failure.
 *   **Clean Up:** If an element leaves the screen, `display: none` it or stop its tickers/videos.
 
 ## 4. The "Director" Workflow
-1.  **Establish the Atmosphere:** Dark mode? Grain? Blur? Sound?
+1.  **Establish the Weather (Theme):** Glacial Day (Light) for clarity and scale? Or Night Camp (Dark) for immersion and mystery?
 2.  **Define the Anchor:** What is the single object the user should stare at? (The Hero).
 3.  **Add Life:** Small, autonomous movements (breathing glow, drifting particles, updating data numbers) make the interface feel "alive" even when the user does nothing.
 4.  **Direct the Camera:** Use scroll to zoom, pan, and focus. Don't just move the page up.
