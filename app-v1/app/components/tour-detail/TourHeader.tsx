@@ -113,67 +113,61 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         </p>
                     </div>
 
-                    {/* RIGHT: Technical Dashboard (Refactored Spec Sheet) */}
-                    <div className="w-full lg:w-72 bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-lg hero-text-reveal shrink-0 overflow-hidden group hover:border-white/20 transition-colors duration-500">
+                    {/* RIGHT: Technical Dashboard (Liquid Glass Card) */}
+                    <div className="w-full lg:w-80 bg-white/[0.02] backdrop-blur-xl border border-white/10 p-6 rounded-2xl hero-text-reveal shrink-0 shadow-2xl">
                         
-                        {/* Status Header */}
-                        <div className="bg-white/[0.03] p-4 flex items-center justify-between border-b border-white/5">
-                            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">Estado</span>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                <span className="text-[9px] font-bold text-emerald-400 tracking-wider uppercase">Confirmado</span>
-                            </div>
-                        </div>
-
-                        {/* Specs List */}
-                        <div className="p-4 flex flex-col gap-4">
+                        {/* Data Grid Vertical */}
+                        <div className="flex flex-col gap-5">
                             
-                            {/* Altitude */}
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3 opacity-60">
-                                    <Mountain className="w-3.5 h-3.5 text-white" />
-                                    <span className="text-[10px] uppercase tracking-widest text-slate-300">Cumbre</span>
+                            {/* 1. Altitude */}
+                            <div className="flex items-center justify-between group">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
+                                        <Mountain className="w-4 h-4" />
+                                    </div>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Altitud</span>
                                 </div>
-                                <span className="text-sm font-bold text-white tabular-nums tracking-wide">
-                                    {tour.altitude.es}
+                                <span className="text-lg font-bold text-white tabular-nums tracking-tight">
+                                    {tour.altitude?.es || "N/A"}
                                 </span>
                             </div>
 
                             {/* Divider */}
                             <div className="h-px bg-white/5 w-full"></div>
 
-                            {/* Distance */}
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3 opacity-60">
-                                    <Map className="w-3.5 h-3.5 text-white" />
-                                    <span className="text-[10px] uppercase tracking-widest text-slate-300">Ruta</span>
+                            {/* 2. Distance */}
+                            <div className="flex items-center justify-between group">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
+                                        <Map className="w-4 h-4" />
+                                    </div>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Distancia</span>
                                 </div>
-                                <span className="text-sm font-bold text-white tabular-nums tracking-wide">
-                                    {tour.distance}
+                                <span className="text-lg font-bold text-white tabular-nums tracking-tight">
+                                    {tour.distance || "N/A"}
                                 </span>
                             </div>
 
-                             {/* Divider */}
-                             <div className="h-px bg-white/5 w-full"></div>
+                            {/* Divider */}
+                            <div className="h-px bg-white/5 w-full"></div>
 
-                            {/* Difficulty - Compact Bar */}
-                            <div className="flex flex-col gap-2 pt-1">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 opacity-60">
-                                        <Zap className="w-3.5 h-3.5 text-white" />
-                                        <span className="text-[10px] uppercase tracking-widest text-slate-300">Nivel</span>
+                            {/* 3. Difficulty */}
+                            <div className="flex items-center justify-between group">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
+                                        <Zap className="w-4 h-4" />
                                     </div>
-                                    <span className={`text-[9px] font-bold uppercase tracking-widest ${tour.difficulty === 'Extreme' ? 'text-purple-400' : tour.difficulty === 'Hard' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                                        {tour.difficulty}
-                                    </span>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Nivel</span>
                                 </div>
-                                <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden mt-1">
-                                    <div 
-                                        className={`h-full ${tour.difficulty === 'Extreme' ? 'bg-purple-500' : tour.difficulty === 'Hard' ? 'bg-orange-500' : 'bg-emerald-500'}`}
-                                        style={{ width: tour.difficulty === 'Extreme' ? '95%' : tour.difficulty === 'Hard' ? '75%' : '50%' }}
-                                    ></div>
-                                </div>
+                                <span className={`text-sm font-bold tracking-widest px-3 py-1 rounded-full border ${
+                                    tour.difficulty === 'Extreme' ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' : 
+                                    tour.difficulty === 'Hard' ? 'bg-orange-500/10 border-orange-500/30 text-orange-400' : 
+                                    'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                                }`}>
+                                    {tour.difficulty || "Medium"}
+                                </span>
                             </div>
+
                         </div>
                     </div>
 
