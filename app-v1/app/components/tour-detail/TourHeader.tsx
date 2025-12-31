@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Mountain, ArrowRight, Activity, Map, Compass, Flame, Zap } from 'lucide-react';
+import { Mountain, ArrowRight, Activity, Map, Compass, Flame, Zap, ArrowDown } from 'lucide-react';
 import BookingModal from './BookingModal';
 
 if (typeof window !== 'undefined') {
@@ -81,7 +81,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
             </div>
 
             {/* --- CONTENT LAYER (The HUD) --- */}
-            <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-3 md:px-10 flex flex-col justify-end pb-12 md:pb-20">
+            <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-3 md:px-10 flex flex-col justify-center lg:justify-end pb-12 lg:pb-20 pt-20 lg:pt-0">
                 
                 <div className="flex flex-col lg:flex-row justify-between items-end gap-10">
                     
@@ -114,7 +114,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     </div>
 
                     {/* RIGHT: Technical Dashboard (Liquid Glass Card) */}
-                    <div className="w-full lg:w-80 bg-white/[0.02] backdrop-blur-xl border border-white/10 p-6 rounded-2xl hero-text-reveal shrink-0 shadow-2xl">
+                    <div className="hidden lg:block w-80 bg-white/[0.02] backdrop-blur-xl border border-white/10 p-6 rounded-2xl hero-text-reveal shrink-0 shadow-2xl">
                         
                         {/* Data Grid Vertical */}
                         <div className="flex flex-col gap-5">
@@ -178,6 +178,12 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         </div>
                     </div>
 
+                </div>
+
+                {/* Mobile Scroll Indicator */}
+                <div className="lg:hidden absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400">Scroll</span>
+                    <ArrowDown className="w-4 h-4 text-white" />
                 </div>
             </div>
 
