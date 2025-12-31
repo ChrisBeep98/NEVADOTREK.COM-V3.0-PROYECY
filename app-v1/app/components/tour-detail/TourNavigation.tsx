@@ -13,8 +13,7 @@ const SECTIONS = [
     { id: 'overview', label: 'Resumen' },
     { id: 'gallery', label: 'Galería' },
     { id: 'itinerary', label: 'Itinerario' },
-    { id: 'dates', label: 'Salidas' },
-    { id: 'pricing', label: 'Tarifas' }
+    { id: 'dates', label: 'Salidas' }
 ];
 
 export default function TourNavigation() {

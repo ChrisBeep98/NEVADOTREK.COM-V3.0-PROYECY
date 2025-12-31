@@ -4,7 +4,6 @@ import { getTours, getTourById, getDeparturesByTourId } from '../../services/nev
 import TourHeader from '../../components/tour-detail/TourHeader';
 import TourOverview from '../../components/tour-detail/TourOverview';
 import TourItinerary from '../../components/tour-detail/TourItinerary';
-import TourPricing from '../../components/tour-detail/TourPricing';
 import TourGallery from '../../components/tour-detail/TourGallery';
 import TourDepartures from '../../components/tour-detail/TourDepartures';
 import TourNavigation from '../../components/tour-detail/TourNavigation';
@@ -78,9 +77,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
 
                     {/* DEPARTURES: Scheduled Dates */}
                     <TourDepartures departures={departures} tourId={id} />
-
-                    {/* PRICING & CTA */}
-                    <TourPricing pricing={tour.pricingTiers} tourId={tour.tourId} />
                 </div>
             </div>
 
