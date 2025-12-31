@@ -3,7 +3,7 @@ import { MountainSnow, Instagram, Twitter, Youtube } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="border-t border-white/5 bg-slate-950 pt-20 pb-10 px-frame">
+        <footer className="border-t border-white/5 bg-background pt-20 pb-10 px-frame">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-2 md:col-span-1">

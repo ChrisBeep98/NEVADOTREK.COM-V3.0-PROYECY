@@ -64,7 +64,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
     if (!departures || departures.length === 0) return null;
 
     return (
-        <section id="dates" ref={containerRef} className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative">
+        <section id="dates" ref={containerRef} className="bg-background section-v-spacing px-frame border-t border-white/5 relative">
             <div className="max-w-6xl mx-auto w-full">
                 
                 {/* 1. Header */}

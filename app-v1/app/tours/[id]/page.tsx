@@ -53,7 +53,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
     const galleryImages = tour.images.length > 1 ? tour.images.slice(1) : [];
 
     return (
-        <main className="bg-slate-950 min-h-screen text-slate-200 selection:bg-cyan-500/30">
+        <main className="bg-background min-h-screen text-slate-200 selection:bg-cyan-500/30">
             {/* 1. HERO: Fullscreen Impact */}
             <TourHeader tour={tour} departures={departures} />
 

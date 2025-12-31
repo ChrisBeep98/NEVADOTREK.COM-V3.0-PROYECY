@@ -187,13 +187,13 @@ export default function HeroMonolith() {
     }, { scope: containerRef });
 
     return (
-        <div ref={containerRef} className="relative bg-slate-950 text-slate-300 antialiased overflow-x-hidden">
+        <div ref={containerRef} className="relative bg-background text-slate-300 antialiased overflow-x-hidden">
              
              {/* Navigation */}
             <Header />
 
             {/* HERO SECTION */}
-            <header ref={heroSectionRef} id="hero-section" className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-slate-950">
+            <header ref={heroSectionRef} id="hero-section" className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-background">
                 
                 {/* Background Video (Blurred) */}
                 <div className="absolute inset-0 z-0 select-none pointer-events-none">

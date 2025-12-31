@@ -93,7 +93,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center pointer-events-none px-0 md:px-6">
-            <div ref={backdropRef} className="absolute inset-0 bg-slate-950/90 backdrop-blur-md pointer-events-auto" onClick={handleClose}></div>
+            <div ref={backdropRef} className="absolute inset-0 bg-background/90 backdrop-blur-md pointer-events-auto" onClick={handleClose}></div>
 
             <div 
                 ref={modalRef}

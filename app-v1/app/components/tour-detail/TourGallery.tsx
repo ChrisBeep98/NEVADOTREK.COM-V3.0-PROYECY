@@ -37,7 +37,7 @@ export default function TourGallery({ images }: { images: string[] }) {
     }, { scope: containerRef });
 
     return (
-        <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-slate-950 border-t border-white/5 relative overflow-hidden">
+        <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-background border-t border-white/5 relative overflow-hidden">
              
              {/* Background Element */}
              <div className="absolute -right-24 top-1/4 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>

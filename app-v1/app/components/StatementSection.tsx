@@ -85,7 +85,7 @@ export default function StatementSection() {
     return (
         <section 
             ref={sectionRef} 
-            className="relative h-auto section-v-spacing bg-slate-950 overflow-hidden flex items-center transform-gpu"
+            className="relative h-auto section-v-spacing bg-background overflow-hidden flex items-center transform-gpu"
         >
             <div className="relative z-10  w-full px-frame flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-24">
                 

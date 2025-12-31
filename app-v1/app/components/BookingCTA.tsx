@@ -121,7 +121,7 @@ export default function BookingCTA() {
     }, { scope: sectionRef });
 
     return (
-        <section ref={sectionRef} className="relative w-full h-screen bg-slate-950 overflow-hidden">
+        <section ref={sectionRef} className="relative w-full h-screen bg-background overflow-hidden">
             <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/5 z-50">
                 <div ref={progressRef} className="w-full bg-cyan-500 shadow-[0_0_15px_#06b6d4]"></div>
             </div>
@@ -141,8 +141,8 @@ export default function BookingCTA() {
                                 className="w-full h-full object-cover saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu"
                             />
                             {/* Gradiente sutil para enfoque visual (mucho más rápido que una máscara radial) */}
-                            <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_30%,_#020617_90%] opacity-80 pointer-events-none"></div>
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                            <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_30%,_#040918_90%] opacity-80 pointer-events-none"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
                         </div>
 
                         <div className="relative z-20 w-full h-full px-frame flex flex-col justify-end md:justify-center pb-32 md:pb-0">

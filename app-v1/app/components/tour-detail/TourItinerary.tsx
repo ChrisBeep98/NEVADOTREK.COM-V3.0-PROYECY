@@ -50,7 +50,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
     const currentColor = THEME_COLORS[activeDay % THEME_COLORS.length];
 
     return (
-        <section id="itinerary" ref={containerRef} className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative overflow-hidden flex flex-col">
+        <section id="itinerary" ref={containerRef} className="bg-background section-v-spacing px-frame border-t border-white/5 relative overflow-hidden flex flex-col">
             
             {/* Background Gradient */}
             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-slate-900/0 via-slate-900/0 to-slate-900/30 pointer-events-none"></div>

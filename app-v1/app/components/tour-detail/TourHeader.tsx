@@ -139,7 +139,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
 
             <header 
                 ref={headerRef} 
-                className="relative w-full bg-slate-950 font-sans overflow-hidden select-none"
+                className="relative w-full bg-background font-sans overflow-hidden select-none"
                 style={{ perspective: '1000px' }} // Enables 3D rotations for intro
             >
                 <div className="pt-[22vh] pb-[10vh] px-frame md:pl-[15vw] flex flex-col items-start text-left z-20 relative will-change-transform">
@@ -165,7 +165,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     
                     <div 
                         ref={imageWrapperRef}
-                        className="relative w-full h-[65vh] md:h-[900px] bg-slate-950 will-change-[clip-path,transform]"
+                        className="relative w-full h-[65vh] md:h-[900px] bg-background will-change-[clip-path,transform]"
                         style={{ 
                             clipPath: "inset(0% 26% 0% 0%)",
                             transform: 'translateZ(0)' // GPU Acceleration
@@ -180,7 +180,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         />
                         
                         {/* Dramatic Atmospheric Gradient */}
-                        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent pointer-events-none"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none"></div>
 
                         {/* --- PERSISTENT SCROLL INDICATOR --- */}
                         <div 

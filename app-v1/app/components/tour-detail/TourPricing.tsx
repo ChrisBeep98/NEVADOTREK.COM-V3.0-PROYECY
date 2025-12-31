@@ -13,7 +13,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
     const sortedPricing = pricing ? [...pricing].sort((a, b) => a.minPax - b.minPax) : [];
 
     return (
-        <section id="pricing" className="bg-slate-950 section-v-spacing px-frame border-t border-white/5 relative overflow-hidden">
+        <section id="pricing" className="bg-background section-v-spacing px-frame border-t border-white/5 relative overflow-hidden">
             
             {/* Background Decorative Element */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/[0.02] -skew-x-12 translate-x-1/4 pointer-events-none"></div>

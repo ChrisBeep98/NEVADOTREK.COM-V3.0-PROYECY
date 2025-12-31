@@ -30,7 +30,7 @@ export default async function ExpeditionsGrid() {
     };
 
     return (
-        <section className="bg-slate-950 section-v-spacing">
+        <section className="bg-background section-v-spacing">
             <div className="px-frame max-w-7xl mx-auto">
                 
                 {/* Header */}

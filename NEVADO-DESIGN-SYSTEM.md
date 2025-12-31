@@ -42,8 +42,17 @@ Define el **ritmo vertical** entre bloques de contenido.
 
 ---
 
-## 🎨 3. COLOR PALETTE
-- **Atmosphere Dark:** `--color-slate-950` (`#020617`)
+## 🎨 3. COLOR PALETTE & MODES
+Nevado Trek utiliza **Tokens Semánticos** para asegurar la compatibilidad con Light y Dark Mode.
+
+### 3.1 NÚCLEO ATMOSFÉRICO
+| Token | Dark Mode (Default) | Light Mode (Próximamente) | Uso |
+| :--- | :--- | :--- | :--- |
+| **`color-background`** | `#040918` (Deep Mountain Navy) | `#F8FAFC` | Fondo principal de sección |
+| **`color-foreground`** | `#EDEDED` | `#0F172A` | Texto base |
+| **`color-surface`** | `rgba(255,255,255,0.02)` | `rgba(0,0,0,0.02)` | Contenedores sutiles |
+
+### 3.2 BRAND ACCENTS
 - **Summit Cyan:** `--color-cyan-500` (`#06b6d4`)
 - **Andean Green:** `--color-emerald-400` (`#34d399`)
 - **Páramo Orange:** `--color-orange-500` (`#f97316`)
@@ -55,7 +64,7 @@ Define el **ritmo vertical** entre bloques de contenido.
 ### **BTN-PRIMARY** (`.btn-primary`)
 El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 - **Fondo:** `White` (#FFFFFF)
-- **Texto:** `Slate-950` (#020617)
+- **Texto:** `Slate-950` (#040a16)
 - **Tipografía:** `font-bold text-[11px] tracking-[0.2em] uppercase`
 - **Forma:** `Pill (rounded-full)`
 - **Efecto Hover:** Fondo `Cyan-400`, Sombra `Cyan-500/20`, icon shift.
@@ -69,6 +78,8 @@ El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2025-12-30:** Refinamiento de atmósfera: Cambio de tono de fondo a Glacial Core (#040a16) para mayor energía visual.
+- **2025-12-30:** Ajuste global de atmósfera: Cambio de Slate-950 de #020617 a #01040a (tono más azulado/frío).
 - **2025-12-29:** Refinamiento visual del token `BTN-PRIMARY` (especificaciones de sombra y tipografía).
 - **2025-12-29:** Creación del token `H-SECTION-TITLE` (Leading 1.2).
 - **2025-12-29:** Adición de `Andean Green`.
