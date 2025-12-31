@@ -180,10 +180,11 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
 
                 </div>
 
-                {/* Mobile Scroll Indicator */}
-                <div className="lg:hidden absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400">Scroll</span>
-                    <ArrowDown className="w-4 h-4 text-white" />
+                {/* Mobile Scroll Indicator (Nano-Mouse) */}
+                <div className="lg:hidden absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20">
+                    <div className="w-[20px] h-[32px] rounded-full border border-white/20 flex justify-center pt-2 bg-white/[0.01] backdrop-blur-[2px]">
+                        <div className="w-[2px] h-[4px] bg-cyan-400 rounded-full animate-bounce shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
+                    </div>
                 </div>
             </div>
 
