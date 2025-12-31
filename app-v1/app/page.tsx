@@ -13,8 +13,8 @@ export default function Home() {
       <div className="relative z-30">
         <StatementSection />
         <ExpeditionsGrid />
-        <FeaturesGrid />
         <BookingCTA />
+        <FeaturesGrid />
         <TestimonialsSection />
         <Footer />
       </div>

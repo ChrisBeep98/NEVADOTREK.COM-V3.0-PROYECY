@@ -1,12 +1,16 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+const repoName = "NEVADOTREK.COM-V3.0-PROYECY";
+
 const nextConfig: NextConfig = {
-  output: "export",  // Genera archivos HTML estáticos (necesario para GitHub Pages)
+  output: "export",
   images: {
-    unoptimized: true, // Desactiva la optimización de imágenes que requiere servidor
+    unoptimized: true,
   },
-  basePath: "/NEVADOTREK.COM-V3.0-PROYECY", // Nombre de tu repositorio para cargar assets correctamente
-  assetPrefix: "/NEVADOTREK.COM-V3.0-PROYECY/", // Prefijo para los assets
+  // Solo aplicar basePath y assetPrefix en producción (GitHub Pages)
+  basePath: isProd ? `/${repoName}` : "",
+  assetPrefix: isProd ? `/${repoName}/` : "",
 };
 
 export default nextConfig;
