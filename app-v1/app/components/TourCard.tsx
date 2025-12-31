@@ -65,7 +65,7 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
         <Link 
             href={`/tours/${tour.tourId}`}
             ref={cardRef}
-            className={`group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer block will-change-transform ${className}`}
+            className={`group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer block shadow-2xl shadow-black/40 will-change-transform ${className}`}
         >
             {/* Imagen Original con Hover scale sutil */}
             <img 
