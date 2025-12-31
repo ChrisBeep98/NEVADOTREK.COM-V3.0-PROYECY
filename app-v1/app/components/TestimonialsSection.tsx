@@ -22,61 +22,61 @@ interface Review {
 const ALL_REVIEWS: Review[] = [
     {
         id: "01",
-        name: "HUGO BESNARD",
-        role: "SENDERISTA",
-        trip: "EXPEDICIÓN PÁRAMO",
-        altitude: "3,800M",
-        date: "HACE 1 SEMANA",
+        name: "Hugo Besnard",
+        role: "Senderista",
+        trip: "Expedición Páramo",
+        altitude: "3,800m",
+        date: "Hace 1 semana",
         quote: "Muchas gracias a David y al equipo de Nevado Trek por organizar esta aventura extraordinaria en el Páramo. Caminamos durante 4 días y fue absolutamente impresionante. Son muy atentos y se adaptan a tus expectativas.",
         image: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1200&auto=format&fit=crop"
     },
     {
         id: "02",
-        name: "CÈLIA NISARRE",
-        role: "EXPLORADORA",
-        trip: "LA CARBONERA",
-        altitude: "2,900M",
-        date: "HACE 2 MESES",
+        name: "Cèlia Nisarre",
+        role: "Exploradora",
+        trip: "La Carbonera",
+        altitude: "2,900m",
+        date: "Hace 2 meses",
         quote: "¡La ruta por La Carbonera ha sido simplemente increíble! El mejor paisaje de Colombia por ahora. Si buscas una experiencia de naturaleza pura, no puedes perdértelo. Todo fue rápido y muy confiable.",
         image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1200&auto=format&fit=crop"
     },
     {
         id: "03",
-        name: "GUSTAVO FAJARDO",
-        role: "MONTAÑISTA",
-        trip: "NEVADO DEL TOLIMA",
-        altitude: "5,220M",
-        date: "HACE 3 MESES",
+        name: "Gustavo Fajardo",
+        role: "Montañista",
+        trip: "Nevado del Tolima",
+        altitude: "5,220m",
+        date: "Hace 3 meses",
         quote: "Logré la cumbre a pesar de una lesión de espalda gracias a la paciencia y ayuda de los guías. Están preparados para cualquier situación y son extremadamente serviciales. Me sentí seguro en todo momento.",
         image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop"
     },
     {
         id: "04",
-        name: "DEBBIE PENG",
-        role: "VIAJERA",
-        trip: "PARAMILLO DEL QUINDÍO",
-        altitude: "4,400M",
-        date: "HACE 1 MES",
+        name: "Debbie Peng",
+        role: "Viajera",
+        trip: "Paramillo del Quindío",
+        altitude: "4,400m",
+        date: "Hace 1 mes",
         quote: "Fue una caminata desafiante pero gratificante. Nuestro guía Andrés fue fantástico y nos ayudó mucho en las zonas de humedales. Los frailejones y las vistas son simplemente impresionantes.",
         image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop"
     },
     {
         id: "05",
-        name: "RENATA BUTI",
-        role: "SENDERISTA",
-        trip: "LA CARBONERA",
-        altitude: "3,100M",
-        date: "HACE 2 MESES",
+        name: "Renata Buti",
+        role: "Senderista",
+        trip: "La Carbonera",
+        altitude: "3,100m",
+        date: "Hace 2 meses",
         quote: "Una experiencia completamente diferente a lo habitual. Aprendimos mucho sobre el santuario y la palma de cera. Es una experiencia recomendada a ojo cerrado junto a Nevado Trek.",
         image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop"
     },
     {
         id: "06",
-        name: "SIMON RITTER",
-        role: "AVENTURERO",
-        trip: "TREKKING PARAMILLO",
-        altitude: "4,000M",
-        date: "HACE 4 MESES",
+        name: "Simon Ritter",
+        role: "Aventurero",
+        trip: "Trekking Paramillo",
+        altitude: "4,000m",
+        date: "Hace 4 meses",
         quote: "¡Una gran aventura! Organización espontánea y perfecta para nuestra caminata de 3 días. Gracias al equipo por un viaje tan divertido y hermoso.",
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
     }
@@ -87,6 +87,16 @@ export default function TestimonialsSection() {
     const trackRef = useRef<HTMLDivElement>(null);
     const [displayedReviews, setDisplayedReviews] = useState<Review[]>(ALL_REVIEWS.slice(0, 3));
     const [hasMore, setHasMore] = useState(true);
+
+    const getAccentColor = (index: number) => {
+        const colors = ['text-cyan-500', 'text-orange-500', 'text-purple-500'];
+        return colors[index % colors.length];
+    };
+
+    const getBgAccent = (index: number) => {
+        const colors = ['bg-cyan-500', 'bg-orange-500', 'bg-purple-500'];
+        return colors[index % colors.length];
+    };
 
     const loadMore = () => {
         const currentLength = displayedReviews.length;
@@ -140,15 +150,15 @@ export default function TestimonialsSection() {
             <div className="absolute top-16 md:top-24 left-0 w-full z-20 px-[var(--page-frame)] flex justify-between items-start pointer-events-none">
                 <div className="mt-4 md:mt-0">
                     <span className="text-sub-label mb-2 block">
-                        Bitácora de Expedición
+                        Bitácora de expedición
                     </span>
                     <h2 className="text-display-xl text-foreground">
-                        LOS ECOS
+                        Los ecos
                     </h2>
                 </div>
                 <div className="hidden md:flex flex-col items-end">
                      <span className="font-mono text-[9px] text-muted tracking-widest uppercase">
-                        Estado de Ruta
+                        Estado de ruta
                     </span>
                     <div className="flex gap-1 mt-1">
                         {[1,2,3,4,5].map(i => <div key={i} className="w-1 h-4 bg-cyan-500/80"></div>)}
@@ -161,49 +171,52 @@ export default function TestimonialsSection() {
                 
                 {/* INTRO BLOCK */}
                 <div className="flex-shrink-0 w-[85vw] md:w-[25vw] mr-20 md:mr-32 flex flex-col justify-center z-10 pt-40 md:pt-20">
-                    <p className="font-mono text-[10px] md:text-sm text-cyan-500 tracking-widest mb-4 md:mb-6">
-                        // TESTIMONIOS_CLIENTE
+                    <p className="font-mono text-[10px] md:text-sm text-cyan-500 tracking-widest mb-4 md:mb-6 uppercase">
+                        // testimonios_cliente
                     </p>
                     <p className="text-lg md:text-xl font-light leading-relaxed text-muted">
                         Explorando las vivencias de quienes alcanzaron la cumbre con nosotros.
                     </p>
-                    <div className="mt-8 flex items-center gap-4 text-xs font-mono text-muted">
+                    <div className="mt-8 flex items-center gap-4 text-[10px] font-mono text-muted tracking-[0.2em] uppercase">
                         <ArrowRight className="w-4 h-4 text-cyan-500" />
-                        DESLIZA PARA EXPLORAR
+                        Desliza para explorar
                     </div>
                 </div>
 
                 {/* CARDS LOOP - More Spacing in Mobile */}
-                {displayedReviews.map((review) => (
-                    <div key={review.id} className="flex-shrink-0 relative group flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16 mr-20 md:mr-24 w-[85vw] md:w-[65vw] lg:w-[50vw] pt-40 md:pt-20">
-                        
-                        <div className="relative w-full md:w-[45%] aspect-[16/9] md:aspect-[4/5] overflow-hidden rounded-sm transition-all duration-700 ease-out shrink-0 bg-surface shadow-2xl">
-                            {/* Gradiente fijo oscuro para proteger legibilidad de textos blancos */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/70 via-transparent to-transparent z-10"></div>
-                            <img src={review.image} alt={review.name} className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000" />
-                            <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 z-20 flex justify-between items-end font-mono text-[9px] tracking-widest text-white drop-shadow-md">
-                                <span className="uppercase">{review.date}</span>
-                                <span className="text-cyan-400 font-bold">{review.altitude}</span>
+                {displayedReviews.map((review, i) => {
+                    const accent = getAccentColor(i);
+                    return (
+                        <div key={review.id} className="flex-shrink-0 relative group flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16 mr-20 md:mr-24 w-[85vw] md:w-[65vw] lg:w-[50vw] pt-40 md:pt-20">
+                            
+                            <div className="relative w-full md:w-[45%] aspect-[16/9] md:aspect-[4/5] overflow-hidden rounded-sm transition-all duration-700 ease-out shrink-0 bg-surface shadow-2xl">
+                                {/* Gradiente fijo oscuro para proteger legibilidad de textos blancos */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/70 via-transparent to-transparent z-10"></div>
+                                <img src={review.image} alt={review.name} className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000" />
+                                <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 z-20 flex justify-between items-end font-mono text-[9px] tracking-widest text-white drop-shadow-md">
+                                    <span className="">{review.date}</span>
+                                    <span className={`${accent} font-bold`}>{review.altitude}</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="w-full md:w-[55%] flex flex-col items-start relative z-10">
-                            <Quote className="w-6 h-6 md:w-12 md:h-12 text-cyan-500/20 mb-3 md:mb-4 transform -scale-x-100" />
-                            <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-foreground mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
-                                "{review.quote}"
-                            </h3>
-                            <div className="flex items-center gap-4 border-t border-border pt-4 w-full">
-                                <div className="font-mono text-xs">
-                                    <div className="text-cyan-500 font-bold tracking-widest">{review.name}</div>
-                                    <div className="text-muted mt-1 uppercase text-[10px]">{review.role} // {review.trip}</div>
-                                </div>
-                                <div className="ml-auto font-mono text-[9px] text-muted opacity-40">
-                                    REF_{review.id}
+                            <div className="w-full md:w-[55%] flex flex-col items-start relative z-10">
+                                <Quote className={`w-6 h-6 md:w-12 md:h-12 ${accent} opacity-20 mb-3 md:mb-4 transform -scale-x-100`} />
+                                <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-foreground mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
+                                    "{review.quote}"
+                                </h3>
+                                <div className="flex items-center gap-4 border-t border-border pt-4 w-full">
+                                    <div className="font-mono text-xs">
+                                        <div className={`${accent} font-bold tracking-wide text-sm`}>{review.name}</div>
+                                        <div className="text-muted mt-1 text-[10px]">{review.role} // {review.trip}</div>
+                                    </div>
+                                    <div className="ml-auto font-mono text-[9px] text-muted opacity-40">
+                                        Ref_{review.id}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
 
                 {/* LOAD MORE */}
                 <div className="flex-shrink-0 w-[80vw] md:w-[30vw] flex items-center justify-center ml-12 md:ml-24 pt-40 md:pt-20">
@@ -212,8 +225,8 @@ export default function TestimonialsSection() {
                             <div className="absolute inset-0 bg-cyan-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
                             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-border group-hover:border-cyan-500 transition-colors"></div>
                             <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-border group-hover:border-cyan-500 transition-colors"></div>
-                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] text-foreground group-hover:text-cyan-500 group-hover:tracking-[0.3em] transition-all duration-500 whitespace-nowrap">
-                                VER MÁS HISTORIAS
+                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] text-foreground group-hover:text-cyan-500 group-hover:tracking-[0.3em] transition-all duration-500 whitespace-nowrap uppercase">
+                                Ver más historias
                             </span>
                             <CornerRightDown className="relative z-10 w-4 h-4 text-muted group-hover:text-cyan-500 transition-colors duration-300" />
                         </button>
