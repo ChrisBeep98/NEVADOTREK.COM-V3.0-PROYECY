@@ -33,7 +33,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     }, { scope: containerRef });
 
     return (
-        <section id="overview" ref={containerRef} className="bg-background text-slate-200 section-v-spacing px-frame relative overflow-hidden">
+        <section id="overview" ref={containerRef} className="bg-slate-950 text-slate-200 section-v-spacing px-frame relative overflow-hidden">
             
             {/* Background Accent */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
