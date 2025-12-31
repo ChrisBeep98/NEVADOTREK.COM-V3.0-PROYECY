@@ -81,7 +81,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
             </div>
 
             {/* --- CONTENT LAYER (The HUD) --- */}
-            <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-6 md:px-10 flex flex-col justify-end pb-12 md:pb-20">
+            <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-3 md:px-10 flex flex-col justify-end pb-12 md:pb-20">
                 
                 <div className="flex flex-col lg:flex-row justify-between items-end gap-10">
                     
@@ -159,13 +159,20 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                                     </div>
                                     <span className="text-xs font-medium text-slate-400 tracking-wider">Nivel</span>
                                 </div>
-                                <span className={`text-sm font-bold tracking-widest px-3 py-1 rounded-full border ${
-                                    tour.difficulty === 'Extreme' ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' : 
-                                    tour.difficulty === 'Hard' ? 'bg-orange-500/10 border-orange-500/30 text-orange-400' : 
-                                    'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                                }`}>
-                                    {tour.difficulty || "Medium"}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-1.5 h-1.5 rounded-full shadow-[0_0_6px_currentColor] ${
+                                        tour.difficulty === 'Extreme' ? 'bg-purple-500 text-purple-500' : 
+                                        tour.difficulty === 'Hard' ? 'bg-orange-500 text-orange-500' : 
+                                        'bg-emerald-400 text-emerald-400'
+                                    }`}></div>
+                                    <span className={`text-sm font-bold tracking-wide ${
+                                        tour.difficulty === 'Extreme' ? 'text-purple-400' : 
+                                        tour.difficulty === 'Hard' ? 'text-orange-400' : 
+                                        'text-emerald-400'
+                                    }`}>
+                                        {tour.difficulty || "Medium"}
+                                    </span>
+                                </div>
                             </div>
 
                         </div>
