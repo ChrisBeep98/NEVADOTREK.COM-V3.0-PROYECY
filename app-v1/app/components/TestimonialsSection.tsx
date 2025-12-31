@@ -128,10 +128,10 @@ export default function TestimonialsSection() {
     }, [displayedReviews]);
 
     return (
-        <section ref={containerRef} className="relative h-screen bg-[#020617] text-white overflow-hidden selection:bg-cyan-500 selection:text-black">
+        <section ref={containerRef} className="relative h-screen bg-background text-foreground overflow-hidden selection:bg-cyan-500/30 transition-colors duration-500">
             
             <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 opacity-[0.04]"
+                <div className="absolute inset-0 opacity-[0.04] mix-blend-multiply dark:mix-blend-screen"
                      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
                 </div>
             </div>
@@ -142,12 +142,12 @@ export default function TestimonialsSection() {
                     <span className="text-sub-label mb-2 block">
                         Bitácora de Expedición
                     </span>
-                    <h2 className="text-display-xl text-slate-100">
+                    <h2 className="text-display-xl text-foreground">
                         LOS ECOS
                     </h2>
                 </div>
                 <div className="hidden md:flex flex-col items-end">
-                     <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">
+                     <span className="font-mono text-[9px] text-muted tracking-widest uppercase">
                         Estado de Ruta
                     </span>
                     <div className="flex gap-1 mt-1">
@@ -164,10 +164,10 @@ export default function TestimonialsSection() {
                     <p className="font-mono text-[10px] md:text-sm text-cyan-500 tracking-widest mb-4 md:mb-6">
                         // TESTIMONIOS_CLIENTE
                     </p>
-                    <p className="text-lg md:text-xl font-light leading-relaxed text-slate-300">
+                    <p className="text-lg md:text-xl font-light leading-relaxed text-muted">
                         Explorando las vivencias de quienes alcanzaron la cumbre con nosotros.
                     </p>
-                    <div className="mt-8 flex items-center gap-4 text-xs font-mono text-white/50">
+                    <div className="mt-8 flex items-center gap-4 text-xs font-mono text-muted">
                         <ArrowRight className="w-4 h-4 text-cyan-500" />
                         DESLIZA PARA EXPLORAR
                     </div>
@@ -177,26 +177,27 @@ export default function TestimonialsSection() {
                 {displayedReviews.map((review) => (
                     <div key={review.id} className="flex-shrink-0 relative group flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-16 mr-20 md:mr-24 w-[85vw] md:w-[65vw] lg:w-[50vw] pt-40 md:pt-20">
                         
-                        <div className="relative w-full md:w-[45%] aspect-[16/9] md:aspect-[4/5] overflow-hidden rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700 ease-out shrink-0 bg-white/5">
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent z-10"></div>
-                            <img src={review.image} alt={review.name} className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-1000" />
-                            <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 z-20 flex justify-between items-end font-mono text-[9px] tracking-widest text-white/80">
+                        <div className="relative w-full md:w-[45%] aspect-[16/9] md:aspect-[4/5] overflow-hidden rounded-sm transition-all duration-700 ease-out shrink-0 bg-surface shadow-2xl">
+                            {/* Gradiente fijo oscuro para proteger legibilidad de textos blancos */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/70 via-transparent to-transparent z-10"></div>
+                            <img src={review.image} alt={review.name} className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-1000" />
+                            <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 z-20 flex justify-between items-end font-mono text-[9px] tracking-widest text-white drop-shadow-md">
                                 <span className="uppercase">{review.date}</span>
-                                <span className="text-cyan-500">{review.altitude}</span>
+                                <span className="text-cyan-400 font-bold">{review.altitude}</span>
                             </div>
                         </div>
 
                         <div className="w-full md:w-[55%] flex flex-col items-start relative z-10">
                             <Quote className="w-6 h-6 md:w-12 md:h-12 text-cyan-500/20 mb-3 md:mb-4 transform -scale-x-100" />
-                            <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-slate-200 mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
+                            <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-foreground mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
                                 "{review.quote}"
                             </h3>
-                            <div className="flex items-center gap-4 border-t border-white/10 pt-4 w-full">
+                            <div className="flex items-center gap-4 border-t border-border pt-4 w-full">
                                 <div className="font-mono text-xs">
                                     <div className="text-cyan-500 font-bold tracking-widest">{review.name}</div>
-                                    <div className="text-white/40 mt-1 uppercase text-[10px]">{review.role} // {review.trip}</div>
+                                    <div className="text-muted mt-1 uppercase text-[10px]">{review.role} // {review.trip}</div>
                                 </div>
-                                <div className="ml-auto font-mono text-[9px] text-white/20">
+                                <div className="ml-auto font-mono text-[9px] text-muted opacity-40">
                                     REF_{review.id}
                                 </div>
                             </div>
@@ -207,18 +208,18 @@ export default function TestimonialsSection() {
                 {/* LOAD MORE */}
                 <div className="flex-shrink-0 w-[80vw] md:w-[30vw] flex items-center justify-center ml-12 md:ml-24 pt-40 md:pt-20">
                     {hasMore ? (
-                         <button onClick={loadMore} className="group relative flex items-center gap-4 md:gap-6 px-8 py-5 md:px-10 md:py-6 overflow-hidden border border-white/10 hover:border-cyan-500/30 transition-colors duration-500">
+                         <button onClick={loadMore} className="group relative flex items-center gap-4 md:gap-6 px-8 py-5 md:px-10 md:py-6 overflow-hidden border border-border hover:border-cyan-500/30 transition-colors duration-500">
                             <div className="absolute inset-0 bg-cyan-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30 group-hover:border-cyan-500 transition-colors"></div>
-                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30 group-hover:border-cyan-500 transition-colors"></div>
-                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] text-white group-hover:text-cyan-400 group-hover:tracking-[0.3em] transition-all duration-500 whitespace-nowrap">
+                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-border group-hover:border-cyan-500 transition-colors"></div>
+                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-border group-hover:border-cyan-500 transition-colors"></div>
+                            <span className="relative z-10 font-mono text-[10px] md:text-xs tracking-[0.2em] text-foreground group-hover:text-cyan-500 group-hover:tracking-[0.3em] transition-all duration-500 whitespace-nowrap">
                                 VER MÁS HISTORIAS
                             </span>
-                            <CornerRightDown className="relative z-10 w-4 h-4 text-white/50 group-hover:text-cyan-500 transition-colors duration-300" />
+                            <CornerRightDown className="relative z-10 w-4 h-4 text-muted group-hover:text-cyan-500 transition-colors duration-300" />
                         </button>
                     ) : (
                         <div className="text-center">
-                            <div className="text-4xl md:text-9xl leading-none font-bold text-white/5 select-none tracking-tighter">
+                            <div className="text-4xl md:text-9xl leading-none font-bold text-foreground opacity-5 select-none tracking-tighter">
                                 FIN_RUTA
                             </div>
                         </div>
@@ -227,7 +228,7 @@ export default function TestimonialsSection() {
 
             </div>
             
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-white/5">
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-border">
                  <div className="h-full bg-gradient-to-r from-cyan-500 to-transparent w-[30%] opacity-50"></div>
             </div>
 

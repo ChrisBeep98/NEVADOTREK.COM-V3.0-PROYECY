@@ -60,13 +60,13 @@ export default function FeaturesGrid() {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="bg-white section-v-spacing border-t border-slate-100 overflow-hidden">
+        <section ref={containerRef} className="bg-background section-v-spacing border-t border-border overflow-hidden transition-colors duration-500">
             
             {/* Header */}
             <div className="px-frame max-w-[1400px] mx-auto mb-16 md:mb-24 feature-section-header">
-                <span className="text-sub-label mb-6 block text-blue-900 font-bold opacity-50">POR QUÉ NEVADO TREK</span>
-                <h2 className="text-display-xl text-slate-950">
-                    DIFERENCIAL <br/> <span className="text-slate-200">DE CUMBRE.</span>
+                <span className="text-sub-label mb-6 block opacity-50">POR QUÉ NEVADO TREK</span>
+                <h2 className="text-display-xl text-foreground">
+                    DIFERENCIAL <br/> <span className="text-muted opacity-40">DE CUMBRE.</span>
                 </h2>
             </div>
 
@@ -87,13 +87,13 @@ export default function FeaturesGrid() {
                                     relative overflow-hidden cursor-pointer rounded-2xl border 
                                     transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] will-change-[flex,height]
                                     ${isActive 
-                                        ? 'flex-[12] md:flex-[15] border-blue-900/20' 
-                                        : 'h-16 md:h-auto md:flex-1 border-slate-100 opacity-60'
+                                        ? 'flex-[12] md:flex-[15] border-cyan-500/20 shadow-2xl' 
+                                        : 'h-16 md:h-auto md:flex-1 border-border opacity-60'
                                     }
                                 `}
                             >
                                 {/* BACKGROUND IMAGE */}
-                                <div className="absolute inset-0 z-0 overflow-hidden bg-slate-100">
+                                <div className="absolute inset-0 z-0 overflow-hidden bg-surface">
                                     <img 
                                         src={f.img} 
                                         alt={f.title}
@@ -103,8 +103,8 @@ export default function FeaturesGrid() {
                                             ${isActive ? 'opacity-100 scale-105 saturate-[1.1]' : 'opacity-30 scale-100 saturate-0'}
                                         `}
                                     />
-                                    {/* Subtle Dark Blue Inner Lighting (Active Only) */}
-                                    <div className={`absolute inset-0 bg-gradient-to-t ${isActive ? 'from-blue-950/60 via-blue-950/10' : 'from-transparent'} to-transparent z-10 transition-opacity duration-700`}></div>
+                                    {/* MANTENIDO: Destello azul profundo para legibilidad de texto blanco */}
+                                    <div className={`absolute inset-0 bg-gradient-to-t ${isActive ? 'from-blue-950/80 via-blue-950/20' : 'from-transparent'} to-transparent z-10 transition-opacity duration-700`}></div>
                                 </div>
 
                                 {/* CONTENT */}
@@ -121,8 +121,8 @@ export default function FeaturesGrid() {
                                     {/* Mobile Centered Bar */}
                                     {!isActive && (
                                         <div className="flex md:hidden items-center justify-between w-full px-2">
-                                            <span className="text-[10px] font-bold tracking-[0.3em] text-slate-900 uppercase">{f.title}</span>
-                                            <div className="w-1.5 h-1.5 bg-blue-900 rounded-full"></div>
+                                            <span className="text-[10px] font-bold tracking-[0.3em] text-foreground uppercase">{f.title}</span>
+                                            <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></div>
                                         </div>
                                     )}
 
@@ -130,7 +130,7 @@ export default function FeaturesGrid() {
                                     <div className={`flex flex-col gap-4 ${!isActive ? 'hidden md:flex' : 'flex'}`}>
                                         <div className={`transition-all duration-500 ${isActive ? 'translate-y-0' : 'md:rotate-[-90deg] md:-translate-y-20 opacity-20'}`}>
                                             <h3 className={`font-bold tracking-tighter uppercase transition-all duration-500
-                                                ${isActive ? 'text-4xl md:text-6xl text-white' : 'text-xl text-slate-950'}
+                                                ${isActive ? 'text-4xl md:text-6xl text-white' : 'text-xl text-foreground'}
                                             `}>
                                                 {f.title}
                                             </h3>
@@ -139,7 +139,7 @@ export default function FeaturesGrid() {
                                         <div className={`overflow-hidden transition-all duration-700 delay-100
                                             ${isActive ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}
                                         `}>
-                                            <p className="text-sm md:text-body-std text-slate-100 max-w-lg mb-8 leading-relaxed font-medium border-l-2 border-white/30 pl-6 italic">
+                                            <p className="text-sm md:text-body-std text-white max-w-lg mb-8 leading-relaxed font-medium border-l-2 border-white/30 pl-6 italic drop-shadow-md">
                                                 "{f.desc}"
                                             </p>
                                             <div className="flex items-center gap-3 text-white group/btn pointer-events-auto">
