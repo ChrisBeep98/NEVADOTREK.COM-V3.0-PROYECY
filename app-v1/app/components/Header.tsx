@@ -2,18 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { MountainSnow, Sun, Moon } from 'lucide-react';
-import esDict from '../../dictionaries/es.json';
-import enDict from '../../dictionaries/en.json';
-
-const DICTIONARIES = {
-    ES: esDict,
-    EN: enDict
-};
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Header() {
     const [isDark, setIsDark] = useState(true);
-    const [lang, setLang] = useState<'ES' | 'EN'>('ES');
-    const t = DICTIONARIES[lang];
+    const { lang, toggleLang, t } = useLanguage();
 
     // Initial Theme Check
     useEffect(() => {
@@ -41,10 +34,6 @@ export default function Header() {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
         }
-    };
-
-    const toggleLang = () => {
-        setLang(prev => prev === 'ES' ? 'EN' : 'ES');
     };
 
     return (

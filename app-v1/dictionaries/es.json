@@ -10,5 +10,22 @@
     "tours": "Expediciones",
     "about": "Nosotros",
     "philosophy": "Filosofía"
+  },
+  "hero": {
+    "status": {
+      "alt": "ALT",
+      "temp": "TEMP",
+      "wind": "VIENTO",
+      "o2": "O2"
+    },
+    "words": ["SILENCIO", "ORIGEN", "LÍMITES", "ESPÍRITU"],
+    "ui": {
+      "live_feed": "SEÑAL EN VIVO",
+      "scroll": "DESPLAZA PARA EXPLORAR",
+      "pitch": "INCLINACIÓN"
+    },
+    "message": {
+      "prefix": "Más allá del borde del mundo conocido, encontramos nuestro"
+    }
   }
 }

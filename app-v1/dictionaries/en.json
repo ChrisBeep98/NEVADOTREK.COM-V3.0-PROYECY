@@ -10,5 +10,22 @@
     "tours": "Expeditions",
     "about": "About Us",
     "philosophy": "Philosophy"
+  },
+  "hero": {
+    "status": {
+      "alt": "ALT",
+      "temp": "TEMP",
+      "wind": "WIND",
+      "o2": "O2"
+    },
+    "words": ["SILENCE", "ORIGIN", "LIMITS", "SPIRIT"],
+    "ui": {
+      "live_feed": "LIVE FEED",
+      "scroll": "SCROLL TO EXPLORE",
+      "pitch": "PITCH"
+    },
+    "message": {
+      "prefix": "Beyond the edge of the known world, we find our"
+    }
   }
 }
