@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { MountainSnow, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import Link from 'next/link';
 
 export default function Header() {
     const [isDark, setIsDark] = useState(true);
@@ -44,7 +45,7 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-4 md:gap-8">
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
-                    <a href="#" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.tours}</a>
+                    <Link href="/tours" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.tours}</Link>
                     <a href="#" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.philosophy}</a>
                 </div>
 
