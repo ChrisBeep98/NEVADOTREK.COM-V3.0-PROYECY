@@ -1,11 +1,19 @@
+'use client';
+
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { getTours } from '../services/nevado-api';
 import TourCard from './TourCard';
+import { useLanguage } from '../context/LanguageContext';
+import { Tour } from '../types/api';
 
-export default async function ExpeditionsGrid() {
-    const allTours = await getTours();
-    const tours = allTours.slice(0, 6);
+interface ExpeditionsGridProps {
+    initialTours: Tour[];
+}
+
+export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) {
+    const { t, lang } = useLanguage();
+    // Slice only if we have more than 6, though usually parent should handle limiting logic if strictly needed, but design requires specific grid.
+    const tours = initialTours.slice(0, 6);
 
     // Configuración del "Cinematic Rhythm"
     // Define tanto el ancho (cols) como la altura (h) para crear una narrativa visual.
@@ -36,15 +44,15 @@ export default async function ExpeditionsGrid() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
-                        <h2 className="text-display-xl text-foreground mb-4">
-                            SELECT <br/>EXPEDITIONS.
+                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line">
+                            {t.expeditions.title}
                         </h2>
                         <p className="text-body-lead text-muted max-w-md">
-                            Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.
+                            {t.expeditions.subtitle}
                         </p>
                     </div>
                     <a href="#" className="text-sub-label text-foreground flex items-center gap-2 hover:text-cyan-400 transition-colors pb-1 border-b border-border hover:border-cyan-400">
-                        VER CATÁLOGO COMPLETO
+                        {t.expeditions.view_all}
                         <ArrowUpRight width={14} strokeWidth={1.5} />
                     </a>
                 </div>
@@ -57,6 +65,7 @@ export default async function ExpeditionsGrid() {
                             tour={tour}
                             index={index}
                             className={getGridClass(index)}
+                            lang={lang}
                         />
                     ))}
                 </div>

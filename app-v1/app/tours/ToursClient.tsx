@@ -1,17 +1,12 @@
 'use client';
 
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Tour } from '../types/api';
 import Link from 'next/link';
 import { useLanguage } from '../context/LanguageContext';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowRight, Thermometer, Calendar, Mountain, Filter } from 'lucide-react';
-
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
+import { ArrowRight, ArrowLeft, Thermometer, Calendar, Mountain, Filter, ChevronDown, MapPin } from 'lucide-react';
 
 interface ToursClientProps {
     initialTours: Tour[];
@@ -22,226 +17,236 @@ type DifficultyFilter = 'ALL' | 'EASY' | 'MEDIUM' | 'HARD' | 'EXTREME';
 export default function ToursClient({ initialTours }: ToursClientProps) {
     const { t } = useLanguage();
     const [filter, setFilter] = useState<DifficultyFilter>('ALL');
-    
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
     const containerRef = useRef<HTMLDivElement>(null);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const trackRef = useRef<HTMLDivElement>(null);
-    const progressBarRef = useRef<HTMLDivElement>(null);
 
     // Filter Logic
     const filteredTours = useMemo(() => {
-        if (filter === 'ALL') return initialTours;
-        return initialTours.filter(tour => 
-            tour.difficulty.toUpperCase().includes(filter)
-        );
+        const result = filter === 'ALL' 
+            ? initialTours 
+            : initialTours.filter(tour => tour.difficulty.toUpperCase().includes(filter));
+        return result;
     }, [filter, initialTours]);
 
-    // Handle Filter Change & Animation Refresh
-    const handleFilterChange = (newFilter: DifficultyFilter) => {
-        setFilter(newFilter);
-        // Reset scroll position slightly to re-trigger calculations smoothly
-        if (scrollContainerRef.current) {
-            gsap.to(window, { scrollTo: { y: scrollContainerRef.current, offsetY: 0 }, duration: 1 });
-        }
+    // Reset index when filter changes
+    useEffect(() => {
+        setCurrentIndex(0);
+    }, [filter]);
+
+    // Navigation Handlers
+    const nextSlide = () => {
+        if (isAnimating) return;
+        setDirection(1);
+        setCurrentIndex((prev) => (prev + 1) % filteredTours.length);
     };
 
-    // GSAP Horizontal Scroll Logic
+    const prevSlide = () => {
+        if (isAnimating) return;
+        setDirection(-1);
+        setCurrentIndex((prev) => (prev - 1 + filteredTours.length) % filteredTours.length);
+    };
+
+    // --- ANIMATION LOGIC ---
     useGSAP(() => {
-        if (!trackRef.current || !scrollContainerRef.current) return;
+        if (filteredTours.length === 0) return;
 
-        const track = trackRef.current;
-        const scrollContainer = scrollContainerRef.current;
+        setIsAnimating(true);
+        const currentTour = filteredTours[currentIndex];
         
-        // Calculate the total width needed to scroll
-        // (Track Width - Viewport Width)
-        const getScrollAmount = () => {
-            return -(track.scrollWidth - window.innerWidth);
-        };
+        // Select elements
+        const activeSlide = document.querySelector(`.slide-${currentIndex}`);
+        const textElements = activeSlide?.querySelectorAll('.animate-text');
+        const bgImage = activeSlide?.querySelector('.bg-image');
+        const hudElements = activeSlide?.querySelectorAll('.animate-hud');
 
-        const tween = gsap.to(track, {
-            x: getScrollAmount,
-            ease: "none",
-            scrollTrigger: {
-                trigger: scrollContainer,
-                start: "top top",
-                end: () => `+=${track.scrollWidth - window.innerWidth}`,
-                pin: true,
-                scrub: 1,
-                invalidateOnRefresh: true,
-                onUpdate: (self) => {
-                    // Update Progress Bar
-                    if (progressBarRef.current) {
-                        gsap.set(progressBarRef.current, { scaleX: self.progress });
+        // Reset state for entry
+        gsap.set(activeSlide, { zIndex: 10, visibility: 'visible' });
+        gsap.set(textElements, { y: 100, opacity: 0 });
+        gsap.set(hudElements, { opacity: 0 });
+        gsap.set(bgImage, { scale: 1.2 });
+
+        const tl = gsap.timeline({
+            onComplete: () => {
+                setIsAnimating(false);
+                // Hide other slides
+                filteredTours.forEach((_, idx) => {
+                    if (idx !== currentIndex) {
+                        gsap.set(`.slide-${idx}`, { zIndex: 0, visibility: 'hidden' });
                     }
-                }
+                });
             }
         });
 
-        // Parallax for images inside cards
-        const images = gsap.utils.toArray('.tour-image-parallax') as HTMLElement[];
-        images.forEach(img => {
-            gsap.to(img, {
-                objectPosition: "100% 50%",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: img.closest('.tour-card'),
-                    containerAnimation: tween,
-                    start: "left right",
-                    end: "right left",
-                    scrub: true
-                }
-            });
-        });
+        // 1. Reveal Background (Clip Path Wipe)
+        const clipStart = direction === 1 ? 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)' : 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)';
+        const clipEnd = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
 
-        return () => {
-            // Cleanup
-            tween.kill();
-        };
+        gsap.fromTo(activeSlide,
+            { clipPath: clipStart },
+            { clipPath: clipEnd, duration: 1.0, ease: "expo.inOut" }
+        );
 
-    }, { scope: containerRef, dependencies: [filteredTours] }); // Re-run when tours change
+        // 2. Scale Image
+        tl.to(bgImage, {
+            scale: 1, duration: 1.5, ease: "power2.out"
+        }, 0);
+
+        // 3. Text Stagger
+        tl.to(textElements, {
+            y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: "power3.out"
+        }, 0.5);
+
+        // 4. HUD Fade
+        tl.to(hudElements, {
+            opacity: 1, duration: 0.5
+        }, 0.8);
+
+    }, { dependencies: [currentIndex, filteredTours], scope: containerRef });
+
+
+    if (filteredTours.length === 0) {
+        return (
+            <div className="h-screen bg-[#040918] flex flex-col items-center justify-center text-white">
+                <p className="text-xl font-mono mb-4">NO EXPEDITIONS FOUND</p>
+                <button 
+                    onClick={() => setFilter('ALL')}
+                    className="text-cyan-500 hover:underline tracking-widest text-xs"
+                >
+                    RESET FILTERS
+                </button>
+            </div>
+        );
+    }
+
+    const currentTour = filteredTours[currentIndex];
 
     return (
-        <div ref={containerRef} className="bg-[#040918] min-h-screen text-white overflow-x-hidden">
+        <div ref={containerRef} className="bg-[#040918] h-screen w-full relative overflow-hidden select-none">
             
-            {/* 1. INTRO MANIFESTO */}
-            <section className="h-[70vh] flex flex-col justify-center px-frame relative z-10">
-                <div className="max-w-4xl">
-                    <span className="text-cyan-500 font-bold tracking-[0.3em] text-xs mb-6 block">
-                        THE COLLECTION // 2026
-                    </span>
-                    <h1 className="text-6xl md:text-8xl lg:text-[7vw] leading-[0.9] font-medium tracking-tighter mb-8 mix-blend-overlay opacity-90">
-                        CHOOSE YOUR <br />
-                        <span className="text-outline-white text-transparent bg-clip-text bg-white/10">EXPEDITION</span>
-                    </h1>
-                    <p className="text-slate-400 max-w-xl text-sm md:text-base leading-relaxed border-l border-white/20 pl-6">
-                        From the cloud forests of the lower Andes to the glacial peaks of the Cocuy. 
-                        Each journey is crafted for a specific kind of spirit. 
-                        Select your difficulty, breathe the thin air, and begin.
-                    </p>
-                </div>
+            {/* --- GRAIN OVERLAY --- */}
+            <div className="absolute inset-0 z-50 pointer-events-none opacity-[0.07] mix-blend-overlay" 
+                 style={{ backgroundImage: 'url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise.png")' }}>
+            </div>
 
-                {/* Filter Interface */}
-                <div className="mt-16 flex flex-wrap gap-4 items-center">
-                    <Filter size={16} className="text-cyan-500 mr-2" />
-                    {(['ALL', 'EASY', 'MEDIUM', 'HARD', 'EXTREME'] as DifficultyFilter[]).map((f) => (
+            {/* --- FILTER (HUD TOP RIGHT) --- */}
+            <div className="absolute top-8 right-8 z-50 flex flex-col items-end">
+                <button 
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-white/70 hover:text-cyan-400 uppercase transition-colors"
+                >
+                    [{filter}] FILTER <ChevronDown size={10} className={isFilterOpen ? 'rotate-180' : ''} />
+                </button>
+                
+                <div className={`overflow-hidden transition-all duration-300 flex flex-col items-end gap-1 mt-2 ${isFilterOpen ? 'h-auto opacity-100' : 'h-0 opacity-0'}`}>
+                    {(['ALL', 'EASY', 'MEDIUM', 'HARD', 'EXTREME'] as DifficultyFilter[]).map(f => (
                         <button
                             key={f}
-                            onClick={() => handleFilterChange(f)}
-                            className={`px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border border-transparent hover:border-white/20 ${
-                                filter === f 
-                                    ? 'bg-white text-slate-950' 
-                                    : 'text-slate-500 hover:text-white'
-                            }`}
+                            onClick={() => { setFilter(f); setIsFilterOpen(false); }}
+                            className={`text-[9px] font-bold tracking-[0.2em] uppercase hover:text-white transition-colors py-1 ${filter === f ? 'text-cyan-500' : 'text-white/40'}`}
                         >
                             {f}
                         </button>
                     ))}
                 </div>
-            </section>
+            </div>
 
-            {/* 2. HORIZONTAL SCROLL TRACK */}
-            <section ref={scrollContainerRef} className="h-screen w-full relative flex flex-col justify-center overflow-hidden bg-[#020611]">
-                
-                {/* Progress Bar */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-white/5 z-50">
-                    <div ref={progressBarRef} className="h-full bg-cyan-500 origin-left scale-x-0 will-change-transform"></div>
-                </div>
+            {/* --- MAIN SLIDES --- */}
+            {filteredTours.map((tour, index) => (
+                <div 
+                    key={tour.tourId} 
+                    className={`slide-${index} absolute inset-0 w-full h-full bg-[#040918] flex items-center justify-center`}
+                    style={{ visibility: index === 0 ? 'visible' : 'hidden' }} // Init first slide visible
+                >
+                    {/* Background */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        <img 
+                            src={tour.images[0]} 
+                            alt={tour.name.en} 
+                            className="bg-image w-full h-full object-cover opacity-60"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 opacity-80" />
+                    </div>
 
-                {/* The Track */}
-                <div ref={trackRef} className="flex gap-[5vw] px-[5vw] items-center h-[80vh] w-fit">
-                    
-                    {filteredTours.map((tour, index) => (
-                        <TourCardHorizontal key={tour.tourId} tour={tour} index={index} />
-                    ))}
-
-                    {/* End Card */}
-                    <div className="w-[30vw] h-full flex items-center justify-center shrink-0 opacity-50">
-                        <div className="text-center">
-                            <h3 className="text-4xl font-bold text-white/20 mb-4">END OF LIST</h3>
-                            <p className="text-xs tracking-widest text-white/40">SCROLL UP TO RETURN</p>
+                    {/* Content */}
+                    <div className="relative z-20 container mx-auto px-frame w-full h-full flex flex-col justify-center">
+                        
+                        {/* Huge Title */}
+                        <div className="overflow-hidden mb-4">
+                            <h1 className="animate-text text-[12vw] md:text-[9vw] font-black tracking-tighter leading-[0.85] text-white mix-blend-overlay uppercase">
+                                {tour.name.es.split(' ')[0]}
+                            </h1>
                         </div>
-                    </div>
-                </div>
-                
-                {/* Decorative Bottom Bar */}
-                <div className="absolute bottom-0 left-0 w-full px-frame py-6 flex justify-between items-center text-[10px] tracking-widest text-white/30 border-t border-white/5 bg-[#040918]">
-                    <span>SCROLL TO EXPLORE</span>
-                    <span>LAT: 6.2442° N // LON: 75.5812° W</span>
-                </div>
-            </section>
+                        <div className="overflow-hidden mb-8">
+                             <h1 className="animate-text text-[12vw] md:text-[9vw] font-black tracking-tighter leading-[0.85] text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 uppercase ml-[5vw]">
+                                {tour.name.es.split(' ').slice(1).join(' ') || "EXPEDITION"}
+                            </h1>
+                        </div>
 
-            {/* 3. SPACER / OUTRO */}
-            <section className="h-[50vh] flex items-center justify-center bg-[#040918] relative z-20">
-                <Link href="/contact" className="group flex flex-col items-center gap-4">
-                    <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500">
-                        <ArrowRight className="group-hover:-rotate-45 transition-transform duration-500" />
+                        {/* Details */}
+                        <div className="max-w-xl ml-[5vw]">
+                            <p className="animate-text text-lg md:text-xl text-slate-300 leading-relaxed font-light mb-8 border-l-2 border-cyan-500 pl-6">
+                                {tour.shortDescription.es}
+                            </p>
+
+                            <div className="animate-text flex gap-4">
+                                <Link 
+                                    href={`/tours/${tour.tourId}`}
+                                    className="btn-primary flex items-center gap-3 bg-white text-black px-8 py-4 rounded-none font-bold text-xs tracking-[0.2em] hover:bg-cyan-400 transition-colors uppercase"
+                                >
+                                    Start Mission <ArrowRight size={14} />
+                                </Link>
+                                <div className="flex items-center gap-4 px-6 border border-white/20 text-white/60 font-mono text-xs tracking-widest uppercase">
+                                    <span>{tour.difficulty}</span>
+                                    <span>//</span>
+                                    <span>{tour.totalDays} Days</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* HUD Elements */}
+                        <div className="animate-hud absolute bottom-12 left-8 md:left-12 flex flex-col gap-2 font-mono text-[9px] text-cyan-500/80 tracking-widest">
+                            <div className="flex items-center gap-2">
+                                <Mountain size={12} /> ALT: {tour.altitude.es}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Thermometer size={12} /> TMP: {tour.temperature.es}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <MapPin size={12} /> LAT: {6.0 + (index * 0.1)}° N
+                            </div>
+                        </div>
+
+                        <div className="animate-hud absolute top-12 left-8 md:left-12">
+                             <span className="text-[10px] font-bold tracking-[0.3em] text-white/40 border border-white/10 px-3 py-1">
+                                No. {String(index + 1).padStart(2, '0')}
+                             </span>
+                        </div>
+
                     </div>
-                    <span className="text-xs font-bold tracking-[0.3em]">START CUSTOM TRIP</span>
-                </Link>
-            </section>
+                </div>
+            ))}
+
+            {/* --- CONTROLS --- */}
+            {/* Clickable Areas */}
+            <div onClick={prevSlide} className="absolute inset-y-0 left-0 w-[15vw] z-40 cursor-pointer group flex items-center justify-start pl-8 hover:bg-gradient-to-r hover:from-black/50 hover:to-transparent transition-all">
+                <ArrowLeft className="text-white/20 group-hover:text-cyan-400 transition-colors scale-150" />
+            </div>
+            <div onClick={nextSlide} className="absolute inset-y-0 right-0 w-[15vw] z-40 cursor-pointer group flex items-center justify-end pr-8 hover:bg-gradient-to-l hover:from-black/50 hover:to-transparent transition-all">
+                <ArrowRight className="text-white/20 group-hover:text-cyan-400 transition-colors scale-150" />
+            </div>
+
+            {/* Progress Bar */}
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 z-50">
+                <div 
+                    className="h-full bg-cyan-500 transition-all duration-500 ease-out"
+                    style={{ width: `${((currentIndex + 1) / filteredTours.length) * 100}%` }}
+                />
+            </div>
 
         </div>
-    );
-}
-
-// --- INTERNAL COMPONENT: HORIZONTAL CARD ---
-function TourCardHorizontal({ tour, index }: { tour: Tour, index: number }) {
-    return (
-        <Link 
-            href={`/tours/${tour.tourId}`}
-            className="tour-card group relative w-[80vw] md:w-[60vw] lg:w-[40vw] h-[60vh] md:h-[70vh] shrink-0 block overflow-hidden border-l border-white/10 bg-[#060c21] hover:border-cyan-500/50 transition-colors duration-500"
-        >
-            {/* Image Container with Clip Path Reveal */}
-            <div className="absolute inset-0 z-0 overflow-hidden opacity-60 group-hover:opacity-100 transition-opacity duration-700">
-                <img 
-                    src={tour.images[0]} 
-                    alt={tour.name.en}
-                    className="tour-image-parallax w-full h-full object-cover object-left grayscale group-hover:grayscale-0 transition-all duration-700 will-change-transform"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#040918] via-transparent to-transparent opacity-90" />
-            </div>
-
-            {/* Content Overlay */}
-            <div className="absolute inset-0 z-10 flex flex-col justify-between p-8 md:p-12">
-                
-                {/* Top: Meta */}
-                <div className="flex justify-between items-start">
-                    <span className="text-[10px] font-bold tracking-[0.2em] text-cyan-500">
-                        NO. 0{index + 1}
-                    </span>
-                    <div className="flex gap-2">
-                        <span className={`px-3 py-1 text-[9px] font-bold tracking-wider uppercase border ${
-                            tour.difficulty === 'Extreme' ? 'border-red-500 text-red-400' :
-                            tour.difficulty === 'Hard' ? 'border-orange-500 text-orange-400' :
-                            'border-white/20 text-white/60'
-                        }`}>
-                            {tour.difficulty}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Bottom: Title & Info */}
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tighter leading-none mb-4 text-white group-hover:text-cyan-50">
-                        {tour.name.es}
-                    </h2>
-                    
-                    <div className="flex items-center gap-6 text-xs text-slate-400 font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                        <span className="flex items-center gap-2">
-                            <Calendar size={12} /> {tour.totalDays} DAYS
-                        </span>
-                        <span className="flex items-center gap-2">
-                            <Mountain size={12} /> {tour.altitude.es}
-                        </span>
-                        <span className="flex items-center gap-2">
-                            <Thermometer size={12} /> {tour.temperature.es}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Hover Line */}
-            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-        </Link>
     );
 }

@@ -17,10 +17,12 @@ interface TourCardProps {
     tour: Tour;
     index: number;
     className?: string;
+    lang: 'ES' | 'EN';
 }
 
-export default function TourCard({ tour, index, className = '' }: TourCardProps) {
+export default function TourCard({ tour, index, className = '', lang }: TourCardProps) {
     const cardRef = useRef<HTMLAnchorElement>(null);
+    const l = lang.toLowerCase() as 'es' | 'en';
 
     // Animación On-Reveal (Mantenemos la optimización de performance)
     useGSAP(() => {
@@ -71,7 +73,7 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
             <img 
                 src={tour.images[0]} 
                 className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" 
-                alt={tour.name.en} 
+                alt={tour.name[l]} 
             />
             
             {/* Gradiente Original */}
@@ -88,31 +90,31 @@ export default function TourCard({ tour, index, className = '' }: TourCardProps)
             <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                 {/* Sub-label formato original */}
                 <span className={`text-sub-label ${accentColor} mb-3 block`}>
-                    0{index + 1} // {tour.name.es.split(' ').slice(0, 2).join(' ').toUpperCase()}
+                    0{index + 1} // {tour.name[l].split(' ').slice(0, 2).join(' ').toUpperCase()}
                 </span>
                 
                 {/* Título Blanco */}
                 <h3 className="text-heading-l text-white mb-2">
-                    {tour.name.es}
+                    {tour.name[l]}
                 </h3>
 
                 {/* Acordeón Original (h-0 -> h-auto) */}
                 <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
                     <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
-                        {tour.shortDescription.es}
+                        {tour.shortDescription[l]}
                     </p>
                     
                     {/* Iconos Originales */}
                     <div className="flex items-center gap-4 text-journal-data text-slate-300">
                         <span className="flex items-center gap-1.5">
-                            <Calendar width={12} className={badgeColor} /> {tour.totalDays} Días
+                            <Calendar width={12} className={badgeColor} /> {tour.totalDays} {l === 'es' ? 'Días' : 'Days'}
                         </span>
                         <span className="flex items-center gap-1.5">
-                            <Thermometer width={12} className={badgeColor} /> {tour.temperature.es}
+                            <Thermometer width={12} className={badgeColor} /> {tour.temperature[l]}
                         </span>
                         {/* Mostramos Altitud si hay espacio */}
                         <span className="hidden xl:flex items-center gap-1.5">
-                            <Activity width={12} className={badgeColor} /> {tour.altitude.es}
+                            <Activity width={12} className={badgeColor} /> {tour.altitude[l]}
                         </span>
                     </div>
                 </div>

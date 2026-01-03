@@ -27,5 +27,10 @@
     "message": {
       "prefix": "Más allá del borde del mundo conocido, encontramos nuestro"
     }
+  },
+  "expeditions": {
+    "title": "EXPEDICIONES\nSELECCIONADAS.",
+    "subtitle": "Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.",
+    "view_all": "VER CATÁLOGO COMPLETO"
   }
 }

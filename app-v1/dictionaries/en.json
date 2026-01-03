@@ -27,5 +27,10 @@
     "message": {
       "prefix": "Beyond the edge of the known world, we find our"
     }
+  },
+  "expeditions": {
+    "title": "SELECT\nEXPEDITIONS.",
+    "subtitle": "Meticulously curated routes for those seeking silence, challenge, and pure beauty.",
+    "view_all": "VIEW FULL CATALOG"
   }
 }
