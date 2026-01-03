@@ -2,11 +2,13 @@
   "common": {
     "welcome": "Welcome to Nevado Trek",
     "book_now": "Book Now",
+    "join": "Join",
     "contact": "Contact Us"
   },
   "navigation": {
     "home": "Home",
     "tours": "Expeditions",
-    "about": "About Us"
+    "about": "About Us",
+    "philosophy": "Philosophy"
   }
 }
