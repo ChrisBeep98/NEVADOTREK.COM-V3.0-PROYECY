@@ -30,9 +30,44 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [selectedPrivateDate, setSelectedPrivateDate] = useState<number | null>(null);
     const [formData, setFormData] = useState<UserData>({ name: '', email: '', phone: '', document: '' });
     
-    const [currentMonth] = useState(new Date().getMonth());
-    const [currentYear] = useState(new Date().getFullYear());
+    // Calendar Engine
+    const [viewDate, setViewDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
     const publicDepartures = departures.filter(d => (d.maxPax - d.currentPax) > 0);
+
+    // Helpers
+    const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    const getFirstDayOfMonth = (date: Date) => {
+        const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        return day === 0 ? 6 : day - 1; // Mon start
+    };
+
+    const nextMonth = () => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1));
+    const prevMonth = () => {
+        const now = new Date();
+        if (viewDate.getMonth() <= now.getMonth() && viewDate.getFullYear() <= now.getFullYear()) return;
+        setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1));
+    };
+
+    const isDateSelected = (day: number) => {
+        return selectedDate?.getDate() === day && 
+               selectedDate?.getMonth() === viewDate.getMonth() && 
+               selectedDate?.getFullYear() === viewDate.getFullYear();
+    };
+
+    const isPast = (day: number) => {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
+        return date < today;
+    };
+
+    const handleDateSelect = (day: number) => {
+        const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
+        setSelectedDate(newDate);
+        setSelectedPrivateDate(day);
+    };
 
     useGSAP(() => {
         if (isOpen) {
@@ -187,19 +222,65 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             })}
                                         </div>
                                     ) : (
-                                        <div className="max-w-xs">
-                                            <div className="flex justify-between items-center mb-6"><span className="text-lg font-bold text-foreground tracking-tighter uppercase">{getMonthName(currentMonth)} {currentYear}</span>
-                                                <div className="flex gap-2">
-                                                    <button className="text-muted hover:text-foreground"><ChevronLeft className="w-4 h-4" /></button>
-                                                    <button className="text-muted hover:text-foreground"><ChevronRight className="w-4 h-4" /></button>
+                                        <div className="max-w-md animate-in fade-in duration-500">
+                                            <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
+                                                <span className="text-xl font-bold text-foreground tracking-tight uppercase tabular-nums">
+                                                    {viewDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
+                                                </span>
+                                                <div className="flex gap-1">
+                                                    <button 
+                                                        onClick={prevMonth}
+                                                        className="p-2 hover:bg-white/5 rounded-md text-muted hover:text-white transition-all disabled:opacity-10"
+                                                        disabled={viewDate.getMonth() === new Date().getMonth() && viewDate.getFullYear() === new Date().getFullYear()}
+                                                    >
+                                                        <X className="w-5 h-5" /> {/* Note: Replacing icons with proper Lucide if needed or keep existing */}
+                                                        <ChevronLeft className="w-5 h-5" />
+                                                    </button>
+                                                    <button 
+                                                        onClick={nextMonth}
+                                                        className="p-2 hover:bg-white/5 rounded-md text-muted hover:text-white transition-all"
+                                                    >
+                                                        <ChevronRight className="w-5 h-5" />
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-7 gap-1 text-center">
-                                                {['L','M','M','J','V','S','D'].map(d => <span key={d} className="text-[9px] font-bold text-muted pb-3">{d}</span>)}
-                                                {Array.from({length: 30}, (_, i) => i + 1).map(day => {
-                                                    const isAvail = day > 5;
-                                                    const isSel = selectedPrivateDate === day;
-                                                    return (<button key={day} disabled={!isAvail} onClick={() => setSelectedPrivateDate(day)} className={`h-8 w-8 rounded-full text-xs font-medium transition-all ${isSel ? 'bg-foreground text-background font-bold' : isAvail ? 'text-foreground hover:bg-surface' : 'text-muted/20 cursor-not-allowed'}`}>{day}</button>)
+                                            <div className="grid grid-cols-7 gap-2 text-center">
+                                                {['L','M','X','J','V','S','D'].map(d => (
+                                                    <div key={d} className="text-[10px] font-bold text-muted/40 py-2 uppercase tracking-widest">{d}</div>
+                                                ))}
+                                                
+                                                {/* Alignment slots */}
+                                                {Array.from({ length: getFirstDayOfMonth(viewDate) }).map((_, i) => (
+                                                    <div key={`empty-${i}`} className="aspect-square"></div>
+                                                ))}
+
+                                                {/* Styled Day Cards */}
+                                                {Array.from({ length: getDaysInMonth(viewDate) }).map((_, i) => {
+                                                    const day = i + 1;
+                                                    const disabled = isPast(day);
+                                                    const active = isDateSelected(day);
+                                                    
+                                                    return (
+                                                        <button 
+                                                            key={day} 
+                                                            disabled={disabled} 
+                                                            onClick={() => handleDateSelect(day)}
+                                                            className={`
+                                                                h-11 w-11 mx-auto rounded-xl text-xs font-bold transition-all flex items-center justify-center relative shadow-sm
+                                                                ${active 
+                                                                    ? 'bg-foreground text-background shadow-xl scale-110 z-10' 
+                                                                    : disabled 
+                                                                        ? 'bg-transparent text-muted/10 cursor-not-allowed' 
+                                                                        : 'bg-surface text-foreground/60 hover:bg-white/5 hover:text-foreground hover:shadow-md'
+                                                                }
+                                                            `}
+                                                        >
+                                                            {day}
+                                                            {active && (
+                                                                <div className="absolute bottom-1 w-1 h-1 bg-cyan-500 rounded-full animate-pulse"></div>
+                                                            )}
+                                                        </button>
+                                                    );
                                                 })}
                                             </div>
                                         </div>
