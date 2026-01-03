@@ -156,15 +156,34 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     </div>
                 </div>
 
-                {/* RIGHT PANE */}
+                {/* === RIGHT PANE (Compact Interaction) === */}
                 <div className="flex-1 flex flex-col bg-transparent relative h-full">
-                    <div className="h-14 md:h-16 flex items-center justify-between px-frame md:px-10 border-b border-border shrink-0">
-                        <div className="flex gap-2">
-                            {[0, 1, 2].map(s => (
-                                <div key={s} className={`h-0.5 w-8 transition-all duration-700 ${step === s ? 'bg-foreground' : 'bg-white/10'}`}></div>
-                            ))}
+                    
+                    {/* Tactical Animated Progress Header */}
+                    <div className="h-16 md:h-20 flex items-center justify-between px-frame md:px-10 border-b border-border shrink-0">
+                        <div className="relative w-32 md:w-48 flex items-center h-4">
+                            {/* Track Background */}
+                            <div className="absolute w-full h-[1px] bg-white/10"></div>
+                            
+                            {/* Progress Fill */}
+                            <div 
+                                className="absolute top-1/2 -translate-y-1/2 left-0 h-[1px] bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-1000 ease-in-out z-10"
+                                style={{ width: `${(step / 2) * 100}%` }}
+                            ></div>
+
+                            {/* Checkpoints */}
+                            <div className="absolute w-full flex justify-between z-20">
+                                {[0, 1, 2].map(s => (
+                                    <div 
+                                        key={s}
+                                        className={`w-1.5 h-1.5 rounded-full transition-all duration-700 border border-background ${step >= s ? 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)] scale-110' : 'bg-white/20 scale-75'}`}
+                                    ></div>
+                                ))}
+                            </div>
                         </div>
-                        <button onClick={handleClose} className="p-2 text-muted hover:text-foreground transition-colors"><X className="w-5 h-5 md:w-6 md:h-6" /></button>
+                        <button onClick={handleClose} className="p-2 text-muted hover:text-foreground transition-all hover:rotate-90 duration-500">
+                            <X className="w-6 h-6 md:w-7 md:h-7" />
+                        </button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12" ref={contentRef}>
