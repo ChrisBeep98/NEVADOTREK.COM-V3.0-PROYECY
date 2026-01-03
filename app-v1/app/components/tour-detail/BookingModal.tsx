@@ -101,7 +101,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         {/* Minimalist Price List */}
                         <div className="mt-auto space-y-12">
                             <div className="space-y-4">
-                                <span className="text-journal-data text-muted block ml-1">Inversión por persona</span>
+                                <span className="text-journal-data text-muted block ml-1">Precio por persona</span>
                                 <div className="bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
                                     {tour.pricingTiers.map((tier, i) => (
                                         <div 
@@ -117,10 +117,6 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
                                     ))}
                                 </div>
-                            </div>
-                            <div className="flex gap-8 text-journal-data text-muted ml-1">
-                                <span>{tour.totalDays} Días</span>
-                                <span>{tour.difficulty}</span>
                             </div>
                         </div>
                     </div>
@@ -191,7 +187,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                         <span className={`text-[10px] font-bold uppercase tracking-widest mb-auto ${isSelected ? 'text-black/40' : 'text-white/20'}`}>
                                                             {date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase()}
                                                         </span>
-                                                        <span className="text-5xl font-bold leading-none tracking-tighter mb-2">{date.getDate()}</span>
+                                                        <span className="text-5xl font-bold leading-none tracking-tighter mb-1">{date.getDate()}</span>
+                                                        <span className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isSelected ? 'text-emerald-600' : 'text-emerald-400'}`}>
+                                                            {dep.maxPax - dep.currentPax} cupos
+                                                        </span>
                                                         <span className="text-sm font-bold font-mono tracking-tighter mt-auto">{formatMoney(price)}</span>
                                                     </button>
                                                 )
