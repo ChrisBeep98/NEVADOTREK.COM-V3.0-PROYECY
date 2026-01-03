@@ -278,8 +278,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <h3 className="text-2xl font-bold text-foreground tracking-tight ml-1">Confirmación de reserva</h3>
                                     
                                     <div className="relative">
-                                        {/* The Ticket Body */}
-                                        <div className="bg-white text-slate-950 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+                                        {/* THE TICKET BODY */}
+                                        <div className="bg-white text-slate-950 rounded-2xl shadow-xl overflow-hidden relative">
                                             {[
                                                 { label: 'Responsable', value: formData.name || 'Invitado', icon: User },
                                                 { 
@@ -325,11 +325,6 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         {/* Physical Ticket Notches (Side circles) */}
                                         <div className="absolute top-[218px] -left-3 w-6 h-6 bg-background rounded-full border-r border-border z-10"></div>
                                         <div className="absolute top-[218px] -right-3 w-6 h-6 bg-background rounded-full border-l border-border z-10"></div>
-                                    </div>
-
-                                    <div className="flex items-center gap-3 text-emerald-500/80 px-1">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                        <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Validación técnica completa</span>
                                     </div>
                                 </div>
                             )}
