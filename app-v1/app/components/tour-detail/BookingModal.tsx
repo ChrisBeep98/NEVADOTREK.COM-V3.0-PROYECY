@@ -227,20 +227,20 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <span className="text-xl font-bold text-foreground tracking-tight uppercase tabular-nums">
                                                     {viewDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
                                                 </span>
-                                                <div className="flex gap-1">
+                                                <div className="flex items-center bg-surface border border-border rounded-lg p-0.5 shadow-sm">
                                                     <button 
                                                         onClick={prevMonth}
-                                                        className="p-2 hover:bg-white/5 rounded-md text-muted hover:text-white transition-all disabled:opacity-10"
+                                                        className="p-2 hover:bg-foreground/5 rounded-md text-muted hover:text-foreground transition-all disabled:opacity-5 disabled:cursor-not-allowed group"
                                                         disabled={viewDate.getMonth() === new Date().getMonth() && viewDate.getFullYear() === new Date().getFullYear()}
                                                     >
-                                                        <X className="w-5 h-5" /> {/* Note: Replacing icons with proper Lucide if needed or keep existing */}
-                                                        <ChevronLeft className="w-5 h-5" />
+                                                        <ChevronLeft className="w-4 h-4 transition-transform group-active:-translate-x-0.5" />
                                                     </button>
+                                                    <div className="w-px h-4 bg-border mx-0.5 opacity-50"></div>
                                                     <button 
                                                         onClick={nextMonth}
-                                                        className="p-2 hover:bg-white/5 rounded-md text-muted hover:text-white transition-all"
+                                                        className="p-2 hover:bg-foreground/5 rounded-md text-muted hover:text-foreground transition-all group"
                                                     >
-                                                        <ChevronRight className="w-5 h-5" />
+                                                        <ChevronRight className="w-4 h-4 transition-transform group-active:translate-x-0.5" />
                                                     </button>
                                                 </div>
                                             </div>
