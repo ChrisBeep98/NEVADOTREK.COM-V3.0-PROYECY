@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Users, Crown } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 
 interface BookingModalProps {
@@ -61,7 +61,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         }, 400);
     };
 
-    const formatMoney = (amount: number) => `$ ${(amount/1000000).toFixed(1)}M`;
+    const formatMoney = (amount: number) => `$ ${amount.toLocaleString('es-CO')} COP`;
     const getMonthName = (m: number) => new Date(currentYear, m).toLocaleDateString('es-ES', { month: 'long' });
     
     const getPrice = () => {
@@ -100,22 +100,25 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                         {/* Minimalist Price List */}
                         <div className="mt-auto space-y-12">
-                            <div className="space-y-6">
-                                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] block">Inversión</span>
-                                <div className="space-y-4">
+                            <div className="space-y-4">
+                                <span className="text-journal-data text-muted block ml-1">Inversión por persona</span>
+                                <div className="bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
                                     {tour.pricingTiers.map((tier, i) => (
-                                        <div key={i} className="flex justify-between items-end border-b border-white/[0.03] pb-2">
-                                            <span className="text-xs text-white/40 uppercase tracking-widest font-medium">
+                                        <div 
+                                            key={i} 
+                                            className={`flex justify-between items-center p-4 ${i !== tour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}
+                                        >
+                                            <span className="text-sub-label text-muted">
                                                 {tier.minPax === tier.maxPax ? `${tier.minPax} Pax` : `${tier.minPax}-${tier.maxPax} Pax`}
                                             </span>
-                                            <span className="text-lg font-bold text-white/80 tabular-nums">
+                                            <span className="text-sm font-bold text-foreground tabular-nums">
                                                 {formatMoney(tier.priceCOP)}
                                             </span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="flex gap-8 text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                            <div className="flex gap-8 text-journal-data text-muted ml-1">
                                 <span>{tour.totalDays} Días</span>
                                 <span>{tour.difficulty}</span>
                             </div>
@@ -150,16 +153,18 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <div className="flex gap-12 border-b border-white/[0.03]">
                                         <button 
                                             onClick={() => setMode('public')}
-                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'public' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
+                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative flex items-center gap-2.5 ${mode === 'public' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
                                         >
-                                            Grupal
+                                            <Users className={`w-3.5 h-3.5 transition-transform duration-500 ${mode === 'public' ? 'scale-110' : 'scale-100 opacity-50'}`} />
+                                            <span>Grupal</span>
                                             {mode === 'public' && <div className="absolute bottom-0 left-0 w-full h-px bg-white"></div>}
                                         </button>
                                         <button 
                                             onClick={() => setMode('private')}
-                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'private' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
+                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative flex items-center gap-2.5 ${mode === 'private' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
                                         >
-                                            Privada
+                                            <Crown className={`w-3.5 h-3.5 transition-transform duration-500 ${mode === 'private' ? 'scale-110' : 'scale-100 opacity-50'}`} />
+                                            <span>Privada</span>
                                             {mode === 'private' && <div className="absolute bottom-0 left-0 w-full h-px bg-white"></div>}
                                         </button>
                                     </div>
