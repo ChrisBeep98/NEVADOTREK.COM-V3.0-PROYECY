@@ -35,6 +35,13 @@ When analyzing any UI file (React/Next.js components, CSS), you must verify the 
 *   **Motion:** Do animations (GSAP/CSS) follow the brand's "Cinematic/Technical" feel?
 *   **Interactions:** Are hover/active states consistent across similar elements?
 
+### 6. 🌐 LINGUISTIC DIMENSION (Internationalization)
+*   **Hardcoded Text:** Are strings hardcoded in the component? (e.g., `<span>Book Now</span>`).
+    *   ❌ Hardcoded: `<div>Hello</div>`
+    *   ✅ Internationalized: `{t('greeting')}` or `{dictionaries.home.greeting}`.
+*   **Expansion Safety:** Will the layout break if the text is 30% longer (Spanish)?
+*   **Formatting:** Are dates and prices formatted using `Intl` or specific formatters, not string concatenation?
+
 ---
 
 ## 🛠️ OPERATIONAL WORKFLOW
@@ -71,6 +78,7 @@ When asked to review or tokenize a file, provide a report in this structured mar
 | **Layout** | `px-frame` | ✅ Linked | Consistent usage. |
 | **Type** | `text-h-section-title` | ⚠️ Hardcoded | Found `text-6xl`, suggested replacement. |
 | **Color** | `text-emerald-400` | ❌ Missing | Color used but not in DS palette. |
+| **Content** | `header.cta_label` | ⚠️ Hardcoded | Found "Reservar Ahora" string. |
 
 ## 🛠️ ACTIONABLE INSIGHTS
 1.  **[Critical]:** [Immediate fix required]

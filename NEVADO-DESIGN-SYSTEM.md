@@ -88,6 +88,24 @@ El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 
 ---
 
+## 🌍 6. INTERNATIONALIZATION (i18n)
+
+### 6.1 ESTRATEGIA DE CONTENIDO
+El diseño debe ser flexible para soportar la expansión de texto del Español vs Inglés (+25-30% de longitud promedio).
+
+- **Layouts Flexibles:** Evitar anchos fijos (`width: 300px`) en contenedores de texto. Usar `min-width` o `max-width` con `flex-wrap`.
+- **Botones:** Los botones deben crecer con el contenido. Evitar romper etiquetas de botones en dos líneas.
+
+### 6.2 FORMATOS REGIONALES
+
+| Dato | Español (ES) | Inglés (EN) | Token/Clase |
+| :--- | :--- | :--- | :--- |
+| **Fecha** | `03 ENE 2026` | `JAN 03, 2026` | `.text-journal-data` |
+| **Moneda** | `$1.200 USD` | `$1,200 USD` | `.text-price` (TBD) |
+| **Separador Decimal** | Coma (`,`) o Punto (`.`) según región LATAM | Punto (`.`) | - |
+
+---
+
 ## 📝 7. LOG DE ACTUALIZACIONES
 - **2025-12-30:** Refinamiento de atmósfera: Cambio de tono de fondo a Glacial Core (#040a16) para mayor energía visual.
 - **2025-12-30:** Ajuste global de atmósfera: Cambio de Slate-950 de #020617 a #01040a (tono más azulado/frío).
