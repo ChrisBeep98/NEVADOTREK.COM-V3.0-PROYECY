@@ -32,5 +32,63 @@
     "title": "SELECT\nEXPEDITIONS.",
     "subtitle": "Meticulously curated routes for those seeking silence, challenge, and pure beauty.",
     "view_all": "VIEW FULL CATALOG"
+  },
+  "fauna": {
+    "book_expedition": "Book Expedition",
+    "items": [
+      {
+        "id": "barranquero",
+        "name": "BARRANQUERO",
+        "role": "THE MOUNTAIN CLOCK",
+        "desc": "Its song marks time in the misty coffee fields. A turquoise flash in the gloom.",
+        "location": "1,900M // COCORA VALLEY"
+      },
+      {
+        "id": "danta",
+        "name": "MOUNTAIN TAPIR",
+        "role": "THE FOREST ARCHITECT",
+        "desc": "Solitary gardener of the heights. Opens ancestral paths between the frailejones.",
+        "location": "3,200M // ALTO QUINDÍO"
+      },
+      {
+        "id": "oso",
+        "name": "SPECTACLED BEAR",
+        "role": "THE WATER GUARDIAN",
+        "desc": "Sacred spirit of the Andes. Where he walks, life is born.",
+        "location": "3,600M // ROMERALES"
+      }
+    ]
+  },
+  "features": {
+    "pretitle": "WHY NEVADO TREK",
+    "title_primary": "SUMMIT",
+    "title_secondary": "DIFFERENCE.",
+    "cta": "View Expedition",
+    "items": [
+      {
+        "id": "01",
+        "title": "HIGH ALTITUDE",
+        "tag": "EXPEDITION_GEAR",
+        "desc": "We master the verticality of Nevado del Tolima with state-of-the-art equipment and precision logistics."
+      },
+      {
+        "id": "02",
+        "title": "NATIVE GUIDES",
+        "tag": "LOCAL_EXPERTISE",
+        "desc": "Experts born in Salento. We know every inch of the cloud forest and the Páramo trails."
+      },
+      {
+        "id": "03",
+        "title": "ELITE SAFETY",
+        "tag": "SAFETY_ZERO",
+        "desc": "Certified rescue protocols and constant satellite communication. Your integrity is our mission."
+      },
+      {
+        "id": "04",
+        "title": "ANDEAN CULTURE",
+        "tag": "LOCAL_COMMUNITY",
+        "desc": "Authentic immersion experiences with local communities, respecting heritage and the ecosystem."
+      }
+    ]
   }
 }

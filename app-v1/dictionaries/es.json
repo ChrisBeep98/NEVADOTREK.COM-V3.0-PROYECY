@@ -32,5 +32,63 @@
     "title": "EXPEDICIONES\nSELECCIONADAS.",
     "subtitle": "Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.",
     "view_all": "VER CATÁLOGO COMPLETO"
+  },
+  "fauna": {
+    "book_expedition": "Reservar Expedición",
+    "items": [
+      {
+        "id": "barranquero",
+        "name": "BARRANQUERO",
+        "role": "EL RELOJ DE LA MONTAÑA",
+        "desc": "Su canto marca el tiempo en los cafetales de niebla. Un destello turquesa en la penumbra.",
+        "location": "1.900M // VALLE DE COCORA"
+      },
+      {
+        "id": "danta",
+        "name": "DANTA DE PÁRAMO",
+        "role": "EL ARQUITECTO DEL BOSQUE",
+        "desc": "Jardinera solitaria de las alturas. Abre caminos ancestrales entre los frailejones.",
+        "location": "3.200M // ALTO QUINDÍO"
+      },
+      {
+        "id": "oso",
+        "name": "OSO DE ANTEOJOS",
+        "role": "EL GUARDIÁN DE AGUA",
+        "desc": "Espíritu sagrado de los Andes. Donde él camina, nace la vida.",
+        "location": "3.600M // ROMERALES"
+      }
+    ]
+  },
+  "features": {
+    "pretitle": "POR QUÉ NEVADO TREK",
+    "title_primary": "DIFERENCIAL",
+    "title_secondary": "DE CUMBRE.",
+    "cta": "Ver Expedición",
+    "items": [
+      {
+        "id": "01",
+        "title": "ALTA MONTAÑA",
+        "tag": "EQUIPO_EXPEDICIÓN",
+        "desc": "Dominamos la verticalidad del Nevado del Tolima con equipos de última generación y logística de precisión."
+      },
+      {
+        "id": "02",
+        "title": "GUÍAS NATIVOS",
+        "tag": "EXPERIENCIA_LOCAL",
+        "desc": "Expertos nacidos en Salento. Conocemos cada centímetro del bosque de niebla y los senderos del Páramo."
+      },
+      {
+        "id": "03",
+        "title": "SEGURIDAD ÉLITE",
+        "tag": "SEGURIDAD_CERO",
+        "desc": "Protocolos de rescate certificados y comunicación satelital constante. Tu integridad es nuestra misión."
+      },
+      {
+        "id": "04",
+        "title": "CULTURA ANDINA",
+        "tag": "COMUNIDAD_LOCAL",
+        "desc": "Experiencias de inmersión auténtica con las comunidades locales, respetando la herencia y el ecosistema."
+      }
+    ]
   }
 }

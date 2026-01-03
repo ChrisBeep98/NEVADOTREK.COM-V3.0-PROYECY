@@ -1,60 +1,59 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ArrowRight, MapPin } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const FAUNA = [
-    {
-        id: "barranquero",
-        name: "BARRANQUERO",
+const FAUNA_STATIC = {
+    barranquero: {
         sciName: "Momotus aequatorialis",
-        role: "EL RELOJ DE LA MONTAÑA",
-        desc: "Su canto marca el tiempo en los cafetales de niebla. Un destello turquesa en la penumbra.",
-        location: "1.900M // VALLE DE COCORA",
         img: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2000&auto=format&fit=crop", 
         accentClass: "text-cyan-400"
     },
-    {
-        id: "danta",
-        name: "DANTA DE PÁRAMO",
+    danta: {
         sciName: "Tapirus pinchaque",
-        role: "EL ARQUITECTO DEL BOSQUE",
-        desc: "Jardinera solitaria de las alturas. Abre caminos ancestrales entre los frailejones.",
-        location: "3.200M // ALTO QUINDÍO",
         img: "https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=2000&auto=format&fit=crop",
         accentClass: "text-orange-400"
     },
-    {
-        id: "oso",
-        name: "OSO DE ANTEOJOS",
+    oso: {
         sciName: "Tremarctos ornatus",
-        role: "EL GUARDIÁN DE AGUA",
-        desc: "Espíritu sagrado de los Andes. Donde él camina, nace la vida.",
-        location: "3.600M // ROMERALES",
         img: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=2000&auto=format&fit=crop",
         accentClass: "text-purple-400"
     }
-];
+};
 
 export default function BookingCTA() {
+    const { t } = useLanguage();
     const sectionRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
+
+    // Memoize fauna to prevent array recreation on every render
+    const fauna = useMemo(() => {
+        if (!t.fauna?.items) return [];
+        return t.fauna.items.map((item: any) => ({
+            ...item,
+            ...FAUNA_STATIC[item.id as keyof typeof FAUNA_STATIC]
+        }));
+    }, [t.fauna]);
 
     useGSAP(() => {
         const mm = gsap.matchMedia();
         const slides = gsap.utils.toArray<HTMLElement>('.animal-slide');
         
+        if (slides.length === 0) return;
+
         // --- ESTADO INICIAL ---
         gsap.set(slides, { autoAlpha: 0, scale: 0.95, z: -50, force3D: true });
-        gsap.set(slides[0], { autoAlpha: 1, scale: 1, z: 0 });
+        if (slides[0]) gsap.set(slides[0], { autoAlpha: 1, scale: 1, z: 0 });
 
         // --- DESKTOP: CINEMATIC SMOOTH VAULT ---
         mm.add("(min-width: 768px)", () => {
+            if (slides.length < 3) return;
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: sectionRef.current,
@@ -113,12 +112,12 @@ export default function BookingCTA() {
                 }
             });
 
-            tl.to(slides[0], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" })
-              .to(slides[1], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" }, 1)
-              .fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
+            if (slides[0]) tl.to(slides[0], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" });
+            if (slides[1]) tl.to(slides[1], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" }, 1);
+            tl.fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
         });
 
-    }, { scope: sectionRef });
+    }, { scope: sectionRef }); // Dependencies removed: GSAP runs once, React updates text in DOM.
 
     return (
         <section ref={sectionRef} className="dark relative w-full h-screen bg-[#040918] overflow-hidden">
@@ -127,11 +126,11 @@ export default function BookingCTA() {
             </div>
 
             <div className="relative w-full h-full">
-                {FAUNA.map((animal, i) => (
+                {fauna.map((animal: any, i: number) => (
                     <div 
                         key={animal.id}
                         className={`animal-slide absolute inset-0 w-full h-full flex items-center justify-center will-change-[clip-path,transform,opacity]`}
-                        style={{ zIndex: FAUNA.length - i }}
+                        style={{ zIndex: fauna.length - i }}
                     >
                         {/* BACKGROUND: Optimizado (Sin mask-image pesada) */}
                         <div className="absolute inset-0 z-0 overflow-hidden transform-gpu">
@@ -179,7 +178,7 @@ export default function BookingCTA() {
 
             <div className="final-cta absolute bottom-12 md:bottom-24 left-0 w-full z-[60] flex justify-center px-frame pointer-events-none opacity-0">
                 <button className="pointer-events-auto w-full md:w-auto group bg-white px-10 py-5 flex items-center justify-center gap-4 hover:bg-cyan-500 transition-all duration-500 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                    <span className="text-black font-bold tracking-widest text-xs md:text-sm uppercase group-hover:text-white">Reservar Expedición</span>
+                    <span className="text-black font-bold tracking-widest text-xs md:text-sm uppercase group-hover:text-white">{t.fauna.book_expedition}</span>
                     <ArrowRight className="text-black w-4 h-4 group-hover:text-white transition-transform group-hover:translate-x-1" />
                 </button>
             </div>

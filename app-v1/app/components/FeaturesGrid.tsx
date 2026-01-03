@@ -5,47 +5,38 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Mountain, Compass, ShieldCheck, Users, ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const FEATURES = [
-    {
-        id: "01",
-        title: "ALTA MONTAÑA",
-        tag: "EXPEDITION_GEAR",
-        desc: "Dominamos la verticalidad del Nevado del Tolima con equipos de última generación y logística de precisión.",
+const FEATURES_STATIC = {
+    "01": {
         icon: Mountain,
         img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop"
     },
-    {
-        id: "02",
-        title: "GUÍAS NATIVOS",
-        tag: "LOCAL_EXPERTISE",
-        desc: "Expertos nacidos en Salento. Conocemos cada centímetro del bosque de niebla y los senderos del Páramo.",
+    "02": {
         icon: Compass,
         img: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1200&auto=format&fit=crop"
     },
-    {
-        id: "03",
-        title: "SEGURIDAD ÉLITE",
-        tag: "SAFETY_ZERO",
-        desc: "Protocolos de rescate certificados y comunicación satelital constante. Tu integridad es nuestra misión.",
+    "03": {
         icon: ShieldCheck,
         img: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=1200&auto=format&fit=crop"
     },
-    {
-        id: "04",
-        title: "CULTURA ANDINA",
-        tag: "COMMUNITY_PASS",
-        desc: "Experiencias de inmersión auténtica con las comunidades locales, respetando la herencia y el ecosistema.",
+    "04": {
         icon: Users,
         img: "https://images.unsplash.com/photo-1549880181-56a44cf4a9a5?q=80&w=1200&auto=format&fit=crop"
     }
-];
+};
 
 export default function FeaturesGrid() {
+    const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeId, setActiveId] = useState<number>(0);
+
+    const features = t.features.items.map((item: any) => ({
+        ...item,
+        ...FEATURES_STATIC[item.id as keyof typeof FEATURES_STATIC]
+    }));
 
     useGSAP(() => {
         gsap.fromTo(".feature-section-header", 
@@ -64,9 +55,9 @@ export default function FeaturesGrid() {
             
             {/* Header */}
             <div className="px-frame max-w-[1400px] mx-auto mb-16 md:mb-24 feature-section-header">
-                <span className="text-sub-label mb-6 block opacity-50">POR QUÉ NEVADO TREK</span>
+                <span className="text-sub-label mb-6 block opacity-50">{t.features.pretitle}</span>
                 <h2 className="text-display-xl text-foreground">
-                    DIFERENCIAL <br/> <span className="text-muted opacity-40">DE CUMBRE.</span>
+                    {t.features.title_primary} <br/> <span className="text-muted opacity-40">{t.features.title_secondary}</span>
                 </h2>
             </div>
 
@@ -74,7 +65,7 @@ export default function FeaturesGrid() {
             <div className="px-frame max-w-[1600px] mx-auto">
                 <div className="flex flex-col md:flex-row h-[850px] md:h-[650px] gap-4">
                     
-                    {FEATURES.map((f, i) => {
+                    {features.map((f: any, i: number) => {
                         const Icon = f.icon;
                         const isActive = activeId === i;
                         
@@ -143,7 +134,7 @@ export default function FeaturesGrid() {
                                                 "{f.desc}"
                                             </p>
                                             <div className="flex items-center gap-3 text-white group/btn pointer-events-auto">
-                                                <span className="text-[10px] font-bold tracking-widest uppercase">Ver Expedición</span>
+                                                <span className="text-[10px] font-bold tracking-widest uppercase">{t.features.cta}</span>
                                                 <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                                             </div>
                                         </div>
