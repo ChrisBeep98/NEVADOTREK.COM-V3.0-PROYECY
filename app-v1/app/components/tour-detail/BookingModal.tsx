@@ -244,14 +244,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-7 gap-2 text-center">
+                                            <div className="grid grid-cols-7 gap-2 text-center w-fit">
                                                 {['L','M','X','J','V','S','D'].map(d => (
-                                                    <div key={d} className="text-[10px] font-bold text-muted/40 py-2 uppercase tracking-widest">{d}</div>
+                                                    <div key={d} className="w-10 h-10 flex items-center justify-center text-[10px] font-bold text-muted/40 uppercase tracking-widest">{d}</div>
                                                 ))}
                                                 
                                                 {/* Alignment slots */}
                                                 {Array.from({ length: getFirstDayOfMonth(viewDate) }).map((_, i) => (
-                                                    <div key={`empty-${i}`} className="aspect-square"></div>
+                                                    <div key={`empty-${i}`} className="w-10 h-10"></div>
                                                 ))}
 
                                                 {/* Styled Day Cards */}
@@ -266,7 +266,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             disabled={disabled} 
                                                             onClick={() => handleDateSelect(day)}
                                                             className={`
-                                                                h-11 w-11 mx-auto rounded-xl text-xs font-bold transition-all flex items-center justify-center relative shadow-sm
+                                                                w-10 h-10 rounded-lg text-xs font-bold transition-all flex items-center justify-center relative shadow-sm
                                                                 ${active 
                                                                     ? 'bg-foreground text-background shadow-xl scale-110 z-10' 
                                                                     : disabled 
