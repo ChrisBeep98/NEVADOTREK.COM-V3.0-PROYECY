@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Info, Plus, Minus } from 'lucide-react';
+import { X, ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Info, Plus, Minus, Mountain, User, CreditCard } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 
 interface BookingModalProps {
@@ -272,16 +272,64 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             )}
 
+                            {/* STEP 2: REFINED MINIMAL TICKET */}
                             {step === 2 && (
-                                <div className="space-y-8">
-                                    <div className="space-y-3">
-                                        <Check className="w-10 h-10 text-foreground mb-4" />
-                                        <h3 className="text-3xl font-bold text-foreground leading-none tracking-tight">Solicitud Lista.</h3>
-                                        <p className="text-muted text-sm font-light">Procesaremos tu reserva en breve.</p>
+                                <div className="space-y-10 animate-in fade-in duration-700 max-w-xl">
+                                    <h3 className="text-2xl font-bold text-foreground tracking-tight ml-1">Confirmación de reserva</h3>
+                                    
+                                    <div className="relative">
+                                        {/* The Ticket Body */}
+                                        <div className="bg-white text-slate-950 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+                                            {[
+                                                { label: 'Responsable', value: formData.name || 'Invitado', icon: User },
+                                                { 
+                                                    label: 'Fecha de inicio', 
+                                                    value: mode === 'public' && selectedDeparture 
+                                                        ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
+                                                        : selectedDate?.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }),
+                                                    icon: CalendarIcon
+                                                },
+                                                { label: 'Viajeros', value: `${formData.pax} ${formData.pax === 1 ? 'persona' : 'personas'}`, icon: Users }
+                                            ].map((item, i) => (
+                                                <div 
+                                                    key={i} 
+                                                    className="px-10 py-6 flex justify-between items-center border-b border-slate-100"
+                                                >
+                                                    <div className="flex items-center gap-3 text-muted">
+                                                        <item.icon className="w-3.5 h-3.5 opacity-50" />
+                                                        <span className="text-[11px] font-medium">{item.label}</span>
+                                                    </div>
+                                                    <span className="text-base font-bold text-slate-900 tracking-tight text-right">
+                                                        {item.value}
+                                                    </span>
+                                                </div>
+                                            ))}
+
+                                            {/* Perforated Total Section */}
+                                            <div className="relative px-10 py-7 bg-slate-50/50">
+                                                {/* Top Dashed Line */}
+                                                <div className="absolute top-0 left-10 right-10 border-t border-dashed border-slate-200"></div>
+                                                
+                                                <div className="flex justify-between items-center">
+                                                    <div className="flex items-center gap-3 text-muted">
+                                                        <CreditCard className="w-3.5 h-3.5 opacity-50" />
+                                                        <span className="text-[11px] font-medium">Inversión total</span>
+                                                    </div>
+                                                    <span className="text-base font-bold text-slate-900 tracking-tight font-mono">
+                                                        {formatMoney(getPrice() * formData.pax)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Physical Ticket Notches (Side circles) */}
+                                        <div className="absolute top-[218px] -left-3 w-6 h-6 bg-background rounded-full border-r border-border z-10"></div>
+                                        <div className="absolute top-[218px] -right-3 w-6 h-6 bg-background rounded-full border-l border-border z-10"></div>
                                     </div>
-                                    <div className="pt-8 border-t border-border space-y-4">
-                                        <div className="flex justify-between items-center"><span className="text-[9px] font-bold text-muted uppercase tracking-widest">Expedición</span><span className="text-base font-bold text-foreground">{tour.name.es}</span></div>
-                                        <div className="flex justify-between items-end"><span className="text-[9px] font-bold text-muted uppercase tracking-widest">Total Inversión</span><span className="text-3xl font-bold text-foreground tracking-tighter">{formatMoney(getPrice() * formData.pax)}</span></div>
+
+                                    <div className="flex items-center gap-3 text-emerald-500/80 px-1">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Validación técnica completa</span>
                                     </div>
                                 </div>
                             )}
@@ -292,8 +340,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         {step > 0 ? (
                             <button onClick={() => setStep(s => s - 1)} className="text-[9px] font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em]">Volver</button>
                         ) : <div />}
-                        <button disabled={!isStepValid()} onClick={() => setStep(s => Math.min(s + 1, 2))} className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}>
-                            {step === 2 ? 'Cerrar' : 'Continuar'}
+                        <button 
+                            disabled={!isStepValid()}
+                            onClick={() => setStep(s => Math.min(s + 1, 2))}
+                            className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
+                        >
+                            {step === 2 ? 'Confirmar y Enviar' : 'Continuar'}
                         </button>
                     </div>
                 </div>
