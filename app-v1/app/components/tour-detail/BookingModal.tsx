@@ -139,25 +139,25 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     </div>
 
                     {/* Content Area */}
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:p-24" ref={contentRef}>
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:pt-16 lg:pb-24 lg:px-24" ref={contentRef}>
                         <div className="max-w-4xl">
                             
                             {/* STEP 0: SELECTION */}
                             {step === 0 && (
-                                <div className="space-y-20">
+                                <div className="space-y-10">
                                     
                                     {/* Minimal Mode Switcher */}
                                     <div className="flex gap-12 border-b border-white/[0.03]">
                                         <button 
                                             onClick={() => setMode('public')}
-                                            className={`pb-6 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'public' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
+                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'public' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
                                         >
                                             Grupal
                                             {mode === 'public' && <div className="absolute bottom-0 left-0 w-full h-px bg-white"></div>}
                                         </button>
                                         <button 
                                             onClick={() => setMode('private')}
-                                            className={`pb-6 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'private' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
+                                            className={`pb-4 text-xs font-bold uppercase tracking-[0.3em] transition-all relative ${mode === 'private' ? 'text-white' : 'text-white/20 hover:text-white/40'}`}
                                         >
                                             Privada
                                             {mode === 'private' && <div className="absolute bottom-0 left-0 w-full h-px bg-white"></div>}
