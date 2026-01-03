@@ -288,31 +288,155 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             )}
 
-                            {step === 1 && (
-                                <div className="space-y-10">
-                                    <h3 className="text-2xl font-bold text-foreground tracking-tighter">Identidad</h3>
-                                    <div className="grid gap-6">
-                                        <div className="group border-b border-border focus-within:border-foreground transition-all">
-                                            <label className="text-[9px] font-bold text-muted mb-2 block group-focus-within:text-foreground uppercase tracking-widest">Nombre Completo</label>
-                                            <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-transparent border-none py-3 px-0 text-lg text-foreground focus:ring-0 placeholder:text-muted/20" placeholder="REQUERIDO" />
-                                        </div>
-                                        <div className="group border-b border-border focus-within:border-foreground transition-all">
-                                            <label className="text-[9px] font-bold text-muted mb-2 block group-focus-within:text-foreground uppercase tracking-widest">Email</label>
-                                            <input value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent border-none py-3 px-0 text-lg text-foreground focus:ring-0 placeholder:text-muted/20" placeholder="EMAIL@DOMINIO.COM" />
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="group border-b border-border focus-within:border-foreground transition-all">
-                                                <label className="text-[9px] font-bold text-muted mb-2 block group-focus-within:text-foreground uppercase tracking-widest">Teléfono</label>
-                                                <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-transparent border-none py-3 px-0 text-lg text-foreground focus:ring-0 placeholder:text-muted/20" placeholder="+57" />
-                                            </div>
-                                            <div className="group border-b border-border focus-within:border-foreground transition-all">
-                                                <label className="text-[9px] font-bold text-muted mb-2 block group-focus-within:text-foreground uppercase tracking-widest">ID</label>
-                                                <input value={formData.document} onChange={e => setFormData({...formData, document: e.target.value})} className="w-full bg-transparent border-none py-3 px-0 text-lg text-foreground focus:ring-0 placeholder:text-muted/20" placeholder="ID NUMBER" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                                                                                                                                                                                                                                                            {/* STEP 1: IDENTITY */}
+
+                                                                                                                                                                                                                                                            {step === 1 && (
+
+                                                                                                                                                                                                                                                                <div className="space-y-10 max-w-4xl animate-in fade-in duration-500">
+
+                                                                                                                                                                                                                                                                    <h3 className="text-2xl font-bold text-foreground tracking-tight">Información personal</h3>
+
+                                                                                                                                                                                                                                                                    
+
+                                                                                                                                                                                                                                                                    <div className="grid gap-8">
+
+                                                                                                                                                                                                                                            {/* Field Group */}
+
+                                                                                                                                                                                                                                            <div className="relative">
+
+                                                                                                                                                                                                                                                <label className="text-[11px] text-muted font-medium mb-2 block">Nombre completo del responsable</label>
+
+                                                                                                                                                                                                                                                <input 
+
+                                                                                                                                                                                                                                                    value={formData.name} 
+
+                                                                                                                                                                                                                                                    onChange={e => setFormData({...formData, name: e.target.value})} 
+
+                                                                                                                                                                                                                                                    className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+
+                                                                                                                                                                                                                                                    placeholder="Ej. Juan Sebastián Pérez" 
+
+                                                                                                                                                                                                                                                />
+
+                                                                                                                                                                                                                                            </div>
+
+                                                                                                                                                                                                                                            
+
+                                                                                                                                                                                                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                                                                                                                                                                                                                                                <div className="relative">
+
+                                                                                                                                                                                                                                                    <label className="text-[11px] text-muted font-medium mb-2 block">Correo electrónico de contacto</label>
+
+                                                                                                                                                                                                                                                    <input 
+
+                                                                                                                                                                                                                                                        value={formData.email} 
+
+                                                                                                                                                                                                                                                        onChange={e => setFormData({...formData, email: e.target.value})} 
+
+                                                                                                                                                                                                                                                        className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+
+                                                                                                                                                                                                                                                        placeholder="nombre@dominio.com" 
+
+                                                                                                                                                                                                                                                    />
+
+                                                                                                                                                                                                                                                </div>
+
+                                                                                                                                                                                                                                                
+
+                                                                                                                                                                                                                                                <div className="relative">
+
+                                                                                                                                                                                                                                                    <label className="text-[11px] text-muted font-medium mb-2 block">Número de viajeros</label>
+
+                                                                                                                                                                                                                                                    <div className="flex items-center justify-between border border-border rounded-lg h-14 px-6 bg-transparent">
+
+                                                                                                                                                                                                                                                        <button onClick={() => setFormData({...formData, pax: Math.max(1, formData.pax - 1)})} className="text-muted hover:text-foreground transition-all p-1">
+
+                                                                                                                                                                                                                                                            <ChevronLeft className="w-5 h-5" />
+
+                                                                                                                                                                                                                                                        </button>
+
+                                                                                                                                                                                                                                                        <span className="text-base font-bold tabular-nums text-foreground">{formData.pax} {formData.pax === 1 ? 'viajero' : 'viajeros'}</span>
+
+                                                                                                                                                                                                                                                        <button onClick={() => setFormData({...formData, pax: Math.min(8, formData.pax + 1)})} className="text-muted hover:text-foreground transition-all p-1">
+
+                                                                                                                                                                                                                                                            <ChevronRight className="w-5 h-5" />
+
+                                                                                                                                                                                                                                                        </button>
+
+                                                                                                                                                                                                                                                    </div>
+
+                                                                                                                                                                                                                                                </div>
+
+                                                                                                                                                                                                                                            </div>
+
+                                                                                                                                                                                                    
+
+                                                                                                                                                                                                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                                                                                                                                                                                                                                                <div className="relative">
+
+                                                                                                                                                                                                                                                    <label className="text-[11px] text-muted font-medium mb-2 block">Teléfono móvil / WhatsApp</label>
+
+                                                                                                                                                                                                                                                    <input 
+
+                                                                                                                                                                                                                                                        value={formData.phone} 
+
+                                                                                                                                                                                                                                                        onChange={e => setFormData({...formData, phone: e.target.value})} 
+
+                                                                                                                                                                                                                                                        className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+
+                                                                                                                                                                                                                                                        placeholder="+57 000 000 0000" 
+
+                                                                                                                                                                                                                                                    />
+
+                                                                                                                                                                                                                                                </div>
+
+                                                                                                                                                                                                                                                <div className="relative">
+
+                                                                                                                                                                                                                                                    <label className="text-[11px] text-muted font-medium mb-2 block">Documento de identidad</label>
+
+                                                                                                                                                                                                                                                    <input 
+
+                                                                                                                                                                                                                                                        value={formData.document} 
+
+                                                                                                                                                                                                                                                        onChange={e => setFormData({...formData, document: e.target.value})} 
+
+                                                                                                                                                                                                                                                        className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+
+                                                                                                                                                                                                                                                        placeholder="C.C. o Pasaporte" 
+
+                                                                                                                                                                                                                                                    />
+
+                                                                                                                                                                                                                                                </div>
+
+                                                                                                                                                                                                                                            </div>
+
+                                                                                                                                                                                                    
+
+                                                                                                                                                                                                                                            <div className="relative">
+
+                                                                                                                                                                                                                                                <label className="text-[11px] text-muted font-medium mb-2 block">Notas o requerimientos especiales</label>
+
+                                                                                                                                                                                                                                                <textarea 
+
+                                                                                                                                                                                                                                                    value={formData.note} 
+
+                                                                                                                                                                                                                                                    onChange={e => setFormData({...formData, note: e.target.value})} 
+
+                                                                                                                                                                                                                                                    className="w-full bg-transparent border border-border focus:border-foreground rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10 resize-none h-32" 
+
+                                                                                                                                                                                                                                                    placeholder="Indica alergias, restricciones alimenticias o mensajes para el guía..." 
+
+                                                                                                                                                                                                                                                />
+
+                                                                                                                                                                                                                                            </div>
+
+                                                                                                                                                                                                                                        </div>
+
+                                                                                                                                                                                                                                    </div>
+
+                                                                                                                                                                                                                                )}
 
                             {step === 2 && (
                                 <div className="space-y-8">
