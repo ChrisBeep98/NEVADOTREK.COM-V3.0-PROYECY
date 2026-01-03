@@ -51,10 +51,12 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             {t.expeditions.subtitle}
                         </p>
                     </div>
-                    <a href="#" className="text-sub-label text-foreground flex items-center gap-2 hover:text-cyan-400 transition-colors pb-1 border-b border-border hover:border-cyan-400">
-                        {t.expeditions.view_all}
-                        <ArrowUpRight width={14} strokeWidth={1.5} />
-                    </a>
+                    <button className="btn-secondary md:w-auto group">
+                        <span>{t.expeditions.view_all.toLowerCase()}</span>
+                        <div className="btn-icon-bubble">
+                            <ArrowUpRight width={18} strokeWidth={2} />
+                        </div>
+                    </button>
                 </div>
 
                 {/* Grid con espaciado arquitectónico (gap-4) */}

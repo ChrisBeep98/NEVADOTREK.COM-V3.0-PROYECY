@@ -11,6 +11,7 @@ export const metadata = {
 
 export default async function ToursPage() {
     const tours = await getTours();
+    console.log(`[ToursPage] Fetched ${tours.length} tours from API`);
 
     return (
         <main className="bg-[#040918]">

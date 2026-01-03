@@ -81,6 +81,15 @@ El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 - **Efecto Hover:** Fondo `Cyan-400`, Sombra `Cyan-500/20`, icon shift.
 - **Efecto Active:** `Scale 95%`.
 
+### **BTN-SECONDARY** (`.btn-secondary`)
+Botón de navegación alternativo. Estilo técnico con acento azul.
+- **Borde:** `Blue-500` (Stroked) con opacidad variable.
+- **Texto:** `Capitalize` (Solo primera letra mayúscula).
+    - **Light Mode:** `Deep Blue Slate` (#050B1A) para máxima legibilidad.
+    - **Dark Mode:** `Blue-100` para contraste suave.
+- **Icono:** Contenido en una burbuja circular (Bubble) que reacciona al hover.
+- **Efecto Hover:** El borde se ilumina, el fondo se tiñe sutilmente y la burbuja del icono se llena de color.
+
 ---
 
 ## 🤖 5. AI PROMPT & SYNC RULE

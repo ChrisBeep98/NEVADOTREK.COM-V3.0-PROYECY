@@ -30,13 +30,13 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
         if (!el) return;
 
         gsap.fromTo(el, 
-            { y: 60, opacity: 0, scale: 0.98 },
+            { y: 40, opacity: 0, scale: 0.98 },
             {
-                y: 0, opacity: 1, scale: 1, duration: 1, ease: "power3.out",
+                y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "power3.out",
                 scrollTrigger: {
                     trigger: el,
-                    start: "top 90%",
-                    toggleActions: "play none none reverse"
+                    start: "top 95%",
+                    toggleActions: "play none none none"
                 }
             }
         );
@@ -45,7 +45,7 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
     // Lógica de color: Prioridad Dificultad -> Fallback Rotación por Índice
     // Esto asegura variedad visual incluso si todos los tours son "Medium"
     const getThemeColors = () => {
-        const diff = tour.difficulty.toLowerCase();
+        const diff = (tour.difficulty || 'medium').toLowerCase();
         
         // Colores específicos para dificultades altas
         if (diff.includes('hard')) return { accent: "text-orange-400", badge: "text-orange-500" };
