@@ -68,6 +68,17 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
         <div ref={containerRef} className="relative w-full h-[95vh] bg-slate-950 overflow-hidden">
             <Header />
 
+            {/* --- FIXED ACTION BUTTON (The Conversion Point) --- */}
+            <button 
+                onClick={() => setIsModalOpen(true)}
+                className="fixed bottom-[var(--spacing-frame)] lg:bottom-auto lg:top-24 right-[var(--spacing-frame)] z-40 btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] hero-text-reveal px-6 group flex items-center gap-4"
+            >
+                <span>Reservar Cupo</span>
+                <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
+                    <Zap className="w-3.5 h-3.5 fill-current" />
+                </div>
+            </button>
+
             {/* --- BACKGROUND LAYER (The Visual Anchor) --- */}
             <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
                 <img 
