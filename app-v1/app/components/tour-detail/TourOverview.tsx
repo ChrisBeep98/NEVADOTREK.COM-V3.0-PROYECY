@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour } from '../../types/api';
-import { Thermometer, Mountain, Ruler, X, Zap } from 'lucide-react';
+import { Thermometer, Mountain, Ruler, X, Zap, Check } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
@@ -62,7 +62,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                 </div>
 
                 {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-32 reveal-content">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-24 reveal-content">
                     <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-white dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_40px_rgba(0,0,0,0.03)] dark:shadow-none transition-all duration-300 hover:shadow-[0_15px_50px_rgba(0,0,0,0.05)] dark:hover:bg-white/[0.04]">
                         <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
                             <Mountain className="w-4 h-4 text-cyan-500" />
@@ -99,33 +99,40 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
                 </div>
 
-                {/* 3. Inclusions - Technical Ledger Design */}
-                <div className="flex flex-col md:flex-row gap-16 reveal-content">
-                    <div className="md:w-1/2">
-                        <div className="flex items-center gap-3 mb-8 border-b border-border pb-4">
-                            <span className="text-sub-label text-foreground">{t.tour_detail.overview.inclusions}</span>
+                {/* 3. Minimal Logistics - Radical Professional Style */}
+                <div className="reveal-content border-t border-border pt-24">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 lg:gap-32">
+                        
+                        {/* INCLUSIONS */}
+                        <div className="space-y-8">
+                            <h3 className="text-sub-label !text-foreground opacity-50 tracking-[0.2em]">{t.tour_detail.overview.inclusions}</h3>
+                            <ul className="space-y-5">
+                                {tour.inclusions?.map((item, i) => (
+                                    <li key={i} className="flex gap-4 group items-start">
+                                        <Check className="w-3.5 h-3.5 mt-1 text-emerald-500/50 group-hover:text-emerald-500 transition-colors shrink-0" />
+                                        <p className="text-sm md:text-base text-foreground/80 leading-relaxed font-light group-hover:text-foreground transition-colors">
+                                            {item[l]}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <ul className="grid grid-cols-1 gap-5">
-                            {tour.inclusions?.map((item, i) => (
-                                <li key={i} className="flex items-baseline gap-4 group">
-                                    <Zap className="w-3 h-3 text-emerald-400 mt-1.5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" />
-                                    <span className="text-body-std text-muted group-hover:text-foreground transition-colors">{item[l]}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="md:w-1/2 md:pl-12 md:border-l border-border">
-                        <div className="flex items-center gap-3 mb-8 border-b border-border pb-4">
-                            <span className="text-sub-label text-muted">{t.tour_detail.overview.exclusions}</span>
+
+                        {/* EXCLUSIONS */}
+                        <div className="space-y-8">
+                            <h3 className="text-sub-label !text-muted opacity-30 tracking-[0.2em]">{t.tour_detail.overview.exclusions}</h3>
+                            <ul className="space-y-5 opacity-40 hover:opacity-100 transition-opacity duration-500">
+                                {tour.exclusions?.map((item, i) => (
+                                    <li key={i} className="flex gap-4 items-start">
+                                        <X className="w-3 h-3 mt-1.5 text-muted/30 shrink-0" />
+                                        <p className="text-sm md:text-base text-muted leading-relaxed font-light italic">
+                                            {item[l]}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <ul className="grid grid-cols-1 gap-5 opacity-60 hover:opacity-100 transition-opacity duration-500">
-                            {tour.exclusions?.map((item, i) => (
-                                <li key={i} className="flex items-baseline gap-4 group">
-                                    <X className="w-3 h-3 text-muted shrink-0 mt-1.5" />
-                                    <span className="text-body-std text-muted">{item[l]}</span>
-                                </li>
-                            ))}
-                        </ul>
+
                     </div>
                 </div>
 
