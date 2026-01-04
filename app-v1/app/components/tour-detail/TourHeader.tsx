@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Mountain, ArrowRight, Activity, Map, Compass, Flame, Zap, ArrowDown } from 'lucide-react';
+import { Mountain, Map, Flame, Zap } from 'lucide-react';
 import BookingModal from './BookingModal';
 import { useLanguage } from '../../context/LanguageContext';
 

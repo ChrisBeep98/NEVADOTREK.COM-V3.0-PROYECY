@@ -15,13 +15,18 @@ export default function Header() {
         const savedTheme = localStorage.getItem('theme');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-            setIsDark(true);
+        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && systemDark);
+
+        if (shouldBeDark !== isDark) {
+            setIsDark(shouldBeDark);
+        }
+        
+        if (shouldBeDark) {
             document.documentElement.classList.add('dark');
         } else {
-            setIsDark(false);
             document.documentElement.classList.remove('dark');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const toggleTheme = () => {

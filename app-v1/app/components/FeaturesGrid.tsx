@@ -33,6 +33,7 @@ export default function FeaturesGrid() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeId, setActiveId] = useState<number>(0);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const features = t.features.items.map((item: any) => ({
         ...item,
         ...FEATURES_STATIC[item.id as keyof typeof FEATURES_STATIC]
@@ -65,6 +66,7 @@ export default function FeaturesGrid() {
             <div className="px-frame max-w-[1600px] mx-auto">
                 <div className="flex flex-col md:flex-row h-[850px] md:h-[650px] gap-4">
                     
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {features.map((f: any, i: number) => {
                         const Icon = f.icon;
                         const isActive = activeId === i;
@@ -131,7 +133,7 @@ export default function FeaturesGrid() {
                                             ${isActive ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}
                                         `}>
                                             <p className="text-sm md:text-body-std text-white max-w-lg mb-8 leading-relaxed font-medium border-l-2 border-white/30 pl-6 italic drop-shadow-md">
-                                                "{f.desc}"
+                                                &quot;{f.desc}&quot;
                                             </p>
                                             <div className="flex items-center gap-3 text-white group/btn pointer-events-auto">
                                                 <span className="text-[10px] font-bold tracking-widest uppercase">{t.features.cta}</span>

@@ -33,7 +33,8 @@ export function ToursProvider({ children, initialTours = [] }: { children: React
         if (initialTours.length === 0) {
             refreshTours();
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialTours.length]);
 
     return (
         <ToursContext.Provider value={{ tours, loading, refreshTours }}>

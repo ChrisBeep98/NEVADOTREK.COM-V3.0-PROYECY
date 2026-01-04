@@ -13,12 +13,12 @@ if (typeof window !== 'undefined') {
 export default function TourNavigation() {
     const { t } = useLanguage();
     
-    const SECTIONS = [
+    const SECTIONS = React.useMemo(() => [
         { id: 'overview', label: t.tour_detail.nav.overview },
         { id: 'gallery', label: t.tour_detail.nav.gallery },
         { id: 'itinerary', label: t.tour_detail.nav.itinerary },
         { id: 'dates', label: t.tour_detail.nav.dates }
-    ];
+    ], [t.tour_detail.nav]);
 
     const [activeSection, setActiveSection] = useState('overview');
     const indicatorRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export default function TourNavigation() {
                 onEnterBack: () => setActiveSection(section.id),
             });
         });
-    }, [t.tour_detail.nav]);
+    }, [t.tour_detail.nav, SECTIONS]);
 
     // Animate the short sliding bar to center with active text
     useEffect(() => {
@@ -52,7 +52,7 @@ export default function TourNavigation() {
                 ease: "expo.out"
             });
         }
-    }, [activeSection, t.tour_detail.nav]);
+    }, [activeSection, t.tour_detail.nav, SECTIONS]);
 
     const scrollTo = (id: string) => {
         const el = document.getElementById(id);

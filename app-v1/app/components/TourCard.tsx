@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { Calendar, Thermometer, Activity, MapPin, Users } from 'lucide-react';
+import { Calendar, Thermometer, Activity } from 'lucide-react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -90,7 +90,7 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
             <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                 {/* Sub-label formato original */}
                 <span className={`text-sub-label ${accentColor} mb-3 block`}>
-                    0{index + 1} // {tour.name[l].split(' ').slice(0, 2).join(' ').toUpperCase()}
+                    0{index + 1} {'//'} {tour.name[l].split(' ').slice(0, 2).join(' ').toUpperCase()}
                 </span>
                 
                 {/* Título Blanco */}

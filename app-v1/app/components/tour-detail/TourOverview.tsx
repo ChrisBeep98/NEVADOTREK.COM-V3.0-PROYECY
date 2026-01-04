@@ -61,9 +61,9 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     )}
                 </div>
 
-                {/* 2. HUD Stats Grid - Technical Ledger Style */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-32 reveal-content">
-                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface border border-border rounded-[8px] shadow-sm hover:shadow-md transition-all duration-500">
+                {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-32 reveal-content">
+                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface rounded-[8px] transition-colors duration-300 hover:bg-white/[0.05]">
                         <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
                             <Mountain className="w-4 h-4 text-cyan-500" />
                             <span className="text-journal-data text-foreground">{t.tour_detail.header.altitude}</span>
@@ -71,7 +71,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         <span className="text-2xl md:text-3xl font-medium tracking-tight text-foreground">{tour.altitude[l]}</span>
                     </div>
                     
-                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface border border-border rounded-[8px] shadow-sm hover:shadow-md transition-all duration-500">
+                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface rounded-[8px] transition-colors duration-300 hover:bg-white/[0.05]">
                         <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
                             <Ruler className="w-4 h-4 text-blue-500" />
                             <span className="text-journal-data text-foreground">{t.tour_detail.header.distance}</span>
@@ -79,7 +79,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         <span className="text-2xl md:text-3xl font-medium tracking-tight text-foreground">{tour.distance}</span>
                     </div>
 
-                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface border border-border rounded-[8px] shadow-sm hover:shadow-md transition-all duration-500">
+                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface rounded-[8px] transition-colors duration-300 hover:bg-white/[0.05]">
                         <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
                             <Thermometer className="w-4 h-4 text-orange-500" />
                             <span className="text-journal-data text-foreground">{t.hero.status.temp}</span>
@@ -87,7 +87,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         <span className="text-2xl md:text-3xl font-medium tracking-tight text-foreground">{tour.temperature[l]}</span>
                     </div>
 
-                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface border border-border rounded-[8px] shadow-sm hover:shadow-md transition-all duration-500">
+                    <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-surface rounded-[8px] transition-colors duration-300 hover:bg-white/[0.05]">
                         <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
                              <div className={`w-1.5 h-1.5 rounded-full 
                                 ${tour.difficulty === 'Extreme' ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]' : 

@@ -35,6 +35,7 @@ export default function BookingCTA() {
     // Memoize fauna to prevent array recreation on every render
     const fauna = useMemo(() => {
         if (!t.fauna?.items) return [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return t.fauna.items.map((item: any) => ({
             ...item,
             ...FAUNA_STATIC[item.id as keyof typeof FAUNA_STATIC]
@@ -126,6 +127,7 @@ export default function BookingCTA() {
             </div>
 
             <div className="relative w-full h-full">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {fauna.map((animal: any, i: number) => (
                     <div 
                         key={animal.id}
@@ -149,7 +151,7 @@ export default function BookingCTA() {
                                 <div className="col-span-12 md:col-span-6 space-y-4 md:space-y-6 md:pl-12">
                                     <div className="flex items-center gap-4 text-reveal">
                                         <span className={`text-[10px] font-mono tracking-[0.4em] ${animal.accentClass} font-black uppercase`}>
-                                            0{i + 1} // {animal.role}
+                                            0{i + 1} {'//'} {animal.role}
                                         </span>
                                         <div className="h-px bg-white/20 w-12 hidden md:block"></div>
                                     </div>
@@ -161,7 +163,7 @@ export default function BookingCTA() {
                                     <div className="text-reveal">
                                         <span className="text-[10px] font-mono text-white/40 block mb-2 italic">{animal.sciName}</span>
                                         <p className="text-body-std md:text-body-lead text-slate-200 max-w-sm drop-shadow-lg leading-relaxed">
-                                            "{animal.desc}"
+                                            &quot;{animal.desc}&quot;
                                         </p>
                                     </div>
 

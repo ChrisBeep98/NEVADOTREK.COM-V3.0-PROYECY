@@ -21,9 +21,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     // Load initial preference
     useEffect(() => {
         const savedLang = localStorage.getItem('lang') as Locale;
-        if (savedLang && (savedLang === 'ES' || savedLang === 'EN')) {
+        if (savedLang && (savedLang === 'ES' || savedLang === 'EN') && savedLang !== lang) {
             setLang(savedLang);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const toggleLang = () => {

@@ -15,19 +15,19 @@ export default function TourGallery({ images }: { images: string[] }) {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Si no hay suficientes imágenes, no renderizamos
-    if (!images || images.length === 0) return null;
-
     useGSAP(() => {
+        if (!images || images.length === 0) return;
+
         const imgs = gsap.utils.toArray('.gallery-img');
         
-        imgs.forEach((img: any) => {
-            gsap.fromTo(img, 
+        imgs.forEach((img: unknown) => {
+            const element = img as HTMLElement;
+            gsap.fromTo(element, 
                 { y: 50, opacity: 0, scale: 0.95 },
                 {
                     y: 0, opacity: 1, scale: 1, duration: 1.2, ease: "power3.out",
                     scrollTrigger: {
-                        trigger: img,
+                        trigger: element,
                         start: "top 90%",
                         end: "bottom top",
                         toggleActions: "play none none reverse"
@@ -36,7 +36,10 @@ export default function TourGallery({ images }: { images: string[] }) {
             );
         });
 
-    }, { scope: containerRef });
+    }, { scope: containerRef, dependencies: [images] });
+
+    // Si no hay suficientes imágenes, no renderizamos
+    if (!images || images.length === 0) return null;
 
     return (
         <section id="gallery" ref={containerRef} className="section-v-spacing px-frame bg-background border-t border-border relative overflow-hidden transition-colors duration-500">

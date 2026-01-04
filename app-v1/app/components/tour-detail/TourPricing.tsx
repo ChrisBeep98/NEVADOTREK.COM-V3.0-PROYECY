@@ -2,15 +2,14 @@
 
 import React from 'react';
 import { PricingTier } from '../../types/api';
-import { Users, Check, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { Users, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 interface TourPricingProps {
     pricing: PricingTier[];
-    tourId: string;
 }
 
-export default function TourPricing({ pricing, tourId }: TourPricingProps) {
+export default function TourPricing({ pricing }: TourPricingProps) {
     const { t, lang } = useLanguage();
     const sortedPricing = pricing ? [...pricing].sort((a, b) => a.minPax - b.minPax) : [];
 

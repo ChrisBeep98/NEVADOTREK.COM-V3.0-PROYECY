@@ -21,8 +21,7 @@ const THEME_COLORS = {
 export default function TourDepartures({ departures }: { departures: Departure[]; tourId: string }) {
     const { t, lang } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
-
-    const getDynamicPrice = (currentPax: number, tiers: any[]) => {
+    const getDynamicPrice = (currentPax: number, tiers: { minPax: number; maxPax: number; priceCOP: number; }[]) => {
         const nextPaxCount = currentPax + 1;
         const tier = tiers.find(t => nextPaxCount >= t.minPax && nextPaxCount <= t.maxPax) || tiers[0];
         return new Intl.NumberFormat(lang === 'ES' ? 'es-CO' : 'en-US', { 
@@ -35,28 +34,29 @@ export default function TourDepartures({ departures }: { departures: Departure[]
     useGSAP(() => {
         const frames = gsap.utils.toArray('.expedition-frame');
         
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         frames.forEach((frame: any) => {
-            const available = parseInt(frame.getAttribute('data-available') || '0');
+            const available = parseInt((frame as HTMLElement).getAttribute('data-available') || '0');
             const color = available <= 4 ? THEME_COLORS.orange : THEME_COLORS.cyan;
 
             const tl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: frame,
+                    trigger: frame as HTMLElement,
                     start: "top 85%", 
                     toggleActions: "play none none none" 
                 }
             });
 
-            tl.fromTo(frame.querySelector('.bracket-line-top'), 
+            tl.fromTo((frame as HTMLElement).querySelector('.bracket-line-top'), 
                 { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },
                 { width: "100%", backgroundColor: `${color}4D`, duration: 0.5, ease: "power2.out" }
             )
-            .fromTo(frame.querySelector('.frame-content'),
+            .fromTo((frame as HTMLElement).querySelector('.frame-content'),
                 { opacity: 0, x: -10 },
                 { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }, "-=0.3"
             );
 
-            const bottomLine = frame.querySelector('.bracket-line-bottom');
+            const bottomLine = (frame as HTMLElement).querySelector('.bracket-line-bottom');
             if (bottomLine) {
                 tl.fromTo(bottomLine,
                     { width: "0%", backgroundColor: "rgba(255,255,255,0.05)" },

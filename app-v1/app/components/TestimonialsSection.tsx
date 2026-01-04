@@ -113,7 +113,7 @@ export default function TestimonialsSection() {
         const oldTriggers = ScrollTrigger.getAll();
         oldTriggers.forEach(t => { if (t.vars.trigger === container) t.kill(); });
 
-        let ctx = gsap.context(() => {
+        const ctx = gsap.context(() => {
             const totalWidth = track.scrollWidth;
             const windowWidth = window.innerWidth;
             const scrollAmount = totalWidth - windowWidth;
@@ -172,7 +172,7 @@ export default function TestimonialsSection() {
                 {/* INTRO BLOCK */}
                 <div className="flex-shrink-0 w-[85vw] md:w-[25vw] mr-20 md:mr-32 flex flex-col justify-center z-10 pt-40 md:pt-20">
                     <p className="font-mono text-[10px] md:text-sm text-cyan-500 tracking-widest mb-4 md:mb-6 uppercase">
-                        // testimonios_cliente
+                        {'//'} testimonios_cliente
                     </p>
                     <p className="text-lg md:text-xl font-light leading-relaxed text-muted">
                         Explorando las vivencias de quienes alcanzaron la cumbre con nosotros.
@@ -202,12 +202,12 @@ export default function TestimonialsSection() {
                             <div className="w-full md:w-[55%] flex flex-col items-start relative z-10">
                                 <Quote className={`w-6 h-6 md:w-12 md:h-12 ${accent} opacity-20 mb-3 md:mb-4 transform -scale-x-100`} />
                                 <h3 className="text-base md:text-2xl font-light leading-relaxed tracking-tight text-foreground mb-6 md:mb-8 line-clamp-[8] md:line-clamp-none">
-                                    "{review.quote}"
+                                    &quot;{review.quote}&quot;
                                 </h3>
                                 <div className="flex items-center gap-4 border-t border-border pt-4 w-full">
                                     <div className="font-mono text-xs">
                                         <div className={`${accent} font-bold tracking-wide text-sm`}>{review.name}</div>
-                                        <div className="text-muted mt-1 text-[10px]">{review.role} // {review.trip}</div>
+                                        <div className="text-muted mt-1 text-[10px]">{review.role} {'//'} {review.trip}</div>
                                     </div>
                                     <div className="ml-auto font-mono text-[9px] text-muted opacity-40">
                                         Ref_{review.id}

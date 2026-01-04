@@ -6,7 +6,7 @@ import { useTours } from '../context/ToursContext';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Filter, SlidersHorizontal, ArrowDownAZ, ArrowUpAZ, Clock, Mountain, RefreshCcw } from 'lucide-react';
+import { Filter, SlidersHorizontal, Clock, Mountain, RefreshCcw } from 'lucide-react';
 import TourCard from '../components/TourCard';
 
 if (typeof window !== 'undefined') {
@@ -30,7 +30,7 @@ export default function ToursClient() {
 
     // --- FILTER LOGIC ---
     const filteredTours = useMemo(() => {
-        let result = tours.filter(tour => {
+        const result = tours.filter(tour => {
             const diff = (tour.difficulty || '').toUpperCase();
             const matchesDifficulty = selectedDifficulties.length === 0 || 
                                      selectedDifficulties.includes(diff);
