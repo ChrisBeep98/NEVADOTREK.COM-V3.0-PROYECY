@@ -75,7 +75,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                     <div className="lg:w-1/4 flex-shrink-0">
                         
                         {/* Mobile Navigator Header */}
-                        <div className="lg:hidden mb-6 flex items-center justify-between border-b border-border pb-4">
+                        <div className="lg:hidden mb-6 flex items-center justify-between border-b border-border pb-6">
                             <span className="text-journal-data text-muted">{t.tour_detail.itinerary.phase}</span>
                             <span className="text-journal-data text-cyan-500 font-bold">{activeDay + 1} / {days.length}</span>
                         </div>
@@ -131,7 +131,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                         <div ref={contentRef} className="lg:pl-16">
                             
                             {/* Dynamic Header */}
-                            <div className="hidden lg:block mb-8 pb-8 border-b border-border relative">
+                            <div className="hidden lg:block mb-4 pb-4 border-b border-border relative">
                                 <div className="flex items-center gap-3 mb-4 opacity-70">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentColor }}></div>
                                     <span className="text-journal-data" style={{ color: currentColor }}>
@@ -168,7 +168,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                             </div>
 
                             {/* Footer Stats */}
-                            <div className="mt-16 pt-8 border-t border-border flex flex-wrap gap-10 opacity-60">
+                            <div className="mt-12 pt-12 border-t border-border flex flex-wrap gap-10 opacity-60">
                                 <div className="flex items-center gap-3 group">
                                     <Clock className="w-4 h-4 text-muted group-hover:text-foreground transition-colors" />
                                     <div className="flex flex-col">
