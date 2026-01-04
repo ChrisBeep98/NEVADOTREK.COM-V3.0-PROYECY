@@ -109,7 +109,7 @@ export default function ToursClient() {
             <header className="pt-40 pb-20 px-frame border-b border-border relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none" />
                 
-                <div className="max-w-7xl mx-auto relative z-10">
+                <div className="max-w-none mx-auto relative z-10">
                     <div className="hero-text inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-md text-journal-data text-cyan-500 mb-6 uppercase">
                         {t.expeditions.archive.pretitle}
                     </div>
@@ -123,7 +123,7 @@ export default function ToursClient() {
             </header>
 
             {/* --- MAIN CONTENT: FILTERS + GRID --- */}
-            <div className="max-w-7xl mx-auto px-frame pt-12">
+            <div className="max-w-none mx-auto px-frame pt-12">
                 <div className="flex flex-col lg:flex-row gap-12">
                     
                     {/* SIDEBAR: FILTERS */}
