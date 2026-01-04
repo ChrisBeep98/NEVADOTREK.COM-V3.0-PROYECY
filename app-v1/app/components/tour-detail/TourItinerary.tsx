@@ -146,11 +146,6 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
 
                             {/* Activities List */}
                             <div className="space-y-4">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <span className="text-journal-data text-muted uppercase tracking-widest">{t.tour_detail.itinerary.activities}</span>
-                                    <div className="h-px bg-border flex-1"></div>
-                                </div>
-                                
                                 {currentDayData.activities?.map((activity, i) => (
                                     <div key={i} className="group flex gap-5 items-start p-4 rounded-[6px] hover:bg-surface transition-colors border border-transparent hover:border-border">
                                         <div className="mt-1 shrink-0 p-1.5 rounded-full bg-background border border-border group-hover:border-cyan-500/30 transition-colors">
