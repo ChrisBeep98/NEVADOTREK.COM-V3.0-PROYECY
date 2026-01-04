@@ -36,7 +36,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     }, { scope: containerRef });
 
     return (
-        <section id="overview" ref={containerRef} className="bg-background text-foreground section-v-spacing px-frame relative overflow-hidden transition-colors duration-500">
+        <section id="overview" ref={containerRef} className="bg-background text-foreground pt-20 md:pt-40 pb-0 px-frame relative overflow-hidden transition-colors duration-500">
             
             {/* Background Accent */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
@@ -100,17 +100,17 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                 </div>
 
                 {/* 3. Minimal Logistics - Radical Professional Style */}
-                <div className="reveal-content border-t border-border pt-24">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 lg:gap-32">
+                <div className="reveal-content">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0">
                         
                         {/* INCLUSIONS */}
-                        <div className="space-y-8">
+                        <div className="space-y-8 md:pr-12 lg:pr-24 pb-12 md:pb-0">
                             <h3 className="text-sub-label !text-foreground opacity-50 tracking-[0.2em]">{t.tour_detail.overview.inclusions}</h3>
                             <ul className="space-y-5">
                                 {tour.inclusions?.map((item, i) => (
                                     <li key={i} className="flex gap-4 group items-start">
                                         <Check className="w-3.5 h-3.5 mt-1 text-emerald-500/50 group-hover:text-emerald-500 transition-colors shrink-0" />
-                                        <p className="text-sm md:text-base text-foreground/80 leading-relaxed font-light group-hover:text-foreground transition-colors">
+                                        <p className="text-sm md:text-base text-foreground/80 group-hover:text-foreground transition-colors">
                                             {item[l]}
                                         </p>
                                     </li>
@@ -119,7 +119,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         </div>
 
                         {/* EXCLUSIONS */}
-                        <div className="space-y-8">
+                        <div className="space-y-8 md:pl-12 lg:pl-24 border-t md:border-t-0 md:border-l border-border pt-12 md:pt-0">
                             <h3 className="text-sub-label !text-muted opacity-30 tracking-[0.2em]">{t.tour_detail.overview.exclusions}</h3>
                             <ul className="space-y-5 opacity-40 hover:opacity-100 transition-opacity duration-500">
                                 {tour.exclusions?.map((item, i) => (
