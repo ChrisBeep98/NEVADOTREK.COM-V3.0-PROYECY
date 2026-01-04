@@ -63,38 +63,56 @@ export default function TourOverview({ tour }: { tour: Tour }) {
 
                 {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-24 reveal-content">
+                    {/* ALTITUDE */}
                     <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04]">
-                        <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <Mountain className="w-4 h-4 text-cyan-500" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-500">
+                                <Mountain className="w-4 h-4" />
+                            </div>
                             <span className="text-journal-data text-foreground">{t.tour_detail.header.altitude}</span>
                         </div>
                         <span className="text-xl font-bold tracking-tight text-foreground">{tour.altitude[l]}</span>
                     </div>
                     
+                    {/* DISTANCE */}
                     <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04]">
-                        <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <Ruler className="w-4 h-4 text-blue-500" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500">
+                                <Ruler className="w-4 h-4" />
+                            </div>
                             <span className="text-journal-data text-foreground">{t.tour_detail.header.distance}</span>
                         </div>
-                        <span className="text-xl font-bold tracking-tight text-foreground">{tour.distance}</span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-bold tracking-tight text-foreground">{tour.distance}</span>
+                            <span className="text-sm font-bold text-muted">Km</span>
+                        </div>
                     </div>
 
+                    {/* TEMPERATURE */}
                     <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04]">
-                        <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <Thermometer className="w-4 h-4 text-orange-500" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500">
+                                <Thermometer className="w-4 h-4" />
+                            </div>
                             <span className="text-journal-data text-foreground">{t.hero.status.temp}</span>
                         </div>
-                        <span className="text-xl font-bold tracking-tight text-foreground">
-                            {tour.temperature?.[l] || (l === 'es' ? 'Muy Frío' : 'Very Cold')}
-                        </span>
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-bold tracking-tight text-foreground">
+                                {String(tour.temperature?.[l] || '0').replace(/[^0-9-]/g, '') || '0'}
+                            </span>
+                            <span className="text-sm font-bold text-muted">°C</span>
+                        </div>
                     </div>
 
+                    {/* DIFFICULTY */}
                     <div className="p-6 md:p-8 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04]">
-                        <div className="flex items-center gap-3 mb-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                             <div className={`w-1.5 h-1.5 rounded-full 
-                                ${tour.difficulty === 'Extreme' ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]' : 
-                                  tour.difficulty === 'Hard' ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]' : 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'}`} 
-                            />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className={`p-2 rounded-lg ${
+                                tour.difficulty === 'Extreme' ? 'bg-purple-500/10 text-purple-500' : 
+                                tour.difficulty === 'Hard' ? 'bg-orange-500/10 text-orange-500' : 'bg-emerald-500/10 text-emerald-500'
+                            }`}>
+                                <Zap className="w-4 h-4" />
+                            </div>
                             <span className="text-journal-data text-foreground">{t.tour_detail.header.difficulty}</span>
                         </div>
                         <span className="text-xl font-bold tracking-tight text-foreground">{tour.difficulty}</span>
