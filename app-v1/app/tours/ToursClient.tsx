@@ -113,8 +113,8 @@ export default function ToursClient() {
                     <div className="hero-text inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-md text-journal-data text-cyan-500 mb-6 uppercase">
                         {t.expeditions.archive.pretitle}
                     </div>
-                    <h1 className="hero-text text-hero-title mb-8 uppercase italic text-foreground">
-                        {t.expeditions.archive.title}
+                    <h1 className="hero-text text-h-tour-title mb-8 lowercase first-letter:uppercase text-foreground">
+                        {lang === 'ES' ? 'Nuestras expediciones' : 'Our expeditions'}
                     </h1>
                     <p className="hero-text text-body-lead text-muted max-w-2xl leading-relaxed">
                         {t.expeditions.archive.description}
@@ -216,7 +216,7 @@ export default function ToursClient() {
                                             tour={tour} 
                                             index={index} 
                                             lang={lang} 
-                                            className="h-[500px]"
+                                            className="h-[640px]"
                                         />
                                     </div>
                                 ))}
