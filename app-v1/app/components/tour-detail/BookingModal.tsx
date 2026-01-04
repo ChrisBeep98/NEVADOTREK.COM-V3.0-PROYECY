@@ -140,7 +140,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-background/90 backdrop-blur-xl p-0 md:p-8 lg:p-12 xl:p-24">
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24">
             <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-3 md:px-0">
                 
                 {/* LEFT PANE */}
