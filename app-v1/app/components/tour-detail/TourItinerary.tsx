@@ -147,12 +147,12 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                             {/* Activities List */}
                             <div className="space-y-4">
                                 {currentDayData.activities?.map((activity, i) => (
-                                    <div key={i} className="group flex gap-5 items-start p-4 rounded-[6px] hover:bg-surface transition-colors border border-transparent hover:border-border">
-                                        <div className="mt-1 shrink-0 p-1.5 rounded-full bg-background border border-border group-hover:border-cyan-500/30 transition-colors">
-                                            <ChevronRight className="w-3.5 h-3.5 text-muted group-hover:text-cyan-500 transition-colors" />
+                                    <div key={i} className="group flex gap-5 items-start p-4 rounded-[6px] transition-colors border border-transparent">
+                                        <div className="mt-1 shrink-0 p-1.5 rounded-full bg-background border border-border transition-colors">
+                                            <ChevronRight className="w-3.5 h-3.5 text-muted transition-colors" />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="text-body-std text-foreground/80 group-hover:text-foreground transition-colors">
+                                            <p className="text-body-std text-foreground/80 transition-colors">
                                                 {activity[l]}
                                             </p>
                                         </div>
@@ -165,24 +165,6 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                         <span className="text-body-std text-muted italic">{t.tour_detail.itinerary.update_info}</span>
                                     </div>
                                 )}
-                            </div>
-
-                            {/* Footer Stats */}
-                            <div className="mt-12 pt-12 border-t border-border flex flex-wrap gap-10 opacity-60">
-                                <div className="flex items-center gap-3 group">
-                                    <Clock className="w-4 h-4 text-muted group-hover:text-foreground transition-colors" />
-                                    <div className="flex flex-col">
-                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">{t.tour_detail.itinerary.duration}</span>
-                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t.tour_detail.itinerary.duration_val}</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3 group">
-                                    <MapPin className="w-4 h-4 text-muted group-hover:text-foreground transition-colors" />
-                                    <div className="flex flex-col">
-                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">{t.tour_detail.itinerary.location}</span>
-                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t.tour_detail.itinerary.location_val}</span>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
