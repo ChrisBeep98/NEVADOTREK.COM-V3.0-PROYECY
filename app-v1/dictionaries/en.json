@@ -103,5 +103,100 @@
         "desc": "Authentic immersion experiences with local communities, respecting heritage and the ecosystem."
       }
     ]
+  },
+  "tour_detail": {
+    "nav": {
+      "index": "Route Index",
+      "overview": "Overview",
+      "gallery": "Gallery",
+      "itinerary": "Itinerary",
+      "dates": "Dates"
+    },
+    "header": {
+      "book_slot": "Book Slot",
+      "hot_tour": "High demand tour",
+      "altitude": "Altitude",
+      "distance": "Distance",
+      "difficulty": "Level"
+    },
+    "overview": {
+      "pretitle": "The experience",
+      "inclusions": "Included Logistics",
+      "exclusions": "Not included"
+    },
+    "itinerary": {
+      "pretitle": "Your experience",
+      "title_main": "Itinerary",
+      "title_sub": "step by step",
+      "phase": "Expedition Phase",
+      "day": "Day",
+      "stage": "Stage",
+      "activities": "Key Activities",
+      "duration": "Est. Duration",
+      "duration_val": "Full Day",
+      "location": "Location",
+      "location_val": "PNN Nevados",
+      "update_info": "Detailed information being updated."
+    },
+    "gallery": {
+      "pretitle": "Visual diary",
+      "title": "Capturing the summit"
+    },
+    "departures": {
+      "pretitle": "Join the rope team",
+      "title": "Next Departures",
+      "availability": "Availability",
+      "slots_last": "LAST SLOTS!",
+      "slots_standard": "SLOTS",
+      "price_label": "Price per person",
+      "join": "Join"
+    },
+    "pricing": {
+      "pretitle": "Investment structure",
+      "title": "2025 Rates",
+      "desc": "Prices per explorer in Colombian Pesos (COP). Comprehensive high-mountain logistics included.",
+      "group_size": "Group of {count}",
+      "group_range": "From {min} to {max} pers.",
+      "request_slot": "REQUEST SLOT",
+      "disclaimer": "Subject to weather conditions verification",
+      "features": ["Expert guiding", "Full insurance", "Technical gear"]
+    }
+  },
+  "booking_modal": {
+    "step_label": "Booking",
+    "price_per_person": "Price per person",
+    "pax_label": "Pax",
+    "mode_group": "Group",
+    "mode_private": "Private",
+    "slots_left": "{count} slots",
+    "info_title": "Personal Information",
+    "form": {
+      "name_label": "Full name of responsible person",
+      "name_placeholder": "e.g., John Smith",
+      "email_label": "Contact email",
+      "email_placeholder": "name@domain.com",
+      "pax_count_label": "Number of travelers",
+      "phone_label": "Mobile phone / WhatsApp",
+      "phone_placeholder": "+57 000 000 0000",
+      "document_label": "ID / Passport number",
+      "document_placeholder": "ID or Passport",
+      "notes_label": "Notes or special requirements",
+      "notes_placeholder": "Indicate allergies, dietary restrictions or messages for the guide..."
+    },
+    "confirmation": {
+      "title": "Booking Confirmation",
+      "responsible": "Responsible",
+      "start_date": "Start date",
+      "travelers": "Travelers",
+      "pax_singular": "person",
+      "pax_plural": "people",
+      "total_investment": "Total investment",
+      "guest": "Guest"
+    },
+    "footer": {
+      "back": "Back",
+      "continue": "Continue",
+      "confirm_send": "Confirm and Send"
+    }
   }
 }

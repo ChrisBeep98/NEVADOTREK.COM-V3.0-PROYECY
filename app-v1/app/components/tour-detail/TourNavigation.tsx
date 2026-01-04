@@ -4,19 +4,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-const SECTIONS = [
-    { id: 'overview', label: 'Resumen' },
-    { id: 'gallery', label: 'Galería' },
-    { id: 'itinerary', label: 'Itinerario' },
-    { id: 'dates', label: 'Salidas' }
-];
-
 export default function TourNavigation() {
+    const { t } = useLanguage();
+    
+    const SECTIONS = [
+        { id: 'overview', label: t.tour_detail.nav.overview },
+        { id: 'gallery', label: t.tour_detail.nav.gallery },
+        { id: 'itinerary', label: t.tour_detail.nav.itinerary },
+        { id: 'dates', label: t.tour_detail.nav.dates }
+    ];
+
     const [activeSection, setActiveSection] = useState('overview');
     const indicatorRef = useRef<HTMLDivElement>(null);
     const navItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
@@ -33,7 +36,7 @@ export default function TourNavigation() {
                 onEnterBack: () => setActiveSection(section.id),
             });
         });
-    }, []);
+    }, [t.tour_detail.nav]);
 
     // Animate the short sliding bar to center with active text
     useEffect(() => {
@@ -49,7 +52,7 @@ export default function TourNavigation() {
                 ease: "expo.out"
             });
         }
-    }, [activeSection]);
+    }, [activeSection, t.tour_detail.nav]);
 
     const scrollTo = (id: string) => {
         const el = document.getElementById(id);
@@ -61,7 +64,7 @@ export default function TourNavigation() {
     return (
         <div className="hidden lg:flex flex-col gap-6 sticky top-32 w-48 z-40 mix-blend-difference">
             <span className="text-journal-data text-white mb-2">
-                Índice de ruta
+                {t.tour_detail.nav.index}
             </span>
             
             <div className="relative pl-6">

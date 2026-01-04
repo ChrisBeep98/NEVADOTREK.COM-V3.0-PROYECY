@@ -3,6 +3,7 @@
 import React from 'react';
 import { PricingTier } from '../../types/api';
 import { Users, Check, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface TourPricingProps {
     pricing: PricingTier[];
@@ -10,6 +11,7 @@ interface TourPricingProps {
 }
 
 export default function TourPricing({ pricing, tourId }: TourPricingProps) {
+    const { t, lang } = useLanguage();
     const sortedPricing = pricing ? [...pricing].sort((a, b) => a.minPax - b.minPax) : [];
 
     return (
@@ -25,14 +27,13 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <Zap className="w-3.5 h-3.5 text-cyan-500" />
-                            <span className="text-sub-label">Investment structure</span>
+                            <span className="text-sub-label">{t.tour_detail.pricing.pretitle}</span>
                         </div>
-                        <h2 className="text-h-section-title text-white">Tarifas 2025</h2>
+                        <h2 className="text-h-section-title text-white">{t.tour_detail.pricing.title.replace('{year}', '2025')}</h2>
                     </div>
                     <div className="md:text-right border-l md:border-l-0 md:border-r border-white/10 pl-6 md:pl-0 md:pr-6">
                         <p className="text-body-std text-slate-400 max-w-sm">
-                            Valores por expedicionario en Pesos Colombianos (COP). <br className="hidden md:block"/>
-                            Logística integral de alta montaña incluida.
+                            {t.tour_detail.pricing.desc}
                         </p>
                     </div>
                 </div>
@@ -60,8 +61,8 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                                     </div>
                                     <span className="text-journal-data text-slate-400">
                                         {tier.minPax === tier.maxPax 
-                                            ? `Grupo de ${tier.minPax}` 
-                                            : `De ${tier.minPax} a ${tier.maxPax} pers.`
+                                            ? t.tour_detail.pricing.group_size.replace('{count}', tier.minPax.toString())
+                                            : t.tour_detail.pricing.group_range.replace('{min}', tier.minPax.toString()).replace('{max}', tier.maxPax.toString())
                                         }
                                     </span>
                                 </div>
@@ -77,7 +78,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                                     </div>
                                     <div className="flex items-center gap-2 opacity-40">
                                         <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase">
-                                            Est. ${(tier.priceUSD).toLocaleString()} USD
+                                            Est. ${(tier.priceUSD).toLocaleString(lang === 'ES' ? 'es-ES' : 'en-US')} USD
                                         </span>
                                     </div>
                                 </div>
@@ -85,7 +86,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                                 {/* Features Ledger */}
                                 <div className="border-t border-white/5 pt-8 mb-10 flex-1">
                                     <ul className="space-y-4">
-                                        {['Guianza experta', 'Seguro total', 'Equipo técnico'].map((feat, idx) => (
+                                        {t.tour_detail.pricing.features.map((feat: string, idx: number) => (
                                             <li key={idx} className="flex items-center gap-3 text-[11px] font-medium text-slate-400 uppercase tracking-wide">
                                                 <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/50" /> 
                                                 <span>{feat}</span>
@@ -102,7 +103,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                                         : 'bg-white/5 hover:bg-white/10 text-white border border-white/5'
                                     }
                                 `}>
-                                    SOLICITAR CUPO <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    {t.tour_detail.pricing.request_slot} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </button>
                             </div>
                         );
@@ -113,7 +114,7 @@ export default function TourPricing({ pricing, tourId }: TourPricingProps) {
                 <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-8 opacity-30">
                     <div className="h-px bg-white/10 flex-1 hidden md:block"></div>
                     <span className="text-[9px] font-mono tracking-[0.4em] uppercase text-white text-center">
-                        Sujeto a verificación de condiciones meteorológicas
+                        {t.tour_detail.pricing.disclaimer}
                     </span>
                     <div className="h-px bg-white/10 flex-1 hidden md:block"></div>
                 </div>

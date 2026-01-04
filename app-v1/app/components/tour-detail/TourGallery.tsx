@@ -5,12 +5,14 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Camera } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function TourGallery({ images }: { images: string[] }) {
+    const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Si no hay suficientes imágenes, no renderizamos
@@ -46,9 +48,9 @@ export default function TourGallery({ images }: { images: string[] }) {
                 <div className="mb-20">
                      <div className="flex items-center gap-2 mb-4">
                         <Camera className="w-3.5 h-3.5 text-cyan-500" />
-                        <span className="text-sub-label">Visual diary</span>
+                        <span className="text-sub-label">{t.tour_detail.gallery.pretitle}</span>
                      </div>
-                     <h2 className="text-h-section-title text-foreground">Capturando la cima</h2>
+                     <h2 className="text-h-section-title text-foreground">{t.tour_detail.gallery.title}</h2>
                 </div>
                 
                 {/* Grid Layout - Mosaico Asimétrico */}

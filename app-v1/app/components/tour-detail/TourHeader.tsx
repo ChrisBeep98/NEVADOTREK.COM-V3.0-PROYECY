@@ -8,12 +8,15 @@ import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
 import { Mountain, ArrowRight, Activity, Map, Compass, Flame, Zap, ArrowDown } from 'lucide-react';
 import BookingModal from './BookingModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function TourHeader({ tour, departures }: { tour: Tour; departures: Departure[] }) {
+    const { t, lang } = useLanguage();
+    const l = lang.toLowerCase() as 'es' | 'en';
     const containerRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -73,7 +76,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                 onClick={() => setIsModalOpen(true)}
                 className="fixed bottom-[var(--spacing-frame)] lg:bottom-auto lg:top-24 right-[var(--spacing-frame)] z-40 btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] hero-text-reveal px-6 group flex items-center gap-4"
             >
-                <span>Reservar Cupo</span>
+                <span>{t.tour_detail.header.book_slot}</span>
                 <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
                     <Zap className="w-3.5 h-3.5 fill-current" />
                 </div>
@@ -84,7 +87,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                 <img 
                     ref={imageRef}
                     src={tour.images[0]} 
-                    alt={tour.name.es} 
+                    alt={tour.name[l]} 
                     className="w-full h-[120%] object-cover object-center absolute -top-[10%] opacity-60"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950"></div>
@@ -103,7 +106,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                             <div className="h-10 px-5 flex items-center gap-3 rounded-full bg-white/[0.02] border border-white/10 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
                                 <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/20" />
                                 <span className="text-sm font-medium tracking-[0.04em] text-slate-300">
-                                    Tour muy solicitado
+                                    {t.tour_detail.header.hot_tour}
                                 </span>
                             </div>
                             <span className="hidden md:block text-xs font-mono text-slate-500 tracking-widest">
@@ -113,14 +116,14 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
 
                         {/* Massive Title */}
                         <h1 className="text-5xl md:text-7xl lg:text-[7rem] xl:text-[8rem] font-bold text-white leading-[0.85] tracking-tighter uppercase mb-8 hero-text-reveal drop-shadow-2xl">
-                            {tour.name.es}
+                            {tour.name[l]}
                         </h1>
 
                         <div className="w-24 h-1 bg-cyan-500 mb-8 hero-line"></div>
 
                         {/* Subtitle / Lead */}
                         <p className="text-lg md:text-xl text-slate-300 font-light max-w-2xl leading-relaxed hero-text-reveal border-l-2 border-white/10 pl-6">
-                            {tour.subtitle?.es}
+                            {tour.subtitle?.[l]}
                         </p>
                     </div>
 
@@ -136,10 +139,10 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                                     <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
                                         <Mountain className="w-4 h-4" />
                                     </div>
-                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Altitud</span>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">{t.tour_detail.header.altitude}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white tabular-nums tracking-tight">
-                                    {tour.altitude?.es || "N/A"}
+                                    {tour.altitude?.[l] || "N/A"}
                                 </span>
                             </div>
 
@@ -152,7 +155,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                                     <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
                                         <Map className="w-4 h-4" />
                                     </div>
-                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Distancia</span>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">{t.tour_detail.header.distance}</span>
                                 </div>
                                 <span className="text-lg font-bold text-white tabular-nums tracking-tight">
                                     {tour.distance || "N/A"}
@@ -168,7 +171,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                                     <div className="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-white group-hover:border-white/20 transition-all">
                                         <Zap className="w-4 h-4" />
                                     </div>
-                                    <span className="text-xs font-medium text-slate-400 tracking-wider">Nivel</span>
+                                    <span className="text-xs font-medium text-slate-400 tracking-wider">{t.tour_detail.header.difficulty}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <div className={`w-1.5 h-1.5 rounded-full shadow-[0_0_6px_currentColor] ${

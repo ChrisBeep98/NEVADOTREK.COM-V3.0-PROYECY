@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Departure } from '../../types/api';
 import { Users, ArrowRight, Activity, Flame, Tag, Zap } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -18,12 +19,17 @@ const THEME_COLORS = {
 };
 
 export default function TourDepartures({ departures }: { departures: Departure[]; tourId: string }) {
+    const { t, lang } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
 
     const getDynamicPrice = (currentPax: number, tiers: any[]) => {
         const nextPaxCount = currentPax + 1;
         const tier = tiers.find(t => nextPaxCount >= t.minPax && nextPaxCount <= t.maxPax) || tiers[0];
-        return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(tier.priceCOP);
+        return new Intl.NumberFormat(lang === 'ES' ? 'es-CO' : 'en-US', { 
+            style: 'currency', 
+            currency: 'COP', 
+            maximumFractionDigits: 0 
+        }).format(tier.priceCOP);
     };
 
     useGSAP(() => {
@@ -72,10 +78,10 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <Zap className="w-3.5 h-3.5 text-cyan-500" />
-                            <span className="text-sub-label text-cyan-500 block uppercase tracking-widest">Únete a la cordada</span>
+                            <span className="text-sub-label text-cyan-500 block uppercase tracking-widest">{t.tour_detail.departures.pretitle}</span>
                         </div>
                         <h2 className="text-h-section-title text-foreground">
-                            Próximas salidas
+                            {t.tour_detail.departures.title}
                         </h2>
                     </div>
                     <div className="hidden md:flex items-center gap-2 opacity-20">
@@ -89,7 +95,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                     {departures.map((dep, index) => {
                         const date = new Date(dep.date._seconds * 1000);
                         const day = date.getDate();
-                        const month = date.toLocaleDateString('es-ES', { month: 'long' }).toUpperCase();
+                        const month = date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'long' }).toUpperCase();
                         const available = dep.maxPax - dep.currentPax;
                         const isLast = index === departures.length - 1;
                         const isHot = available <= 4;
@@ -133,10 +139,10 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
                                                 {isHot ? <Flame className="w-3.5 h-3.5 text-orange-500 animate-pulse" /> : <Users className="w-3.5 h-3.5 text-foreground" />}
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-foreground">Disponibilidad</span>
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-foreground">{t.tour_detail.departures.availability}</span>
                                             </div>
                                             <span className={`text-xs md:text-xl font-bold leading-none ${isHot ? 'text-orange-500' : 'text-emerald-500'} tabular-nums`}>
-                                                {available} <span className="text-[10px] md:text-xs opacity-50 font-medium tracking-normal">{isHot ? '¡ÚLTIMOS!' : 'CUPOS'}</span>
+                                                {available} <span className="text-[10px] md:text-xs opacity-50 font-medium tracking-normal">{isHot ? t.tour_detail.departures.slots_last : t.tour_detail.departures.slots_standard}</span>
                                             </span>
                                         </div>
 
@@ -144,7 +150,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         <div className="flex flex-col">
                                             <div className="flex items-center gap-2 mb-2 opacity-30 md:opacity-40 h-4">
                                                 <Tag className="w-3.5 h-3.5 text-foreground hidden md:block" />
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-foreground hidden md:block">Precio por persona</span>
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-foreground hidden md:block">{t.tour_detail.departures.price_label}</span>
                                             </div>
                                             <span className="text-base md:text-xl font-bold text-foreground/80 uppercase tracking-tight tabular-nums leading-none">
                                                 {currentPrice} <span className="text-[9px] md:text-[11px] text-muted font-medium">COP</span>
@@ -157,7 +163,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                         <div className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center transition-all duration-500 group-hover:bg-foreground group-hover:text-background">
                                             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                                         </div>
-                                        <span className="mt-2 text-[8px] font-black tracking-[0.2em] text-foreground/20 uppercase text-center w-10 block">Join</span>
+                                        <span className="mt-2 text-[8px] font-black tracking-[0.2em] text-foreground/20 uppercase text-center w-10 block">{t.tour_detail.departures.join}</span>
                                     </div>
 
                                 </div>

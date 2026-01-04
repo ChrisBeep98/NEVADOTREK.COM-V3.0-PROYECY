@@ -67,17 +67,17 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
         <Link 
             href={`/tours/${tour.tourId}`}
             ref={cardRef}
-            className={`group relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 cursor-pointer block shadow-2xl shadow-black/40 will-change-transform ${className}`}
+            className={`group relative rounded-xl overflow-hidden bg-slate-900 cursor-pointer block shadow-2xl shadow-black/40 will-change-transform ${className}`}
         >
             {/* Imagen Original con Hover scale sutil */}
             <img 
                 src={tour.images[0]} 
-                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 ease-out" 
+                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out" 
                 alt={tour.name[l]} 
             />
             
             {/* Gradiente Original */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-70"></div>
             
             {/* Badge Original (Top Right) */}
             <div className="absolute top-6 right-6 z-20">

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ItineraryDay } from '../../types/api';
 import { MapPin, ChevronRight, Clock, Info, Zap } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -19,6 +20,8 @@ const THEME_COLORS = [
 ];
 
 export default function TourItinerary({ itinerary }: { itinerary: { days: ItineraryDay[] } }) {
+    const { t, lang } = useLanguage();
+    const l = lang.toLowerCase() as 'es' | 'en';
     const [activeDay, setActiveDay] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -58,11 +61,11 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                 <div className="mb-12 md:mb-24 itinerary-header">
                     <div className="flex items-center gap-2 mb-4">
                         <Zap className="w-3.5 h-3.5 text-cyan-500" />
-                        <span className="text-sub-label">Tu experiencia</span>
+                        <span className="text-sub-label">{t.tour_detail.itinerary.pretitle}</span>
                     </div>
                     <h2 className="text-h-section-title text-foreground">
-                        Itinerario <br/>
-                        <span className="text-muted opacity-50">paso a paso</span>
+                        {t.tour_detail.itinerary.title_main} <br/>
+                        <span className="text-muted opacity-50">{t.tour_detail.itinerary.title_sub}</span>
                     </h2>
                 </div>
 
@@ -73,7 +76,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                         
                         {/* Mobile Navigator Header */}
                         <div className="lg:hidden mb-6 flex items-center justify-between border-b border-border pb-4">
-                            <span className="text-journal-data text-muted">Fase de expedición</span>
+                            <span className="text-journal-data text-muted">{t.tour_detail.itinerary.phase}</span>
                             <span className="text-journal-data text-cyan-500 font-bold">{activeDay + 1} / {days.length}</span>
                         </div>
 
@@ -109,10 +112,10 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
 
                                         <div className="flex flex-col gap-0.5 overflow-hidden">
                                             <span className={`text-[9px] font-bold tracking-wider uppercase ${isActive ? 'text-cyan-500' : 'text-muted/60'}`}>
-                                                Día
+                                                {t.tour_detail.itinerary.day}
                                             </span>
                                             <span className={`text-[11px] font-medium line-clamp-1 ${isActive ? 'text-foreground' : 'text-muted/60'}`}>
-                                                {day.title?.es || `Día ${day.dayNumber}`}
+                                                {day.title?.[l] || `${t.tour_detail.itinerary.day} ${day.dayNumber}`}
                                             </span>
                                         </div>
                                     </button>
@@ -132,19 +135,19 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                 <div className="flex items-center gap-3 mb-4 opacity-70">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentColor }}></div>
                                     <span className="text-journal-data" style={{ color: currentColor }}>
-                                        Etapa {currentDayData.dayNumber}
+                                        {t.tour_detail.itinerary.stage} {currentDayData.dayNumber}
                                     </span>
                                 </div>
                                 
                                 <h3 className="text-2xl md:text-4xl font-medium text-foreground mb-6 leading-tight max-w-2xl">
-                                    {currentDayData.title?.es}
+                                    {currentDayData.title?.[l]}
                                 </h3>
                             </div>
 
                             {/* Activities List */}
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <span className="text-journal-data text-muted uppercase tracking-widest">Actividades clave</span>
+                                    <span className="text-journal-data text-muted uppercase tracking-widest">{t.tour_detail.itinerary.activities}</span>
                                     <div className="h-px bg-border flex-1"></div>
                                 </div>
                                 
@@ -155,7 +158,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                         </div>
                                         <div className="flex-1">
                                             <p className="text-body-std text-foreground/80 group-hover:text-foreground transition-colors">
-                                                {activity.es}
+                                                {activity[l]}
                                             </p>
                                         </div>
                                     </div>
@@ -164,7 +167,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                 {(!currentDayData.activities || currentDayData.activities.length === 0) && (
                                     <div className="flex items-center gap-4 p-6 rounded-[6px] border border-dashed border-border bg-surface">
                                         <Info className="w-4 h-4 text-muted" />
-                                        <span className="text-body-std text-muted italic">Información detallada en proceso de actualización.</span>
+                                        <span className="text-body-std text-muted italic">{t.tour_detail.itinerary.update_info}</span>
                                     </div>
                                 )}
                             </div>
@@ -174,15 +177,15 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                 <div className="flex items-center gap-3 group">
                                     <Clock className="w-4 h-4 text-muted group-hover:text-foreground transition-colors" />
                                     <div className="flex flex-col">
-                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">Duración est.</span>
-                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">Jornada completa</span>
+                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">{t.tour_detail.itinerary.duration}</span>
+                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t.tour_detail.itinerary.duration_val}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 group">
                                     <MapPin className="w-4 h-4 text-muted group-hover:text-foreground transition-colors" />
                                     <div className="flex flex-col">
-                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">Ubicación</span>
-                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">PNN Nevados</span>
+                                        <span className="text-[9px] font-mono text-muted uppercase tracking-widest">{t.tour_detail.itinerary.location}</span>
+                                        <span className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t.tour_detail.itinerary.location_val}</span>
                                     </div>
                                 </div>
                             </div>

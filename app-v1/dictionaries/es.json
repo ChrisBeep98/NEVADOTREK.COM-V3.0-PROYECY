@@ -103,5 +103,100 @@
         "desc": "Experiencias de inmersión auténtica con las comunidades locales, respetando la herencia y el ecosistema."
       }
     ]
+  },
+  "tour_detail": {
+    "nav": {
+      "index": "Índice de ruta",
+      "overview": "Resumen",
+      "gallery": "Galería",
+      "itinerary": "Itinerario",
+      "dates": "Salidas"
+    },
+    "header": {
+      "book_slot": "Reservar Cupo",
+      "hot_tour": "Tour muy solicitado",
+      "altitude": "Altitud",
+      "distance": "Distancia",
+      "difficulty": "Nivel"
+    },
+    "overview": {
+      "pretitle": "La experiencia",
+      "inclusions": "Logística incluida",
+      "exclusions": "No incluido"
+    },
+    "itinerary": {
+      "pretitle": "Tu experiencia",
+      "title_main": "Itinerario",
+      "title_sub": "paso a paso",
+      "phase": "Fase de expedición",
+      "day": "Día",
+      "stage": "Etapa",
+      "activities": "Actividades clave",
+      "duration": "Duración est.",
+      "duration_val": "Jornada completa",
+      "location": "Ubicación",
+      "location_val": "PNN Nevados",
+      "update_info": "Información detallada en proceso de actualización."
+    },
+    "gallery": {
+      "pretitle": "Diario visual",
+      "title": "Capturando la cima"
+    },
+    "departures": {
+      "pretitle": "Únete a la cordada",
+      "title": "Próximas salidas",
+      "availability": "Disponibilidad",
+      "slots_last": "¡ÚLTIMOS!",
+      "slots_standard": "CUPOS",
+      "price_label": "Precio por persona",
+      "join": "Unirse"
+    },
+    "pricing": {
+      "pretitle": "Estructura de inversión",
+      "title": "Tarifas {year}",
+      "desc": "Valores por expedicionario en Pesos Colombianos (COP). Logística integral de alta montaña incluida.",
+      "group_size": "Grupo de {count}",
+      "group_range": "De {min} a {max} pers.",
+      "request_slot": "SOLICITAR CUPO",
+      "disclaimer": "Sujeto a verificación de condiciones meteorológicas",
+      "features": ["Guianza experta", "Seguro total", "Equipo técnico"]
+    }
+  },
+  "booking_modal": {
+    "step_label": "Reserva",
+    "price_per_person": "Precio por persona",
+    "pax_label": "Pax",
+    "mode_group": "Grupal",
+    "mode_private": "Privada",
+    "slots_left": "{count} cupos",
+    "info_title": "Información personal",
+    "form": {
+      "name_label": "Nombre completo del responsable",
+      "name_placeholder": "Ej. Juan Sebastián Pérez",
+      "email_label": "Correo electrónico de contacto",
+      "email_placeholder": "nombre@dominio.com",
+      "pax_count_label": "Número de viajeros",
+      "phone_label": "Teléfono móvil / WhatsApp",
+      "phone_placeholder": "+57 000 000 0000",
+      "document_label": "Documento de identidad",
+      "document_placeholder": "C.C. o Pasaporte",
+      "notes_label": "Notas o requerimientos especiales",
+      "notes_placeholder": "Indica alergias, restricciones alimenticias o mensajes para el guía..."
+    },
+    "confirmation": {
+      "title": "Confirmación de reserva",
+      "responsible": "Responsable",
+      "start_date": "Fecha de inicio",
+      "travelers": "Viajeros",
+      "pax_singular": "persona",
+      "pax_plural": "personas",
+      "total_investment": "Inversión total",
+      "guest": "Invitado"
+    },
+    "footer": {
+      "back": "Volver",
+      "continue": "Continuar",
+      "confirm_send": "Confirmar y Enviar"
+    }
   }
 }
