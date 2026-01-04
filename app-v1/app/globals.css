@@ -17,7 +17,7 @@
 
 .dark {
   /* DARK MODE (Night Camp) */
-  --background: #040918; /* Deep Navy */
+  --background: #02040a; /* True Deep Black */
   --foreground: #EDEDED; /* Off White */
   --muted: #94A3B8;      /* Slate 400 */
   --border: rgba(255,255,255,0.1);
@@ -126,7 +126,7 @@
 
 @media (min-width: 1024px) {
   :root {
-    --page-frame: 6rem; /* 96px desktop */
+    --page-frame: 2rem; /* Reduced from 6rem to 32px desktop */
   }
 }
 
