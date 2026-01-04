@@ -38,9 +38,6 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     return (
         <section id="overview" ref={containerRef} className="bg-background text-foreground pt-20 md:pt-40 pb-0 px-frame relative overflow-hidden transition-colors duration-500">
             
-            {/* Background Accent */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
-
             <div className="max-w-6xl mx-auto overview-start">
                 
                 {/* 1. Header & Hook */}

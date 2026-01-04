@@ -68,7 +68,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
     }, { scope: containerRef });
 
     return (
-        <div ref={containerRef} className="relative w-full h-[95vh] bg-slate-950 overflow-hidden">
+        <div ref={containerRef} className="relative w-full h-[95vh] bg-[#02040a] overflow-hidden">
             <Header />
 
             {/* --- FIXED ACTION BUTTON (The Conversion Point) --- */}
@@ -88,13 +88,15 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     ref={imageRef}
                     src={tour.images[0]} 
                     alt={tour.name[l]} 
-                    className="w-full h-[120%] object-cover object-center absolute -top-[10%] opacity-60"
+                    className="w-full h-[120%] object-cover object-center absolute -top-[10%] opacity-100"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/20 to-transparent"></div>
+                
+                {/* Fixed Cinematic Overlays - These do not change in Light Mode */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#02040a] pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent pointer-events-none"></div>
             </div>
 
-            {/* --- CONTENT LAYER (The HUD) --- */}
+            {/* --- CONTENT LAYER --- */}
             <div ref={contentRef} className="relative z-10 w-full h-full max-w-[1600px] mx-auto px-3 md:px-10 flex flex-col justify-center lg:justify-end pb-12 lg:pb-20 pt-20 lg:pt-0">
                 
                 <div className="flex flex-col lg:flex-row justify-between items-end gap-10">
