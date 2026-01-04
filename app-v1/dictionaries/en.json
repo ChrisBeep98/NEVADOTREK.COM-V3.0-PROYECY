@@ -31,7 +31,20 @@
   "expeditions": {
     "title": "SELECT\nEXPEDITIONS.",
     "subtitle": "Meticulously curated routes for those seeking silence, challenge, and pure beauty.",
-    "view_all": "VIEW FULL CATALOG"
+    "view_all": "VIEW FULL CATALOG",
+    "archive": {
+      "pretitle": "ACTIVE EXPEDITIONS // ARCHIVE V3",
+      "title": "EXPEDITIONS",
+      "description": "Browse our curated selection of technical routes and high-altitude trekking in the Colombian Andes.",
+      "filter_console": "FILTER CONSOLE",
+      "results_found": "{count} RESULTS FOUND",
+      "difficulty": "DIFFICULTY LEVEL",
+      "duration": "DURATION",
+      "sort_by": "SORT BY",
+      "no_results": "NO MATCHES FOUND",
+      "no_results_desc": "Try adjusting your difficulty or duration filters.",
+      "reset_filters": "RESET ALL FILTERS"
+    }
   },
   "fauna": {
     "book_expedition": "Book Expedition",

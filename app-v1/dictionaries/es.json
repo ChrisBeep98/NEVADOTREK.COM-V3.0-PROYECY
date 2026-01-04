@@ -31,7 +31,20 @@
   "expeditions": {
     "title": "EXPEDICIONES\nSELECCIONADAS.",
     "subtitle": "Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.",
-    "view_all": "VER CATÁLOGO COMPLETO"
+    "view_all": "VER CATÁLOGO COMPLETO",
+    "archive": {
+      "pretitle": "EXPEDICIONES ACTIVAS // ARCHIVO V3",
+      "title": "EXPEDICIONES",
+      "description": "Navega por nuestra selección curada de rutas técnicas y senderismo de altura en los Andes colombianos.",
+      "filter_console": "CONSOLA DE FILTROS",
+      "results_found": "{count} RESULTADOS ENCONTRADOS",
+      "difficulty": "NIVEL DE DIFICULTAD",
+      "duration": "DURACIÓN",
+      "sort_by": "ORDENAR POR",
+      "no_results": "NO SE ENCONTRARON COINCIDENCIAS",
+      "no_results_desc": "Intenta ajustar tus filtros de dificultad o duración.",
+      "reset_filters": "REINICIAR FILTROS"
+    }
   },
   "fauna": {
     "book_expedition": "Reservar Expedición",
