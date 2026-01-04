@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ItineraryDay } from '../../types/api';
-import { MapPin, ChevronRight, Clock, Info, Zap } from 'lucide-react';
+import { MapPin, ChevronRight, Clock, Info, Zap, Flag } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
@@ -147,12 +147,12 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                             {/* Activities List */}
                             <div className="space-y-4">
                                 {currentDayData.activities?.map((activity, i) => (
-                                    <div key={i} className="group flex gap-5 items-start p-4 rounded-[6px] transition-colors border border-transparent">
-                                        <div className="mt-1 shrink-0 p-1.5 rounded-full bg-background border border-border transition-colors">
-                                            <ChevronRight className="w-3.5 h-3.5 text-muted transition-colors" />
+                                    <div key={i} className="group flex gap-5 items-start py-4 transition-colors">
+                                        <div className="mt-1 shrink-0">
+                                            <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="text-body-std text-foreground/80 transition-colors">
+                                            <p className="text-body-std text-foreground/80">
                                                 {activity[l]}
                                             </p>
                                         </div>
