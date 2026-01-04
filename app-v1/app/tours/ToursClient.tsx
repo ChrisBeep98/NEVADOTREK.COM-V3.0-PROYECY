@@ -13,7 +13,6 @@ if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-type SortOption = 'RECOMMENDED' | 'DURATION_ASC' | 'DURATION_DESC';
 type DurationFilter = 'ALL' | 'SHORT' | 'MEDIUM' | 'LONG';
 
 export default function ToursClient() {
@@ -26,11 +25,29 @@ export default function ToursClient() {
     // --- STATE ---
     const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
     const [durationFilter, setDurationFilter] = useState<DurationFilter>('ALL');
-    const [sortBy, setSortBy] = useState<SortOption>('RECOMMENDED');
+
+    // --- INTELLIGENT FILTER DATA ---
+    const availableOptions = useMemo(() => {
+        const diffs = new Set<string>();
+        const durations = new Set<string>(['ALL']);
+
+        tours.forEach(tour => {
+            if (tour.difficulty) diffs.add(tour.difficulty.toUpperCase());
+            const d = tour.totalDays;
+            if (d < 3) durations.add('SHORT');
+            else if (d >= 3 && d <= 5) durations.add('MEDIUM');
+            else if (d > 5) durations.add('LONG');
+        });
+
+        return {
+            difficulties: Array.from(diffs).sort(),
+            durations: ['ALL', 'SHORT', 'MEDIUM', 'LONG'].filter(d => durations.has(d))
+        };
+    }, [tours]);
 
     // --- FILTER LOGIC ---
     const filteredTours = useMemo(() => {
-        const result = tours.filter(tour => {
+        return tours.filter(tour => {
             const diff = (tour.difficulty || '').toUpperCase();
             const matchesDifficulty = selectedDifficulties.length === 0 || 
                                      selectedDifficulties.includes(diff);
@@ -43,15 +60,7 @@ export default function ToursClient() {
 
             return matchesDifficulty && matchesDuration;
         });
-
-        if (sortBy === 'DURATION_ASC') {
-            result.sort((a, b) => a.totalDays - b.totalDays);
-        } else if (sortBy === 'DURATION_DESC') {
-            result.sort((a, b) => b.totalDays - a.totalDays);
-        }
-
-        return result;
-    }, [tours, selectedDifficulties, durationFilter, sortBy]);
+    }, [tours, selectedDifficulties, durationFilter]);
 
 
     // --- HANDLERS ---
@@ -109,14 +118,14 @@ export default function ToursClient() {
             <header className="pt-40 pb-20 px-frame border-b border-border relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none" />
                 
-                <div className="max-w-none mx-auto relative z-10">
+                <div className="max-w-none mx-auto relative z-10 lg:text-center">
                     <div className="hero-text inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-md text-journal-data text-cyan-500 mb-6 uppercase">
                         {t.expeditions.archive.pretitle}
                     </div>
                     <h1 className="hero-text text-h-tour-title mb-8 lowercase first-letter:uppercase text-foreground">
                         {lang === 'ES' ? 'Nuestras expediciones' : 'Our expeditions'}
                     </h1>
-                    <p className="hero-text text-body-lead text-muted max-w-2xl leading-relaxed">
+                    <p className="hero-text text-body-lead text-muted max-w-2xl leading-relaxed lg:mx-auto">
                         {t.expeditions.archive.description}
                     </p>
                 </div>
@@ -136,7 +145,7 @@ export default function ToursClient() {
                                     <Mountain size={12} /> {t.expeditions.archive.difficulty}
                                 </h3>
                                 <div className="space-y-2">
-                                    {['EASY', 'MEDIUM', 'HARD', 'EXTREME'].map((diff) => (
+                                    {availableOptions.difficulties.map((diff) => (
                                         <button
                                             key={diff}
                                             onClick={() => toggleDifficulty(diff)}
@@ -159,41 +168,20 @@ export default function ToursClient() {
                                     <Clock size={12} /> {t.expeditions.archive.duration}
                                 </h3>
                                 <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        { label: 'ALL', value: 'ALL' },
-                                        { label: '< 3D', value: 'SHORT' },
-                                        { label: '3-5D', value: 'MEDIUM' },
-                                        { label: '> 5D', value: 'LONG' }
-                                    ].map((opt) => (
+                                    {availableOptions.durations.map((val) => (
                                         <button
-                                            key={opt.value}
-                                            onClick={() => setDurationFilter(opt.value as DurationFilter)}
+                                            key={val}
+                                            onClick={() => setDurationFilter(val as DurationFilter)}
                                             className={`py-3 rounded-lg border text-journal-data transition-all ${
-                                                durationFilter === opt.value
+                                                durationFilter === val
                                                     ? 'bg-cyan-500/10 text-cyan-500 border-cyan-500/50'
                                                     : 'bg-transparent text-muted border-surface hover:border-border hover:text-foreground'
                                             }`}
                                         >
-                                            {opt.label}
+                                            {val === 'ALL' ? 'ALL' : val === 'SHORT' ? '< 3D' : val === 'MEDIUM' ? '3-5D' : '> 5D'}
                                         </button>
                                     ))}
                                 </div>
-                            </div>
-
-                            {/* Sort */}
-                            <div>
-                                <h3 className="text-journal-data text-muted mb-6 flex items-center gap-2">
-                                    <SlidersHorizontal size={12} /> {t.expeditions.archive.sort_by}
-                                </h3>
-                                <select 
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value as SortOption)}
-                                    className="w-full bg-surface border border-border rounded-lg py-3 px-4 text-journal-data text-foreground outline-none focus:ring-1 focus:ring-cyan-500 cursor-pointer"
-                                >
-                                    <option value="RECOMMENDED">RECOMMENDED</option>
-                                    <option value="DURATION_ASC">DURATION (SHORT - LONG)</option>
-                                    <option value="DURATION_DESC">DURATION (LONG - SHORT)</option>
-                                </select>
                             </div>
 
                             {/* Results Counter */}
@@ -216,7 +204,7 @@ export default function ToursClient() {
                                             tour={tour} 
                                             index={index} 
                                             lang={lang} 
-                                            className="h-[640px]"
+                                            className="h-[700px]"
                                         />
                                     </div>
                                 ))}
