@@ -67,6 +67,8 @@ export default function TourGallery({ images }: { images: string[] }) {
                                 key={i} 
                                 className={`${colSpan} relative overflow-hidden rounded-[6px] group gallery-img shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface will-change-transform transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
                             >
+                                {/* Vignette & Gradient Overlay */}
+                                <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_40%,_rgba(4,9,24,0.4)_100%] z-10 opacity-100 group-hover:opacity-60 transition-opacity duration-1000 pointer-events-none"></div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#040918]/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-40 transition-opacity duration-1000"></div>
                                 <img 
                                     src={img} 
