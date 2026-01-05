@@ -12,41 +12,68 @@ export default function IntroSection() {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLHeadingElement>(null);
+    const glowRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const text = textRef.current;
         if (!text) return;
 
         const pills = text.querySelectorAll('.img-pill');
+        const innerImgs = text.querySelectorAll('.img-pill img');
         const content = text.querySelectorAll('span.text-content');
 
-        const tl = gsap.timeline({
+        // 1. ANIMACIÓN DE ENTRADA (Texto + Pills)
+        const entryTl = gsap.timeline({
             scrollTrigger: {
                 trigger: containerRef.current,
-                start: "top 70%",
-                end: "top 20%",
+                start: "top 75%",
                 toggleActions: "play none none reverse"
             }
         });
 
-        // 1. Animación suave del texto (Opacity + Blur)
-        tl.fromTo(content, 
-            { autoAlpha: 0, filter: "blur(10px)", y: 20 },
-            { autoAlpha: 1, filter: "blur(0px)", y: 0, duration: 1.5, stagger: 0.2, ease: "power2.out" }
+        entryTl.fromTo(content, 
+            { autoAlpha: 0, y: 15, filter: "blur(5px)" },
+            { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.1, ease: "power2.out" }
         );
 
-        // 2. Las Pills se expanden desde el centro (Scale X)
-        tl.fromTo(pills, 
-            { scaleX: 0, opacity: 0 },
-            { scaleX: 1, opacity: 1, duration: 1.2, ease: "expo.out", stagger: 0.1 },
-            "<0.3"
-        );
+        // Optimización de Pills: Revelación fluida y Parallax interno
+        pills.forEach((pill, i) => {
+            const img = innerImgs[i];
+            
+            // Animación de la píldora (Clip Path es más fluido que Width)
+            entryTl.fromTo(pill, 
+                { clipPath: "inset(0% 50% 0% 50% rounded 999px)", opacity: 0, scale: 0.9 },
+                { 
+                    clipPath: "inset(0% 0% 0% 0% rounded 999px)", 
+                    opacity: 1, 
+                    scale: 1,
+                    duration: 1.2, 
+                    ease: "expo.out" 
+                }, 
+                `-=${0.8 - (i * 0.1)}` // Stagger dinámico
+            );
 
-        // 3. Línea lateral
-        tl.fromTo(".deco-border", 
-            { scaleY: 0 },
-            { scaleY: 1, duration: 1.5, ease: "power2.inOut" },
-            0
+            // Efecto de Zoom/Parallax interno para que la imagen no esté muerta
+            entryTl.fromTo(img,
+                { scale: 1.4 },
+                { scale: 1, duration: 1.5, ease: "power2.out" },
+                "<" // Empieza al mismo tiempo que el clip-path de su contenedor
+            );
+        });
+
+        // 2. SEPARADOR (Scroll-driven)
+        gsap.fromTo(glowRef.current,
+            { y: "-100%" },
+            { 
+                y: "100%", 
+                ease: "none",
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            }
         );
 
     }, { scope: containerRef });
@@ -58,9 +85,14 @@ export default function IntroSection() {
         >
             <div className="max-w-[1600px] mx-auto w-full grid grid-cols-12 gap-2 md:gap-4">
                 
-                {/* Línea Decorativa Izquierda */}
-                <div className="col-span-1 md:col-span-1 hidden md:flex justify-end pr-2 md:pr-4">
-                    <div className="deco-border w-[1px] h-full bg-border origin-top h-64"></div>
+                {/* Separador Minimalista Alineado */}
+                <div className="col-span-1 md:col-span-1 hidden md:flex justify-end items-start pr-4 md:pr-6 relative pt-4">
+                    <div className="relative h-48 w-[1px] bg-white/5 overflow-hidden">
+                        <div 
+                            ref={glowRef}
+                            className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-transparent via-cyan-500/40 to-transparent"
+                        ></div>
+                    </div>
                 </div>
 
                 {/* Bloque de Texto */}
@@ -69,50 +101,39 @@ export default function IntroSection() {
                         ref={textRef} 
                         className="text-h-section-title text-foreground text-left"
                     >
-                        {/* Bloque 1 */}
                         <span className="text-content relative inline">{t.intro?.part1}</span>
                         
-                                                                                                {/* Pill 1: Volcán de Fuego */}
-                        
-                                                                                                <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
-                        
-                                                                                                    <img 
-                        
-                                                                                                        src="https://images.unsplash.com/photo-1611605645802-c21be743c321?q=80&w=400&auto=format&fit=crop" 
-                        
-                                                                                                        alt="Active Volcano" 
-                        
-                                                                                                        className="w-full h-full object-cover opacity-80" 
-                        
-                                                                                                    />
-                        
-                                                                                                </span>
+                        {/* Pill 1: Volcán */}
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] relative top-[-0.05em] bg-surface rounded-full will-change-transform transform-gpu overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1611605645802-c21be743c321?q=80&w=400&auto=format&fit=crop" 
+                                alt="Active Volcano" 
+                                className="w-full h-full object-cover opacity-80 will-change-transform" 
+                            />
+                        </span>
 
-                        {/* Bloque 2 */}
                         <span className="text-content relative inline">{t.intro?.part2}</span>
 
                         {/* Pill 2: Hielo */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] relative top-[-0.05em] bg-surface rounded-full will-change-transform transform-gpu overflow-hidden">
                             <img 
                                 src="https://images.unsplash.com/photo-1473081556163-2a17de81fc97?q=80&w=400&auto=format&fit=crop" 
-                                alt="Glacial Ice"
-                                className="w-full h-full object-cover opacity-90 brightness-110"
+                                alt="Glacial Ice" 
+                                className="w-full h-full object-cover opacity-90 brightness-110 will-change-transform" 
                             />
                         </span>
 
-                        {/* Bloque 3 */}
                         <span className="text-content relative inline">{t.intro?.part3}</span>
 
-                        {/* Pill 3: Cumbre/Pico */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
+                        {/* Pill 3: Cumbre */}
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] relative top-[-0.05em] bg-surface rounded-full will-change-transform transform-gpu overflow-hidden">
                             <img 
                                 src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400&auto=format&fit=crop" 
-                                alt="Mountain Peak"
-                                className="w-full h-full object-cover opacity-80"
+                                alt="Mountain Peak" 
+                                className="w-full h-full object-cover opacity-80 will-change-transform" 
                             />
                         </span>
 
-                        {/* Bloque 4 */}
                         <span className="text-content relative inline text-muted">{t.intro?.part4}</span>
                     </h2>
                 </div>
