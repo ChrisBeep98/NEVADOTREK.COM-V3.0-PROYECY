@@ -96,8 +96,19 @@ export default function IntroSection() {
                         </span>
 
                         {/* Bloque 3 */}
-                        {/* Forzamos un break sutil para la parte final si es necesario, o dejamos fluir */}
-                        <span className="text-content relative inline text-slate-400">{t.intro?.part3}</span>
+                        <span className="text-content relative inline">{t.intro?.part3}</span>
+
+                        {/* Pill 3: Cumbre/Pico (Movida al final) */}
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-stone-900">
+                            <img 
+                                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400&auto=format&fit=crop" 
+                                alt="Mountain Peak"
+                                className="w-full h-full object-cover opacity-80"
+                            />
+                        </span>
+
+                        {/* Bloque 4 */}
+                        <span className="text-content relative inline text-slate-400">{t.intro?.part4}</span>
                     </h2>
                 </div>
             </div>
