@@ -43,80 +43,44 @@ export default function BookingCTA() {
     }, [t.fauna]);
 
     useGSAP(() => {
-        const mm = gsap.matchMedia();
         const slides = gsap.utils.toArray<HTMLElement>('.animal-slide');
         
         if (slides.length === 0) return;
 
-        // --- ESTADO INICIAL ---
-        gsap.set(slides, { autoAlpha: 0, scale: 0.95, z: -50, force3D: true });
-        if (slides[0]) gsap.set(slides[0], { autoAlpha: 1, scale: 1, z: 0 });
-
-        // --- DESKTOP: CINEMATIC SMOOTH VAULT ---
-        mm.add("(min-width: 768px)", () => {
-            if (slides.length < 3) return;
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: "+=500%", 
-                    pin: true,
-                    scrub: 0.8,
-                    snap: {
-                        snapTo: [0, 0.5, 1],
-                        duration: { min: 0.4, max: 0.8 },
-                        delay: 0.1,
-                        ease: "sine.inOut"
-                    },
-                    onUpdate: (self) => {
-                        if (progressRef.current) {
-                            gsap.set(progressRef.current, { height: `${self.progress * 100}%` });
-                        }
-                    }
-                }
-            });
-
-            tl.to(slides[0], { autoAlpha: 0, scale: 1.05, z: 30, duration: 1.5, ease: "sine.inOut" }, 0.5)
-              .to(slides[0].querySelectorAll('.text-reveal'), { y: -30, autoAlpha: 0, duration: 0.8 }, 0.5)
-              .fromTo(slides[1], 
-                { autoAlpha: 0, scale: 0.95, z: -30 }, 
-                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 0.5)
-              .fromTo(slides[1].querySelectorAll('.text-reveal'), 
-                { y: 30, autoAlpha: 0 }, 
-                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 1);
-
-            tl.to({}, { duration: 1 }); // Zona de descanso
-
-            tl.to(slides[1], { autoAlpha: 0, scale: 1.05, z: 30, duration: 1.5, ease: "sine.inOut" }, 2.5)
-              .to(slides[1].querySelectorAll('.text-reveal'), { y: -30, autoAlpha: 0, duration: 0.8 }, 2.5)
-              .fromTo(slides[2], 
-                { autoAlpha: 0, scale: 0.95, z: -30 }, 
-                { autoAlpha: 1, scale: 1, z: 0, duration: 1.5, ease: "sine.inOut" }, 2.5)
-              .fromTo(slides[2].querySelectorAll('.text-reveal'), 
-                { y: 30, autoAlpha: 0 }, 
-                { y: 0, autoAlpha: 1, stagger: 0.1, duration: 1, ease: "sine.out" }, 3);
-
-            tl.fromTo(".final-cta", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1, ease: "sine.out" }, 4.2);
+        // --- CONFIGURACIÓN UNIFICADA (Estilo "Peel" / Baraja) ---
+        // Inicializamos todos visibles y sin recortes
+        gsap.set(slides, { autoAlpha: 1, z: 0, clipPath: 'inset(0% 0% 0% 0%)' });
+        
+        // Creamos una única línea de tiempo para todas las resoluciones
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top top",
+                end: "+=300%", // Duración cómoda para 3 slides
+                pin: true,
+                scrub: 1, // Suavizado moderado para evitar saltos
+            }
         });
 
-        // --- MOBILE: THE DOWNWARD PEEL ---
-        mm.add("(max-width: 767px)", () => {
-            gsap.set(slides, { autoAlpha: 1, z: 0, clipPath: 'inset(0% 0% 0% 0%)' });
-            
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top top",
-                    end: "+=300%",
-                    pin: true,
-                    scrub: 0.5,
-                }
-            });
-
-            if (slides[0]) tl.to(slides[0], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" });
-            if (slides[1]) tl.to(slides[1], { clipPath: 'inset(100% 0% 0% 0%)', duration: 1, ease: "power1.inOut" }, 1);
-            tl.fromTo(".final-cta", { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5 }, 2.5);
+        // Animación de "pelado" (Peel effect)
+        // El slide superior se recorta hacia arriba para revelar el siguiente
+        slides.forEach((slide, i) => {
+            // No animamos el último slide porque es el fondo final
+            if (i < slides.length - 1) {
+                // Sincronizamos el inicio de cada slide basado en su índice
+                tl.to(slide, { 
+                    clipPath: 'inset(0% 0% 100% 0%)', 
+                    ease: "none" 
+                }, i);
+            }
         });
+
+        // Animación del botón final
+        tl.fromTo(".final-cta", 
+            { autoAlpha: 0, scale: 0.9, y: 20 }, 
+            { autoAlpha: 1, scale: 1, y: 0, duration: 0.5 }, 
+            slides.length - 1.5 // Aparece un poco antes de terminar
+        );
 
     }, { scope: sectionRef }); // Dependencies removed: GSAP runs once, React updates text in DOM.
 
