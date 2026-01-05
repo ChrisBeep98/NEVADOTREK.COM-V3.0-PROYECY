@@ -18,7 +18,6 @@ export default function IntroSection() {
         if (!text) return;
 
         const pills = text.querySelectorAll('.img-pill');
-        // Seleccionamos el texto completo para animarlo como bloque, o spans si queremos detalle
         const content = text.querySelectorAll('span.text-content');
 
         const tl = gsap.timeline({
@@ -37,7 +36,6 @@ export default function IntroSection() {
         );
 
         // 2. Las Pills se expanden desde el centro (Scale X)
-        // Usamos scaleX en lugar de width para no afectar el flujo del texto (reflow)
         tl.fromTo(pills, 
             { scaleX: 0, opacity: 0 },
             { scaleX: 1, opacity: 1, duration: 1.2, ease: "expo.out", stagger: 0.1 },
@@ -56,26 +54,26 @@ export default function IntroSection() {
     return (
         <section 
             ref={containerRef} 
-            className="w-full py-32 md:py-48 px-frame bg-background flex items-center relative overflow-hidden"
+            className="w-full section-v-spacing px-frame bg-background flex items-center relative overflow-hidden"
         >
             <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-8">
                 
                 {/* Línea Decorativa Izquierda */}
                 <div className="col-span-1 md:col-span-1 hidden md:flex justify-end pr-8">
-                    <div className="deco-border w-[1px] h-full bg-gradient-to-b from-white/0 via-white/20 to-white/0 origin-top h-64"></div>
+                    <div className="deco-border w-[1px] h-full bg-border origin-top h-64"></div>
                 </div>
 
                 {/* Bloque de Texto */}
                 <div className="col-span-12 md:col-span-10 relative z-10">
                     <h2 
                         ref={textRef} 
-                        className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tight leading-[1.15] text-slate-200 text-left"
+                        className="text-h-section-title text-foreground text-left"
                     >
                         {/* Bloque 1 */}
                         <span className="text-content relative inline">{t.intro?.part1}</span>
                         
                         {/* Pill 1: Volcán */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-stone-800">
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
                             <img 
                                 src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&auto=format&fit=crop" 
                                 alt="Volcano"
@@ -87,7 +85,7 @@ export default function IntroSection() {
                         <span className="text-content relative inline">{t.intro?.part2}</span>
 
                         {/* Pill 2: Hielo */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-slate-800">
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
                             <img 
                                 src="https://images.unsplash.com/photo-1473081556163-2a17de81fc97?q=80&w=400&auto=format&fit=crop" 
                                 alt="Glacial Ice"
@@ -98,8 +96,8 @@ export default function IntroSection() {
                         {/* Bloque 3 */}
                         <span className="text-content relative inline">{t.intro?.part3}</span>
 
-                        {/* Pill 3: Cumbre/Pico (Movida al final) */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-stone-900">
+                        {/* Pill 3: Cumbre/Pico */}
+                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
                             <img 
                                 src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400&auto=format&fit=crop" 
                                 alt="Mountain Peak"
@@ -108,7 +106,7 @@ export default function IntroSection() {
                         </span>
 
                         {/* Bloque 4 */}
-                        <span className="text-content relative inline text-slate-400">{t.intro?.part4}</span>
+                        <span className="text-content relative inline text-muted">{t.intro?.part4}</span>
                     </h2>
                 </div>
             </div>
