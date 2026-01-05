@@ -54,17 +54,17 @@ export default function IntroSection() {
     return (
         <section 
             ref={containerRef} 
-            className="w-full section-v-spacing px-frame bg-background flex items-center relative overflow-hidden"
+            className="w-full py-16 md:py-24 px-frame bg-background flex items-center relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto w-full grid grid-cols-12 gap-8">
+            <div className="max-w-[1600px] mx-auto w-full grid grid-cols-12 gap-2 md:gap-4">
                 
                 {/* Línea Decorativa Izquierda */}
-                <div className="col-span-1 md:col-span-1 hidden md:flex justify-end pr-8">
+                <div className="col-span-1 md:col-span-1 hidden md:flex justify-end pr-2 md:pr-4">
                     <div className="deco-border w-[1px] h-full bg-border origin-top h-64"></div>
                 </div>
 
                 {/* Bloque de Texto */}
-                <div className="col-span-12 md:col-span-10 relative z-10">
+                <div className="col-span-12 md:col-span-11 relative z-10">
                     <h2 
                         ref={textRef} 
                         className="text-h-section-title text-foreground text-left"
