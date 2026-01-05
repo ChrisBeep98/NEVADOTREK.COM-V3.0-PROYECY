@@ -4,14 +4,14 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ShieldCheck, Users, Sprout, Compass } from 'lucide-react';
+import { ShieldCheck, MapPin, Sprout, Compass } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const FEATURES_STATIC = {
     "01": { icon: ShieldCheck },
-    "02": { icon: Users },
+    "02": { icon: MapPin },
     "03": { icon: Sprout },
     "04": { icon: Compass }
 };
