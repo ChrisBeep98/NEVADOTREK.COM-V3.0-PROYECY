@@ -63,17 +63,19 @@ export default function IntroSection() {
             );
         });
 
-        // 2. SEPARADOR (Scroll-driven)
+        // 2. SEPARADOR (Scroll-driven) - Optimizado con yPercent
         gsap.fromTo(glowRef.current,
-            { y: "-100%" },
+            { yPercent: -100 },
             { 
-                y: "100%", 
+                yPercent: 300, 
                 ease: "none",
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top bottom",
                     end: "bottom top",
-                    scrub: true
+                    scrub: 0.5, // Añadimos un pequeño suavizado para reducir saltos de CPU
+                    fastScrollEnd: true,
+                    preventOverlaps: true
                 }
             }
         );
