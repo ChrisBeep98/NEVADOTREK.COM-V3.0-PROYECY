@@ -72,14 +72,21 @@ export default function IntroSection() {
                         {/* Bloque 1 */}
                         <span className="text-content relative inline">{t.intro?.part1}</span>
                         
-                        {/* Pill 1: Volcán */}
-                        <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
-                            <img 
-                                src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&auto=format&fit=crop" 
-                                alt="Volcano"
-                                className="w-full h-full object-cover opacity-80"
-                            />
-                        </span>
+                                                                                                {/* Pill 1: Volcán de Fuego */}
+                        
+                                                                                                <span className="img-pill inline-flex items-center justify-center align-middle mx-3 h-[0.7em] w-[1.8em] md:w-[2.2em] rounded-full overflow-hidden relative top-[-0.05em] bg-surface">
+                        
+                                                                                                    <img 
+                        
+                                                                                                        src="https://images.unsplash.com/photo-1611605645802-c21be743c321?q=80&w=400&auto=format&fit=crop" 
+                        
+                                                                                                        alt="Active Volcano" 
+                        
+                                                                                                        className="w-full h-full object-cover opacity-80" 
+                        
+                                                                                                    />
+                        
+                                                                                                </span>
 
                         {/* Bloque 2 */}
                         <span className="text-content relative inline">{t.intro?.part2}</span>
