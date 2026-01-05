@@ -82,13 +82,17 @@ El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 - **Efecto Active:** `Scale 95%`.
 
 ### **BTN-SECONDARY** (`.btn-secondary`)
-Botón de navegación alternativo. Estilo técnico con acento azul.
-- **Borde:** `Blue-500` (Stroked) con opacidad variable.
-- **Texto:** `Capitalize` (Solo primera letra mayúscula).
-    - **Light Mode:** `Deep Blue Slate` (#050B1A) para máxima legibilidad.
-    - **Dark Mode:** `Blue-100` para contraste suave.
-- **Icono:** Contenido en una burbuja circular (Bubble) que reacciona al hover.
-- **Efecto Hover:** El borde se ilumina, el fondo se tiñe sutilmente y la burbuja del icono se llena de color.
+Botón de navegación alternativo. Estilo técnico y cinemático.
+- **Fondo:** `bg-background/50` con `backdrop-blur-md` (Efecto Glass).
+- **Borde:** `Blue-500/40` para alta visibilidad en ambos modos.
+- **Sombra:** `Spread` sutil (`shadow-[0_4px_20px_-2px_rgba(59,130,246,0.15)]`).
+- **Texto:** `text-foreground`, `Capitalize` (Solo primera letra mayúscula).
+- **Tipografía:** `text-[13px] font-medium tracking-[0.05em]`.
+- **Icono:** Contenido en una burbuja (`btn-icon-bubble`) de `w-9 h-9`.
+    - **Normal:** `bg-surface`, `border-border`, `text-muted`.
+    - **Hover:** `bg-blue-500`, `text-white`, `border-blue-400`, Glow `shadow-[0_0_20px_rgba(59,130,246,0.4)]`.
+- **Efecto Hover:** El borde se intensifica y el icono se desplaza ligeramente (+0.5px).
+- **Efecto Active:** `Scale 95%`.
 
 ---
 
@@ -116,6 +120,7 @@ El diseño debe ser flexible para soportar la expansión de texto del Español v
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2026-01-05:** Refactorización del `BTN-SECONDARY`: Implementación de Glassmorphism (blur), sombra spread sutil y refuerzo de contraste de borde para Light Mode.
 - **2025-12-30:** Refinamiento de atmósfera: Cambio de tono de fondo a Glacial Core (#040a16) para mayor energía visual.
 - **2025-12-30:** Ajuste global de atmósfera: Cambio de Slate-950 de #020617 a #01040a (tono más azulado/frío).
 - **2025-12-29:** Refinamiento visual del token `BTN-PRIMARY` (especificaciones de sombra y tipografía).
