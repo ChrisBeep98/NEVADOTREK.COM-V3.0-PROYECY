@@ -56,24 +56,28 @@ export default function BookingCTA() {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top top",
-                end: "+=200%", // Ajustado a 200% para evitar scroll muerto al final
+                end: "+=350%", // Volvemos a un scroll largo para que las transiciones sean suaves
                 pin: true,
-                scrub: 0.5, // 0.5 es más responsivo (menos "lag" que 1.5)
+                scrub: 0.5, 
             }
         });
 
         // Animación combinada: Peel del contenedor + Zoom de imagen
         slides.forEach((slide, i) => {
-            // 1. Zoom FLUIDO Y ANTICIPADO
+            const timePos = i * 1.5; // Espaciado amplio para buen ritmo
+            const isLast = i === slides.length - 1;
+
+            // 1. Zoom FLUIDO
             const img = slide.querySelector('img');
             if (img) {
-                // Empezamos el zoom UN PASO ANTES (i - 1) para que cuando se revele
-                // la imagen ya se esté moviendo suavemente.
-                // Duración extendida (2.5) para cubrir la "espera" + el "corte".
+                // Si es el último slide, el zoom debe terminar ANTES (para no alargar el scroll)
+                // Si no es el último, puede durar más para dar continuidad
+                const zoomDuration = isLast ? 1.5 : 3;
+                
                 tl.fromTo(img, 
                     { scale: 1 }, 
-                    { scale: 1.15, duration: 2.5, ease: "power1.inOut" }, 
-                    Math.max(0, i - 1) // Start time adelantado
+                    { scale: 1.15, duration: zoomDuration, ease: "power1.inOut" }, 
+                    Math.max(0, timePos - 1)
                 );
             }
 
@@ -81,17 +85,18 @@ export default function BookingCTA() {
             if (i < slides.length - 1) {
                 tl.to(slide, { 
                     clipPath: 'inset(0% 0% 100% 0%)', 
-                    duration: 1, 
+                    duration: 1.5, 
                     ease: "power1.inOut" 
-                }, i);
+                }, timePos);
             }
         });
 
         // Animación del botón final
         tl.fromTo(".final-cta", 
             { autoAlpha: 0, scale: 0.9, y: 20 }, 
-            { autoAlpha: 1, scale: 1, y: 0, duration: 0.5 }, 
-            slides.length - 1.5 // Aparece un poco antes de terminar
+            { autoAlpha: 1, scale: 1, y: 0, duration: 0.8 }, 
+            // Aparece solapado con el final de la última transición visual
+            "-=0.8" 
         );
 
     }, { scope: sectionRef }); // Dependencies removed: GSAP runs once, React updates text in DOM.
