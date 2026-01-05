@@ -54,7 +54,7 @@ export default function IntroSection() {
     return (
         <section 
             ref={containerRef} 
-            className="w-full py-16 md:py-24 px-frame bg-background flex items-center relative overflow-hidden"
+            className="w-full mt-[64px] md:mt-[72px] py-16 md:py-24 px-frame bg-background flex items-center relative overflow-hidden"
         >
             <div className="max-w-[1600px] mx-auto w-full grid grid-cols-12 gap-2 md:gap-4">
                 
