@@ -1,4 +1,5 @@
 import HeroMonolith from "./components/HeroMonolith";
+import IntroSection from "./components/IntroSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
 import FeaturesGrid from "./components/FeaturesGrid";
 import TestimonialsSection from "./components/TestimonialsSection";
@@ -12,6 +13,7 @@ export default async function Home() {
   return (
     <main className="bg-background">
       <HeroMonolith />
+      <IntroSection />
       <div className="relative z-30">
         
         <ExpeditionsGrid initialTours={tours} />

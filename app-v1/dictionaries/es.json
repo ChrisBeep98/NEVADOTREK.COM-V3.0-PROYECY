@@ -28,6 +28,11 @@
       "prefix": "Más allá del borde del mundo conocido, encontramos nuestro"
     }
   },
+  "intro": {
+    "part1": "Entre el rugido del volcán",
+    "part2": "y el silencio absoluto del glaciar,",
+    "part3": "existe una frontera invisible donde la altitud transforma el espíritu humano para siempre."
+  },
   "expeditions": {
     "title": "EXPEDICIONES\nSELECCIONADAS.",
     "subtitle": "Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.",

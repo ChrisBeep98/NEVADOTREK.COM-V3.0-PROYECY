@@ -28,6 +28,11 @@
       "prefix": "Beyond the edge of the known world, we find our"
     }
   },
+  "intro": {
+    "part1": "Between the volcano's roar",
+    "part2": "and the glacier's absolute silence,",
+    "part3": "lies an invisible frontier where altitude transforms the human spirit forever."
+  },
   "expeditions": {
     "title": "SELECT\nEXPEDITIONS.",
     "subtitle": "Meticulously curated routes for those seeking silence, challenge, and pure beauty.",
