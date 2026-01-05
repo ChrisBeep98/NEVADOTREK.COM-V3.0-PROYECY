@@ -80,27 +80,31 @@
     "items": [
       {
         "id": "01",
-        "title": "ALTA MONTAÑA",
-        "tag": "EQUIPO_EXPEDICIÓN",
-        "desc": "Dominamos la verticalidad del Nevado del Tolima con equipos de última generación y logística de precisión."
+        "title": "SEGURIDAD PRIMERO",
+        "tag": "SEGURIDAD_TOTAL",
+        "highlights": ["150+ Expediciones", "Guías certificados", "Equipos alta gama"],
+        "desc": "Nuestros guías están certificados, usamos equipos de primeras marcas y seguimos protocolos de seguridad en cada expedición."
       },
       {
         "id": "02",
-        "title": "GUÍAS NATIVOS",
+        "title": "GUÍAS LOCALES",
         "tag": "EXPERIENCIA_LOCAL",
-        "desc": "Expertos nacidos en Salento. Conocemos cada centímetro del bosque de niebla y los senderos del Páramo."
+        "highlights": ["Conocimiento cultural", "Expertos en montaña", "Atención cercana"],
+        "desc": "Más que acompañantes, son conocedores del territorio, su cultura y sus senderos, garantizando experiencias auténticas."
       },
       {
         "id": "03",
-        "title": "SEGURIDAD ÉLITE",
-        "tag": "SEGURIDAD_CERO",
-        "desc": "Protocolos de rescate certificados y comunicación satelital constante. Tu integridad es nuestra misión."
+        "title": "TURISMO RESPONSABLE",
+        "tag": "ECO_TURISMO",
+        "highlights": ["Conexión natural", "Apoyo a comunidades", "Experiencias auténticas"],
+        "desc": "Diseñamos rutas responsables que respetan la naturaleza y apoyan a las comunidades locales."
       },
       {
         "id": "04",
-        "title": "CULTURA ANDINA",
-        "tag": "COMUNIDAD_LOCAL",
-        "desc": "Experiencias de inmersión auténtica con las comunidades locales, respetando la herencia y el ecosistema."
+        "title": "LOGÍSTICA IMPECABLE",
+        "tag": "CONFORT_ALTURA",
+        "highlights": ["Carpas 4 estaciones", "Menú de montaña", "Transporte privado"],
+        "desc": "Nos encargamos de cada detalle, desde el transporte hasta la alimentación en alta montaña, para que solo te preocupes por caminar."
       }
     ]
   },
