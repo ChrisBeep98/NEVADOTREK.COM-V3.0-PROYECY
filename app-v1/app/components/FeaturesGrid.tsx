@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ShieldCheck, Users, Mountain, Compass } from 'lucide-react';
+import { ShieldCheck, Users, Sprout, Compass } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const FEATURES_STATIC = {
     "01": { icon: ShieldCheck },
     "02": { icon: Users },
-    "03": { icon: Mountain },
+    "03": { icon: Sprout },
     "04": { icon: Compass }
 };
 
@@ -93,8 +93,8 @@ export default function FeaturesGrid() {
                                     {/* Icon with Dynamic System Colors */}
                                     <div className={`p-3 rounded-lg ${
                                         i === 0 ? 'bg-cyan-500/10 text-cyan-500' :
-                                        i === 1 ? 'bg-emerald-400/10 text-emerald-400' :
-                                        i === 2 ? 'bg-orange-500/10 text-orange-500' :
+                                        i === 1 ? 'bg-orange-500/10 text-orange-500' :
+                                        i === 2 ? 'bg-emerald-400/10 text-emerald-400' :
                                                   'bg-purple-500/10 text-purple-500'
                                     }`}>
                                         <Icon size={24} strokeWidth={1.5} />
