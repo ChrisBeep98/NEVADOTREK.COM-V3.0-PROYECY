@@ -52,14 +52,14 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </h2>
 
                     {body && (
-                        <div className="md:columns-2 gap-20 reveal-content border-l border-border pl-8 md:pl-0 md:border-l-0">
+                        <div className="md:columns-2 gap-20 reveal-content border-l border-border pl-8 md:pl-3 md:border-l-0">
                             <p className="text-body-lead text-muted mb-4">{body}</p>
                         </div>
                     )}
                 </div>
 
                 {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-24 reveal-content">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 mb-24 reveal-content">
                     {/* ALTITUDE */}
                     <div className="p-3 md:p-6 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
@@ -121,7 +121,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0">
                         
                         {/* INCLUSIONS */}
-                        <div className="space-y-8 md:pr-12 lg:pr-24 pb-12 md:pb-0">
+                        <div className="space-y-8 md:pr-12 lg:pr-24 pb-0">
                             <h3 className="text-sub-label !text-foreground opacity-50 tracking-[0.2em]">{t.tour_detail.overview.inclusions}</h3>
                             <ul className="space-y-5">
                                 {tour.inclusions?.map((item, i) => (

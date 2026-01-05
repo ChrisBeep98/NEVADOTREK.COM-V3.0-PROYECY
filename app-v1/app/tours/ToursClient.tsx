@@ -114,21 +114,96 @@ export default function ToursClient() {
     return (
         <div ref={containerRef} className="bg-background min-h-screen text-foreground pb-32">
             
-            {/* --- TOP SECTION: EDITORIAL HEADER --- */}
-            <header className="pt-40 pb-20 px-frame border-b border-border relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none" />
+            {/* --- TOP SECTION: TACTICAL EXPEDITION DOSSIER --- */}
+            <header className="relative pt-48 pb-40 px-frame overflow-hidden border-b border-white/5 bg-[#040918]">
                 
-                <div className="max-w-none mx-auto relative z-10 lg:text-center">
-                    <div className="hero-text inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-md text-journal-data text-cyan-500 mb-6 uppercase">
-                        {t.expeditions.archive.pretitle}
+                {/* 1. Tactical UI Background Elements */}
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+                    {/* Corner Crosshairs */}
+                    <div className="absolute top-12 left-12 w-8 h-8 border-t border-l border-white/20" />
+                    <div className="absolute top-12 right-12 w-8 h-8 border-t border-r border-white/20" />
+                    
+                    {/* Altitude Scale (Right Edge) */}
+                    <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-8 items-center text-[8px] font-mono text-white/20 tracking-tighter">
+                        <span>6000M</span>
+                        <div className="w-[1px] h-12 bg-white/10" />
+                        <span className="text-cyan-500 font-bold">4500M</span>
+                        <div className="w-[1px] h-12 bg-white/10" />
+                        <span>3000M</span>
                     </div>
-                    <h1 className="hero-text text-h-tour-title mb-8 lowercase first-letter:uppercase text-foreground">
-                        {lang === 'ES' ? 'Nuestras expediciones' : 'Our expeditions'}
-                    </h1>
-                    <p className="hero-text text-body-lead text-muted max-w-2xl leading-relaxed lg:mx-auto">
-                        {t.expeditions.archive.description}
-                    </p>
+
+                    {/* Scanner Line Animation */}
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500/10 animate-scan-slow" />
                 </div>
+                
+                <div className="max-w-none mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+                    
+                    {/* 2. LEFT SIDE: MASSIVE EDITORIAL TITLE */}
+                    <div className="lg:col-span-8">
+                        <div className="flex items-start gap-6">
+                            <div className="w-[1px] h-32 bg-gradient-to-b from-cyan-500 via-white/20 to-transparent mt-4" />
+                            <div>
+                                <div className="flex items-center gap-4 mb-4">
+                                    <span className="text-[10px] font-mono text-cyan-500 tracking-[0.4em] uppercase">
+                                        [ Archive_Type: {t.expeditions.archive.pretitle} ]
+                                    </span>
+                                </div>
+                                <h1 className="hero-text text-[clamp(4rem,10vw,8rem)] leading-[0.85] font-black tracking-[-0.05em] text-white uppercase break-words">
+                                    {lang === 'ES' ? (
+                                        <>Nuestras<br /><span className="text-transparent stroke-text">Tours</span></>
+                                    ) : (
+                                        <>Our<br /><span className="text-transparent stroke-text">Tours</span></>
+                                    )}
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 3. RIGHT SIDE: METADATA & SYSTEM INFO */}
+                    <div className="lg:col-span-4 lg:pl-12 border-l border-white/5 space-y-8">
+                        
+                        {/* Technical Metadata Table */}
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-end border-b border-white/5 pb-2">
+                                <span className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Location</span>
+                                <span className="text-xs font-bold text-white tracking-wider uppercase">Colombian Andes</span>
+                            </div>
+                            <div className="flex justify-between items-end border-b border-white/5 pb-2">
+                                <span className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Status</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                                    <span className="text-xs font-bold text-white tracking-wider uppercase">Active_Feed</span>
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-end border-b border-white/5 pb-2">
+                                <span className="text-[9px] font-mono text-white/30 uppercase tracking-widest">Coord</span>
+                                <span className="text-[10px] font-mono text-white/60 tracking-wider">4°35'56"N 74°04'51"W</span>
+                            </div>
+                        </div>
+
+                        {/* Description Treated as Marginalia */}
+                        <div className="relative">
+                            <span className="absolute -left-6 top-0 text-[10px] font-mono text-cyan-500">01.</span>
+                            <p className="hero-text text-sm md:text-base text-white/60 leading-relaxed italic font-light">
+                                {t.expeditions.archive.description}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <style jsx>{`
+                    .stroke-text {
+                        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+                    }
+                    @keyframes scan {
+                        0% { top: 0%; opacity: 0; }
+                        50% { opacity: 0.5; }
+                        100% { top: 100%; opacity: 0; }
+                    }
+                    .animate-scan-slow {
+                        animation: scan 8s linear infinite;
+                    }
+                `}</style>
             </header>
 
             {/* --- MAIN CONTENT: FILTERS + GRID --- */}

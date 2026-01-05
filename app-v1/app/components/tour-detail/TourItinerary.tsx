@@ -69,7 +69,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                     </h2>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-10 lg:gap-20">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
                     
                     {/* 2. TABS NAVIGATOR */}
                     <div className="lg:w-1/4 flex-shrink-0">
@@ -83,7 +83,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                         {/* Tabs */}
                         <div 
                             ref={tabsRef}
-                            className="flex lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide snap-x"
+                            className="flex lg:flex-col gap-3 overflow-x-auto pb-0 lg:pb-0 scrollbar-hide snap-x"
                             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                         >
                             {days.map((day, index) => {
@@ -95,7 +95,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                         key={index}
                                         onClick={() => setActiveDay(index)}
                                         className={`
-                                            group relative flex-shrink-0 snap-start flex items-center gap-4 p-4 rounded-[6px] border transition-all duration-300 w-[160px] lg:w-full text-left
+                                            group relative flex-shrink-0 snap-start flex items-center gap-4 p-4 rounded-[6px] border transition-all duration-300 w-[140px] lg:w-full text-left
                                             ${isActive 
                                                 ? 'bg-surface border-border shadow-lg' 
                                                 : 'bg-transparent border-border/50 hover:border-border hover:bg-surface'
@@ -147,7 +147,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                             {/* Activities List */}
                             <div className="space-y-4">
                                 {currentDayData.activities?.map((activity, i) => (
-                                    <div key={i} className="group flex gap-5 items-start py-4 transition-colors">
+                                    <div key={i} className="group flex gap-5 items-start pb-4 transition-colors">
                                         <div className="mt-1 shrink-0">
                                             <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
                                         </div>
