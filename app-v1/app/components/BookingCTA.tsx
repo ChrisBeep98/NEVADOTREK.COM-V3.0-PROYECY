@@ -62,12 +62,27 @@ export default function BookingCTA() {
             }
         });
 
-        // Animación de "pelado" (Peel effect) con easing sutil
+        // Animación combinada: Peel del contenedor + Zoom de imagen
         slides.forEach((slide, i) => {
+            // 1. Zoom FLUIDO Y ANTICIPADO
+            const img = slide.querySelector('img');
+            if (img) {
+                // Empezamos el zoom UN PASO ANTES (i - 1) para que cuando se revele
+                // la imagen ya se esté moviendo suavemente.
+                // Duración extendida (2.5) para cubrir la "espera" + el "corte".
+                tl.fromTo(img, 
+                    { scale: 1 }, 
+                    { scale: 1.15, duration: 2.5, ease: "power1.inOut" }, 
+                    Math.max(0, i - 1) // Start time adelantado
+                );
+            }
+
+            // 2. Recorte del contenedor (Peel)
             if (i < slides.length - 1) {
                 tl.to(slide, { 
                     clipPath: 'inset(0% 0% 100% 0%)', 
-                    ease: "power1.inOut" // Suavizado ligero, idéntico al mobile original
+                    duration: 1, 
+                    ease: "power1.inOut" 
                 }, i);
             }
         });
