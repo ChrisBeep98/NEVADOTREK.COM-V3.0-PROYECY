@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Zap } from 'lucide-react';
 import TourCard from './TourCard';
 import { useLanguage } from '../context/LanguageContext';
 import { Tour } from '../types/api';
@@ -42,14 +42,17 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
             <div className="px-frame max-w-7xl mx-auto">
                 
                 {/* Header */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                     <div>
-                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line">
+                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line text-left">
                             {t.expeditions.title}
                         </h2>
-                        <p className="text-body-lead text-muted max-w-md">
-                            {t.expeditions.subtitle}
-                        </p>
+                        <div className="flex items-center gap-2 justify-start">
+                            <Zap className="w-5 h-5 text-cyan-400 fill-cyan-400/20" strokeWidth={2} />
+                            <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-white to-purple-400">
+                                {t.expeditions.upcoming}
+                            </span>
+                        </div>
                     </div>
                     <button className="btn-secondary md:w-auto group">
                         <span>{t.expeditions.view_all.toLowerCase()}</span>

@@ -35,7 +35,8 @@
     "part4": "para siempre."
   },
   "expeditions": {
-    "title": "EXPEDICIONES\nSELECCIONADAS.",
+    "title": "Expediciones\nSeleccionadas.",
+    "upcoming": "próximas salidas",
     "subtitle": "Rutas meticulosamente curadas para quienes buscan silencio, desafío y belleza pura.",
     "view_all": "VER CATÁLOGO COMPLETO",
     "archive": {

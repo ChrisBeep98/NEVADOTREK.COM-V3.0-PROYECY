@@ -35,7 +35,8 @@
     "part4": "forever."
   },
   "expeditions": {
-    "title": "SELECT\nEXPEDITIONS.",
+    "title": "Select\nExpeditions.",
+    "upcoming": "upcoming departures",
     "subtitle": "Meticulously curated routes for those seeking silence, challenge, and pure beauty.",
     "view_all": "VIEW FULL CATALOG",
     "archive": {
