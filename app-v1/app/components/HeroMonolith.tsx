@@ -9,7 +9,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Componente de ciclo de palabras aislado
+// Componente de ciclo de palabras aislado para rendimiento de React
 function WordCycle({ words, prefix }: { words: string[], prefix: string }) {
     const [wordIndex, setWordIndex] = useState(0);
     const wordWrapperRef = useRef<HTMLSpanElement>(null);
@@ -50,6 +50,7 @@ function WordCycle({ words, prefix }: { words: string[], prefix: string }) {
 export default function HeroMonolith() {
     const { t } = useLanguage();
     
+    // Refs
     const wrapperRef = useRef<HTMLDivElement>(null);
     const monolithRef = useRef<HTMLDivElement>(null);
     const textFrontRef = useRef<HTMLHeadingElement>(null);
@@ -60,6 +61,7 @@ export default function HeroMonolith() {
     const statusRef = useRef<HTMLSpanElement>(null); 
     const scrollRingRef = useRef<HTMLDivElement>(null);
 
+    // 1. Status Ticker (DOM Directo)
     useEffect(() => {
         const msgs = [`${t.hero.status.alt}: 4500M`, `${t.hero.status.temp}: -15C`, `${t.hero.status.wind}: 40KT`, `${t.hero.status.o2}: 88%`];
         if (statusRef.current) statusRef.current.innerText = msgs[0];
@@ -75,6 +77,7 @@ export default function HeroMonolith() {
         if (videoRef.current) videoRef.current.play().catch(() => {});
     }, []);
 
+    // 2. MAIN GPU ANIMATION
     useGSAP(() => {
         const wrapper = wrapperRef.current;
         const monolith = monolithRef.current;
@@ -83,12 +86,16 @@ export default function HeroMonolith() {
 
         if (!wrapper || !monolith || !textFront) return;
 
-        // --- ESTADO INICIAL EXPLÍCITO ---
-        const isDesktop = window.innerWidth >= 768;
-        const startW = isDesktop ? "28vw" : "30vw";
-        const startH = isDesktop ? "65vh" : "60vh";
+        // --- CÁLCULOS DE ESCALA (GPU) ---
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const isDesktop = w >= 768;
+        
+        // Tamaños objetivo originales expresados en ratio de escala
+        const targetScaleX = isDesktop ? 0.28 : 0.30;
+        const targetScaleY = isDesktop ? 0.65 : 0.60;
 
-        // Centrado milimétrico del texto
+        // Configuración inicial del texto (Centrado absoluto)
         gsap.set(textFront, { xPercent: -50, yPercent: -50, x: 0, y: 0 });
 
         const tl = gsap.timeline({
@@ -103,38 +110,30 @@ export default function HeroMonolith() {
             }
         });
 
-        // USAMOS fromTo para evitar el error de "1px" al inicio
+        // ANIMACIÓN DE ESCALA (GPU)
+        // Escalamos el contenedor hacia abajo y el contenido hacia arriba (Counter-Scale)
+        const innerContent = monolith.querySelectorAll('.inner-gpu');
+
         tl.fromTo(monolith, 
-            { 
-                width: startW, 
-                height: startH, 
-                borderRadius: "4px" 
-            },
-            { 
-                width: "100vw", 
-                height: "100vh", 
-                borderRadius: "0px", 
-                ease: "none", 
-                duration: 1 
-            }, 
+            { scaleX: targetScaleX, scaleY: targetScaleY, borderRadius: "4px" },
+            { scaleX: 1, scaleY: 1, borderRadius: "0px", ease: "none", duration: 1 }, 
             0
         );
 
+        tl.fromTo(innerContent,
+            { scaleX: 1 / targetScaleX, scaleY: 1 / targetScaleY },
+            { scaleX: 1, scaleY: 1, ease: "none", duration: 1 },
+            0
+        );
+
+        // UI Transitions
         tl.to([textFront, ".monolith-ui", "#dynamic-message", ".scroll-indicator-container"], {
-            opacity: 0,
-            y: -30,
-            duration: 0.4
+            opacity: 0, y: -40, duration: 0.5
         }, 0);
-
-        tl.fromTo(video, 
-            { scale: 1.5 },
-            { scale: 1, duration: 1 }, 
-            0
-        );
 
         tl.to(wrapper, { rotationX: 0, rotationY: 0, duration: 1 }, 0);
 
-        // Interacción de Mouse
+        // Mouse Interaction
         const rotateX = gsap.quickTo(wrapper, "rotationX", {duration: 0.8, ease: "power2.out"});
         const rotateY = gsap.quickTo(wrapper, "rotationY", {duration: 0.8, ease: "power2.out"});
         const frontX = gsap.quickTo(textFront, "x", {duration: 1, ease: "power2.out"});
@@ -189,30 +188,34 @@ export default function HeroMonolith() {
                 </div>
 
                 <div className="relative z-20 w-full h-full flex items-center justify-center perspective-[1200px]">
-                    {/* El Wrapper ocupa todo el espacio para que el monolito se centre en él */}
                     <div ref={wrapperRef} className="relative w-full h-full flex items-center justify-center transform-style-3d" style={{transformStyle: 'preserve-3d'}}>
                         
+                        {/* 
+                            OPTIMIZED MONOLITH (GPU):
+                            Ocupa el 100% (inset-0) para centrado absoluto. 
+                            Se escala mediante GSAP para el estado inicial.
+                        */}
                         <div ref={monolithRef} 
-                             className="relative bg-slate-900 rounded-sm overflow-hidden shadow-2xl z-10 will-change-[width,height]"
-                             style={{ width: '28vw', height: '65vh', minWidth: '200px', minHeight: '300px' }}>
+                             className="absolute inset-0 bg-slate-900 overflow-hidden shadow-2xl z-10 transform-gpu will-change-transform">
                             
-                            <div className="absolute inset-0">
-                                <video ref={videoRef} autoPlay muted loop playsInline className="w-full h-full object-cover">
+                            {/* Contenido con escala inversa para evitar deformación */}
+                            <div className="inner-gpu absolute inset-0 transform-gpu will-change-transform">
+                                <video ref={videoRef} autoPlay muted loop playsInline className="w-full h-full object-cover scale-150">
                                     <source src="https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4" type="video/mp4" />
                                 </video>
-                            </div>
-                            
-                            <div className="monolith-ui absolute inset-0 pointer-events-none">
-                                <div className="absolute top-6 right-6 flex flex-col items-end">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                                        <span className="text-[9px] font-mono text-white tracking-widest uppercase">{t.hero.ui.live_feed}</span>
+                                
+                                <div className="monolith-ui absolute inset-0 pointer-events-none">
+                                    <div className="absolute top-6 right-6 flex flex-col items-end">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+                                            <span className="text-[9px] font-mono text-white tracking-widest uppercase">{t.hero.ui.live_feed}</span>
+                                        </div>
+                                        <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-1"></span>
                                     </div>
-                                    <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-1"></span>
+                                    <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
+                                    <div className="absolute bottom-8 left-8 h-8 w-[1px] bg-white/20"></div>
+                                    <span className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest">EXP. 2025</span>
                                 </div>
-                                <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
-                                <div className="absolute bottom-8 left-8 h-8 w-[1px] bg-white/20"></div>
-                                <span className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest">EXP. 2025</span>
                             </div>
                         </div>
 
