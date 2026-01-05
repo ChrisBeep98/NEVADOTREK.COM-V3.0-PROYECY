@@ -36,11 +36,14 @@ export default function IntroSection() {
             { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.1, ease: "power2.out" }
         );
 
-        // Optimización de Pills: Revelación fluida y Parallax interno
+        // Punto de inicio con delay un toque más marcado (0.4s)
+        const PILLS_START = 0.4;
+
         pills.forEach((pill, i) => {
             const img = innerImgs[i];
+            // Ligera secuencialidad (0.1s entre cada una)
+            const startTime = PILLS_START + (i * 0.1);
             
-            // Animación de la píldora (Clip Path es más fluido que Width)
             entryTl.fromTo(pill, 
                 { clipPath: "inset(0% 50% 0% 50% rounded 999px)", opacity: 0, scale: 0.9 },
                 { 
@@ -50,14 +53,13 @@ export default function IntroSection() {
                     duration: 1.2, 
                     ease: "expo.out" 
                 }, 
-                `-=${0.8 - (i * 0.1)}` // Stagger dinámico
+                startTime
             );
 
-            // Efecto de Zoom/Parallax interno para que la imagen no esté muerta
             entryTl.fromTo(img,
                 { scale: 1.4 },
                 { scale: 1, duration: 1.5, ease: "power2.out" },
-                "<" // Empieza al mismo tiempo que el clip-path de su contenedor
+                startTime
             );
         });
 
