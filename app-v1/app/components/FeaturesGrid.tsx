@@ -59,10 +59,10 @@ export default function FeaturesGrid() {
                 
                 {/* Minimal Header - Left Aligned */}
                 <div className="mb-20 md:mb-32 max-w-2xl">
-                    <span className="text-sub-label text-muted-foreground mb-4 block">
+                    <span className="text-sm font-bold tracking-[0.1em] text-muted-foreground mb-4 block normal-case">
                         // {t.features.pretitle}
                     </span>
-                    <h2 className="text-h-section-title text-foreground">
+                    <h2 className="text-h-section-title text-foreground normal-case">
                         {t.features.title_primary} <span className="text-muted-foreground">{t.features.title_secondary}</span>
                     </h2>
                 </div>
@@ -87,14 +87,23 @@ export default function FeaturesGrid() {
                                 )}
 
                                 {/* Header: Icon & ID */}
-                                <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-500">
-                                    <span className="text-journal-data text-base">0{i + 1}</span>
-                                    <Icon size={20} strokeWidth={1.5} />
+                                <div className="flex justify-between items-start mb-6">
+                                    <span className="text-sm font-medium tracking-wide text-foreground normal-case opacity-50 mt-2">0{i + 1}</span>
+                                    
+                                    {/* Icon with Dynamic System Colors */}
+                                    <div className={`p-3 rounded-lg ${
+                                        i === 0 ? 'bg-cyan-500/10 text-cyan-500' :
+                                        i === 1 ? 'bg-emerald-400/10 text-emerald-400' :
+                                        i === 2 ? 'bg-orange-500/10 text-orange-500' :
+                                                  'bg-purple-500/10 text-purple-500'
+                                    }`}>
+                                        <Icon size={24} strokeWidth={1.5} />
+                                    </div>
                                 </div>
 
-                                {/* Title */}
-                                <div className="min-h-[60px] flex items-end">
-                                    <h3 className="text-heading-l uppercase text-foreground">
+                                {/* Title - Top Aligned */}
+                                <div className="min-h-[60px] flex items-start">
+                                    <h3 className="text-heading-l text-foreground normal-case">
                                         {f.title}
                                     </h3>
                                 </div>
@@ -104,8 +113,8 @@ export default function FeaturesGrid() {
                                     <ul className="flex flex-col gap-3 py-4 border-t border-border/50 border-dashed">
                                         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                         {f.highlights.map((h: string, idx: number) => (
-                                            <li key={idx} className="flex items-start gap-3 text-journal-data text-foreground/80">
-                                                <div className="w-1 h-1 bg-foreground/30 rounded-full mt-1.5 shrink-0"></div>
+                                            <li key={idx} className="flex items-start gap-3 text-sm font-medium tracking-wide text-foreground/80 normal-case">
+                                                <div className="w-1 h-1 bg-foreground/30 rounded-full mt-2 shrink-0"></div>
                                                 <span>{h}</span>
                                             </li>
                                         ))}

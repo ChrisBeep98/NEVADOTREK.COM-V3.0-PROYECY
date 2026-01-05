@@ -73,36 +73,36 @@
     ]
   },
   "features": {
-    "pretitle": "POR QUÉ NEVADO TREK",
-    "title_primary": "DIFERENCIAL",
-    "title_secondary": "DE CUMBRE.",
-    "cta": "Ver Expedición",
+    "pretitle": "Por qué Nevado Trek",
+    "title_primary": "Diferencial",
+    "title_secondary": "de Cumbre.",
+    "cta": "Ver expedición",
     "items": [
       {
         "id": "01",
-        "title": "SEGURIDAD PRIMERO",
-        "tag": "SEGURIDAD_TOTAL",
+        "title": "Seguridad primero",
+        "tag": "Seguridad total",
         "highlights": ["150+ Expediciones", "Guías certificados", "Equipos alta gama"],
         "desc": "Nuestros guías están certificados, usamos equipos de primeras marcas y seguimos protocolos de seguridad en cada expedición."
       },
       {
         "id": "02",
-        "title": "GUÍAS LOCALES",
-        "tag": "EXPERIENCIA_LOCAL",
+        "title": "Guías locales",
+        "tag": "Experiencia local",
         "highlights": ["Conocimiento cultural", "Expertos en montaña", "Atención cercana"],
         "desc": "Más que acompañantes, son conocedores del territorio, su cultura y sus senderos, garantizando experiencias auténticas."
       },
       {
         "id": "03",
-        "title": "TURISMO RESPONSABLE",
-        "tag": "ECO_TURISMO",
+        "title": "Turismo responsable",
+        "tag": "Eco turismo",
         "highlights": ["Conexión natural", "Apoyo a comunidades", "Experiencias auténticas"],
         "desc": "Diseñamos rutas responsables que respetan la naturaleza y apoyan a las comunidades locales."
       },
       {
         "id": "04",
-        "title": "LOGÍSTICA IMPECABLE",
-        "tag": "CONFORT_ALTURA",
+        "title": "Logística impecable",
+        "tag": "Confort altura",
         "highlights": ["Carpas 4 estaciones", "Menú de montaña", "Transporte privado"],
         "desc": "Nos encargamos de cada detalle, desde el transporte hasta la alimentación en alta montaña, para que solo te preocupes por caminar."
       }

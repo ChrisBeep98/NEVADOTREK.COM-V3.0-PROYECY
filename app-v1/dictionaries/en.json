@@ -73,36 +73,36 @@
     ]
   },
   "features": {
-    "pretitle": "WHY NEVADO TREK",
-    "title_primary": "SUMMIT",
-    "title_secondary": "DIFFERENCE.",
-    "cta": "View Expedition",
+    "pretitle": "Why Nevado Trek",
+    "title_primary": "Summit",
+    "title_secondary": "Difference.",
+    "cta": "View expedition",
     "items": [
       {
         "id": "01",
-        "title": "SAFETY FIRST",
-        "tag": "TOTAL_SAFETY",
+        "title": "Safety first",
+        "tag": "Total safety",
         "highlights": ["150+ Expeditions", "Certified Guides", "High-End Gear"],
         "desc": "Our guides are certified, we use top-brand equipment and follow security protocols on every expedition."
       },
       {
         "id": "02",
-        "title": "LOCAL GUIDES",
-        "tag": "LOCAL_EXPERTISE",
+        "title": "Local guides",
+        "tag": "Local expertise",
         "highlights": ["Cultural Knowledge", "Mountain Experts", "Close Attention"],
         "desc": "More than companions, they are experts of the territory, its culture and trails, guaranteeing authentic experiences."
       },
       {
         "id": "03",
-        "title": "RESPONSIBLE TOURISM",
-        "tag": "ECO_TOURISM",
+        "title": "Responsible tourism",
+        "tag": "Eco tourism",
         "highlights": ["Nature Connection", "Community Support", "Authentic Experiences"],
         "desc": "We design responsible routes that respect nature and support local communities."
       },
       {
         "id": "04",
-        "title": "FLAWLESS LOGISTICS",
-        "tag": "HIGH_COMFORT",
+        "title": "Flawless logistics",
+        "tag": "High comfort",
         "highlights": ["4-Season Tents", "Mountain Menu", "Private Transport"],
         "desc": "We take care of every detail, from transport to high-altitude meals, so you only worry about walking."
       }
