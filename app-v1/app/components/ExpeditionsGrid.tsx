@@ -48,16 +48,16 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             {t.expeditions.title}
                         </h2>
                         <div className="flex items-center gap-2 justify-start">
-                            <Zap className="w-5 h-5 text-cyan-400 fill-cyan-400/20" strokeWidth={2} />
-                            <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-white to-purple-400">
+                            <Zap className="w-5 h-5 text-blue-500 fill-blue-500/20" strokeWidth={2} />
+                            <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-foreground">
                                 {t.expeditions.upcoming}
                             </span>
                         </div>
                     </div>
-                    <button className="btn-secondary md:w-auto group">
-                        <span>{t.expeditions.view_all.toLowerCase()}</span>
+                    <button className="btn-secondary group">
+                        <span className="opacity-90">{t.expeditions.view_all}</span>
                         <div className="btn-icon-bubble">
-                            <ArrowUpRight width={18} strokeWidth={2} />
+                            <ArrowUpRight width={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500" />
                         </div>
                     </button>
                 </div>
