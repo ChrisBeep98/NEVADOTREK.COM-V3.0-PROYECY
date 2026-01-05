@@ -56,7 +56,7 @@ export default function BookingCTA() {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top top",
-                end: "+=300%", // Duración cómoda para 3 slides
+                end: "+=200%", // Ajustado a 200% para evitar scroll muerto al final
                 pin: true,
                 scrub: 0.5, // 0.5 es más responsivo (menos "lag" que 1.5)
             }
