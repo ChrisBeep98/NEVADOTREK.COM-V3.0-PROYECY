@@ -18,22 +18,23 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
     // Configuración del "Cinematic Rhythm"
     // Define tanto el ancho (cols) como la altura (h) para crear una narrativa visual.
     const getGridClass = (index: number) => {
+        const baseMobileHeight = "h-[500px]";
         switch (index) {
             // 1. THE OPENING (Impacto Total)
-            case 0: return "md:col-span-12 h-[80vh] min-h-[600px]"; 
+            case 0: return `md:col-span-12 ${baseMobileHeight} md:h-[80vh] md:min-h-[600px]`; 
             
             // 2. THE DETAILS (Ritmo Rápido)
-            case 1: return "md:col-span-5 h-[500px]";
-            case 2: return "md:col-span-7 h-[500px]"; 
+            case 1: return `md:col-span-5 ${baseMobileHeight}`;
+            case 2: return `md:col-span-7 ${baseMobileHeight}`; 
             
             // 3. THE PAUSE (Segundo Acto - Panorámica)
-            case 3: return "md:col-span-12 h-[65vh] min-h-[500px]"; 
+            case 3: return `md:col-span-12 ${baseMobileHeight} md:h-[65vh] md:min-h-[500px]`; 
 
             // 4. THE FINALE (Asimetría Agresiva)
-            case 4: return "md:col-span-8 h-[500px]"; 
-            case 5: return "md:col-span-4 h-[500px]"; 
+            case 4: return `md:col-span-8 ${baseMobileHeight}`; 
+            case 5: return `md:col-span-4 ${baseMobileHeight}`; 
             
-            default: return "md:col-span-4 h-[500px]";
+            default: return `md:col-span-4 ${baseMobileHeight}`;
         }
     };
 
