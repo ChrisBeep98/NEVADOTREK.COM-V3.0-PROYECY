@@ -58,19 +58,16 @@ export default function BookingCTA() {
                 start: "top top",
                 end: "+=300%", // Duración cómoda para 3 slides
                 pin: true,
-                scrub: 1, // Suavizado moderado para evitar saltos
+                scrub: 0.5, // 0.5 es más responsivo (menos "lag" que 1.5)
             }
         });
 
-        // Animación de "pelado" (Peel effect)
-        // El slide superior se recorta hacia arriba para revelar el siguiente
+        // Animación de "pelado" (Peel effect) con easing sutil
         slides.forEach((slide, i) => {
-            // No animamos el último slide porque es el fondo final
             if (i < slides.length - 1) {
-                // Sincronizamos el inicio de cada slide basado en su índice
                 tl.to(slide, { 
                     clipPath: 'inset(0% 0% 100% 0%)', 
-                    ease: "none" 
+                    ease: "power1.inOut" // Suavizado ligero, idéntico al mobile original
                 }, i);
             }
         });
