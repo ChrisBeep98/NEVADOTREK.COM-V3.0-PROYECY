@@ -117,11 +117,11 @@ export default function ToursClient() {
 
                 {/* 2. BACKGROUND: THE GIANT (Static Target) */}
                 <div className="absolute inset-0 flex items-end justify-start z-10 select-none overflow-hidden pointer-events-none px-frame">
-                    <div className="relative translate-y-[-5%] pb-6">
+                    <div className="relative translate-y-[-5%] pb-8">
                         <span className="hero-text opacity-0 block text-display-xl text-foreground font-bold tracking-tight uppercase mb-4 ml-2">
                             {lang === 'ES' ? 'Nuestras' : 'Our'}
                         </span>
-                        <h1 className="hero-giant-text hero-text opacity-0 text-[13.5vw] leading-[0.9] font-bold tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-foreground via-foreground via-60% to-transparent bg-clip-text text-transparent">
+                        <h1 className="hero-giant-text hero-text opacity-0 text-[13.5vw] leading-[0.95] font-bold tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-foreground via-foreground/80 to-foreground/10 bg-clip-text text-transparent">
                             EXPEDICIONES
                         </h1>
                     </div>
