@@ -58,7 +58,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
             <div className="max-w-6xl mx-auto w-full z-10">
                 
                 {/* 1. SECTION HEADER */}
-                <div className="mb-12 md:mb-24 itinerary-header">
+                <div className="mb-[52px] md:mb-[52px] itinerary-header">
                     <div className="flex items-center gap-2 mb-4">
                         <Zap className="w-3.5 h-3.5 text-cyan-500" />
                         <span className="text-sub-label">{t.tour_detail.itinerary.pretitle}</span>
@@ -69,7 +69,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                     </h2>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-6">
                     
                     {/* 2. TABS NAVIGATOR */}
                     <div className="lg:w-1/4 flex-shrink-0">
@@ -128,10 +128,10 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                     <div className="lg:w-3/4 min-h-[400px] relative">
                         <div className="absolute left-0 top-0 bottom-0 w-px bg-border hidden lg:block"></div>
 
-                        <div ref={contentRef} className="lg:pl-16">
+                        <div ref={contentRef} className="lg:pl-[14px]">
                             
                             {/* Dynamic Header */}
-                            <div className="hidden lg:block mb-4 pb-4 border-b border-border relative">
+                            <div className="hidden lg:block mb-4 pb-3 border-b border-border relative">
                                 <div className="flex items-center gap-3 mb-4 opacity-70">
                                     <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentColor }}></div>
                                     <span className="text-journal-data" style={{ color: currentColor }}>
@@ -147,7 +147,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                             {/* Activities List */}
                             <div className="space-y-4">
                                 {currentDayData.activities?.map((activity, i) => (
-                                    <div key={i} className="group flex gap-5 items-start pb-4 transition-colors">
+                                    <div key={i} className="group flex flex-col gap-5 items-start pt-[6px] pb-4 transition-colors">
                                         <div className="mt-1 shrink-0">
                                             <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
                                         </div>

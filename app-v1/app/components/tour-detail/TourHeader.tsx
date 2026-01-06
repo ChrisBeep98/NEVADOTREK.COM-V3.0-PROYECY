@@ -121,10 +121,10 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                             {tour.name[l]}
                         </h1>
 
-                        <div className="w-24 h-1 bg-cyan-500 mb-8 hero-line"></div>
+                        <div className="w-24 bg-cyan-500 mb-8 hero-line" style={{ height: '2px' }}></div>
 
                         {/* Subtitle / Lead */}
-                        <p className="text-lg md:text-xl text-slate-300 font-light max-w-2xl leading-relaxed hero-text-reveal border-l-2 border-white/10 pl-6">
+                        <p className="text-lg md:text-xl text-slate-300 font-light max-w-2xl leading-relaxed hero-text-reveal border-l-2 border-white/10" style={{ paddingLeft: '12px' }}>
                             {tour.subtitle?.[l]}
                         </p>
                     </div>
@@ -143,7 +143,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                                     </div>
                                     <span className="text-xs font-medium text-slate-400 tracking-wider">{t.tour_detail.header.altitude}</span>
                                 </div>
-                                <span className="text-lg font-bold text-white tabular-nums tracking-tight">
+                                <span className="text-lg font-bold text-white tabular-nums tracking-tight" style={{ textAlign: 'right' }}>
                                     {tour.altitude?.[l] || "N/A"}
                                 </span>
                             </div>

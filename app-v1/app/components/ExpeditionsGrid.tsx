@@ -39,7 +39,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
     };
 
     return (
-        <section className="bg-background section-v-spacing">
+        <section className="bg-background section-v-spacing" style={{ paddingBottom: '0px' }}>
             <div className="px-frame max-w-7xl mx-auto">
                 
                 {/* Header */}

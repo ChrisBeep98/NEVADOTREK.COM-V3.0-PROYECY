@@ -52,7 +52,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </h2>
 
                     {body && (
-                        <div className="md:columns-2 gap-20 reveal-content border-l border-border pl-8 md:pl-3 md:border-l-0">
+                        <div className="md:columns-2 gap-20 reveal-content border-l border-border md:pl-3 md:border-l-0" style={{ paddingLeft: '12px' }}>
                             <p className="text-body-lead text-muted mb-4">{body}</p>
                         </div>
                     )}
@@ -61,7 +61,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                 {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 mb-24 reveal-content">
                     {/* ALTITUDE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
+                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-cyan-500/10 text-cyan-500">
                                 <Mountain className="w-4 h-4" />
@@ -72,7 +72,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
                     
                     {/* DISTANCE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
+                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-blue-500/10 text-blue-500">
                                 <Ruler className="w-4 h-4" />
@@ -86,7 +86,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
 
                     {/* TEMPERATURE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
+                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-orange-500/10 text-orange-500">
                                 <Thermometer className="w-4 h-4" />
@@ -102,7 +102,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
 
                     {/* DIFFICULTY */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-center group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
+                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`p-2 md:p-3 rounded-lg ${
                                 tour.difficulty === 'Extreme' ? 'bg-purple-500/10 text-purple-500' : 
