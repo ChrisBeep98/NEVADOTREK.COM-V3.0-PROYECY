@@ -3,6 +3,7 @@ import IntroSection from "./components/IntroSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
 import TextMarquee from "./components/TextMarquee";
 import FeaturesGrid from "./components/FeaturesGrid";
+import FeatureImage from "./components/FeatureImage";
 import TestimonialsSection from "./components/TestimonialsSection";
 import BookingCTA from "./components/BookingCTA";
 import Footer from "./components/Footer";
@@ -21,6 +22,7 @@ export default async function Home() {
         <TextMarquee />
         <BookingCTA />
         <FeaturesGrid />
+        <FeatureImage />
         <TestimonialsSection />
         <Footer />
       </div>
