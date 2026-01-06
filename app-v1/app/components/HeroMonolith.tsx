@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { CircleDot } from 'lucide-react';
+import { CircleDot, Disc, Video, Radio, Aperture } from 'lucide-react';
 import Header from './Header';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -225,13 +225,17 @@ export default function HeroMonolith() {
                     {/* LIVE INDICATOR: Flotando sobre todo, posicionado por GSAP para coincidir con la esquina del monolito */}
                     <div 
                         ref={liveIndicatorRef}
-                        className="absolute z-50 flex items-center gap-2 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10"
+                        className="absolute z-50 flex items-center gap-3 group"
                         style={{ right: '24px', top: '24px' }} // Posición final por defecto (fallback)
                     >
-                        <CircleDot className="w-3 h-3 text-red-500 animate-pulse" />
-                        <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase font-semibold leading-none pt-[1px]">
-                            {t.hero.ui.live_now}
-                        </span>
+                        <div className="flex flex-col items-end leading-none gap-[2px]">
+                            {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
+                                <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
+                                    {line}
+                                </span>
+                            ))}
+                        </div>
+                        <Aperture className="w-4 h-4 text-red-500 animate-spin-slow drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
                     </div>
                 </div>
 

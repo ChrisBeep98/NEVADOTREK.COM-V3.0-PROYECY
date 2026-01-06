@@ -21,7 +21,7 @@
     "words": ["SILENCIO", "ORIGEN", "LÍMITES", "ESPÍRITU"],
     "ui": {
       "live_feed": "SEÑAL EN VIVO",
-      "live_now": "EN VIVO AHORA",
+      "live_now": ["EN VIVO", "AHORA"],
       "scroll": "DESPLAZA PARA EXPLORAR",
       "pitch": "INCLINACIÓN"
     },

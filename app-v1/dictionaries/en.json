@@ -21,7 +21,7 @@
     "words": ["SILENCE", "ORIGIN", "LIMITS", "SPIRIT"],
     "ui": {
       "live_feed": "LIVE FEED",
-      "live_now": "LIVE NOW",
+      "live_now": ["LIVE", "NOW"],
       "scroll": "SCROLL TO EXPLORE",
       "pitch": "PITCH"
     },
