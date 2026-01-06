@@ -36,7 +36,7 @@ export default function TextMarquee() {
 
     }, { scope: containerRef });
 
-    const textStyle = "text-[8vw] md:text-[6vw] font-bold uppercase tracking-tighter whitespace-nowrap leading-none select-none will-change-transform flex items-center";
+    const textStyle = "text-h-tour-title uppercase whitespace-nowrap select-none will-change-transform flex items-center";
 
     const renderLine = (text: string = "", Icon: React.ElementType, iconColor: string) => {
         if (!text) return null;
@@ -52,9 +52,9 @@ export default function TextMarquee() {
     return (
         <section 
             ref={containerRef} 
-            className="bg-background py-24 overflow-hidden flex flex-col justify-center gap-8"
+            className="bg-background section-v-spacing overflow-hidden flex flex-col justify-center gap-8"
         >
-            <div ref={line1Ref} className={`${textStyle} text-foreground/10`}>
+            <div ref={line1Ref} className={`${textStyle} text-foreground/25`}>
                 {renderLine(t.marquee.line1, Sprout, "text-blue-500")}
             </div>
             
@@ -62,7 +62,7 @@ export default function TextMarquee() {
                 {renderLine(t.marquee.line2, Tent, "text-foreground")}
             </div>
 
-            <div ref={line3Ref} className={`${textStyle} text-foreground/10`}>
+            <div ref={line3Ref} className={`${textStyle} text-foreground/25`}>
                 {renderLine(t.marquee.line3, Wind, "text-blue-500")}
             </div>
         </section>
