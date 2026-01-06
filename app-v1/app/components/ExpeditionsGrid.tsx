@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ArrowUpRight, Zap } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, Zap } from 'lucide-react';
+import Link from 'next/link';
 import TourCard from './TourCard';
 import { useLanguage } from '../context/LanguageContext';
 import { Tour } from '../types/api';
@@ -44,8 +45,14 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
-                    <div>
-                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line text-left">
+                    <div className="flex flex-col md:block w-full md:w-auto">
+                        <Link href="/tours" className="flex items-end md:hidden mb-4 group">
+                            <h2 className="text-display-xl text-foreground whitespace-pre-line text-left flex-1 group-hover:opacity-80 transition-opacity">
+                                {t.expeditions.title}
+                            </h2>
+                            <ArrowRight className="w-6 h-6 text-foreground mb-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line text-left hidden md:block">
                             {t.expeditions.title}
                         </h2>
                         <div className="flex items-center gap-2 justify-start">
@@ -55,7 +62,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             </span>
                         </div>
                     </div>
-                    <button className="btn-secondary group max-w-[160px] md:max-w-none">
+                    <button className="btn-secondary group max-w-[160px] md:max-w-none hidden md:block">
                         <span className="opacity-90">{t.expeditions.view_all}</span>
                         <div className="btn-icon-bubble">
                             <ArrowUpRight width={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500" />
