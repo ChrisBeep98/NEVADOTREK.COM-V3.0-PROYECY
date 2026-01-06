@@ -26,13 +26,34 @@ export default function TextMarquee() {
                 trigger: containerRef.current,
                 start: "top bottom",
                 end: "bottom top",
-                scrub: 1,
+                scrub: 1.5, // Suavizado aumentado para mayor peso "cinemático"
             }
         });
 
-        tl.to(line1Ref.current, { xPercent: -15, ease: "none", force3D: true }, 0);
-        tl.to(line2Ref.current, { xPercent: 15, ease: "none", force3D: true }, 0);
-        tl.to(line3Ref.current, { xPercent: -15, ease: "none", force3D: true }, 0);
+        // OPTIMIZACIÓN: Uso de .fromTo para control absoluto de coordenadas GPU
+        // Delta de movimiento unificado (aprox 15-20%) para velocidad constante sin jitter.
+        
+        // Línea 1: Se mueve hacia la IZQUIERDA
+        tl.fromTo(line1Ref.current, 
+            { xPercent: 0 }, 
+            { xPercent: -15, ease: "none", force3D: true }, 
+            0
+        );
+
+        // Línea 2: Se mueve hacia la DERECHA (Opuesta)
+        // Empieza desplazada (-20%) y va hacia el origen (-5%). Delta: 15%.
+        tl.fromTo(line2Ref.current, 
+            { xPercent: -20 }, 
+            { xPercent: -5, ease: "none", force3D: true }, 
+            0
+        );
+
+        // Línea 3: Se mueve hacia la IZQUIERDA
+        tl.fromTo(line3Ref.current, 
+            { xPercent: 0 }, 
+            { xPercent: -15, ease: "none", force3D: true }, 
+            0
+        );
 
     }, { scope: containerRef });
 
@@ -52,13 +73,13 @@ export default function TextMarquee() {
     return (
         <section 
             ref={containerRef} 
-            className="bg-background section-v-spacing overflow-hidden flex flex-col justify-center gap-8"
+            className="bg-background min-h-[800px] overflow-hidden flex flex-col justify-center gap-12"
         >
             <div ref={line1Ref} className={`${textStyle} text-foreground/25`}>
                 {renderLine(t.marquee.line1, Sprout, "text-blue-500")}
             </div>
             
-            <div ref={line2Ref} className={`${textStyle} text-blue-500/80 -translate-x-1/4`}>
+            <div ref={line2Ref} className={`${textStyle} text-blue-500/80`}>
                 {renderLine(t.marquee.line2, Tent, "text-foreground")}
             </div>
 
