@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { CircleDot } from 'lucide-react';
 import Header from './Header';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -59,6 +60,7 @@ export default function HeroMonolith() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const heroSectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const liveIndicatorRef = useRef<HTMLDivElement>(null);
 
     // Status Ticker
     useEffect(() => {
@@ -81,6 +83,7 @@ export default function HeroMonolith() {
         const monolith = monolithRef.current;
         const inner = innerContentRef.current;
         const textFront = textFrontRef.current;
+        const liveIndicator = liveIndicatorRef.current;
 
         if (!monolith || !inner || !textFront) return;
 
@@ -120,6 +123,38 @@ export default function HeroMonolith() {
             { scaleX: 1, scaleY: 1, ease: "none", duration: 1 },
             0
         );
+
+        // 4. Animación de Posición del Indicador Live (Sin deformación)
+        // Calculamos dónde está visualmente la esquina del monolito al inicio
+        // Monolito ancho inicial = 100% * startScaleX
+        // Margen desde el borde derecho de la pantalla = (100% - AnchoMonolito) / 2
+        
+        const initialMarginX = (w * (1 - startScaleX)) / 2; // Distancia desde el borde derecho hasta el borde del monolito
+        const initialMarginY = (h * (1 - startScaleY)) / 2; // Distancia desde el borde superior hasta el borde del monolito
+        
+        // Queremos que esté a 24px (1.5rem / top-6 right-6) ADENTRO del borde del monolito
+        // Posición start: right: initialMarginX + 24, top: initialMarginY + 24
+        // Posición end: right: 24, top: 24
+        
+        if (liveIndicator) {
+            // Reset transforms primero por si acaso
+            gsap.set(liveIndicator, { clearProps: "all" });
+            
+            tl.fromTo(liveIndicator,
+                { 
+                    right: initialMarginX + 24, 
+                    top: initialMarginY + 24,
+                    scale: 1 // Aseguramos escala 1:1 siempre
+                },
+                { 
+                    right: 24, 
+                    top: 24, 
+                    ease: "none", 
+                    duration: 1 
+                },
+                0
+            );
+        }
 
         // UI Fade
         tl.to([textFront, ".monolith-ui", "#dynamic-message", ".scroll-indicator-container"], {
@@ -172,22 +207,32 @@ export default function HeroMonolith() {
                             {/* UI del Monolito (Se escala con el contenido) */}
                             <div className="monolith-ui absolute inset-0">
                                 <div className="absolute top-6 right-6 flex flex-col items-end">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                                        <span className="text-[9px] font-mono text-white tracking-widest uppercase">{t.hero.ui.live_feed}</span>
-                                    </div>
                                     <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-1"></span>
                                 </div>
                                 <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
                                 <div className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest uppercase opacity-60">Exp. 2025</div>
                             </div>
                         </div>
+
+                        {/* LIVE INDICATOR: Removed from here to place outside */}
                     </div>
 
                     {/* TÍTULO TREK: Centrado Absoluto sobre el monolito */}
                     <h1 ref={textFrontRef} className="text-display-xl absolute top-1/2 left-1/2 text-white select-none pointer-events-none mix-blend-overlay z-20 whitespace-nowrap">
                         TREK
                     </h1>
+
+                    {/* LIVE INDICATOR: Flotando sobre todo, posicionado por GSAP para coincidir con la esquina del monolito */}
+                    <div 
+                        ref={liveIndicatorRef}
+                        className="absolute z-50 flex items-center gap-2 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10"
+                        style={{ right: '24px', top: '24px' }} // Posición final por defecto (fallback)
+                    >
+                        <CircleDot className="w-3 h-3 text-red-500 animate-pulse" />
+                        <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase font-semibold leading-none pt-[1px]">
+                            {t.hero.ui.live_now}
+                        </span>
+                    </div>
                 </div>
 
                 {/* UI EXTERIOR */}
