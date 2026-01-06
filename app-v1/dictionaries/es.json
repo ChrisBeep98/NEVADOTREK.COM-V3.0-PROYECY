@@ -115,6 +115,11 @@
       }
     ]
   },
+  "marquee": {
+    "line1": "Exploración // Montaña // Libertad // Desafío // Exploración // Montaña // Libertad // Desafío //",
+    "line2": "Nevado Trek // Colombia // Andes // Naturaleza // Nevado Trek // Colombia // Andes // Naturaleza //",
+    "line3": "Sin Límites // Eternidad // Cumbres // Silencio // Sin Límites // Eternidad // Cumbres // Silencio //"
+  },
   "tour_detail": {
     "nav": {
       "index": "Índice de ruta",

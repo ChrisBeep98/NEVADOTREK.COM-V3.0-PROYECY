@@ -1,6 +1,7 @@
 import HeroMonolith from "./components/HeroMonolith";
 import IntroSection from "./components/IntroSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
+import TextMarquee from "./components/TextMarquee";
 import FeaturesGrid from "./components/FeaturesGrid";
 import TestimonialsSection from "./components/TestimonialsSection";
 import BookingCTA from "./components/BookingCTA";
@@ -17,6 +18,7 @@ export default async function Home() {
       <div className="relative z-30">
         
         <ExpeditionsGrid initialTours={tours} />
+        <TextMarquee />
         <BookingCTA />
         <FeaturesGrid />
         <TestimonialsSection />
