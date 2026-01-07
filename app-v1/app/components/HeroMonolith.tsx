@@ -92,8 +92,8 @@ export default function HeroMonolith() {
         const h = window.innerHeight;
         const isDesktop = w >= 768;
         
-        const startScaleX = isDesktop ? 0.28 : 0.35;
-        const startScaleY = isDesktop ? 0.65 : 0.60;
+        const startScaleX = isDesktop ? 0.28 : 0.65;
+        const startScaleY = isDesktop ? 0.65 : 0.80;
 
         // Centrado inicial del título
         gsap.set(textFront, { xPercent: -50, yPercent: -50, x: 0, y: 0 });
@@ -112,15 +112,15 @@ export default function HeroMonolith() {
 
         // 2. Animación de "La Ventana"
         tl.fromTo(monolith, 
-            { scaleX: startScaleX, scaleY: startScaleY, borderRadius: "4px" },
-            { scaleX: 1, scaleY: 1, borderRadius: "0px", ease: "none", duration: 1 }, 
+            { scaleX: startScaleX, scaleY: startScaleY, borderRadius: "4px", y: isDesktop ? 0 : "20%" },
+            { scaleX: 1, scaleY: isDesktop ? 1 : 1.25, y: 0, borderRadius: "0px", ease: "none", duration: 1 }, 
             0
         );
 
         // 3. Contrarrestar Escala del Contenido (Para que el video se vea normal)
         tl.fromTo(inner,
             { scaleX: 1 / startScaleX, scaleY: 1 / startScaleY },
-            { scaleX: 1, scaleY: 1, ease: "none", duration: 1 },
+            { scaleX: 1, scaleY: isDesktop ? 1 : 0.80, ease: "none", duration: 1 },
             0
         );
 
@@ -187,7 +187,7 @@ export default function HeroMonolith() {
                         Ocupa el 100% para que el centro sea inamovible.
                         Lo escalamos con GSAP.
                     */}
-                    <div 
+                     <div 
                         ref={monolithRef}
                         className="relative w-full h-full overflow-hidden bg-slate-900 shadow-2xl transform-gpu will-change-transform"
                         style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)' }}
@@ -225,8 +225,8 @@ export default function HeroMonolith() {
                     {/* LIVE INDICATOR: Flotando sobre todo, posicionado por GSAP para coincidir con la esquina del monolito */}
                     <div 
                         ref={liveIndicatorRef}
-                        className="absolute z-50 flex items-center gap-3 group"
-                        style={{ right: '24px', top: '24px' }} // Posición final por defecto (fallback)
+                        className="absolute z-50 items-center gap-3 group hidden md:flex"
+                        style={{ right: '24px', top: '24px' }}
                     >
                         <div className="flex flex-col items-end leading-none gap-[2px]">
                             {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
