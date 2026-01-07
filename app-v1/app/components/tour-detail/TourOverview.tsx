@@ -52,7 +52,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </h2>
 
                     {body && (
-                        <div className="md:columns-2 gap-20 reveal-content border-l border-border md:pl-3 md:border-l-0" style={{ paddingLeft: '12px' }}>
+                        <div className="md:columns-2 gap-20 reveal-content md:pl-3 md:border-l md:border-l-0 md:border-border">
                             <p className="text-body-lead text-muted mb-4">{body}</p>
                         </div>
                     )}

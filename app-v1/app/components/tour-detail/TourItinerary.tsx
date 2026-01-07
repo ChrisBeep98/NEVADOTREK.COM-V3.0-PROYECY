@@ -152,7 +152,7 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
                                             <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="text-body-std text-foreground/80">
+                                            <p className="text-base md:text-base text-foreground/80">
                                                 {activity[l]}
                                             </p>
                                         </div>
