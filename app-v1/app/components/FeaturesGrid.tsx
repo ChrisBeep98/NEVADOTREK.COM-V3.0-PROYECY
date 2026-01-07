@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -20,21 +20,22 @@ export default function FeaturesGrid() {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const features = t.features.items.map((item: any) => ({
         ...item,
         ...FEATURES_STATIC[item.id as keyof typeof FEATURES_STATIC]
     }));
 
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
     useGSAP(() => {
-        // Optimized Animation: Batch animate columns for better performance
-        gsap.from(".feature-col", {
-            y: 40,
+        gsap.from(".altitude-card", {
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power2.out",
-            clearProps: "all", // Clear styles after animation to prevent layout issues
+            y: 80,
+            scale: 0.9,
+            rotationX: 15,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out",
             scrollTrigger: {
                 trigger: containerRef.current,
                 start: "top 80%",
@@ -44,88 +45,100 @@ export default function FeaturesGrid() {
 
     }, { scope: containerRef });
 
+    const altitudes = [0, 40, 80, 0];
+    const iconColors = ['text-cyan-400', 'text-orange-400', 'text-emerald-400', 'text-purple-400'];
+    const bgGradients = [
+        'from-cyan-500/5 to-transparent',
+        'from-orange-500/5 to-transparent',
+        'from-emerald-400/5 to-transparent',
+        'from-purple-500/5 to-transparent'
+    ];
+    const borderColors = ['border-cyan-500/15', 'border-orange-500/15', 'border-emerald-400/15', 'border-purple-500/15'];
+
     return (
-        <section ref={containerRef} className="bg-background section-v-spacing pb-32 border-t border-border relative">
+        <section ref={containerRef} className="bg-background section-v-spacing relative overflow-hidden">
             
-            <div className="px-frame max-w-[1600px] mx-auto">
+            <div className="px-frame max-w-[1400px] mx-auto relative z-10">
                 
                 {/* Header */}
-                <div className="mb-8 md:mb-16 max-w-2xl md:mx-auto text-left md:text-center">
-                    <span className="text-sm font-medium tracking-[0.1em] text-cyan-500 mb-4 block normal-case">
-                        // {t.features.pretitle}
+                <div className="mb-16 md:mb-24 text-center">
+                    <span className="text-sub-label mb-5 block">
+                        {t.features.pretitle}
                     </span>
-                    <h2 className="text-3xl md:text-h-section-title text-foreground normal-case">
-                        {t.features.title_primary} <span className="text-muted-foreground">{t.features.title_secondary}</span>
+                    <h2 className="text-h-section-title text-foreground">
+                        {t.features.title_primary} <span className="text-muted">{t.features.title_secondary}</span>
                     </h2>
                 </div>
 
-                {/* Swiss Grid Layout - Clean & Performant */}
-                <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 relative border-t border-border no-scrollbar pb-8 md:pb-0 -mx-frame px-frame md:mx-0 md:px-0">
-                    
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {/* Altitude Cards */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8 items-end">
                     {features.map((f: any, i: number) => {
                         const Icon = f.icon;
+                        const isHovered = hoveredIndex === i;
                         
                         return (
-                            <div key={f.id} className="feature-col relative min-w-[280px] md:min-w-0 snap-center p-6 md:p-8 lg:px-10 lg:py-12 flex flex-col gap-4 md:gap-8 group hover:bg-surface transition-colors duration-300 border-r border-border md:border-r-0">
+                            <div key={f.id} 
+                                className={`altitude-card relative group perspective-1000`}
+                                onMouseEnter={() => setHoveredIndex(i)}
+                                onMouseLeave={() => setHoveredIndex(null)}
+                            >
                                 
-                                {/* Vertical Divider (Desktop) */}
-                                {i !== 0 && (
-                                    <div className="absolute left-0 top-0 bottom-0 w-px bg-border hidden lg:block"></div>
-                                )}
-                                {/* Horizontal Divider (Mobile/Tablet - Grid View Only) */}
-                                {i !== 0 && (
-                                    <div className="absolute top-0 left-0 right-0 h-px bg-border hidden md:block lg:hidden"></div>
-                                )}
-
-                                {/* Header: Icon & ID */}
-                                <div className="flex justify-between items-start mb-2 md:mb-6">
-                                    <span className="text-sm font-medium tracking-wide text-foreground normal-case opacity-50 mt-2">0{i + 1}</span>
+                                {/* Card Container with 3D Effect */}
+                                <div 
+                                    className={`relative px-3 md:px-6 py-4 md:py-8 rounded-lg md:rounded-xl bg-gradient-to-br ${bgGradients[i]} border border-foreground/5 
+                                        backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.15)]
+                                        transition-all duration-700 ease-out
+                                        ${isHovered ? 'scale-105 translate-y-[-8px] shadow-2xl shadow-foreground/5' : 'hover:translate-y-[-4px]'}
+                                        will-change-transform`}
+                                    style={{ 
+                                        transformStyle: 'preserve-3d',
+                                        marginBottom: `${altitudes[i]}px`
+                                    }}
+                                >
                                     
-                                    {/* Icon with Dynamic System Colors */}
-                                    <div className={`p-3 rounded-lg transition-transform duration-300 group-hover:scale-105 ${
-                                        i === 0 ? 'bg-cyan-500/10 text-cyan-500' :
-                                        i === 1 ? 'bg-orange-500/10 text-orange-500' :
-                                        i === 2 ? 'bg-emerald-400/10 text-emerald-400' :
-                                                  'bg-purple-500/10 text-purple-500'
-                                    }`}>
-                                        <Icon size={24} strokeWidth={1.5} />
+                                    {/* Altitude Marker */}
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-background rounded-full border border-foreground/10 text-[10px] font-mono tracking-widest text-foreground/40">
+                                        {2000 + i * 1000}m
                                     </div>
-                                </div>
 
-                                {/* Title - Top Aligned */}
-                                <div className="min-h-0 md:min-h-[60px] flex items-start">
-                                    <h3 className="text-xl md:text-heading-l text-foreground normal-case font-medium">
+                                    {/* Icon */}
+                                    <div className={`mb-4 md:mb-6 p-2 md:p-3 rounded-2xl bg-background ${iconColors[i]} 
+                                        transition-all duration-500 ${isHovered ? 'scale-110 rotate-12' : 'group-hover:rotate-6'}`}>
+                                        <Icon size={20} strokeWidth={1.5} />
+                                    </div>
+
+                                    {/* Title */}
+                                    <h3 className="text-lg md:text-xl text-foreground font-medium mb-4 md:mb-5">
                                         {f.title}
                                     </h3>
+
+                                    {/* Highlights */}
+                                    {f.highlights && (
+                                        <ul className={`space-y-3 md:space-y-4 border-t ${borderColors[i]} pt-5`}>
+                                            {f.highlights.map((h: string, idx: number) => (
+                                                <li key={idx} className="flex items-start" style={{ gap: '2px' }}>
+                                                    <span className={`w-1 h-1 rounded-full mt-1.5 md:mt-2 shrink-0 ${iconColors[i]}`}></span>
+                                                    <span className="text-xs md:text-sm text-muted group-hover:text-foreground/80 transition-colors leading-relaxed normal-case">{h}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+
+                                    {/* Altitude Line Decorative */}
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-0 bg-gradient-to-t from-foreground/20 to-transparent 
+                                        group-hover:h-12 transition-all duration-700" />
                                 </div>
-
-                                {/* Highlights List */}
-                                {f.highlights && (
-                                    <ul className="flex flex-col gap-2 md:gap-3 py-4 border-t border-border/50 border-dashed">
-                                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                        {f.highlights.map((h: string, idx: number) => (
-                                            <li key={idx} className="flex items-start gap-3 text-sm font-medium tracking-wide text-foreground/80 normal-case">
-                                                <div className={`w-1 h-1 rounded-full mt-2 shrink-0 ${
-                                                    i === 0 ? 'bg-cyan-500' :
-                                                    i === 1 ? 'bg-orange-500' :
-                                                    i === 2 ? 'bg-emerald-400' :
-                                                              'bg-purple-500'
-                                                }`}></div>
-                                                <span>{h}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-
-                                {/* Description */}
-                                <p className="hidden md:block text-body-std text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300">
-                                    {f.desc}
-                                </p>
 
                             </div>
                         );
                     })}
+                </div>
+
+                {/* Base Line */}
+                <div className="mt-16 md:mt-24 flex items-center justify-center gap-4 text-foreground/30">
+                    <div className="flex-1 max-w-[200px] h-px bg-gradient-to-r from-transparent to-foreground/20" />
+                    <span className="text-xs font-mono tracking-[0.2em]">BASE CAMP</span>
+                    <div className="flex-1 max-w-[200px] h-px bg-gradient-to-l from-transparent to-foreground/20" />
                 </div>
 
             </div>
