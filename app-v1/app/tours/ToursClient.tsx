@@ -190,46 +190,41 @@ export default function ToursClient() {
                     <aside className="filter-sidebar lg:w-64 flex-shrink-0">
                         <div className="sticky top-32 space-y-10">
                             
-                            {/* Difficulty */}
+{/* All Filters */}
                             <div>
                                 <h3 className="text-journal-data text-muted mb-6 flex items-center gap-2">
-                                    <Mountain size={12} /> {t.expeditions.archive.difficulty}
+                                    <Filter size={12} /> Filters
                                 </h3>
-                                <div className="space-y-2">
-                                    {availableOptions.difficulties.map((diff) => (
-                                        <button
-                                            key={diff}
-                                            onClick={() => toggleDifficulty(diff)}
-                                            className={`w-full flex items-center justify-between px-4 py-3 rounded-lg border transition-all duration-300 ${
-                                                selectedDifficulties.includes(diff)
-                                                    ? 'bg-foreground text-background border-foreground'
-                                                    : 'bg-transparent text-muted border-border hover:border-foreground/30'
-                                            }`}
-                                        >
-                                            <span className="text-journal-data font-bold">{diff}</span>
-                                            {selectedDifficulties.includes(diff) && <div className="w-1.5 h-1.5 rounded-full bg-background" />}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Duration */}
-                            <div>
-                                <h3 className="text-journal-data text-muted mb-6 flex items-center gap-2">
-                                    <Clock size={12} /> {t.expeditions.archive.duration}
-                                </h3>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="flex flex-wrap gap-2">
+                                    {/* Duration Filters */}
                                     {availableOptions.durations.map((val) => (
                                         <button
-                                            key={val}
+                                            key={`duration-${val}`}
                                             onClick={() => setDurationFilter(val as DurationFilter)}
-                                            className={`py-3 rounded-lg border text-journal-data transition-all ${
+                                            className={`flex items-center justify-center px-4 py-3 rounded-full transition-all duration-300 min-w-[120px] transform hover:scale-105 border border-border ${
                                                 durationFilter === val
-                                                    ? 'bg-cyan-500/10 text-cyan-500 border-cyan-500/50'
-                                                    : 'bg-transparent text-muted border-border hover:border-foreground/30'
+                                                    ? 'bg-foreground text-background shadow-lg shadow-black/10'
+                                                    : 'bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-white/15 hover:shadow-lg hover:shadow-black/15'
                                             }`}
                                         >
-                                            {val === 'ALL' ? 'ALL' : val === 'SHORT' ? '< 3D' : val === 'MEDIUM' ? '3-5D' : '> 5D'}
+                                            <span className="text-sm font-normal capitalize">
+                                                {val === 'ALL' ? 'All' : val === 'SHORT' ? '< 3d' : val === 'MEDIUM' ? '3-5d' : '> 5d'}
+                                            </span>
+                                        </button>
+                                    ))}
+                                    
+                                    {/* Difficulty Filters */}
+                                    {availableOptions.difficulties.map((diff) => (
+                                        <button
+                                            key={`difficulty-${diff}`}
+                                            onClick={() => toggleDifficulty(diff)}
+                                            className={`flex items-center justify-center px-4 py-3 rounded-full transition-all duration-300 min-w-[120px] transform hover:scale-105 border border-border ${
+                                                selectedDifficulties.includes(diff)
+                                                    ? 'bg-foreground text-background shadow-lg shadow-black/10'
+                                                    : 'bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-white/15 hover:shadow-lg hover:shadow-black/15'
+                                            }`}
+                                        >
+                                            <span className="text-sm font-normal capitalize">{diff.toLowerCase()}</span>
                                         </button>
                                     ))}
                                 </div>
