@@ -23,11 +23,26 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
     const { t, lang } = useLanguage();
     const l = lang.toLowerCase() as 'es' | 'en';
     const [activeDay, setActiveDay] = useState(0);
+    const [expandedActivities, setExpandedActivities] = useState<Set<number>>(new Set());
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const tabsRef = useRef<HTMLDivElement>(null);
 
     const days = itinerary?.days || [];
+
+    const toggleExpand = (index: number) => {
+        setExpandedActivities(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(index)) {
+                newSet.delete(index);
+            } else {
+                newSet.add(index);
+            }
+            return newSet;
+        });
+    };
+
+    const MAX_CHARS_MOBILE = 450;
 
     useGSAP(() => {
         if (!contentRef.current) return;
@@ -146,18 +161,34 @@ export default function TourItinerary({ itinerary }: { itinerary: { days: Itiner
 
                             {/* Activities List */}
                             <div className="space-y-4">
-                                {currentDayData.activities?.map((activity, i) => (
-                                    <div key={i} className="group flex flex-col gap-5 items-start pt-[6px] pb-4 transition-colors">
-                                        <div className="mt-1 shrink-0">
-                                            <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
+                                {currentDayData.activities?.map((activity, i) => {
+                                    const isExpanded = expandedActivities.has(i);
+                                    const shouldTruncate = !isExpanded && activity[l].length > MAX_CHARS_MOBILE;
+
+                                    return (
+                                        <div key={i} className="group flex flex-col gap-5 items-start pt-[6px] pb-4 transition-colors">
+                                            <div className="mt-1 shrink-0">
+                                                <Flag className="w-4 h-4 text-cyan-500 fill-cyan-500/20" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-base md:text-base text-foreground/80">
+                                                    {shouldTruncate 
+                                                        ? `${activity[l].substring(0, MAX_CHARS_MOBILE)}...` 
+                                                        : activity[l]
+                                                    }
+                                                </p>
+                                                {shouldTruncate && (
+                                                    <button
+                                                        onClick={() => toggleExpand(i)}
+                                                        className="md:hidden mt-2 text-xs text-cyan-500 font-medium hover:text-cyan-400 transition-colors uppercase tracking-wider"
+                                                    >
+                                                        {isExpanded ? 'Show Less' : 'Read More'}
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className="flex-1">
-                                            <p className="text-base md:text-base text-foreground/80">
-                                                {activity[l]}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
 
                                 {(!currentDayData.activities || currentDayData.activities.length === 0) && (
                                     <div className="flex items-center gap-4 p-6 rounded-[6px] border border-dashed border-border bg-surface">

@@ -137,12 +137,12 @@ export default function TourOverview({ tour }: { tour: Tour }) {
 
                         {/* EXCLUSIONS */}
                         <div className="space-y-8 md:pl-12 lg:pl-24 border-t md:border-t-0 md:border-l border-border pt-12 md:pt-0">
-                            <h3 className="text-sub-label !text-muted opacity-30 tracking-[0.2em]">{t.tour_detail.overview.exclusions}</h3>
-                            <ul className="space-y-5 opacity-40 hover:opacity-100 transition-opacity duration-500">
+                            <h3 className="text-sub-label !text-muted tracking-[0.2em]">{t.tour_detail.overview.exclusions}</h3>
+                            <ul className="space-y-5">
                                 {tour.exclusions?.map((item, i) => (
                                     <li key={i} className="flex gap-4 items-start">
-                                        <X className="w-3 h-3 mt-1.5 text-muted/30 shrink-0" />
-                                        <p className="text-sm md:text-base text-muted leading-relaxed font-light italic">
+                                        <X className="w-3 h-3 mt-1.5 text-foreground/40 shrink-0" />
+                                        <p className="text-sm md:text-base text-foreground/80 leading-relaxed font-light">
                                             {item[l]}
                                         </p>
                                     </li>
