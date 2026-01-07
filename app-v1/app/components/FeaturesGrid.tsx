@@ -71,14 +71,14 @@ export default function FeaturesGrid() {
                 </div>
 
                 {/* Altitude Cards */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-1 lg:gap-x-8 gap-y-0 lg:gap-y-8 lg:items-end items-start">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 lg:gap-x-8 gap-y-2 lg:gap-y-8 lg:items-end items-start">
                     {features.map((f: any, i: number) => {
                         const Icon = f.icon;
                         const isHovered = hoveredIndex === i;
                         
                         return (
                             <div key={f.id} 
-                                className={`altitude-card relative group perspective-1000 ${i % 2 === 1 ? 'translate-y-4 lg:translate-y-0' : ''}`}
+                                className="altitude-card relative group perspective-1000"
                                 onMouseEnter={() => setHoveredIndex(i)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                             >
@@ -91,8 +91,7 @@ export default function FeaturesGrid() {
                                         ${isHovered ? 'scale-105 translate-y-[-8px] shadow-2xl shadow-foreground/5' : 'hover:translate-y-[-4px]'}
                                         will-change-transform`}
                                     style={{ 
-                                        transformStyle: 'preserve-3d',
-                                        marginBottom: i % 2 === 0 ? 0 : 12
+                                        transformStyle: 'preserve-3d'
                                     }}
                                 >
                                     
