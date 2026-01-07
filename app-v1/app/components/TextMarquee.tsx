@@ -79,16 +79,16 @@ export default function TextMarquee() {
             ref={containerRef} 
             className="bg-background min-h-[580px] md:min-h-[800px] overflow-hidden flex flex-col justify-center gap-6"
         >
-            <div ref={line1Ref} className={`${textStyle} text-blue-400/35`}>
-                {renderLine(t.marquee.line1, Sprout, "text-cyan-500/50 dark:text-cyan-500/70")}
+            <div ref={line1Ref} className={`${textStyle} text-blue-950/70 dark:text-white/80`}>
+                {renderLine(t.marquee.line1, Sprout, "text-cyan-500/80 dark:text-cyan-500/90")}
             </div>
             
-            <div ref={line2Ref} className={`${textStyle} text-blue-400/35`}>
-                {renderLine(t.marquee.line2, Tent, "text-cyan-500/50 dark:text-cyan-500/70")}
+            <div ref={line2Ref} className={`${textStyle} text-blue-950/70 dark:text-white/80`}>
+                {renderLine(t.marquee.line2, Tent, "text-cyan-500/80 dark:text-cyan-500/90")}
             </div>
 
-            <div ref={line3Ref} className={`${textStyle} text-blue-400/35`}>
-                {renderLine(t.marquee.line3, Wind, "text-cyan-500/50 dark:text-cyan-500/70")}
+            <div ref={line3Ref} className={`${textStyle} text-blue-950/70 dark:text-white/80`}>
+                {renderLine(t.marquee.line3, Wind, "text-cyan-500/80 dark:text-cyan-500/90")}
             </div>
         </section>
     );
