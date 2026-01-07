@@ -6,7 +6,7 @@ import { useTours } from '../context/ToursContext';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Filter, Clock, Mountain, RefreshCcw, Map } from 'lucide-react';
+import { Filter, Clock, Mountain, RefreshCcw, Map, Trash2 } from 'lucide-react';
 import TourCard from '../components/TourCard';
 
 if (typeof window !== 'undefined') {
@@ -64,13 +64,18 @@ export default function ToursClient() {
     }, [tours, selectedDifficulties, durationFilter]);
 
 
-    // --- HANDLERS ---
+// --- HANDLERS ---
     const toggleDifficulty = (diff: string) => {
         setSelectedDifficulties(prev => 
             prev.includes(diff) 
                 ? prev.filter(d => d !== diff)
                 : [...prev, diff]
         );
+    };
+
+    const clearAllFilters = () => {
+        setSelectedDifficulties([]);
+        setDurationFilter('ALL');
     };
 
     // --- ANIMATIONS ---
@@ -184,10 +189,56 @@ export default function ToursClient() {
 
 {/* --- MAIN CONTENT: FILTERS + GRID --- */}
             <div className="max-w-none mx-auto px-frame pt-0 md:pt-12">
+                {/* Mobile Filters Horizontal Scroll */}
+                <div className="lg:hidden mb-6 overflow-x-auto -mx-frame px-frame pb-12 no-scrollbar">
+                    <div className="flex gap-2 flex-nowrap">
+                        {/* Clear Filters Button */}
+                        <button
+                            onClick={clearAllFilters}
+                            className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 transform hover:scale-105 border border-border bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-red-500/10 hover:text-red-500 hover:shadow-lg hover:shadow-black/15 flex-shrink-0`}
+                            title="Clear all filters"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </button>
+                        
+                        {/* Duration Filters */}
+                        {availableOptions.durations.map((val) => (
+                            <button
+                                key={`duration-${val}`}
+                                onClick={() => setDurationFilter(val as DurationFilter)}
+                                className={`flex items-center justify-center px-4 py-3 rounded-full transition-all duration-300 min-w-[120px] transform hover:scale-105 border border-border whitespace-nowrap flex-shrink-0 ${
+                                    durationFilter === val
+                                        ? 'bg-foreground text-background shadow-lg shadow-black/10'
+                                        : 'bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-white/15 hover:shadow-lg hover:shadow-black/15'
+                                }`}
+                            >
+                                <span className="text-sm font-normal capitalize">
+                                    {val === 'ALL' ? 'All' : val === 'SHORT' ? '< 3d' : val === 'MEDIUM' ? '3-5d' : '> 5d'}
+                                </span>
+                            </button>
+                        ))}
+                        
+                        {/* Difficulty Filters */}
+                        {availableOptions.difficulties.map((diff) => (
+                            <button
+                                key={`difficulty-${diff}`}
+                                onClick={() => toggleDifficulty(diff)}
+                                className={`flex items-center justify-center px-4 py-3 rounded-full transition-all duration-300 min-w-[120px] transform hover:scale-105 border border-border whitespace-nowrap flex-shrink-0 ${
+                                    selectedDifficulties.includes(diff)
+                                        ? 'bg-foreground text-background shadow-lg shadow-black/10'
+                                        : 'bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-white/15 hover:shadow-lg hover:shadow-black/15'
+                                }`}
+                            >
+                                <span className="text-sm font-normal capitalize">{diff.toLowerCase()}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="flex flex-col lg:flex-row gap-12">
                     
-                    {/* SIDEBAR: FILTERS */}
-                    <aside className="filter-sidebar lg:w-64 flex-shrink-0">
+{/* SIDEBAR: FILTERS (Desktop Only) */}
+                    <aside className="filter-sidebar hidden lg:block lg:w-64 flex-shrink-0">
                         <div className="sticky top-32 space-y-10">
                             
 {/* All Filters */}
@@ -196,12 +247,23 @@ export default function ToursClient() {
                                     <Filter size={12} /> Filters
                                 </h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {/* Duration Filters */}
+                                    {/* Clear Filters Button */}
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 transform hover:scale-105 border border-border bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-red-500/10 hover:text-red-500 hover:shadow-lg hover:shadow-black/15`}
+                                        title="Clear all filters"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                    
+                                    {/* Duration Filters - All fills remaining space */}
                                     {availableOptions.durations.map((val) => (
                                         <button
                                             key={`duration-${val}`}
                                             onClick={() => setDurationFilter(val as DurationFilter)}
                                             className={`flex items-center justify-center px-4 py-3 rounded-full transition-all duration-300 min-w-[120px] transform hover:scale-105 border border-border ${
+                                                val === 'ALL' ? 'flex-1' : ''
+                                            } ${
                                                 durationFilter === val
                                                     ? 'bg-foreground text-background shadow-lg shadow-black/10'
                                                     : 'bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-white/15 hover:shadow-lg hover:shadow-black/15'
