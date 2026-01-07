@@ -35,9 +35,9 @@ function WordCycle({ words, prefix }: { words: string[], prefix: string }) {
     }, { dependencies: [wordIndex, words], scope: wordWrapperRef });
 
     return (
-        <p className="text-sm md:text-base font-light italic leading-relaxed text-white/80">
-            {prefix} 
-            <span ref={wordWrapperRef} className="inline-flex font-bold text-cyan-300 ml-2 tracking-wider overflow-hidden">
+        <p className="text-sm md:text-base font-light italic leading-relaxed text-white drop-shadow-lg flex flex-wrap">
+            <span>{prefix} </span>
+            <span ref={wordWrapperRef} className="inline-flex font-bold text-white tracking-wider overflow-hidden drop-shadow-md">
                 {words[wordIndex].split("").map((char, i) => (
                     <span key={`${wordIndex}-${i}`} className="letter inline-block">
                         {char}
@@ -102,7 +102,7 @@ export default function HeroMonolith() {
             scrollTrigger: {
                 trigger: heroSectionRef.current,
                 start: "top top",
-                end: "+=100%",
+                end: "+=150%",
                 pin: true,
                 scrub: 0.5,
                 fastScrollEnd: true,
@@ -240,7 +240,7 @@ export default function HeroMonolith() {
                 </div>
 
                 {/* UI EXTERIOR */}
-                <div id="dynamic-message" className="absolute top-[45%] left-8 lg:left-24 z-30 max-w-[320px] pointer-events-none mix-blend-difference py-2">
+                <div id="dynamic-message" className="absolute bottom-6 lg:top-[45%] left-3 lg:left-24 z-30 max-w-[160px] lg:max-w-[400px] pointer-events-none mix-blend-difference py-2">
                     <WordCycle words={t.hero.words} prefix={t.hero.message.prefix} />
                 </div>
 
