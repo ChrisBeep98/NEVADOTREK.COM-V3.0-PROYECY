@@ -149,14 +149,14 @@ export default function ToursClient() {
                     {/* Clean Title */}
                     <div className="relative">
                         <h1 className="leading-[0.9] tracking-tight uppercase font-medium text-foreground select-none">
-                            <div className="overflow-hidden">
+<div className="overflow-hidden mb-2 md:mb-0">
                                 <span className="hero-reveal block text-[10vw] md:text-[8vw]">
                                     {lang === 'ES' ? 'NUESTRAS' : 'OUR'}
                                 </span>
                             </div>
                             <div className="overflow-hidden">
                                 <span className="hero-reveal block text-[10vw] md:text-[8vw] text-muted-foreground/50">
-                                    EXPEDICIONES
+                                    {lang === 'ES' ? 'EXPEDICIONES' : 'EXPEDITIONS'}
                                 </span>
                             </div>
                         </h1>
