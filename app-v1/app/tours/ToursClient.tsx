@@ -125,7 +125,7 @@ export default function ToursClient() {
         <div ref={containerRef} className="bg-background min-h-screen text-foreground pb-32">
             
             {/* --- TOP SECTION: THE SILENT PEAK (Atmospheric Minimalism) --- */}
-            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background mt-[104px]">
+            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background mt-0 md:mt-[104px]">
                 
                 {/* 0. Organic Atmosphere */}
                 <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
@@ -159,7 +159,7 @@ export default function ToursClient() {
 
                     {/* Bottom Info / Connection to Grid */}
                     <div className="hero-stats mt-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-12 border-l border-foreground/20 pl-6">
-                        <div className="max-w-md">
+<div className="max-w-md hidden md:block">
                             <p className="text-body-std text-muted">
                                 {lang === 'ES' 
                                     ? 'Descubre rutas diseñadas para conectar con la esencia de los Andes. Desde caminatas de un día hasta expediciones de alta montaña.' 
@@ -167,7 +167,7 @@ export default function ToursClient() {
                             </p>
                         </div>
                         
-                        <div className="flex items-center gap-4 md:ml-auto">
+                        <div className="flex items-center gap-2 md:gap-4 md:ml-auto">
                             <div className="bg-surface p-3 rounded-full">
                                 <Map className="text-cyan-500 w-5 h-5" strokeWidth={1.5} />
                             </div>
