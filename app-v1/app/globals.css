@@ -85,11 +85,11 @@
 }
 
 @utility text-body-lead {
-  @apply text-sm md:text-lg font-light leading-relaxed;
+  @apply text-base md:text-lg font-light leading-relaxed;
 }
 
 @utility text-body-std {
-  @apply text-xs md:text-base font-light leading-relaxed opacity-70;
+  @apply text-sm md:text-base font-light leading-relaxed opacity-70;
 }
 
 @utility text-journal-data {
