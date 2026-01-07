@@ -2,12 +2,42 @@ import { Tour, Departure } from "../types/api";
 
 const API_BASE_URL = 'https://us-central1-nevadotrektest01.cloudfunctions.net/api/public';
 
+// Helper function with retry logic for Cloud Functions cold starts
+async function fetchWithRetry(url: string, options?: RequestInit, maxRetries = 3): Promise<Response> {
+    let lastError: Error | null = null;
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const response = await fetch(url, options);
+            
+            // If it's a 503, retry with delay
+            if (response.status === 503 && attempt < maxRetries) {
+                const delay = Math.pow(2, attempt) * 1000; // Exponential backoff: 2s, 4s, 8s
+                console.warn(`Received 503 on attempt ${attempt}/${maxRetries}, retrying in ${delay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                continue;
+            }
+            
+            return response;
+        } catch (error) {
+            lastError = error as Error;
+            if (attempt < maxRetries) {
+                const delay = Math.pow(2, attempt) * 1000;
+                console.warn(`Fetch failed on attempt ${attempt}/${maxRetries}, retrying in ${delay}ms...`, error);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    }
+    
+    throw lastError || new Error('Max retries exceeded');
+}
+
 /**
- * Fetches the list of active tours.
+ * Fetches list of active tours.
  */
 export async function getTours(): Promise<Tour[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/tours`, {
+        const response = await fetchWithRetry(`${API_BASE_URL}/tours`, {
             next: { revalidate: 300 } // 5 minutes cache
         });
 
@@ -28,7 +58,7 @@ export async function getTours(): Promise<Tour[]> {
  */
 export async function getTourById(id: string): Promise<Tour | undefined> {
     const tours = await getTours();
-    return tours.find(t => t.tourId === id);
+    return tours.find(tour => tour.tourId === id);
 }
 
 /**
@@ -36,7 +66,7 @@ export async function getTourById(id: string): Promise<Tour | undefined> {
  */
 export async function getDeparturesByTourId(tourId: string): Promise<Departure[]> {
     try {
-        const response = await fetch(`${API_BASE_URL}/departures`, {
+        const response = await fetchWithRetry(`${API_BASE_URL}/departures`, {
             next: { revalidate: 300 }
         });
 
