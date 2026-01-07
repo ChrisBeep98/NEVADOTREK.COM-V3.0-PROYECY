@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { MountainSnow, Sun, Moon } from 'lucide-react';
+import { MountainSnow, Sun, Moon, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import Link from 'next/link';
 
@@ -80,8 +80,11 @@ export default function Header() {
                     </button>
                 </div>
 
-                <button className="hidden md:block border border-white/20 w-32 py-2 rounded-full hover:bg-white hover:text-slate-950 transition-all font-bold text-[11px] tracking-[0.2em] uppercase text-center">
-                    {t.common.join}
+                <button className="hidden md:flex border border-white/20 items-center justify-between pl-4 pr-1.75 py-2.5 rounded-full hover:bg-white hover:text-slate-950 transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px]">
+                    <span className="text-sm">{t.common.contact}</span>
+                    <div className="w-8 h-8 rounded-full bg-white/10 border border-white/30 flex items-center justify-center hover:bg-white/20 transition-all shrink-0">
+                        <MessageCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
+                    </div>
                 </button>
             </div>
         </nav>
