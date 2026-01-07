@@ -28,7 +28,7 @@ export default function TextMarquee() {
             isMobile: "(max-width: 767px)"
         }, (context) => {
             const { isDesktop, isMobile } = context.conditions || {};
-            const movement = isMobile ? -50 : -15;
+            const movement = isMobile ? -80 : -15;
 
             const tl = gsap.timeline({
                 scrollTrigger: {
