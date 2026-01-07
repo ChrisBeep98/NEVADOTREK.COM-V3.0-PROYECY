@@ -125,7 +125,7 @@ export default function ToursClient() {
         <div ref={containerRef} className="bg-background min-h-screen text-foreground pb-32">
             
             {/* --- TOP SECTION: THE SILENT PEAK (Atmospheric Minimalism) --- */}
-            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background -mt-20 md:mt-[104px]">
+            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-12 md:pb-24 overflow-hidden bg-background -mt-20 md:mt-[104px]">
                 
                 {/* 0. Organic Atmosphere */}
                 <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
@@ -182,8 +182,8 @@ export default function ToursClient() {
 
             </header>
 
-            {/* --- MAIN CONTENT: FILTERS + GRID --- */}
-            <div className="max-w-none mx-auto px-frame pt-12">
+{/* --- MAIN CONTENT: FILTERS + GRID --- */}
+            <div className="max-w-none mx-auto px-frame pt-0 md:pt-12">
                 <div className="flex flex-col lg:flex-row gap-12">
                     
                     {/* SIDEBAR: FILTERS */}
