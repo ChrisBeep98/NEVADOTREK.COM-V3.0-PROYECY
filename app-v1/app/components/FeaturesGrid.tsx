@@ -7,6 +7,14 @@ import { useGSAP } from '@gsap/react';
 import { ShieldCheck, MapPin, Sprout, Compass } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
+interface FeatureItem {
+    id: string;
+    title: string;
+    tag: string;
+    highlights: string[];
+    desc: string;
+}
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const FEATURES_STATIC = {
@@ -20,7 +28,7 @@ export default function FeaturesGrid() {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const features = t.features.items.map((item: any) => ({
+    const features = t.features.items.map((item: FeatureItem) => ({
         ...item,
         ...FEATURES_STATIC[item.id as keyof typeof FEATURES_STATIC]
     }));
@@ -72,7 +80,7 @@ export default function FeaturesGrid() {
 
                 {/* Altitude Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 lg:gap-x-8 gap-y-2 lg:gap-y-8 lg:items-end items-start">
-                    {features.map((f: any, i: number) => {
+                    {features.map((f: FeatureItem & { icon: React.ComponentType<{ size?: number; strokeWidth?: number }> }, i: number) => {
                         const Icon = f.icon;
                         const isHovered = hoveredIndex === i;
                         
