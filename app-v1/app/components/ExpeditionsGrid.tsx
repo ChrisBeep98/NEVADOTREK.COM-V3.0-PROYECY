@@ -62,7 +62,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             </span>
                         </div>
                     </div>
-                    <button className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center px-4">
+                    <button className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center">
                         <span className="opacity-90 text-left text-xs">{t.expeditions.view_all}</span>
                         <div className="btn-icon-bubble shrink-0">
                             <ArrowUpRight width={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500" />

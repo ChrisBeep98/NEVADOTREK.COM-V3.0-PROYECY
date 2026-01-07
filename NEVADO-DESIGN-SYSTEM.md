@@ -83,8 +83,8 @@ El botón de mayor jerarquía. Debe destacar por su pureza y contraste.
 
 ### **BTN-SECONDARY** (`.btn-secondary`)
 Botón de navegación alternativo. Estilo técnico y cinemático.
-- **Fondo:** `bg-background/50` con `backdrop-blur-md` (Efecto Glass).
-- **Borde:** `Blue-500/40` para alta visibilidad en ambos modos.
+- **Fondo:** `bg-background/80` con `backdrop-blur-md` (Efecto Glass).
+- **Borde:** `1.6px Blue-500/40` para alta visibilidad en ambos modos.
 - **Sombra:** `Spread` sutil (`shadow-[0_4px_20px_-2px_rgba(59,130,246,0.15)]`).
 - **Texto:** `text-foreground`, `Capitalize` (Solo primera letra mayúscula).
 - **Tipografía:** `text-[13px] font-medium tracking-[0.05em]`.
@@ -120,6 +120,7 @@ El diseño debe ser flexible para soportar la expansión de texto del Español v
 ---
 
 ## 📝 7. LOG DE ACTUALIZACIONES
+- **2026-01-07:** Ajuste de grosor de borde en `BTN-SECONDARY` a 1.6px para mayor definición visual.
 - **2026-01-05:** Refactorización del `BTN-SECONDARY`: Implementación de Glassmorphism (blur), sombra spread sutil y refuerzo de contraste de borde para Light Mode.
 - **2025-12-30:** Refinamiento de atmósfera: Cambio de tono de fondo a Glacial Core (#040a16) para mayor energía visual.
 - **2025-12-30:** Ajuste global de atmósfera: Cambio de Slate-950 de #020617 a #01040a (tono más azulado/frío).
