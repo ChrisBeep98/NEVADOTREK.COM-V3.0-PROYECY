@@ -33,11 +33,16 @@ export default function ToursClient() {
         const durations = new Set<string>(['ALL']);
 
         tours.forEach(tour => {
-            if (tour.difficulty) diffs.add(tour.difficulty.toUpperCase());
-            const d = tour.totalDays;
-            if (d < 3) durations.add('SHORT');
-            else if (d >= 3 && d <= 5) durations.add('MEDIUM');
-            else if (d > 5) durations.add('LONG');
+            // Normalizar dificultad para coincidir con TourCard (fallback a MEDIUM)
+            const rawDiff = tour.difficulty || 'medium';
+            diffs.add(rawDiff.trim().toUpperCase());
+
+            const d = Number(tour.totalDays);
+            if (!isNaN(d) && d > 0) {
+                if (d < 3) durations.add('SHORT');
+                else if (d >= 3 && d <= 5) durations.add('MEDIUM');
+                else if (d > 5) durations.add('LONG');
+            }
         });
 
         return {
@@ -48,16 +53,30 @@ export default function ToursClient() {
 
     // --- FILTER LOGIC ---
     const filteredTours = useMemo(() => {
+        // Debug mode: descomentar si es necesario
+        // console.log('Filtering tours...', { selectedDifficulties, durationFilter });
+        
         return tours.filter(tour => {
-            const diff = (tour.difficulty || '').toUpperCase();
+            // 1. Check Difficulty (con fallback consistente)
+            const rawDiff = tour.difficulty || 'medium';
+            const diff = rawDiff.trim().toUpperCase();
             const matchesDifficulty = selectedDifficulties.length === 0 || 
                                      selectedDifficulties.includes(diff);
             
+            // 2. Check Duration
             let matchesDuration = true;
-            const d = tour.totalDays;
-            if (durationFilter === 'SHORT') matchesDuration = d < 3;
-            else if (durationFilter === 'MEDIUM') matchesDuration = d >= 3 && d <= 5;
-            else if (durationFilter === 'LONG') matchesDuration = d > 5;
+            const d = Number(tour.totalDays);
+            
+            if (durationFilter !== 'ALL') {
+                // Si no es un número válido, lo excluimos de los filtros específicos
+                if (isNaN(d) || d <= 0) {
+                    matchesDuration = false;
+                } else {
+                    if (durationFilter === 'SHORT') matchesDuration = d < 3;
+                    else if (durationFilter === 'MEDIUM') matchesDuration = d >= 3 && d <= 5;
+                    else if (durationFilter === 'LONG') matchesDuration = d > 5;
+                }
+            }
 
             return matchesDifficulty && matchesDuration;
         });
