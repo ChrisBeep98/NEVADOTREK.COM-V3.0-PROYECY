@@ -54,18 +54,32 @@ export default function TourGallery({ images }: { images: string[] }) {
                 </div>
                 
                 {/* Grid Layout - Mosaico Asimétrico Dinámico */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 auto-rows-[300px] md:auto-rows-[450px]">
+                <div className="grid grid-cols-3 md:grid-cols-12 gap-2 md:gap-3 auto-rows-[160px] md:auto-rows-[450px]">
                     {images.map((img, i) => {
-                        // Patrón de diseño: 8-4, 4-4-4, 12... y repite
                         const pattern = i % 6;
-                        let colSpan = "md:col-span-4";
-                        if (pattern === 0) colSpan = "md:col-span-8";
-                        if (pattern === 5) colSpan = "md:col-span-12";
+                        
+                        // Mobile Layout (3 Columns)
+                        // 0: Big Square (2x2) -> Takes 2/3 width, 2 rows height
+                        // 1: Small (1x1) -> Top right
+                        // 2: Small (1x1) -> Bottom right (under 1)
+                        // 3: Banner (3x1) -> Full width
+                        // 4: Small (1x1) -> Left
+                        // 5: Medium (2x1) -> Right
+                        let mobileClass = "col-span-1";
+                        if (pattern === 0) mobileClass = "col-span-2 row-span-2";
+                        else if (pattern === 3) mobileClass = "col-span-3";
+                        else if (pattern === 5) mobileClass = "col-span-2";
+
+                        // Desktop Layout (12 Columns)
+                        // Reset row-span to 1 for all desktop items to override mobile 2x2
+                        let desktopClass = "md:col-span-4 md:row-span-1";
+                        if (pattern === 0) desktopClass = "md:col-span-8 md:row-span-1";
+                        if (pattern === 5) desktopClass = "md:col-span-12 md:row-span-1";
 
                         return (
                             <div 
                                 key={i} 
-                                className={`${colSpan} relative overflow-hidden rounded-[6px] group gallery-img shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface will-change-transform transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
+                                className={`${mobileClass} ${desktopClass} relative overflow-hidden rounded-[6px] group gallery-img shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface will-change-transform transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
                             >
                                 {/* Vignette & Gradient Overlay */}
                                 <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_40%,_rgba(4,9,24,0.4)_100%] z-10 opacity-100 group-hover:opacity-60 transition-opacity duration-1000 pointer-events-none"></div>
