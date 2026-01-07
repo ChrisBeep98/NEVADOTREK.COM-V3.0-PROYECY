@@ -92,8 +92,8 @@ export default function HeroMonolith() {
         const h = window.innerHeight;
         const isDesktop = w >= 768;
         
-        const startScaleX = isDesktop ? 0.28 : 0.65;
-        const startScaleY = isDesktop ? 0.65 : 0.80;
+        const startScaleX = isDesktop ? 0.28 : 0.70;
+        const startScaleY = isDesktop ? 0.65 : 0.85;
 
         // Centrado inicial del título
         gsap.set(textFront, { xPercent: -50, yPercent: -50, x: 0, y: 0 });
