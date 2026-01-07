@@ -43,7 +43,7 @@ export default function Header() {
     };
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-frame mix-blend-difference text-white">
+        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 px-frame mix-blend-difference text-white/90">
             <div className="flex items-center gap-2 cursor-pointer">
                 <MountainSnow width={24} strokeWidth={1.5} />
                 <span className="font-bold tracking-tighter text-xl">NEVADO TREK</span>
