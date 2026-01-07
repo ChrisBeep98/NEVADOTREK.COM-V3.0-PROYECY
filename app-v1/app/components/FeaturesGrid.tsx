@@ -61,8 +61,8 @@ export default function FeaturesGrid() {
             <div className="px-frame max-w-[1400px] mx-auto relative z-10">
                 
                 {/* Header */}
-                <div className="mb-16 md:mb-24 text-center">
-                    <span className="text-sub-label mb-5 block">
+                <div className="mb-8 md:mb-16 text-center">
+                    <span className="text-sub-label mb-4 block">
                         {t.features.pretitle}
                     </span>
                     <h2 className="text-h-section-title text-foreground">
@@ -71,33 +71,33 @@ export default function FeaturesGrid() {
                 </div>
 
                 {/* Altitude Cards */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8 items-end">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-1 lg:gap-x-8 gap-y-0 lg:gap-y-8 lg:items-end items-start">
                     {features.map((f: any, i: number) => {
                         const Icon = f.icon;
                         const isHovered = hoveredIndex === i;
                         
                         return (
                             <div key={f.id} 
-                                className={`altitude-card relative group perspective-1000`}
+                                className={`altitude-card relative group perspective-1000 ${i % 2 === 1 ? 'translate-y-4 lg:translate-y-0' : ''}`}
                                 onMouseEnter={() => setHoveredIndex(i)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                             >
                                 
                                 {/* Card Container with 3D Effect */}
                                 <div 
-                                    className={`relative px-3 md:px-6 py-4 md:py-8 rounded-lg md:rounded-xl bg-gradient-to-br ${bgGradients[i]} border border-foreground/5 
+                                    className={`relative px-3 md:px-6 py-4 md:py-8 rounded-lg md:rounded-xl min-h-[280px] bg-gradient-to-br ${bgGradients[i]} border border-foreground/5 
                                         backdrop-blur-sm shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.15)]
                                         transition-all duration-700 ease-out
                                         ${isHovered ? 'scale-105 translate-y-[-8px] shadow-2xl shadow-foreground/5' : 'hover:translate-y-[-4px]'}
                                         will-change-transform`}
                                     style={{ 
                                         transformStyle: 'preserve-3d',
-                                        marginBottom: `${altitudes[i]}px`
+                                        marginBottom: i % 2 === 0 ? 0 : 12
                                     }}
                                 >
                                     
                                     {/* Altitude Marker */}
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-background rounded-full border border-foreground/10 text-[10px] font-mono tracking-widest text-foreground/40">
+                                    <div className="hidden md:block absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-background rounded-full border border-foreground/10 text-[10px] font-mono tracking-widest text-foreground/40">
                                         {2000 + i * 1000}m
                                     </div>
 
