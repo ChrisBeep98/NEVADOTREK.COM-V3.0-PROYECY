@@ -50,8 +50,8 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-4 md:gap-8">
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
+                    <Link href="/" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.home}</Link>
                     <Link href="/tours" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.tours}</Link>
-                    <a href="#" className="hover:text-cyan-400 transition-colors uppercase">{t.navigation.philosophy}</a>
                 </div>
 
                 <div className="flex items-center gap-3">
