@@ -195,7 +195,7 @@ export default function ToursClient() {
                         {/* Clear Filters Button */}
                         <button
                             onClick={clearAllFilters}
-                            className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 transform hover:scale-105 border border-border bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-red-500/10 hover:text-red-500 hover:shadow-lg hover:shadow-black/15 flex-shrink-0`}
+                            className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 border border-border bg-white/10 backdrop-blur-sm text-foreground shadow-lg shadow-black/10 hover:bg-red-500/10 hover:text-red-500 hover:shadow-lg hover:shadow-black/15 flex-shrink-0 active:bg-red-500/20`}
                             title="Clear all filters"
                         >
                             <Trash2 className="w-4 h-4" />
