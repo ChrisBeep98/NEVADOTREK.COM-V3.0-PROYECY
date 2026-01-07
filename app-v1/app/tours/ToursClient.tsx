@@ -125,7 +125,7 @@ export default function ToursClient() {
         <div ref={containerRef} className="bg-background min-h-screen text-foreground pb-32">
             
             {/* --- TOP SECTION: THE SILENT PEAK (Atmospheric Minimalism) --- */}
-            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background mt-0 md:mt-[104px]">
+            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background -mt-20 md:mt-[104px]">
                 
                 {/* 0. Organic Atmosphere */}
                 <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
