@@ -6,7 +6,7 @@ import { useTours } from '../context/ToursContext';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Filter, SlidersHorizontal, Clock, Mountain, RefreshCcw } from 'lucide-react';
+import { Filter, Clock, Mountain, RefreshCcw, Map } from 'lucide-react';
 import TourCard from '../components/TourCard';
 
 if (typeof window !== 'undefined') {
@@ -21,6 +21,7 @@ export default function ToursClient() {
     
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
+    const heroRef = useRef<HTMLDivElement>(null);
 
     // --- STATE ---
     const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
@@ -75,17 +76,36 @@ export default function ToursClient() {
     // --- ANIMATIONS ---
     useGSAP(() => {
         const tl = gsap.timeline();
-        tl.fromTo('.hero-text', 
-            { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power4.out" }
+        
+        // 1. Fog Movement (Organic Atmosphere)
+        gsap.to('.fog-layer', {
+            x: '-10%',
+            duration: 20,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true
+        });
+
+        // 2. Elegant Title Reveal
+        tl.fromTo('.hero-reveal', 
+            { y: 60, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: "power3.out" }
         );
+
+        // 3. Stats Fade In
+        tl.fromTo('.hero-stats',
+            { opacity: 0, x: -20 },
+            { opacity: 1, x: 0, duration: 1, ease: "power2.out" },
+            "-=0.5"
+        );
+
     }, { scope: containerRef, dependencies: [loading] });
 
     useEffect(() => {
         if (!gridRef.current || loading) return;
         gsap.fromTo(gridRef.current.children, 
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out", overwrite: true }
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", overwrite: true }
         );
     }, [filteredTours, loading]);
 
@@ -104,27 +124,60 @@ export default function ToursClient() {
     return (
         <div ref={containerRef} className="bg-background min-h-screen text-foreground pb-32">
             
-            {/* --- TOP SECTION: THE FROZEN GIANT (Atmospheric Brutalism) --- */}
-            <header className="relative h-[65vh] min-h-[500px] flex flex-col px-frame pt-32 pb-[52px] overflow-hidden bg-background mb-[52px]">
+            {/* --- TOP SECTION: THE SILENT PEAK (Atmospheric Minimalism) --- */}
+            <header ref={heroRef} className="relative h-[60vh] min-h-[500px] flex flex-col justify-end px-frame pb-24 overflow-hidden bg-background mt-[104px]">
                 
-                {/* Grain Texture Overlay */}
-                <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-                     style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} 
-                />
+                {/* 0. Organic Atmosphere */}
+                <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background pointer-events-none" />
+                <div className="fog-layer absolute inset-0 z-0 opacity-20 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-700/20 via-background to-background blur-3xl scale-150" />
 
-                {/* 1. ATMOSPHERE: Frost/Fog Gradient (Moved behind text) */}
-                <div className="absolute inset-0 z-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
-
-                {/* 2. BACKGROUND: THE GIANT (Static Target) */}
-                <div className="absolute inset-0 flex items-end justify-start z-10 select-none overflow-hidden pointer-events-none px-frame">
-                    <div className="relative translate-y-[-5%] pb-8">
-                        <span className="hero-text opacity-0 block text-display-xl text-foreground font-bold tracking-tight uppercase mb-4 ml-2">
-                            {lang === 'ES' ? 'Nuestras' : 'Our'}
+                {/* 1. Main Typography Content */}
+                <div className="relative z-10 w-full max-w-[1800px] mx-auto">
+                    
+                    {/* Top Tagline */}
+                    <div className="mb-6 overflow-hidden">
+                        <span className="hero-reveal block text-sub-label text-cyan-500 tracking-[0.2em] ml-1">
+                            {lang === 'ES' ? 'EXPLORACIÓN GUIADA' : 'GUIDED EXPLORATION'}
                         </span>
-                        <h1 className="hero-giant-text hero-text opacity-0 text-[13.5vw] leading-[0.95] font-bold tracking-tighter uppercase whitespace-nowrap bg-gradient-to-b from-foreground via-foreground/80 to-foreground/10 bg-clip-text text-transparent">
-                            EXPEDICIONES
+                    </div>
+
+                    {/* Clean Title */}
+                    <div className="relative">
+                        <h1 className="leading-[0.9] tracking-tight uppercase font-medium text-foreground select-none">
+                            <div className="overflow-hidden">
+                                <span className="hero-reveal block text-[10vw] md:text-[8vw]">
+                                    {lang === 'ES' ? 'NUESTRAS' : 'OUR'}
+                                </span>
+                            </div>
+                            <div className="overflow-hidden">
+                                <span className="hero-reveal block text-[10vw] md:text-[8vw] text-muted-foreground/50">
+                                    EXPEDICIONES
+                                </span>
+                            </div>
                         </h1>
                     </div>
+
+                    {/* Bottom Info / Connection to Grid */}
+                    <div className="hero-stats mt-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-12 border-l border-foreground/20 pl-6">
+                        <div className="max-w-md">
+                            <p className="text-body-std text-muted">
+                                {lang === 'ES' 
+                                    ? 'Descubre rutas diseñadas para conectar con la esencia de los Andes. Desde caminatas de un día hasta expediciones de alta montaña.' 
+                                    : 'Discover routes designed to connect with the essence of the Andes. From day hikes to high mountain expeditions.'}
+                            </p>
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                            <div className="bg-surface p-3 rounded-full">
+                                <Map className="text-cyan-500 w-5 h-5" strokeWidth={1.5} />
+                            </div>
+                            <div>
+                                <span className="block text-2xl font-medium text-foreground leading-none">{tours.length}</span>
+                                <span className="text-[10px] text-muted uppercase tracking-wider">Routes Available</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </header>
@@ -173,7 +226,7 @@ export default function ToursClient() {
                                             className={`py-3 rounded-lg border text-journal-data transition-all ${
                                                 durationFilter === val
                                                     ? 'bg-cyan-500/10 text-cyan-500 border-cyan-500/50'
-                                                    : 'bg-transparent text-muted border-surface hover:border-border hover:text-foreground'
+                                                    : 'bg-transparent text-muted border-border hover:border-foreground/30'
                                             }`}
                                         >
                                             {val === 'ALL' ? 'ALL' : val === 'SHORT' ? '< 3D' : val === 'MEDIUM' ? '3-5D' : '> 5D'}
