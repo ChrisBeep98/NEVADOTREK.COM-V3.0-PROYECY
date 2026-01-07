@@ -163,11 +163,11 @@ export default function ToursClient() {
                             <p className="text-body-std text-muted">
                                 {lang === 'ES' 
                                     ? 'Descubre rutas diseñadas para conectar con la esencia de los Andes. Desde caminatas de un día hasta expediciones de alta montaña.' 
-                                    : 'Discover routes designed to connect with the essence of the Andes. From day hikes to high mountain expeditions.'}
+                                    : 'Discover routes designed to connect with essence of Andes. From day hikes to high mountain expeditions.'}
                             </p>
                         </div>
                         
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 md:ml-auto">
                             <div className="bg-surface p-3 rounded-full">
                                 <Map className="text-cyan-500 w-5 h-5" strokeWidth={1.5} />
                             </div>
