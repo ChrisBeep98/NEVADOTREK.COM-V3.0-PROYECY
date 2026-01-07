@@ -197,7 +197,7 @@ export default function ToursClient() {
                             </div>
                             <div>
                                 <span className="block text-2xl font-medium text-foreground leading-none">{tours.length}</span>
-                                <span className="text-[10px] text-muted uppercase tracking-wider">Routes Available</span>
+                                <span className="text-[10px] text-muted uppercase tracking-wider">{t.expeditions.archive.routes_available}</span>
                             </div>
                         </div>
                     </div>

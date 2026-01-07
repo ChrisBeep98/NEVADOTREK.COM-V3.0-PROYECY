@@ -51,7 +51,8 @@
       "sort_by": "SORT BY",
       "no_results": "NO MATCHES FOUND",
       "no_results_desc": "Try adjusting your difficulty or duration filters.",
-      "reset_filters": "RESET ALL FILTERS"
+      "reset_filters": "RESET ALL FILTERS",
+      "routes_available": "Routes Available"
     }
   },
   "fauna": {

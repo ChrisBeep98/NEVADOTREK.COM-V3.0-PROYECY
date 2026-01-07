@@ -51,7 +51,8 @@
       "sort_by": "ORDENAR POR",
       "no_results": "NO SE ENCONTRARON COINCIDENCIAS",
       "no_results_desc": "Intenta ajustar tus filtros de dificultad o duración.",
-      "reset_filters": "REINICIAR FILTROS"
+      "reset_filters": "REINICIAR FILTROS",
+      "routes_available": "Rutas Disponibles"
     }
   },
   "fauna": {
