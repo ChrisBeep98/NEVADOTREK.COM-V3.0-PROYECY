@@ -3,13 +3,19 @@
     "welcome": "Bienvenido a Nevado Trek",
     "book_now": "Reservar Ahora",
     "join": "Unirse",
-    "contact": "Contáctanos"
+    "contact": "Contáctanos",
+    "explore_tours": "Explorar Tours"
   },
   "navigation": {
     "home": "Inicio",
     "tours": "Expediciones",
     "about": "Nosotros",
     "philosophy": "Filosofía"
+  },
+  "mobile_menu": {
+    "navigation": "Navegación",
+    "get_in_touch": "Hablemos",
+    "exploration": "Exploración"
   },
   "hero": {
     "status": {
