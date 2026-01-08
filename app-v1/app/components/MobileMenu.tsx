@@ -110,17 +110,17 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
             </div>
 
             {/* Navigation Links */}
-            <div className="flex-1 flex flex-col justify-end px-frame pb-12">
-                <span className="text-sub-label opacity-50 mb-6 text-right">{t.mobile_menu.exploration}</span>
+            <div className="flex-1 flex flex-col justify-center px-frame pb-8">
+                <span className="text-sub-label opacity-50 mb-4 text-right">{t.mobile_menu.exploration}</span>
                 
-                <div className="space-y-6">
+                <div className="space-y-4">
                     <Link 
                         href="/" 
                         onClick={onClose}
                         ref={(el) => { linksRef.current[0] = el; }}
-                        className="group flex items-center justify-between py-2"
+                        className="group flex items-center justify-end gap-4 py-2"
                     >
-                        <span className="text-h-section-title group-hover:text-cyan-500 group-hover:-translate-x-2 transition-all duration-300 uppercase">
+                        <span className="text-h-section-title group-hover:text-cyan-500 group-hover:-translate-x-2 transition-all duration-300 uppercase text-right">
                             {t.navigation.home}
                         </span>
                         <span className="text-journal-data text-cyan-500 font-bold w-6 text-right">01</span>
@@ -135,9 +135,9 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                         href="/tours" 
                         onClick={onClose}
                         ref={(el) => { linksRef.current[1] = el; }}
-                        className="group flex items-center justify-between py-2"
+                        className="group flex items-center justify-end gap-4 py-2"
                     >
-                        <span className="text-h-section-title group-hover:text-cyan-500 group-hover:-translate-x-2 transition-all duration-300 uppercase">
+                        <span className="text-h-section-title group-hover:text-cyan-500 group-hover:-translate-x-2 transition-all duration-300 uppercase text-right">
                             {t.navigation.tours}
                         </span>
                         <span className="text-journal-data text-cyan-500 font-bold w-6 text-right">02</span>
@@ -147,7 +147,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                 {/* Decorative Line */}
                 <div 
                     ref={decorativeLineRef}
-                    className="w-full h-[1px] bg-border/50 my-8 origin-right"
+                    className="w-full h-[1px] bg-border/50 my-6 origin-right"
                 />
 
                 {/* Contact - Minimalist Design */}
@@ -155,7 +155,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     href="#contact"
                     onClick={onClose}
                     ref={contactButtonRef as unknown as React.Ref<HTMLAnchorElement>}
-                    className="flex items-center gap-4 py-4 group border border-border rounded-full px-6 bg-surface/30 hover:border-cyan-500/50 hover:bg-surface/60 transition-all duration-300 self-start"
+                    className="flex items-center gap-4 py-4 group border border-border rounded-full px-6 bg-surface/30 hover:border-cyan-500/50 hover:bg-surface/60 transition-all duration-300 self-end"
                 >
                     <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center group-hover:border-cyan-500 group-hover:bg-cyan-500/10 transition-all">
                         <MapPin className="w-4 h-4 text-muted group-hover:text-cyan-500" />
