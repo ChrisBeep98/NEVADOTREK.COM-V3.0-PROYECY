@@ -83,8 +83,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     useGSAP(() => {
         if (isOpen) {
             const isMobile = window.innerWidth < 768;
-            gsap.fromTo(modalRef.current, 
-                { autoAlpha: 0, y: isMobile ? "100%" : 20 },
+            gsap.fromTo(modalRef.current,
+                { autoAlpha: 0, y: isMobile ? '100vh' : 20 },
                 { autoAlpha: 1, y: 0, duration: 0.5, ease: "power4.out" }
             );
         }
@@ -93,16 +93,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     useEffect(() => {
         if (contentRef.current) {
             gsap.fromTo(contentRef.current.children,
-                { opacity: 0, y: 10 },
-                { opacity: 1, y: 0, duration: 0.4, stagger: 0.03, ease: "power2.out" }
+                { autoAlpha: 0, y: 15 },
+                { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.025, ease: "power2.out", force3D: true }
             );
         }
     }, [step, mode]);
 
     const handleClose = () => {
         const isMobile = window.innerWidth < 768;
-        gsap.to(modalRef.current, { autoAlpha: 0, y: isMobile ? "100%" : 10, duration: 0.3, ease: "power2.in", onComplete: onClose });
-        setTimeout(() => { 
+        gsap.to(modalRef.current, { autoAlpha: 0, y: isMobile ? '100vh' : 10, duration: 0.3, ease: "power2.in", onComplete: onClose });
+        setTimeout(() => {
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
         }, 300);
     };
@@ -138,10 +138,9 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     };
 
     if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24">
-            <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-3 md:px-0">
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-3 md:px-0 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
                 <div className="hidden md:flex w-[32%] bg-background border-r border-border flex-col p-8 lg:p-10 relative overflow-hidden shrink-0">
@@ -201,7 +200,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12" ref={contentRef}>
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12 transform-gpu will-change-transform" ref={contentRef}>
                         <div className="max-w-4xl">
                             {step === 0 && (
                                 <div className="space-y-8 animate-in fade-in duration-500">
