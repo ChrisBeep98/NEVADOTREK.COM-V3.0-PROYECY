@@ -15,48 +15,44 @@ export default function Footer() {
     const letterERef = useRef(null);
 
     useGSAP(() => {
-        // Animation for 'O'
-        gsap.to(letterORef.current, {
-            y: '-1vw', // Reduced offset
+        // Shared "Focus Pull" Animation Properties
+        // Letters rise, sharpen, and gain opacity simultaneously
+        const focusAnim = {
+            filter: 'blur(0px)',
+            opacity: 1,
             ease: 'power2.out',
             scrollTrigger: {
                 trigger: containerRef.current,
-                start: 'top 10%', // Maximum delay (starts at very bottom)
+                start: 'top 20%', 
                 end: 'bottom bottom',
                 scrub: 1
             }
-        });
+        };
+
+        // Animation for 'O'
+        gsap.fromTo(letterORef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-1vw' }
+        );
 
         // Animation for 'R' - Peak
-        gsap.to(letterRRef.current, {
-            y: '-4vw', // Reduced offset
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 10%', // Maximum delay
-                end: 'bottom bottom',
-                scrub: 1.5
-            }
-        });
+        gsap.fromTo(letterRRef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-4vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 1.5 } }
+        );
 
         // Animation for 'E' - Lower than R
-        gsap.to(letterERef.current, {
-            y: '-2vw', // Reduced offset
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 10%', // Maximum delay
-                end: 'bottom bottom',
-                scrub: 2
-            }
-        });
+        gsap.fromTo(letterERef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-2vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 2 } }
+        );
     }, { scope: containerRef });
 
     return (
         <footer ref={containerRef} className="relative min-h-[100dvh] w-full bg-[#02040a] text-[#EDEDED] dark:bg-[#FAFAFA] dark:text-[#02040a] flex flex-col overflow-hidden z-50 transition-colors duration-500">
-            {/* Background Glow Effect - Adapts to Mode (Inverted) */}
-            {/* Default (Light Mode=Dark Footer): Deep Blue Glow | Dark Mode (Light Footer): Soft Cyan Internal Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-blue-900/10 dark:bg-cyan-500/5 rounded-full blur-[120px] md:blur-[150px] pointer-events-none" />
+            {/* Minimalist Background: Subtle Central Light Source */}
+            {/* Theme: Deep Blue hint (Light Mode) / Clean Cyan hint (Dark Mode) */}
+            <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-indigo-900/10 dark:bg-cyan-900/5 rounded-full blur-[120px] pointer-events-none" />
             
             {/* Main Content Container - Using px-frame for strict Design System compliance matching Header */}
             <div className="flex-1 flex flex-col px-frame pt-24 md:pt-0 relative z-10 w-full justify-between pb-12 md:pb-0">
@@ -114,7 +110,7 @@ export default function Footer() {
                         <span>P</span>
                         <span>L</span>
                         
-                        {/* Animated Letters - GSAP Controlled */}
+                        {/* Animated Letters - Minimal Focus Pull */}
                         <span ref={letterORef} className="inline-block transform-gpu will-change-transform">O</span>
                         <span ref={letterRRef} className="inline-block transform-gpu will-change-transform">R</span>
                         <span ref={letterERef} className="inline-block transform-gpu will-change-transform">E</span>
