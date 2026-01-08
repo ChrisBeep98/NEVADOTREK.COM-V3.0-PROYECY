@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from 'react';
-import { X, MessageCircle, Sun, Moon, Globe } from 'lucide-react';
+import { X, MessageCircle, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import Link from 'next/link';
 import gsap from 'gsap';
@@ -56,13 +56,36 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                 <div className="flex items-center gap-2">
                     <span className="font-bold tracking-tighter text-xl">NEVADO</span>
                 </div>
-                <button 
-                    onClick={onClose}
-                    className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface transition-transform active:scale-90"
-                    aria-label="Close menu"
-                >
-                    <X className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                    {/* Language Toggle */}
+                    <button 
+                        onClick={toggleLang}
+                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
+                        aria-label="Switch Language"
+                    >
+                        <span className="text-[10px] font-bold tracking-widest">
+                            {lang}
+                        </span>
+                    </button>
+
+                    {/* Theme Toggle */}
+                    <button 
+                        onClick={toggleTheme}
+                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
+                        aria-label="Toggle Theme"
+                    >
+                        {isDark ? <Sun className="w-4 h-4 text-cyan-500" /> : <Moon className="w-4 h-4 text-cyan-500" />}
+                    </button>
+
+                    {/* Close Button */}
+                    <button 
+                        onClick={onClose}
+                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface transition-transform active:scale-90"
+                        aria-label="Close menu"
+                    >
+                        <X className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Navigation Links */}
@@ -85,36 +108,11 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     {t.navigation.tours}
                 </Link>
                 
-                <div 
-                    ref={(el) => { if (el) linksRef.current[2] = el as unknown as HTMLAnchorElement; }} 
-                    className="mt-4"
-                >
-                     <button className="btn-primary flex justify-between items-center group">
-                        <span>{t.common.contact}</span>
-                        <div className="w-8 h-8 rounded-full bg-slate-950/10 flex items-center justify-center group-hover:bg-slate-950/20 transition-all">
-                            <MessageCircle className="w-4 h-4" />
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            {/* Bottom Controls */}
-            <div className="p-frame border-t border-border flex justify-between items-center bg-surface/20">
-                <div className="flex gap-4">
-                    <button 
-                        onClick={toggleLang}
-                        className="flex items-center gap-2 text-sm font-bold tracking-[0.1em] opacity-70 hover:opacity-100 transition-opacity uppercase"
-                    >
-                        <Globe className="w-4 h-4 text-cyan-500" />
-                        {lang === 'ES' ? 'ENGLISH' : 'ESPAÑOL'}
-                    </button>
-                </div>
-                
-                <button 
-                    onClick={toggleTheme}
-                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
-                >
-                    {isDark ? <Sun className="w-4 h-4 text-cyan-500" /> : <Moon className="w-4 h-4 text-cyan-500" />}
+                <button className="btn-primary flex justify-between items-center group">
+                    <span>{t.common.contact}</span>
+                    <div className="w-8 h-8 rounded-full bg-slate-950/10 flex items-center justify-center group-hover:bg-slate-950/20 transition-all">
+                        <MessageCircle className="w-4 h-4" />
+                    </div>
                 </button>
             </div>
         </div>
