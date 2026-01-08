@@ -1,9 +1,59 @@
-import React from 'react';
+"use client";
+
+import React, { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
+    const containerRef = useRef(null);
+    const letterORef = useRef(null);
+    const letterRRef = useRef(null);
+    const letterERef = useRef(null);
+
+    useGSAP(() => {
+        // Animation for 'O'
+        gsap.to(letterORef.current, {
+            y: '-1vw', // Reduced offset
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top 10%', // Maximum delay (starts at very bottom)
+                end: 'bottom bottom',
+                scrub: 1
+            }
+        });
+
+        // Animation for 'R' - Peak
+        gsap.to(letterRRef.current, {
+            y: '-4vw', // Reduced offset
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top 10%', // Maximum delay
+                end: 'bottom bottom',
+                scrub: 1.5
+            }
+        });
+
+        // Animation for 'E' - Lower than R
+        gsap.to(letterERef.current, {
+            y: '-2vw', // Reduced offset
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top 10%', // Maximum delay
+                end: 'bottom bottom',
+                scrub: 2
+            }
+        });
+    }, { scope: containerRef });
+
     return (
-        <footer className="relative min-h-[100dvh] w-full bg-background text-foreground flex flex-col overflow-hidden z-50 transition-colors duration-500">
+        <footer ref={containerRef} className="relative min-h-[100dvh] w-full bg-background text-foreground flex flex-col overflow-hidden z-50 transition-colors duration-500">
             {/* Background Glow Effect - Adapts to Mode */}
             {/* Dark: Blue/Purple Glow | Light: Soft Cyan/Blue Gradient */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-blue-500/5 dark:bg-blue-900/10 rounded-full blur-[120px] md:blur-[150px] pointer-events-none" />
@@ -47,7 +97,7 @@ export default function Footer() {
             </div>
 
             {/* Giant Logo Area - Fixed at bottom but flows naturally */}
-            <div className="relative w-full border-t border-border flex-none">
+            <div className="relative w-full flex-none">
                 <div className="px-frame pt-4 pb-48 md:pb-32">
                    {/* Logo Refinements: 
                        - Align Left
@@ -55,9 +105,19 @@ export default function Footer() {
                        - Removed Opacity/Blend Modes for solid visibility
                        - Optical Alignment: Aggressive negative margin to kill bearing
                        - Visibility: Increased contrast (text-foreground/40)
+                       - Animation: GSAP Scroll Scrub Stepped Offset
                    */}
-                   <h1 className="text-[17vw] leading-[0.75] tracking-tighter font-medium text-left select-none text-foreground/40 dark:text-foreground/40 transition-colors duration-500 -ml-[1.5vw]">
-                        EXPLORE
+                   <h1 className="text-[17vw] leading-[0.75] tracking-tighter font-medium text-left select-none text-foreground/40 dark:text-foreground/40 transition-colors duration-500 -ml-[1.5vw] flex items-end overflow-visible">
+                        {/* Static Letters */}
+                        <span>E</span>
+                        <span>X</span>
+                        <span>P</span>
+                        <span>L</span>
+                        
+                        {/* Animated Letters - GSAP Controlled */}
+                        <span ref={letterORef} className="inline-block transform-gpu will-change-transform">O</span>
+                        <span ref={letterRRef} className="inline-block transform-gpu will-change-transform">R</span>
+                        <span ref={letterERef} className="inline-block transform-gpu will-change-transform">E</span>
                    </h1>
                 </div>
 
