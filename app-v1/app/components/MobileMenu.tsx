@@ -54,7 +54,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
             {/* Header inside Menu */}
             <div className="flex justify-between items-center py-6 px-frame">
                 <div className="flex items-center gap-2">
-                    <span className="font-bold tracking-tighter text-xl">NEVADO</span>
+                    <span className="font-bold tracking-tighter text-xl">MENU</span>
                 </div>
                 <div className="flex items-center gap-2">
                     {/* Language Toggle */}
