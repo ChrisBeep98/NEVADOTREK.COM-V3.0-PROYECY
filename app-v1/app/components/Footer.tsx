@@ -17,7 +17,7 @@ export default function Footer() {
 
                 {/* Hero Query - Centered vertically in available space */}
                 <div className="flex-1 flex items-center">
-                    <h2 className="text-3xl md:text-5xl lg:text-7xl font-medium tracking-tight leading-[1.05] max-w-6xl">
+                    <h2 className="text-2xl md:text-4xl lg:text-6xl font-medium tracking-tight leading-[1.05] max-w-6xl">
                         Interested in starting your expedition, <span className="opacity-50">pushing your limits</span> or simply <span className="opacity-50">exploring nature?</span>
                     </h2>
                 </div>
@@ -46,7 +46,7 @@ export default function Footer() {
             </div>
 
             {/* Giant Logo Area - Fixed at bottom but flows naturally */}
-            <div className="relative w-full border-t border-white/5 bg-[#02040a]/50 backdrop-blur-sm flex-none">
+            <div className="relative w-full border-t border-white/5 flex-none">
                 <div className="px-frame pt-4 pb-20 md:pb-24">
                    <h1 className="text-[17vw] leading-[0.75] tracking-tighter font-bold text-center select-none text-white mix-blend-overlay opacity-90">
                         NEVADO
