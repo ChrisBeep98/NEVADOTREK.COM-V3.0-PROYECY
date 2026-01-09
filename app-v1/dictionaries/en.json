@@ -222,5 +222,26 @@
       "continue": "Continue",
       "confirm_send": "Confirm and Send"
     }
+  },
+  "page_footer": {
+    "contact": "Contact Us",
+    "cta": "Ready to start your next adventure?",
+    "email": "hello@nevadotrek.com",
+    "nav": {
+      "home": "Home",
+      "expeditions": "Expeditions",
+      "gallery": "Gallery"
+    },
+    "brand": "Nevado Trek",
+    "copyright": "© 2025 Nevado Trek. All rights reserved."
+  },
+  "weather_widget": {
+    "location": "Salento, Quindío",
+    "condition": "Partly Cloudy",
+    "wind": "Wind",
+    "humidity": "Humidity",
+    "altitude": "Altitude",
+    "trekStatus": "Perfect Trek Conditions",
+    "credit": "Made By Christian Sandoval"
   }
 }

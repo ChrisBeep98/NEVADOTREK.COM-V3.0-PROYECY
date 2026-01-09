@@ -2,8 +2,10 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Cloud, CloudRain, Sun, Wind, MapPin, Calendar } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function FooterWidget() {
+    const { t, lang } = useLanguage();
     const [currentTime, setCurrentTime] = useState(new Date());
 
     // Update time every second
@@ -23,12 +25,14 @@ export default function FooterWidget() {
     };
 
     const formatDate = () => {
-        return currentTime.toLocaleDateString('en-US', { 
+        const options: Intl.DateTimeFormatOptions = { 
             weekday: 'long',
             month: 'long',
             day: 'numeric',
             year: 'numeric'
-        });
+        };
+        const locale = lang === 'ES' ? 'es-ES' : 'en-US';
+        return currentTime.toLocaleDateString(locale, options);
     };
 
     return (
@@ -58,7 +62,7 @@ export default function FooterWidget() {
                         {/* Location */}
                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <MapPin className="w-4 h-4" />
-                            <span>Salento, Quindío</span>
+                            <span>{t.weather_widget.location}</span>
                         </div>
 
                         {/* Temperature & Condition */}
@@ -68,22 +72,22 @@ export default function FooterWidget() {
                             </div>
                             <div>
                                 <div className="text-5xl md:text-6xl font-bold text-[#02040a] dark:text-[#EDEDED]">18°</div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Partly Cloudy</div>
+                                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t.weather_widget.condition}</div>
                             </div>
                         </div>
 
                         {/* Weather Stats */}
                         <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200 dark:border-white/5">
                             <div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Wind</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.weather_widget.wind}</div>
                                 <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">8 km/h</div>
                             </div>
                             <div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Humidity</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.weather_widget.humidity}</div>
                                 <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">75%</div>
                             </div>
                             <div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Altitude</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t.weather_widget.altitude}</div>
                                 <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">1,895m</div>
                             </div>
                         </div>
@@ -92,13 +96,13 @@ export default function FooterWidget() {
                     {/* Trek Status Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Perfect Trek Conditions</span>
+                        <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">{t.weather_widget.trekStatus}</span>
                     </div>
 
                     {/* Credit */}
                     <div className="pt-12 border-t border-gray-200 dark:border-white/5">
                         <p className="text-xs text-gray-400 dark:text-gray-500 text-left">
-                            Made By Christian Sandoval
+                            {t.weather_widget.credit}
                         </p>
                     </div>
                 </div>

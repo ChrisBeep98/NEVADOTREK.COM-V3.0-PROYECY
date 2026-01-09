@@ -1,12 +1,15 @@
 import React, { useRef } from 'react';
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
+    const { t, lang } = useLanguage();
     const containerRef = useRef(null);
     const letterORef = useRef(null);
     const letterRRef = useRef(null);
@@ -56,13 +59,13 @@ export default function Footer() {
                 {/* Top Label */}
                 <div className="flex items-center gap-2 mb-8 md:mb-0 md:mt-12 flex-none">
                     <span className="text-cyan-500 text-xl font-bold">+</span>
-                    <span className="text-sm font-medium tracking-wide text-gray-400 dark:text-gray-500">Contact Us</span>
+                    <span className="text-sm font-medium tracking-wide text-gray-400 dark:text-gray-500">{t.page_footer.contact}</span>
                 </div>
 
                 {/* Hero Query - Centered naturally by flex spacing */}
                 <div className="flex items-center py-8 md:py-0">
                     <h2 className="text-3xl md:text-4xl lg:text-6xl font-medium tracking-tight leading-[1.05] max-w-6xl text-[#02040a] dark:text-[#EDEDED]">
-                        Interested in starting your expedition, <span className="text-gray-500/60 dark:text-gray-400/60">pushing your limits</span> or simply <span className="text-gray-500/60 dark:text-gray-400/60">exploring nature?</span>
+                        {t.page_footer.cta}
                     </h2>
                 </div>
 
@@ -73,18 +76,16 @@ export default function Footer() {
                     <div className="space-y-3 md:space-y-4">
                         <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">Contact us at:</p>
                         <a href="mailto:expeditions@nevadotrek.com" className="group flex items-center gap-2 text-lg md:text-3xl font-medium hover:opacity-80 active:scale-95 transition-all text-[#02040a] dark:text-[#EDEDED]">
-                            expeditions@nevadotrek.com
+                            {t.page_footer.email}
                             <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#02040a] dark:group-hover:text-[#EDEDED] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                         </a>
                     </div>
 
                     {/* Navigation Links */}
                     <nav className="flex flex-wrap gap-x-6 gap-y-3 md:gap-12">
-                        {['Inicio', 'Expediciones', 'Galería'].map((item) => (
-                            <a key={item} href="#" className="text-lg md:text-xl font-medium text-[#02040a] dark:text-[#EDEDED] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">
-                                {item}
-                            </a>
-                        ))}
+                        <Link href="/" className="text-lg md:text-xl font-medium text-[#02040a] dark:text-[#EDEDED] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">{t.page_footer.nav.home}</Link>
+                        <Link href="/tours" className="text-lg md:text-xl font-medium text-[#02040a] dark:text-[#EDEDED] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">{t.page_footer.nav.expeditions}</Link>
+                        <Link href="/gallery" className="text-lg md:text-xl font-medium text-[#02040a] dark:text-[#EDEDED] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">{t.page_footer.nav.gallery}</Link>
                     </nav>
                 </div>
             </div>
@@ -110,7 +111,7 @@ export default function Footer() {
                         {/* Animated Letters - Minimal Focus Pull */}
                         <span ref={letterORef} className="inline-block transform-gpu will-change-transform">O</span>
                         <span ref={letterRRef} className="inline-block transform-gpu will-change-transform">R</span>
-                        <span ref={letterERef} className="inline-block transform-gpu will-change-transform">E</span>
+                        <span ref={letterERef} className="inline-block transform-gpu will-change-transform">{lang === 'ES' ? 'A' : 'E'}</span>
                    </h1>
                 </div>
 
