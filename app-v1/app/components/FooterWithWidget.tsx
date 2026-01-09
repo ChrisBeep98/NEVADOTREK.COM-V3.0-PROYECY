@@ -16,20 +16,21 @@ export default function FooterWithWidget() {
     useGSAP(() => {
         if (!horizontalRef.current || !containerRef.current) return;
 
-        // Calculate widget width based on viewport
-        const isMobile = window.innerWidth < 768; // md breakpoint
-        const widgetWidthPercent = isMobile ? 0.94 : 0.4; // 94vw mobile, 40vw desktop
+        // Only enable horizontal scroll on desktop (>= 768px)
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) return;
+
+        const widgetWidthPercent = 0.4;
         const scrollDistance = window.innerWidth * widgetWidthPercent;
 
-        // Horizontal scroll: Footer slides left by widget width to reveal Widget
         gsap.to(horizontalRef.current, {
-            x: `-${widgetWidthPercent * 100}vw`,  // Move left by widget width
+            x: `-${widgetWidthPercent * 100}vw`,
             ease: 'none',
             scrollTrigger: {
                 trigger: containerRef.current,
                 pin: true,
                 scrub: 1,
-                end: () => "+=" + scrollDistance, // Scroll distance = widget width
+                end: () => "+=" + scrollDistance,
             }
         });
     }, { scope: containerRef, dependencies: [] });
@@ -38,7 +39,7 @@ export default function FooterWithWidget() {
         <div ref={containerRef} className="relative overflow-hidden">
             <div ref={horizontalRef} className="flex w-fit">
                 <Footer />
-                <FooterWidget />
+                <FooterWidget className="hidden md:block" />
             </div>
         </div>
     );

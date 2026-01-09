@@ -58,10 +58,10 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
 
             <div className="flex flex-col lg:flex-row relative">
                 
-                {/* 2. STICKY NAVIGATION (Desktop) */}
-                <div className="hidden lg:block lg:w-80 flex-shrink-0 pt-24 pl-[6vw]">
-                     <TourNavigation />
-                </div>
+                 {/* 2. STICKY NAVIGATION (Desktop) */}
+                 <div className="hidden lg:block lg:w-80 flex-shrink-0 pt-24 pl-[6vw]">
+                      <TourNavigation hasDepartures={departures.length > 0} />
+                 </div>
 
                 {/* 3. MAIN CONTENT */}
                 <div className="flex-1 w-full min-w-0">

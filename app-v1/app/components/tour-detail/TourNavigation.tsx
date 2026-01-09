@@ -11,15 +11,22 @@ if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function TourNavigation() {
+export default function TourNavigation({ hasDepartures = true }: { hasDepartures?: boolean }) {
     const { t } = useLanguage();
     
-    const SECTIONS = React.useMemo(() => [
-        { id: 'overview', label: t.tour_detail.nav.overview },
-        { id: 'gallery', label: t.tour_detail.nav.gallery },
-        { id: 'itinerary', label: t.tour_detail.nav.itinerary },
-        { id: 'dates', label: t.tour_detail.nav.dates }
-    ], [t.tour_detail.nav]);
+    const SECTIONS = React.useMemo(() => {
+        const sections = [
+            { id: 'overview', label: t.tour_detail.nav.overview },
+            { id: 'gallery', label: t.tour_detail.nav.gallery },
+            { id: 'itinerary', label: t.tour_detail.nav.itinerary },
+        ];
+        
+        if (hasDepartures) {
+            sections.push({ id: 'dates', label: t.tour_detail.nav.dates });
+        }
+        
+        return sections;
+    }, [t.tour_detail.nav, hasDepartures]);
     
     const [activeSection, setActiveSection] = useState('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -86,51 +93,46 @@ export default function TourNavigation() {
 
     return (
         <>
-            {/* Mobile Floating Bubble - Positioned Above Booking Button */}
-            <div className="lg:hidden fixed bottom-[68px] left-[var(--spacing-frame)] z-50">
+            {/* Mobile Floating Bubble - Positioned Above Booking Button, Right Aligned */}
+            <div className="lg:hidden fixed bottom-[80px] right-[var(--spacing-frame)] z-50">
                 <div className="relative">
-                    {/* Mobile Menu Panel - Minimalist Expansion */}
+                    {/* Mobile Menu Panel - Minimalist Expansion, No Background */}
                     <div 
                         ref={mobileMenuRef}
-                        className="absolute bottom-full left-0 w-48 bg-glass backdrop-blur-xl border border-border rounded-t-xl overflow-hidden mb-3"
+                        className="absolute bottom-full right-0 mb-3 overflow-hidden"
                         style={{ height: 0, opacity: 0 }}
                     >
-                        <div className="p-4 space-y-3">
-                            <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest">
-                                {t.tour_detail.nav.index}
-                            </span>
+                        <div className="flex flex-col items-end gap-2">
                             {SECTIONS.map((item, index) => (
                                 <button
                                     key={item.id}
                                     onClick={() => scrollTo(item.id)}
                                     ref={el => { navItemsRef.current[index] = el }}
-                                    className={`w-full text-left py-2 px-3 rounded-lg transition-all duration-300 ${
+                                    className={`py-2 px-4 text-sm tracking-wide transition-all duration-300 rounded-lg bg-foreground/5 backdrop-blur-sm text-right shadow-lg border border-foreground/10 ${
                                         activeSection === item.id
-                                            ? 'bg-foreground text-background font-medium'
-                                            : 'text-foreground/70 hover:bg-surface'
+                                            ? 'bg-cyan-500/20 text-cyan-400 font-medium'
+                                            : 'text-foreground/70 hover:text-foreground hover:bg-foreground/10'
                                     }`}
                                 >
-                                    <span className="text-sm tracking-wide">
-                                        {item.label}
-                                    </span>
+                                    {item.label}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* Bubble Button */}
+                    {/* Bubble Button - Header Style */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className={`w-12 h-12 rounded-full border border-border bg-glass backdrop-blur-md flex items-center justify-center transition-all duration-300 shadow-lg ${
+                        className={`w-9 h-9 rounded-full border border-foreground/20 bg-foreground/5 backdrop-blur-sm flex items-center justify-center transition-all duration-300 ${
                             isMobileMenuOpen 
-                                ? 'bg-foreground text-background border-foreground' 
-                                : 'hover:border-cyan-500/50'
+                                ? 'border-cyan-500/50 bg-foreground/10' 
+                                : 'hover:border-cyan-500/50 hover:bg-foreground/10'
                         }`}
                     >
                         {isMobileMenuOpen ? (
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4 text-foreground" />
                         ) : (
-                            <List className="w-5 h-5 text-foreground" />
+                            <List className="w-4 h-4 text-foreground" />
                         )}
                     </button>
                 </div>
