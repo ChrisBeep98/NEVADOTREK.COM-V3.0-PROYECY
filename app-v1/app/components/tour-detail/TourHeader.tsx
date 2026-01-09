@@ -71,7 +71,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
     return (
         <div ref={containerRef} className="relative w-full h-[95vh] bg-[#02040a] overflow-hidden">
             <Header />
-            <TourNavigation hasDepartures={departures.length > 0} />
+            <TourNavigation hasDepartures={departures.length > 0} showDesktop={false} />
 
             {/* --- FIXED ACTION BUTTON (The Conversion Point) --- */}
             <button 
