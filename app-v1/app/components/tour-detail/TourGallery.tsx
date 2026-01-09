@@ -89,7 +89,7 @@ export default function TourGallery({ images }: { images: string[] }) {
                                     alt={`Gallery Moment ${i + 1}`} 
                                     className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-[1.5s] ease-out"
                                 />
-                                <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 flex items-center gap-3 z-20">
+                                <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 flex items-center gap-3 z-20 hidden md:flex">
                                     <span className="text-[9px] md:text-[10px] font-light text-white/90 tracking-widest uppercase bg-white/10 backdrop-blur-xl px-2.5 py-0.5 md:px-3 md:py-1 rounded-full border border-white/20 shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
                                         {i + 1 < 10 ? `0${i + 1}` : i + 1} {pattern === 5 ? '/ Panorama' : i === 0 ? '/ Journal' : ''}
                                     </span>
