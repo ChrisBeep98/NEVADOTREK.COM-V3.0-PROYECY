@@ -119,7 +119,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                         </div>
 
                         {/* Massive Title */}
-                        <h1 className="text-5xl md:text-7xl lg:text-[7rem] xl:text-[8rem] font-bold text-white leading-[0.85] tracking-tighter uppercase mb-8 hero-text-reveal drop-shadow-2xl">
+                        <h1 className="text-5xl md:text-7xl lg:text-[7rem] xl:text-[8rem] font-bold text-white leading-[1.0] md:leading-[0.85] tracking-tighter uppercase mb-8 hero-text-reveal drop-shadow-2xl">
                             {tour.name[l]}
                         </h1>
 
