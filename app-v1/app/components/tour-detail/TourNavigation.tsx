@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { List, X } from 'lucide-react';
+import { Navigation, X } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
 if (typeof window !== 'undefined') {
@@ -13,6 +13,25 @@ if (typeof window !== 'undefined') {
 
 export default function TourNavigation({ hasDepartures = true, showDesktop = true }: { hasDepartures?: boolean; showDesktop?: boolean }) {
     const { t } = useLanguage();
+    const [isInHero, setIsInHero] = useState(true);
+
+    useGSAP(() => {
+        const handleScroll = () => {
+            const heroElement = document.querySelector('[data-hero]');
+            if (!heroElement) return;
+
+            const heroRect = heroElement.getBoundingClientRect();
+            const bubbleBottom = window.innerHeight - 80;
+            const bubbleTop = bubbleBottom - 36;
+
+            const isBubbleInHero = bubbleTop < heroRect.bottom && bubbleBottom > heroRect.top;
+            setIsInHero(isBubbleInHero);
+        };
+
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
     
     const SECTIONS = React.useMemo(() => {
         const sections = [
@@ -33,7 +52,8 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
     const indicatorRef = useRef<HTMLDivElement>(null);
     const navItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
-    
+    const mobileButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
     const INDICATOR_HEIGHT = 16; // Short technical bar
     
     useGSAP(() => {
@@ -48,6 +68,31 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
         });
     }, [t.tour_detail.nav, SECTIONS]);
     
+    // Animate active state transitions for mobile buttons
+    useGSAP(() => {
+        SECTIONS.forEach((item, index) => {
+            const button = mobileButtonRefs.current[index];
+            if (!button) return;
+
+            const isActive = activeSection === item.id;
+            let color: string;
+
+            if (isActive) {
+                color = 'rgb(6, 182, 212)';
+            } else if (isInHero) {
+                color = 'rgb(255, 255, 255)';
+            } else {
+                color = '';
+            }
+
+            gsap.to(button, {
+                color: color,
+                duration: 0.4,
+                ease: 'power2.out'
+            });
+        });
+    }, [activeSection, isInHero, SECTIONS]);
+
     // Animate the short sliding bar to center with active text
     useEffect(() => {
         const activeIndex = SECTIONS.findIndex(s => s.id === activeSection);
@@ -94,10 +139,10 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
     return (
         <>
             {/* Mobile Floating Bubble - Positioned Above Booking Button, Right Aligned */}
-            <div className="lg:hidden fixed bottom-[80px] right-[var(--spacing-frame)] z-50">
+            <div className="lg:hidden fixed bottom-[80px] right-3 z-50">
                 <div className="relative">
-                    {/* Mobile Menu Panel - Minimalist Expansion, No Background */}
-                    <div 
+                    {/* Mobile Menu Panel - Minimalist Expansion */}
+                    <div
                         ref={mobileMenuRef}
                         className="absolute bottom-full right-0 mb-3 overflow-hidden"
                         style={{ height: 0, opacity: 0 }}
@@ -107,32 +152,40 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
                                 <button
                                     key={item.id}
                                     onClick={() => scrollTo(item.id)}
-                                    ref={el => { navItemsRef.current[index] = el }}
-                                    className={`py-2 px-4 text-sm tracking-wide transition-all duration-300 rounded-lg bg-foreground/5 backdrop-blur-sm text-right shadow-lg border border-foreground/10 ${
-                                        activeSection === item.id
-                                            ? 'bg-cyan-500/20 text-cyan-400 font-medium'
-                                            : 'text-foreground/70 hover:text-foreground hover:bg-foreground/10'
+                                    ref={el => { mobileButtonRefs.current[index] = el }}
+                                    className={`py-1.5 px-4 text-[13px] tracking-wide rounded-lg text-right shadow-lg backdrop-blur-md border flex items-center gap-2 ${
+                                        isInHero
+                                            ? 'bg-black/30 border-white/20 hover:bg-black/40'
+                                            : 'dark:bg-black/10 bg-white/5 border-foreground/20 hover:bg-white/10 dark:hover:bg-black/20 hover:border-cyan-500/50'
                                     }`}
                                 >
-                                    {item.label}
+                                    <span className={activeSection === item.id ? 'font-medium' : 'font-light'}>
+                                        {item.label}
+                                    </span>
+                                    {activeSection === item.id && (
+                                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 flex-shrink-0 animate-in fade-in slide-in-from-right-2 duration-300"></div>
+                                    )}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* Bubble Button - Header Style */}
+                    {/* Bubble Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className={`w-9 h-9 rounded-full border border-foreground/20 bg-foreground/5 backdrop-blur-sm flex items-center justify-center transition-all duration-300 ${
-                            isMobileMenuOpen 
-                                ? 'border-cyan-500/50 bg-foreground/10' 
-                                : 'hover:border-cyan-500/50 hover:bg-foreground/10'
+                        className={`w-9 h-9 rounded-full border backdrop-blur-sm flex items-center justify-center transition-all duration-300 ${
+                            isInHero
+                                ? 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+                                : 'border-foreground/20 bg-foreground/5 hover:border-cyan-500/50 hover:bg-foreground/10'
+                        } ${isMobileMenuOpen
+                            ? (isInHero ? 'border-cyan-400/50 bg-white/10' : 'border-cyan-500/50 bg-foreground/10')
+                            : ''
                         }`}
                     >
                         {isMobileMenuOpen ? (
-                            <X className="w-4 h-4 text-foreground" />
+                            <X className={`w-4 h-4 ${isInHero ? 'text-white' : 'text-foreground'}`} />
                         ) : (
-                            <List className="w-4 h-4 text-foreground" />
+                            <Navigation className={`w-4 h-4 ${isInHero ? 'text-white' : 'text-foreground'}`} />
                         )}
                     </button>
                 </div>
