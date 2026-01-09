@@ -147,7 +147,7 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
                         className="absolute bottom-full right-0 mb-3 overflow-hidden"
                         style={{ height: 0, opacity: 0 }}
                     >
-                        <div className="flex flex-col items-end gap-2">
+                        <div className="flex flex-col items-end gap-1">
                             {SECTIONS.map((item, index) => (
                                 <button
                                     key={item.id}
