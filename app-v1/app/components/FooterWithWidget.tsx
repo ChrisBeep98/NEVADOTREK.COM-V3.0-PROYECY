@@ -39,7 +39,9 @@ export default function FooterWithWidget() {
         <div ref={containerRef} className="relative overflow-hidden">
             <div ref={horizontalRef} className="flex w-fit">
                 <Footer />
-                <FooterWidget className="hidden md:block" />
+                <div className="hidden md:block">
+                    <FooterWidget />
+                </div>
             </div>
         </div>
     );
