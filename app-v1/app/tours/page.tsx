@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function ToursPage() {
     return (
-        <main className="bg-[#040918]">
+        <main>
             <Header />
             <ToursClient />
             <FooterWithWidget />
