@@ -8,7 +8,7 @@ export default function Footer() {
     const letterERef = useRef(null);
 
     return (
-        <footer ref={containerRef} className="w-screen h-screen flex-shrink-0 bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500">
+        <footer ref={containerRef} className="w-screen h-screen flex-shrink-0 bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500 shadow-[inset_-20px_0_30px_-10px_rgba(0,0,0,0.1)] dark:shadow-[inset_-20px_0_30px_-10px_rgba(0,0,0,0.3)]">
             {/* Minimalist Background: Subtle Central Light Source */}
             {/* Theme: Deep Blue hint (Light Mode) / Clean Cyan hint (Dark Mode) */}
             <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-indigo-900/10 dark:bg-cyan-900/5 rounded-full blur-[120px] pointer-events-none" />
