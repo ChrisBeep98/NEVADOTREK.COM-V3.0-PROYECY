@@ -32,7 +32,7 @@ export default function FooterWidget() {
     };
 
     return (
-        <div className="hidden md:flex w-[40vw] h-screen flex-shrink-0 border-l border-white/10 dark:border-white/5">
+        <div className="hidden md:flex w-[40vw] h-screen flex-shrink-0 border-l border-gray-200 dark:border-white/5">
             <div className="h-full w-full flex flex-col justify-center px-16 py-16 relative">
                 {/* Subtle background glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 pointer-events-none" />
@@ -51,14 +51,14 @@ export default function FooterWidget() {
                     </div>
 
                     {/* Divider */}
-                    <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent" />
 
                     {/* Weather Section */}
                     <div className="space-y-6">
                         {/* Location */}
                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <MapPin className="w-4 h-4" />
-                            <span>Bogotá, Colombia</span>
+                            <span>Salento, Quindío</span>
                         </div>
 
                         {/* Temperature & Condition */}
@@ -67,24 +67,24 @@ export default function FooterWidget() {
                                 <Sun className="w-14 h-14 text-white" />
                             </div>
                             <div>
-                                <div className="text-6xl font-bold text-[#02040a] dark:text-[#EDEDED]">24°</div>
+                                <div className="text-6xl font-bold text-[#02040a] dark:text-[#EDEDED]">18°</div>
                                 <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Partly Cloudy</div>
                             </div>
                         </div>
 
                         {/* Weather Stats */}
-                        <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/5">
+                        <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200 dark:border-white/5">
                             <div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Wind</div>
-                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">12 km/h</div>
+                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">8 km/h</div>
                             </div>
                             <div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Humidity</div>
-                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">65%</div>
+                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">75%</div>
                             </div>
                             <div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Pressure</div>
-                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">1013 mb</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Altitude</div>
+                                <div className="text-lg font-semibold text-[#02040a] dark:text-[#EDEDED]">1,895m</div>
                             </div>
                         </div>
                     </div>
