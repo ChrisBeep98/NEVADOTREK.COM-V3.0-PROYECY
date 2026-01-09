@@ -16,15 +16,20 @@ export default function FooterWithWidget() {
     useGSAP(() => {
         if (!horizontalRef.current || !containerRef.current) return;
 
-        // Horizontal scroll: Footer (100vw) slides left by 40vw to reveal Widget (40vw)
+        // Calculate widget width based on viewport
+        const isMobile = window.innerWidth < 768; // md breakpoint
+        const widgetWidthPercent = isMobile ? 0.94 : 0.4; // 94vw mobile, 40vw desktop
+        const scrollDistance = window.innerWidth * widgetWidthPercent;
+
+        // Horizontal scroll: Footer slides left by widget width to reveal Widget
         gsap.to(horizontalRef.current, {
-            x: '-40vw',  // Move left by exactly the widget width
+            x: `-${widgetWidthPercent * 100}vw`,  // Move left by widget width
             ease: 'none',
             scrollTrigger: {
                 trigger: containerRef.current,
                 pin: true,
                 scrub: 1,
-                end: () => "+=" + (window.innerWidth * 0.4), // Scroll distance = widget width
+                end: () => "+=" + scrollDistance, // Scroll distance = widget width
             }
         });
     }, { scope: containerRef, dependencies: [] });
