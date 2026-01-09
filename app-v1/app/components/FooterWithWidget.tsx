@@ -16,31 +16,24 @@ export default function FooterWithWidget() {
     useGSAP(() => {
         if (!horizontalRef.current || !containerRef.current) return;
 
-        // Horizontal scroll controlled by vertical scroll
-        const sections = gsap.utils.toArray<HTMLElement>('.horizontal-section');
-        
-        gsap.to(sections, {
-            xPercent: -100 * (sections.length - 1),
+        // Horizontal scroll: Footer (100vw) slides left by 40vw to reveal Widget (40vw)
+        gsap.to(horizontalRef.current, {
+            x: '-40vw',  // Move left by exactly the widget width
             ease: 'none',
             scrollTrigger: {
                 trigger: containerRef.current,
                 pin: true,
                 scrub: 1,
-                snap: 1 / (sections.length - 1),
-                end: () => "+=" + horizontalRef.current!.offsetWidth,
+                end: () => "+=" + (window.innerWidth * 0.4), // Scroll distance = widget width
             }
         });
-    }, { scope: containerRef });
+    }, { scope: containerRef, dependencies: [] });
 
     return (
         <div ref={containerRef} className="relative overflow-hidden">
             <div ref={horizontalRef} className="flex w-fit">
-                <div className="horizontal-section">
-                    <Footer />
-                </div>
-                <div className="horizontal-section">
-                    <FooterWidget />
-                </div>
+                <Footer />
+                <FooterWidget />
             </div>
         </div>
     );

@@ -32,7 +32,7 @@ export default function FooterWidget() {
     };
 
     return (
-        <div className="hidden md:flex w-screen h-screen flex-shrink-0 bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-purple-600/20 dark:from-cyan-400/10 dark:via-blue-400/10 dark:to-purple-500/10 backdrop-blur-2xl border-l border-white/20 dark:border-white/10">
+        <div className="hidden md:flex w-[40vw] h-screen flex-shrink-0 border-l border-white/20 dark:border-white/10">
             <div className="h-full w-full flex flex-col justify-center items-center px-12 py-16 relative overflow-hidden">
                 {/* Animated gradient orbs */}
                 <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-full blur-3xl animate-pulse" />
