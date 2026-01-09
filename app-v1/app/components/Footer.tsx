@@ -1,11 +1,49 @@
 import React, { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
     const containerRef = useRef(null);
     const letterORef = useRef(null);
     const letterRRef = useRef(null);
     const letterERef = useRef(null);
+
+    useGSAP(() => {
+        // Shared "Focus Pull" Animation Properties
+        const focusAnim = {
+            filter: 'blur(0px)',
+            opacity: 1,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top 20%', 
+                end: 'bottom bottom',
+                scrub: 1
+            }
+        };
+
+        // Animation for 'O'
+        gsap.fromTo(letterORef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-1vw' }
+        );
+
+        // Animation for 'R' - Peak
+        gsap.fromTo(letterRRef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-4vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 1.5 } }
+        );
+
+        // Animation for 'E' - Lower than R
+        gsap.fromTo(letterERef.current, 
+            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
+            { ...focusAnim, y: '-2vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 2 } }
+        );
+    }, { scope: containerRef });
 
     return (
         <footer ref={containerRef} className="w-screen h-screen flex-shrink-0 bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500 shadow-[inset_-20px_0_30px_-10px_rgba(0,0,0,0.1)] dark:shadow-[inset_-20px_0_30px_-10px_rgba(0,0,0,0.3)]">
