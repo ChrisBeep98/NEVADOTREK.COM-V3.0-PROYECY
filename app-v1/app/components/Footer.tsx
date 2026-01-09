@@ -49,7 +49,7 @@ export default function Footer() {
     }, { scope: containerRef });
 
     return (
-        <footer ref={containerRef} className="relative min-h-[100dvh] w-full bg-[#02040a] text-[#EDEDED] dark:bg-[#FAFAFA] dark:text-[#02040a] flex flex-col overflow-hidden z-50 transition-colors duration-500">
+        <footer ref={containerRef} className="relative min-h-[100dvh] w-full bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500">
             {/* Minimalist Background: Subtle Central Light Source */}
             {/* Theme: Deep Blue hint (Light Mode) / Clean Cyan hint (Dark Mode) */}
             <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-indigo-900/10 dark:bg-cyan-900/5 rounded-full blur-[120px] pointer-events-none" />
@@ -64,7 +64,7 @@ export default function Footer() {
 
                 {/* Hero Query - Centered naturally by flex spacing */}
                 <div className="flex items-center py-8 md:py-0">
-                    <h2 className="text-3xl md:text-4xl lg:text-6xl font-medium tracking-tight leading-[1.05] max-w-6xl text-[#EDEDED] dark:text-[#02040a]">
+                    <h2 className="text-3xl md:text-4xl lg:text-6xl font-medium tracking-tight leading-[1.05] max-w-6xl text-[#02040a] dark:text-[#EDEDED]">
                         Interested in starting your expedition, <span className="text-gray-500/60 dark:text-gray-400/60">pushing your limits</span> or simply <span className="text-gray-500/60 dark:text-gray-400/60">exploring nature?</span>
                     </h2>
                 </div>
@@ -75,16 +75,16 @@ export default function Footer() {
                     {/* Contact Info */}
                     <div className="space-y-3 md:space-y-4">
                         <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">Contact us at:</p>
-                        <a href="mailto:expeditions@nevadotrek.com" className="group flex items-center gap-2 text-lg md:text-3xl font-medium hover:opacity-80 active:scale-95 transition-all text-[#EDEDED] dark:text-[#02040a]">
+                        <a href="mailto:expeditions@nevadotrek.com" className="group flex items-center gap-2 text-lg md:text-3xl font-medium hover:opacity-80 active:scale-95 transition-all text-[#02040a] dark:text-[#EDEDED]">
                             expeditions@nevadotrek.com
-                            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-gray-400 dark:text-gray-500 group-hover:text-[#EDEDED] dark:group-hover:text-[#02040a] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                            <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#02040a] dark:group-hover:text-[#EDEDED] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                         </a>
                     </div>
 
                     {/* Navigation Links */}
                     <nav className="flex flex-wrap gap-x-6 gap-y-3 md:gap-12">
                         {['Inicio', 'Expediciones', 'Galería'].map((item) => (
-                            <a key={item} href="#" className="text-lg md:text-xl font-medium text-[#EDEDED] dark:text-[#02040a] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">
+                            <a key={item} href="#" className="text-lg md:text-xl font-medium text-[#02040a] dark:text-[#EDEDED] hover:text-cyan-500 dark:hover:text-cyan-600 active:scale-95 active:text-cyan-600 transition-all">
                                 {item}
                             </a>
                         ))}
@@ -103,7 +103,7 @@ export default function Footer() {
                        - Visibility: Increased contrast (text-foreground/40)
                        - Animation: GSAP Scroll Scrub Stepped Offset
                    */}
-                   <h1 className="text-[23vw] md:text-[17vw] leading-[0.75] tracking-tighter font-medium text-left select-none text-[#EDEDED]/40 dark:text-[#02040a]/40 transition-colors duration-500 -ml-[1.5vw] flex items-end overflow-visible drop-shadow-lg">
+                   <h1 className="text-[23vw] md:text-[17vw] leading-[0.75] tracking-tighter font-medium text-left select-none text-[#02040a]/40 dark:text-[#EDEDED]/40 transition-colors duration-500 -ml-[1.5vw] flex items-end overflow-visible drop-shadow-lg">
                         {/* Static Letters */}
                         <span>E</span>
                         <span>X</span>
