@@ -1,12 +1,5 @@
-"use client";
-
 import React, { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
     const containerRef = useRef(null);
@@ -14,42 +7,8 @@ export default function Footer() {
     const letterRRef = useRef(null);
     const letterERef = useRef(null);
 
-    useGSAP(() => {
-        // Shared "Focus Pull" Animation Properties
-        // Letters rise, sharpen, and gain opacity simultaneously
-        const focusAnim = {
-            filter: 'blur(0px)',
-            opacity: 1,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 20%', 
-                end: 'bottom bottom',
-                scrub: 1
-            }
-        };
-
-        // Animation for 'O'
-        gsap.fromTo(letterORef.current, 
-            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
-            { ...focusAnim, y: '-1vw' }
-        );
-
-        // Animation for 'R' - Peak
-        gsap.fromTo(letterRRef.current, 
-            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
-            { ...focusAnim, y: '-4vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 1.5 } }
-        );
-
-        // Animation for 'E' - Lower than R
-        gsap.fromTo(letterERef.current, 
-            { y: '2vw', filter: 'blur(12px)', opacity: 0.4 },
-            { ...focusAnim, y: '-2vw', scrollTrigger: { ...focusAnim.scrollTrigger, scrub: 2 } }
-        );
-    }, { scope: containerRef });
-
     return (
-        <footer ref={containerRef} className="relative min-h-[100dvh] w-full bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500">
+        <footer ref={containerRef} className="w-screen h-screen flex-shrink-0 bg-[#FAFAFA] text-[#02040a] dark:bg-[#02040a] dark:text-[#EDEDED] flex flex-col overflow-hidden transition-colors duration-500">
             {/* Minimalist Background: Subtle Central Light Source */}
             {/* Theme: Deep Blue hint (Light Mode) / Clean Cyan hint (Dark Mode) */}
             <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-indigo-900/10 dark:bg-cyan-900/5 rounded-full blur-[120px] pointer-events-none" />

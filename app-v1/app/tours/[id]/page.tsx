@@ -7,7 +7,7 @@ import TourItinerary from '../../components/tour-detail/TourItinerary';
 import TourGallery from '../../components/tour-detail/TourGallery';
 import TourDepartures from '../../components/tour-detail/TourDepartures';
 import TourNavigation from '../../components/tour-detail/TourNavigation';
-import Footer from '../../components/Footer';
+import FooterWithWidget from '../../components/FooterWithWidget';
 
 // Generate segments for all tours at build time
 export async function generateStaticParams() {
@@ -81,7 +81,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
             </div>
 
             {/* 4. FOOTER */}
-            <Footer />
+            <FooterWithWidget />
         </main>
     );
 }

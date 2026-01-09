@@ -6,7 +6,7 @@ import FeaturesGrid from "./components/FeaturesGrid";
 import FeatureImage from "./components/FeatureImage";
 import TestimonialsSection from "./components/TestimonialsSection";
 import BookingCTA from "./components/BookingCTA";
-import Footer from "./components/Footer";
+import FooterWithWidget from "./components/FooterWithWidget";
 import { getTours } from "./services/nevado-api";
 
 export default async function Home() {
@@ -24,7 +24,7 @@ export default async function Home() {
         <FeaturesGrid />
         <FeatureImage />
         <TestimonialsSection />
-        <Footer />
+        <FooterWithWidget />
       </div>
     </main>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import ToursClient from './ToursClient';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
+import FooterWithWidget from '../components/FooterWithWidget';
 
 export const metadata = {
     title: 'Expeditions | Nevado Trek',
@@ -13,7 +13,7 @@ export default function ToursPage() {
         <main className="bg-[#040918]">
             <Header />
             <ToursClient />
-            <Footer />
+            <FooterWithWidget />
         </main>
     );
 }
