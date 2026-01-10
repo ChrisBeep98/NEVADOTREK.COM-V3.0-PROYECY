@@ -48,7 +48,7 @@ export default function TourNavigation({ hasDepartures = true, showDesktop = tru
     }, [t.tour_detail.nav, hasDepartures]);
     
     const [activeSection, setActiveSection] = useState('overview');
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const indicatorRef = useRef<HTMLDivElement>(null);
     const navItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
