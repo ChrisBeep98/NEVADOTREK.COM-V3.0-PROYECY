@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { Aperture } from 'lucide-react';
 import Header from '../Header';
 import { useLanguage } from '../../context/LanguageContext';
 import WordCycle from './WordCycle';
-import StatusTicker from './StatusTicker';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -19,10 +19,27 @@ export default function DesktopHero() {
     const monolithRef = useRef<HTMLDivElement>(null);
     const innerContentRef = useRef<HTMLDivElement>(null);
     const textFrontRef = useRef<HTMLHeadingElement>(null);
-    const liveIndicatorRef = useRef<HTMLDivElement>(null);
+    const statusRef = useRef<HTMLSpanElement>(null);
     const scrollRingRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const heroSectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const liveIndicatorRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const msgs = [`${t.hero.status.alt}: 4500M`, `${t.hero.status.temp}: -15C`, `${t.hero.status.wind}: 40KT`, `${t.hero.status.o2}: 88%`];
+        if (statusRef.current) statusRef.current.innerText = msgs[0];
+        let i = 0;
+        const interval = setInterval(() => {
+            i = (i + 1) % msgs.length;
+            if (statusRef.current) statusRef.current.innerText = msgs[i];
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [t.hero.status]);
+
+    useEffect(() => {
+        if (videoRef.current) videoRef.current.play().catch(() => {});
+    }, []);
 
     useGSAP(() => {
         const monolith = monolithRef.current;
@@ -117,38 +134,45 @@ export default function DesktopHero() {
                     >
                         <div ref={innerContentRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform">
 
-                            <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+                            <video ref={videoRef} autoPlay muted loop playsInline className="w-full h-full object-cover">
                                 <source src={VIDEO_URL} type="video/mp4" />
                             </video>
 
                             <div className="monolith-ui absolute inset-0">
                                 <div className="absolute top-6 right-6 flex flex-col items-end">
-                                    <StatusTicker showLiveIndicator={false} />
+                                    <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-1"></span>
                                 </div>
                                 <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
                                 <div className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest uppercase opacity-60">Exp. 2025</div>
                             </div>
                         </div>
+                    </div>
 
-                        <h1 ref={textFrontRef} className="text-display-xl absolute top-1/2 left-1/2 text-white select-none pointer-events-none mix-blend-overlay z-20 whitespace-nowrap">
-                            TREK
-                        </h1>
+                    <h1 ref={textFrontRef} className="text-display-xl absolute top-1/2 left-1/2 text-white select-none pointer-events-none mix-blend-overlay z-20 whitespace-nowrap">
+                        TREK
+                    </h1>
 
-                        <div
-                            ref={liveIndicatorRef}
-                            className="absolute z-50 items-center gap-3 hidden md:flex"
-                            style={{ right: '24px', top: '24px' }}
-                        >
-                            <StatusTicker />
+                    <div
+                        ref={liveIndicatorRef}
+                        className="absolute z-50 items-center gap-3 group hidden md:flex"
+                        style={{ right: '24px', top: '24px' }}
+                    >
+                        <div className="flex flex-col items-end leading-none gap-[2px]">
+                            {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
+                                <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
+                                    {line}
+                                </span>
+                            ))}
                         </div>
+                        <Aperture className="w-4 h-4 text-red-500 animate-spin-slow drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
                     </div>
                 </div>
 
-                <div id="dynamic-message" className="absolute bottom-6 lg:top-[45%] left-24 z-30 max-w-[400px] pointer-events-none mix-blend-difference py-2">
-                    <WordCycle words={t.hero.words} prefix={t.hero.message.prefix} size="lg" />
+                <div id="dynamic-message" className="absolute bottom-6 lg:top-[45%] left-3 lg:left-24 z-30 max-w-[160px] lg:max-w-[400px] pointer-events-none mix-blend-difference py-2">
+                    <WordCycle words={t.hero.words} prefix={t.hero.message.prefix} />
                 </div>
 
-                <div className="scroll-indicator-container absolute bottom-12 left-24 hidden md:flex items-center justify-center z-30">
+                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-24 hidden md:flex items-center justify-center z-30">
                     <div ref={scrollRingRef} className="absolute w-[90px] h-[90px] flex items-center justify-center opacity-30 mix-blend-difference">
                         <svg viewBox="0 0 100 100" width="100" height="100">
                             <defs><path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" /></defs>

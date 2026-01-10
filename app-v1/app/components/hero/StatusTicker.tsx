@@ -28,7 +28,7 @@ export default function StatusTicker({ className = '', showLiveIndicator = true 
         <div className={`flex flex-col items-end gap-1 ${className}`}>
             {showLiveIndicator && (
                 <div className="flex items-center gap-2">
-                    <div className="flex flex-col items-end leading-none">
+                    <div className="flex flex-col items-end leading-none gap-[2px]">
                         {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
                             <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
                                 {line}
