@@ -1,4 +1,4 @@
-import HeroMonolith from "./components/HeroMonolith";
+import { DesktopHero, MobileHero } from "./components/hero";
 import IntroSection from "./components/IntroSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
 import TextMarquee from "./components/TextMarquee";
@@ -14,7 +14,8 @@ export default async function Home() {
 
   return (
     <main className="bg-background">
-      <HeroMonolith />
+      <DesktopHero />
+      <MobileHero />
       <IntroSection />
       <div className="relative z-30">
         
