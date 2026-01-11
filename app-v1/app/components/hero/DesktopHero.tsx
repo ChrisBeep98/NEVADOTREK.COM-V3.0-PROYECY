@@ -91,10 +91,9 @@ export default function DesktopHero() {
             );
         }
 
-        // Animate TREK text position to stick to the corner as monolith expands
-        tl.fromTo(textFront, 
-            { right: "18%", bottom: "14.7%" }, 
-            { right: "3rem", bottom: "3.2rem", ease: "none", duration: 1 }, 
+        // Animate TREK text to fade out to the right on scroll
+        tl.to(textFront, 
+            { x: 100, opacity: 0, ease: "power1.out", duration: 0.5 }, 
             0
         );
 
@@ -144,6 +143,15 @@ export default function DesktopHero() {
             clearProps: "all"
         });
 
+        // TREK Text Reveal Animation (On Load) - Soft Fade & Lift
+        const trekTitle = textFrontRef.current?.querySelector("h1");
+        if (trekTitle) {
+            gsap.fromTo(trekTitle,
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.4, ease: "power2.out", delay: 0.3 }
+            );
+        }
+
     }, { scope: containerRef });
 
     return (
@@ -187,7 +195,7 @@ export default function DesktopHero() {
                         <span ref={statusRef} className="text-[9px] font-mono text-white/50 tracking-widest uppercase text-right pr-2"></span>
                     </div>
 
-                    <div ref={textFrontRef} className="absolute z-20 select-none pointer-events-none mix-blend-overlay will-change-transform flex flex-col items-end group">
+                    <div ref={textFrontRef} style={{ right: "18%", bottom: "14.7%" }} className="absolute z-20 select-none pointer-events-none mix-blend-overlay will-change-transform flex flex-col items-end group">
                         {/* Technical Frame Accents */}
                         <div className="hud-accent absolute -top-6 -left-6 w-8 h-8 border-t border-l border-white/20" />
                         
