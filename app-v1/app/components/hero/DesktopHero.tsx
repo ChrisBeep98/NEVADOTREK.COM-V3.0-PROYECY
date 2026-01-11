@@ -111,8 +111,8 @@ export default function DesktopHero() {
 
         // Animate TREK text position to stick to the corner as monolith expands
         tl.fromTo(textFront, 
-            { right: "18%", bottom: "14%" }, 
-            { right: "3rem", bottom: "3rem", ease: "none", duration: 1 }, 
+            { right: "18%", bottom: "14.7%" }, 
+            { right: "3rem", bottom: "3.2rem", ease: "none", duration: 1 }, 
             0
         );
 
