@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Aperture, ArrowRight } from 'lucide-react';
+import { Aperture, ArrowRight, ChevronDown } from 'lucide-react';
 import Header from '../Header';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -23,7 +23,6 @@ export default function DesktopHero() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const heroSectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const liveIndicatorRef = useRef<HTMLDivElement>(null);
     const rightRailRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -45,7 +44,6 @@ export default function DesktopHero() {
         const monolith = monolithRef.current;
         const inner = innerContentRef.current;
         const textFront = textFrontRef.current;
-        const liveIndicator = liveIndicatorRef.current;
 
         if (!monolith || !inner || !textFront) return;
 
@@ -82,33 +80,6 @@ export default function DesktopHero() {
         const initialMarginX = (w * (1 - startScaleX)) / 2;
         const initialMarginY = (h * (1 - startScaleY)) / 2;
 
-        if (liveIndicator) {
-            // Set initial stable position (end state) via CSS in JSX, 
-            // use GSAP to animate FROM the offset position using transforms (GPU efficient)
-            // instead of animating top/right (CPU layout thrashing).
-            gsap.set(liveIndicator, { 
-                right: 24, 
-                top: 24,
-                x: -initialMarginX, // Move left (away from right edge)
-                y: initialMarginY   // Move down (away from top edge)
-            });
-
-            tl.fromTo(liveIndicator,
-                {
-                    right: initialMarginX + 24,
-                    top: initialMarginY + 24,
-                    scale: 1
-                },
-                {
-                    right: 24,
-                    top: 24,
-                    ease: "none",
-                    duration: 1
-                },
-                0
-            );
-        }
-
         // Animate TREK text position to stick to the corner as monolith expands
         tl.fromTo(textFront, 
             { right: "18%", bottom: "14.7%" }, 
@@ -122,7 +93,17 @@ export default function DesktopHero() {
         }, 0);
 
         if (scrollRingRef.current) {
-            gsap.to(scrollRingRef.current, { rotation: 360, duration: 15, repeat: -1, ease: "none" });
+            const chevrons = scrollRingRef.current.querySelectorAll('.scroll-chevron');
+            
+            const tl = gsap.timeline({ repeat: -1 });
+            
+            tl.fromTo(chevrons, 
+                { y: -10, opacity: 0 },
+                { y: 5, opacity: 1, duration: 0.8, stagger: 0.4, ease: "power2.out" }
+            ).to(chevrons, 
+                { y: 20, opacity: 0, duration: 0.8, stagger: 0.4, ease: "power2.in" },
+                "-=0.4"
+            );
         }
 
         // Right Rail (Minimalist Entry)
@@ -180,8 +161,18 @@ export default function DesktopHero() {
                             </video>
 
                             <div className="monolith-ui absolute inset-0">
-                                <div className="absolute top-6 right-6 flex flex-col items-end">
-                                    <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-1"></span>
+                                <div className="absolute top-6 right-6 flex flex-col items-end z-40">
+                                    <div className="flex items-center gap-3 group">
+                                        <div className="flex flex-col items-end leading-none gap-[2px]">
+                                            {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
+                                                <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
+                                                    {line}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <Aperture className="w-4 h-4 text-red-500 animate-spin-slow drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                                    </div>
+                                    <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-2"></span>
                                 </div>
                                 <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
                                 <div className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest uppercase opacity-60">Exp. 2025</div>
@@ -206,21 +197,6 @@ export default function DesktopHero() {
 
                         <div className="hud-accent absolute -bottom-6 -right-6 w-8 h-8 border-b border-r border-white/20" />
                     </div>
-
-                    <div
-                        ref={liveIndicatorRef}
-                        className="absolute z-50 items-center gap-3 group hidden md:flex will-change-transform"
-                        style={{ right: '24px', top: '24px' }}
-                    >
-                        <div className="flex flex-col items-end leading-none gap-[2px]">
-                            {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
-                                <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
-                                    {line}
-                                </span>
-                            ))}
-                        </div>
-                        <Aperture className="w-4 h-4 text-red-500 animate-spin-slow drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                    </div>
                 </div>
 
                 <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-center pl-3 lg:pl-32">
@@ -242,17 +218,10 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-32 hidden md:flex items-center justify-center z-30">
-                    <div ref={scrollRingRef} className="absolute w-[90px] h-[90px] flex items-center justify-center opacity-30 mix-blend-difference">
-                        <svg viewBox="0 0 100 100" width="100" height="100">
-                            <defs><path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" /></defs>
-                            <text fontSize="8" fill="white" letterSpacing="0.2em" fontFamily="monospace">
-                                <textPath xlinkHref="#circlePath">{t.hero.ui.scroll} • {t.hero.ui.scroll} •</textPath>
-                            </text>
-                        </svg>
-                    </div>
-                    <div className="w-[14px] h-[24px] border border-white/20 rounded-full flex justify-center p-[2px] opacity-60">
-                        <div className="scroll-dot w-[1px] h-[4px] bg-cyan-400 rounded-full shadow-[0_0_4px_rgba(34,211,238,0.8)]"></div>
+                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-32 hidden md:flex flex-col items-center z-30 mix-blend-difference pointer-events-none">
+                    <div ref={scrollRingRef} className="flex flex-col items-center -gap-1 opacity-70">
+                        <ChevronDown className="scroll-chevron w-5 h-5 text-white" />
+                        <ChevronDown className="scroll-chevron w-5 h-5 text-white -mt-3" />
                     </div>
                 </div>
 
