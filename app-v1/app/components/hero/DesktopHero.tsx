@@ -131,6 +131,14 @@ export default function DesktopHero() {
                 { opacity: 0, height: 0 },
                 { opacity: 1, height: "auto", duration: 1.5, delay: 0.5, ease: "power3.out" }
             );
+
+            // Subtle Color Flow
+            gsap.to(rightRailRef.current, {
+                filter: "hue-rotate(360deg) saturate(1.5)",
+                duration: 20,
+                repeat: -1,
+                ease: "none"
+            });
         }
 
         // HUD Entrance Animation
@@ -247,10 +255,10 @@ export default function DesktopHero() {
                 </div>
 
                 {/* Vertical Data Rail (Right) - Variant 4: Minimalist Structural */}
-                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-overlay pointer-events-none select-none text-white/80">
-                    <div className="text-xs font-light">+</div>
-                    <div className="w-[1px] h-32 bg-current opacity-80"></div>
-                    <span className="text-[10px] font-mono tracking-[0.2em] [writing-mode:vertical-rl] rotate-180">
+                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-screen pointer-events-none select-none">
+                    <div className="text-xs font-light text-cyan-400/80">+</div>
+                    <div className="w-[1px] h-32 bg-gradient-to-b from-cyan-400 via-emerald-400 to-blue-500 opacity-60"></div>
+                    <span className="text-[10px] font-mono tracking-[0.2em] [writing-mode:vertical-rl] rotate-180 bg-gradient-to-b from-cyan-200 via-emerald-200 to-blue-300 bg-clip-text text-transparent opacity-90 font-semibold">
                         COL - QND
                     </span>
                 </div>
