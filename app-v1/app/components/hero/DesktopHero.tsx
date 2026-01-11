@@ -158,6 +158,12 @@ export default function DesktopHero() {
             { y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: "power3.out", delay: 0.9 }
         );
 
+        // Hero Button Reveal
+        gsap.fromTo(".hero-button-reveal",
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1.1 }
+        );
+
     }, { scope: containerRef });
 
     return (
@@ -228,7 +234,7 @@ export default function DesktopHero() {
                             <div className="overflow-hidden"><span className="hero-text-reveal block">En</span></div>
                             <div className="overflow-hidden"><span className="hero-text-reveal block">Salento</span></div>
                         </h2>
-                        <div className="pointer-events-auto">
+                        <div className="pointer-events-auto hero-button-reveal">
                             <button className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4">
                                 <span>{t.common.explore_tours}</span>
                                 <div className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors duration-300">
