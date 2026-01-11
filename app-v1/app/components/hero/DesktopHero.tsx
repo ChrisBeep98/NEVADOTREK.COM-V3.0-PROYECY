@@ -55,8 +55,6 @@ export default function DesktopHero() {
         const startScaleX = 0.28;
         const startScaleY = 0.65;
 
-        gsap.set(textFront, { xPercent: -50, yPercent: -50, x: 0, y: 0 });
-
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: heroSectionRef.current,
@@ -95,10 +93,15 @@ export default function DesktopHero() {
                 y: initialMarginY   // Move down (away from top edge)
             });
 
-            tl.to(liveIndicator,
+            tl.fromTo(liveIndicator,
                 {
-                    x: 0,
-                    y: 0,
+                    right: initialMarginX + 24,
+                    top: initialMarginY + 24,
+                    scale: 1
+                },
+                {
+                    right: 24,
+                    top: 24,
                     ease: "none",
                     duration: 1
                 },
@@ -106,7 +109,15 @@ export default function DesktopHero() {
             );
         }
 
-        tl.to([textFront, ".monolith-ui", "#dynamic-message", ".scroll-indicator-container"], {
+        // Animate TREK text position to stick to the corner as monolith expands
+        tl.fromTo(textFront, 
+            { right: "18%", bottom: "14%" }, 
+            { right: "3rem", bottom: "3rem", ease: "none", duration: 1 }, 
+            0
+        );
+
+        // Remove textFront from the quick fade-out group to let it ride the corner
+        tl.to([".monolith-ui", "#dynamic-message", ".scroll-indicator-container"], {
             opacity: 0, y: -40, duration: 0.5
         }, 0);
 
@@ -121,6 +132,17 @@ export default function DesktopHero() {
                 { opacity: 1, height: "auto", duration: 1.5, delay: 0.5, ease: "power3.out" }
             );
         }
+
+        // HUD Entrance Animation
+        gsap.from(".hud-accent", {
+            scale: 0,
+            opacity: 0,
+            duration: 1.2,
+            stagger: 0.15,
+            delay: 0.8,
+            ease: "back.out(2)",
+            clearProps: "all"
+        });
 
     }, { scope: containerRef });
 
@@ -159,9 +181,27 @@ export default function DesktopHero() {
                         </div>
                     </div>
 
-                    <h1 ref={textFrontRef} className="text-display-xl absolute top-1/2 left-1/2 text-white select-none pointer-events-none mix-blend-overlay z-20 whitespace-nowrap">
-                        TREK
-                    </h1>
+                    <div ref={textFrontRef} className="absolute z-20 select-none pointer-events-none mix-blend-overlay will-change-transform flex flex-col items-end group">
+                        {/* Technical Frame Accents */}
+                        <div className="hud-accent absolute -top-6 -left-6 w-8 h-8 border-t border-l border-white/20" />
+                        
+                        <h1 className="text-[12vw] font-bold text-white leading-[0.8] tracking-tighter">
+                            TREK
+                        </h1>
+                        
+                        <div className="hud-accent flex items-center gap-4 mt-4">
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                                <span className="text-[9px] font-mono tracking-[0.2em] text-white/60">NV-01 // ACTIVE</span>
+                            </div>
+                            <div className="hud-accent w-8 h-[1px] bg-white/20" />
+                            <span className="text-[10px] font-mono tracking-[0.3em] text-white/50">
+                                4.6372° N // 75.5708° W
+                            </span>
+                        </div>
+
+                        <div className="hud-accent absolute -bottom-6 -right-6 w-8 h-8 border-b border-r border-white/20" />
+                    </div>
 
                     <div
                         ref={liveIndicatorRef}
