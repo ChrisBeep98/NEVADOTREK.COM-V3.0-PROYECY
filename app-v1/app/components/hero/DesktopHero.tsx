@@ -211,9 +211,9 @@ export default function DesktopHero() {
                 </div>
 
                 {/* Vertical Data Rail (Right) - Variant 4: Minimalist Structural */}
-                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-overlay pointer-events-none select-none text-white/50">
+                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-overlay pointer-events-none select-none text-white/80">
                     <div className="text-xs font-light">+</div>
-                    <div className="w-[1px] h-32 bg-current opacity-50"></div>
+                    <div className="w-[1px] h-32 bg-current opacity-80"></div>
                     <span className="text-[10px] font-mono tracking-[0.2em] [writing-mode:vertical-rl] rotate-180">
                         COL - QND
                     </span>
