@@ -24,6 +24,7 @@ export default function DesktopHero() {
     const heroSectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const liveIndicatorRef = useRef<HTMLDivElement>(null);
+    const rightRailRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const msgs = [`${t.hero.status.alt}: 4500M`, `${t.hero.status.temp}: -15C`, `${t.hero.status.wind}: 40KT`, `${t.hero.status.o2}: 88%`];
@@ -111,6 +112,14 @@ export default function DesktopHero() {
 
         if (scrollRingRef.current) {
             gsap.to(scrollRingRef.current, { rotation: 360, duration: 15, repeat: -1, ease: "none" });
+        }
+
+        // Right Rail (Minimalist Entry)
+        if (rightRailRef.current) {
+            gsap.fromTo(rightRailRef.current, 
+                { opacity: 0, height: 0 },
+                { opacity: 1, height: "auto", duration: 1.5, delay: 0.5, ease: "power3.out" }
+            );
         }
 
     }, { scope: containerRef });
@@ -201,13 +210,13 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-                {/* Vertical Data Rail (Right) */}
-                <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-6 z-30 opacity-60 mix-blend-overlay pointer-events-none">
-                    <div className="w-[1px] h-24 bg-gradient-to-b from-transparent via-white/40 to-white/40"></div>
-                    <span className="text-[10px] font-mono tracking-[0.3em] text-white whitespace-nowrap [writing-mode:vertical-rl] rotate-180">
-                        QUINDÍO // COLOMBIA
+                {/* Vertical Data Rail (Right) - Variant 4: Minimalist Structural */}
+                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-overlay pointer-events-none select-none text-white/50">
+                    <div className="text-xs font-light">+</div>
+                    <div className="w-[1px] h-32 bg-current opacity-50"></div>
+                    <span className="text-[10px] font-mono tracking-[0.2em] [writing-mode:vertical-rl] rotate-180">
+                        COL - QND
                     </span>
-                    <div className="w-[1px] h-24 bg-gradient-to-t from-transparent via-white/40 to-white/40"></div>
                 </div>
 
             </header>
