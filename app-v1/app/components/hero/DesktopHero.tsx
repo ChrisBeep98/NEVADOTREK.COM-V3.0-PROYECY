@@ -223,18 +223,20 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-                <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none mix-blend-difference flex flex-col justify-center pl-3 lg:pl-32">
+                <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-center pl-3 lg:pl-32">
                     <div className="flex flex-col gap-8 items-start">
-                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic">
+                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic mix-blend-difference">
                             Un<br />
                             Paraíso<br />
                             En<br />
                             Salento
                         </h2>
                         <div className="pointer-events-auto">
-                            <button className="btn-primary group w-fit">
-                                {t.common.explore_tours}
-                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                            <button className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4">
+                                <span>{t.common.explore_tours}</span>
+                                <div className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors duration-300">
+                                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                                </div>
                             </button>
                         </div>
                     </div>

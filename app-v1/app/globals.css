@@ -37,6 +37,7 @@
   --font-mono: var(--font-geist-mono);
   
   /* NEVADO BRAND ACCENTS */
+  --color-mineral-cyan: #3AB8C8; /* Slightly more saturated Mineral Cyan */
   --color-cyan-500: #06b6d4;
   --color-blue-500: #3b82f6;
   --color-orange-500: #f97316;
@@ -98,7 +99,7 @@
 
 /* COMPONENT TOKENS */
 @utility btn-primary {
-  @apply bg-cyan-500 text-white hover:bg-cyan-400 hover:scale-105 transition-all duration-300 rounded-full px-8 py-4 font-bold text-[11px] tracking-[0.2em] uppercase flex items-center justify-center gap-3 w-full shadow-lg shadow-cyan-500/20 active:scale-95;
+  @apply bg-gradient-to-b from-mineral-cyan to-[#2A9CA9] text-white hover:opacity-90 hover:scale-105 transition-all duration-300 rounded-full px-8 py-4 font-bold text-[11px] tracking-[0.2em] uppercase flex items-center justify-center gap-3 w-full shadow-lg shadow-black/20 active:scale-95;
 }
 
 @utility btn-secondary {
