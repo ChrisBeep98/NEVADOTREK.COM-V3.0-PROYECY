@@ -4,10 +4,9 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Aperture } from 'lucide-react';
+import { Aperture, ArrowRight } from 'lucide-react';
 import Header from '../Header';
 import { useLanguage } from '../../context/LanguageContext';
-import WordCycle from './WordCycle';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -85,17 +84,20 @@ export default function DesktopHero() {
         const initialMarginY = (h * (1 - startScaleY)) / 2;
 
         if (liveIndicator) {
-            gsap.set(liveIndicator, { clearProps: "all" });
+            // Set initial stable position (end state) via CSS in JSX, 
+            // use GSAP to animate FROM the offset position using transforms (GPU efficient)
+            // instead of animating top/right (CPU layout thrashing).
+            gsap.set(liveIndicator, { 
+                right: 24, 
+                top: 24,
+                x: -initialMarginX, // Move left (away from right edge)
+                y: initialMarginY   // Move down (away from top edge)
+            });
 
-            tl.fromTo(liveIndicator,
+            tl.to(liveIndicator,
                 {
-                    right: initialMarginX + 24,
-                    top: initialMarginY + 24,
-                    scale: 1
-                },
-                {
-                    right: 24,
-                    top: 24,
+                    x: 0,
+                    y: 0,
                     ease: "none",
                     duration: 1
                 },
@@ -154,7 +156,7 @@ export default function DesktopHero() {
 
                     <div
                         ref={liveIndicatorRef}
-                        className="absolute z-50 items-center gap-3 group hidden md:flex"
+                        className="absolute z-50 items-center gap-3 group hidden md:flex will-change-transform"
                         style={{ right: '24px', top: '24px' }}
                     >
                         <div className="flex flex-col items-end leading-none gap-[2px]">
@@ -168,11 +170,24 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-                <div id="dynamic-message" className="absolute bottom-6 lg:top-[45%] left-3 lg:left-24 z-30 max-w-[160px] lg:max-w-[400px] pointer-events-none mix-blend-difference py-2">
-                    <WordCycle words={t.hero.words} prefix={t.hero.message.prefix} />
+                <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none mix-blend-difference flex flex-col justify-center pl-3 lg:pl-32">
+                    <div className="flex flex-col gap-8 items-start">
+                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic">
+                            Un<br />
+                            Paraíso<br />
+                            En<br />
+                            Salento
+                        </h2>
+                        <div className="pointer-events-auto">
+                            <button className="btn-primary group w-fit">
+                                {t.common.explore_tours}
+                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-24 hidden md:flex items-center justify-center z-30">
+                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-32 hidden md:flex items-center justify-center z-30">
                     <div ref={scrollRingRef} className="absolute w-[90px] h-[90px] flex items-center justify-center opacity-30 mix-blend-difference">
                         <svg viewBox="0 0 100 100" width="100" height="100">
                             <defs><path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" /></defs>
@@ -184,6 +199,15 @@ export default function DesktopHero() {
                     <div className="w-[14px] h-[24px] border border-white/20 rounded-full flex justify-center p-[2px] opacity-60">
                         <div className="scroll-dot w-[1px] h-[4px] bg-cyan-400 rounded-full shadow-[0_0_4px_rgba(34,211,238,0.8)]"></div>
                     </div>
+                </div>
+
+                {/* Vertical Data Rail (Right) */}
+                <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-6 z-30 opacity-60 mix-blend-overlay pointer-events-none">
+                    <div className="w-[1px] h-24 bg-gradient-to-b from-transparent via-white/40 to-white/40"></div>
+                    <span className="text-[10px] font-mono tracking-[0.3em] text-white whitespace-nowrap [writing-mode:vertical-rl] rotate-180">
+                        QUINDÍO // COLOMBIA
+                    </span>
+                    <div className="w-[1px] h-24 bg-gradient-to-t from-transparent via-white/40 to-white/40"></div>
                 </div>
 
             </header>
