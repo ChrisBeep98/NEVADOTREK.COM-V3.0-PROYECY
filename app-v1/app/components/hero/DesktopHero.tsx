@@ -190,10 +190,6 @@ export default function DesktopHero() {
                         </h1>
                         
                         <div className="hud-accent flex items-center gap-4 mt-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-                                <span className="text-[9px] font-mono tracking-[0.2em] text-white/60">NV-01 // ACTIVE</span>
-                            </div>
                             <div className="hud-accent w-8 h-[1px] bg-white/20" />
                             <span className="text-[10px] font-mono tracking-[0.3em] text-white/50">
                                 4.6372° N // 75.5708° W
