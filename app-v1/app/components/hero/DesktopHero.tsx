@@ -55,6 +55,36 @@ export default function DesktopHero() {
         const startScaleX = 0.28;
         const startScaleY = 0.65;
 
+        // 1. Subtle Cinematic Entry (Optimized)
+        // We set the scale immediately to match the layout requirements.
+        // Then we just fade it in with a slight vertical drift.
+        // This avoids heavy scaling operations during the critical first render.
+        gsap.set(monolith, { scaleX: startScaleX, scaleY: startScaleY });
+
+        gsap.fromTo(monolith,
+            { 
+                opacity: 0, 
+                y: 40,
+                force3D: true
+            },
+            { 
+                opacity: 1, 
+                y: 0, 
+                duration: 1.8, 
+                ease: "power2.out" 
+            }
+        );
+
+        // 2. Monolith UI Details Reveal (REC & Info)
+        // Subtle fade-in for the technical details inside/around the monolith
+        const uiTargets = [".monolith-ui"];
+        if (liveIndicator) uiTargets.push(liveIndicator);
+        
+        gsap.fromTo(uiTargets,
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 1, delay: 0.5, stagger: 0.2, ease: "power2.out" }
+        );
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: heroSectionRef.current,
