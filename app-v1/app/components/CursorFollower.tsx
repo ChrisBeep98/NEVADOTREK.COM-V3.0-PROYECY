@@ -11,25 +11,24 @@ export default function CursorFollower() {
     useEffect(() => {
         if (!window.matchMedia('(pointer: fine)').matches) return;
 
-        // Configuración de movimiento con inercia diferenciada
         const moveCursor = (e: MouseEvent) => {
-            // El núcleo (dot) es reactivo y rápido
             gsap.to(dotRef.current, {
                 x: e.clientX,
                 y: e.clientY,
-                duration: 0.1,
-                ease: "power2.out"
+                duration: 0.15,
+                ease: "power2.out",
+                overwrite: "auto"
             });
 
-            // El eco (ring) tiene mucha más inercia y "peso"
             gsap.to(ringRef.current, {
                 x: e.clientX,
                 y: e.clientY,
-                duration: 0.5,
-                ease: "power3.out"
+                duration: 0.6,
+                ease: "power3.out",
+                overwrite: "auto"
             });
 
-            // Detección de interactividad
+            // Detección de interactividad rápida
             const target = e.target as HTMLElement;
             const isInteractive = 
                 target.closest('button') || 
@@ -43,58 +42,53 @@ export default function CursorFollower() {
         return () => window.removeEventListener('mousemove', moveCursor);
     }, []);
 
-    // Mutación Cinemática
     useEffect(() => {
         if (!dotRef.current || !ringRef.current) return;
 
         if (isHovered) {
-            // Modo "Magnético / Aurora"
+            // Modo Interactivo
             gsap.to(dotRef.current, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.3
+                scale: 1.5,
+                backgroundColor: "#06b6d4",
+                duration: 0.3,
+                overwrite: "auto"
             });
             gsap.to(ringRef.current, {
-                scale: 1.8,
+                scale: 1.6,
                 borderColor: "#06b6d4",
-                backgroundColor: "rgba(6, 182, 212, 0.05)",
-                borderWidth: "1px",
-                boxShadow: "0 0 20px rgba(6, 182, 212, 0.2)",
+                backgroundColor: "rgba(6, 182, 212, 0.1)",
                 duration: 0.4,
-                ease: "expo.out"
+                ease: "back.out(1.7)",
+                overwrite: "auto"
             });
         } else {
-            // Modo "Glacial / Silencio"
+            // Modo Normal
             gsap.to(dotRef.current, {
                 scale: 1,
-                opacity: 1,
                 backgroundColor: "#ffffff",
-                duration: 0.4
+                duration: 0.4,
+                overwrite: "auto"
             });
             gsap.to(ringRef.current, {
                 scale: 1,
-                borderColor: "rgba(255, 255, 255, 0.2)",
+                borderColor: "rgba(255, 255, 255, 0.3)",
                 backgroundColor: "transparent",
-                borderWidth: "1px",
-                boxShadow: "none",
                 duration: 0.6,
-                ease: "power2.out"
+                ease: "power2.out",
+                overwrite: "auto"
             });
         }
     }, [isHovered]);
 
     return (
         <>
-            {/* El Núcleo (Rápido) */}
             <div 
                 ref={dotRef}
                 className="fixed top-0 left-0 w-1.5 h-1.5 -ml-[3px] -mt-[3px] bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block will-change-transform"
             />
-            
-            {/* El Eco / Anillo (Lento con inercia) */}
             <div 
                 ref={ringRef}
-                className="fixed top-0 left-0 w-10 h-10 -ml-5 -mt-5 border border-white/20 rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block will-change-transform"
+                className="fixed top-0 left-0 w-9 h-9 -ml-[18.5px] -mt-[18.5px] border border-white/30 rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block will-change-transform"
             />
         </>
     );
