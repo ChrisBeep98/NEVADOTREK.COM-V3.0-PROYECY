@@ -7,6 +7,7 @@ import { useGSAP } from '@gsap/react';
 import { Aperture, ArrowRight, ChevronDown, Radio } from 'lucide-react';
 import Header from '../Header';
 import { useLanguage } from '../../context/LanguageContext';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -265,12 +266,12 @@ export default function DesktopHero() {
                             <div className="overflow-hidden"><span className="hero-text-reveal block">Salento</span></div>
                         </h2>
                         <div className="pointer-events-auto hero-button-reveal">
-                            <button className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4">
+                            <Link href="/tours" className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4 cursor-pointer">
                                 <span>{t.common.explore_tours}</span>
                                 <div className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors duration-300">
                                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                                 </div>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
