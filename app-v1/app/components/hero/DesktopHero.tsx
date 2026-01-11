@@ -152,6 +152,12 @@ export default function DesktopHero() {
             );
         }
 
+        // New Masked Slide-Up Reveal for "Un Paraíso En Salento"
+        gsap.fromTo(".hero-text-reveal", 
+            { y: 60, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: "power3.out", delay: 0.9 }
+        );
+
     }, { scope: containerRef });
 
     return (
@@ -216,11 +222,11 @@ export default function DesktopHero() {
 
                 <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-center pl-3 lg:pl-32">
                     <div className="flex flex-col gap-8 items-start">
-                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic mix-blend-difference">
-                            Un<br />
-                            Paraíso<br />
-                            En<br />
-                            Salento
+                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic mix-blend-difference flex flex-col">
+                            <div className="overflow-hidden"><span className="hero-text-reveal block">Un</span></div>
+                            <div className="overflow-hidden"><span className="hero-text-reveal block">Paraíso</span></div>
+                            <div className="overflow-hidden"><span className="hero-text-reveal block">En</span></div>
+                            <div className="overflow-hidden"><span className="hero-text-reveal block">Salento</span></div>
                         </h2>
                         <div className="pointer-events-auto">
                             <button className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4">
