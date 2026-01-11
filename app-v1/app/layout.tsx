@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ToursProvider } from "./context/ToursContext";
 import { getTours } from "./services/nevado-api";
+import CursorFollower from "./components/CursorFollower";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default async function RootLayout({
       >
         <LanguageProvider>
           <ToursProvider initialTours={initialTours}>
+            <CursorFollower />
             {children}
           </ToursProvider>
         </LanguageProvider>
