@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Aperture, ArrowRight, ChevronDown } from 'lucide-react';
+import { Aperture, ArrowRight, ChevronDown, Radio } from 'lucide-react';
 import Header from '../Header';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -23,6 +23,7 @@ export default function DesktopHero() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const heroSectionRef = useRef<HTMLElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const liveIndicatorRef = useRef<HTMLDivElement>(null);
     const rightRailRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -44,6 +45,7 @@ export default function DesktopHero() {
         const monolith = monolithRef.current;
         const inner = innerContentRef.current;
         const textFront = textFrontRef.current;
+        const liveIndicator = liveIndicatorRef.current;
 
         if (!monolith || !inner || !textFront) return;
 
@@ -79,6 +81,15 @@ export default function DesktopHero() {
 
         const initialMarginX = (w * (1 - startScaleX)) / 2;
         const initialMarginY = (h * (1 - startScaleY)) / 2;
+
+        // Animate Live Indicator to corner
+        if (liveIndicator) {
+            tl.fromTo(liveIndicator,
+                { right: "36%", top: "18%" },
+                { right: "1.5rem", top: "1.5rem", ease: "none", duration: 1 },
+                0
+            );
+        }
 
         // Animate TREK text position to stick to the corner as monolith expands
         tl.fromTo(textFront, 
@@ -161,23 +172,19 @@ export default function DesktopHero() {
                             </video>
 
                             <div className="monolith-ui absolute inset-0">
-                                <div className="absolute top-6 right-6 flex flex-col items-end z-40">
-                                    <div className="flex items-center gap-3 group">
-                                        <div className="flex flex-col items-end leading-none gap-[2px]">
-                                            {(Array.isArray(t.hero.ui.live_now) ? t.hero.ui.live_now : [t.hero.ui.live_now]).map((line, i) => (
-                                                <span key={i} className="text-[9px] font-mono text-white/90 tracking-[0.2em] uppercase font-light shadow-black drop-shadow-sm">
-                                                    {line}
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <Aperture className="w-4 h-4 text-red-500 animate-spin-slow drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                                    </div>
-                                    <span ref={statusRef} className="text-[9px] font-mono text-white/60 tracking-wider mt-2"></span>
-                                </div>
                                 <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
                                 <div className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest uppercase opacity-60">Exp. 2025</div>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Live Indicator (Animated to corner) */}
+                    <div ref={liveIndicatorRef} className="absolute top-[18%] right-[36%] flex flex-col items-end gap-1 z-40 pointer-events-none mix-blend-overlay will-change-transform">
+                        <div className="flex items-center gap-2 px-2 py-1 rounded border border-white/10 bg-black/20 backdrop-blur-sm">
+                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+                            <span className="text-[10px] font-mono font-bold tracking-widest text-white">REC</span>
+                        </div>
+                        <span ref={statusRef} className="text-[9px] font-mono text-white/50 tracking-widest uppercase text-right pr-2"></span>
                     </div>
 
                     <div ref={textFrontRef} className="absolute z-20 select-none pointer-events-none mix-blend-overlay will-change-transform flex flex-col items-end group">
