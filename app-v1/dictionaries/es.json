@@ -32,7 +32,13 @@
       "pitch": "INCLINACIÓN"
     },
     "message": {
-      "prefix": "Más allá del borde del mundo conocido, encontramos nuestro"
+      "prefix": "Más allá del borde del mundo conocido, encontramos nuestro",
+      "title_line1": "Un",
+      "title_line2": "Paraíso",
+      "title_line3": "En",
+      "title_line4": "Salento",
+      "tagline": "Explora la frontera\nde lo salvaje.",
+      "description": "Descubre rutas diseñadas para conectar con la esencia de los Andes. Desde caminatas de un día hasta expediciones de alta montaña."
     }
   },
   "intro": {

@@ -32,7 +32,13 @@
       "pitch": "PITCH"
     },
     "message": {
-      "prefix": "Beyond the edge of the known world, we find our"
+      "prefix": "Beyond the edge of the known world, we find our",
+      "title_line1": "A",
+      "title_line2": "Paradise",
+      "title_line3": "In",
+      "title_line4": "Salento",
+      "tagline": "Explore the frontier\nof the wild.",
+      "description": "Discover routes designed to connect with the essence of the Andes. From day hikes to high mountain expeditions."
     }
   },
   "intro": {
