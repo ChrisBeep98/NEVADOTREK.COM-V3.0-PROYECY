@@ -14,17 +14,21 @@ const FAUNA_STATIC = {
         sciName: "Momotus aequatorialis",
         img: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2000&auto=format&fit=crop", 
         video: "https://res.cloudinary.com/dnx0dmhq3/video/upload/dreamina-2026-01-12-4862-Un_video_cinematogr%C3%A1fico_en_c%C3%A1mara_lenta..._irww9z.mp4",
-        accentClass: "text-cyan-400"
+        accentClass: "text-cyan-400",
+        videoPos: "object-top"
     },
     danta: {
         sciName: "Tapirus pinchaque",
         img: "https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=2000&auto=format&fit=crop",
-        accentClass: "text-orange-400"
+        video: "https://res.cloudinary.com/nevado-trek/video/upload/AIVideo_260112_fe3b30c7-fb83-450b-a773-8cfc216f8f0b_0_MiriCanvas_cm08k4.mp4",
+        accentClass: "text-orange-400",
+        videoPos: "object-right"
     },
     oso: {
         sciName: "Tremarctos ornatus",
         img: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=2000&auto=format&fit=crop",
-        accentClass: "text-purple-400"
+        accentClass: "text-purple-400",
+        videoPos: "object-center"
     }
 };
 
@@ -121,7 +125,7 @@ export default function BookingCTA() {
                             {animal.video ? (
                                 <video
                                     src={animal.video}
-                                    className="bg-media w-full h-full object-cover object-top saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu scale-105"
+                                    className={`bg-media w-full h-full object-cover ${animal.videoPos || 'object-center'} saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu scale-105`}
                                     autoPlay
                                     muted
                                     loop
@@ -132,7 +136,7 @@ export default function BookingCTA() {
                                 <img 
                                     src={animal.img} 
                                     alt={animal.name}
-                                    className="bg-media w-full h-full object-cover saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu"
+                                    className={`bg-media w-full h-full object-cover ${animal.videoPos || 'object-center'} saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu`}
                                 />
                             )}
                             
