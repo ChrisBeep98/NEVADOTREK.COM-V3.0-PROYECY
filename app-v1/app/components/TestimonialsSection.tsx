@@ -5,8 +5,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Quote, ArrowRight, CornerRightDown } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import SectionTitle from './ui/SectionTitle';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Review {
     id: string;
@@ -152,9 +152,10 @@ export default function TestimonialsSection() {
                     <span className="text-sub-label mb-2 block">
                         Bitácora de expedición
                     </span>
-                    <h2 className="text-display-xl text-foreground">
-                        Los ecos
-                    </h2>
+                    <SectionTitle 
+                        title="Los ecos" 
+                        className="text-display-xl text-foreground"
+                    />
                 </div>
                 <div className="hidden md:flex flex-col items-end">
                      <span className="font-mono text-[9px] text-muted tracking-widest uppercase">

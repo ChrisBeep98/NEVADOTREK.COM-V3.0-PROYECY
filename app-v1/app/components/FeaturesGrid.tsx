@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { ShieldCheck, MapPin, Sprout, Compass } from 'lucide-react';
+import SectionTitle from './ui/SectionTitle';
 import { useLanguage } from '../context/LanguageContext';
 
 interface FeatureItem {
@@ -73,9 +74,16 @@ export default function FeaturesGrid() {
                     <span className="text-sub-label mb-4 block">
                         {t.features.pretitle}
                     </span>
-                    <h2 className="text-h-section-title text-foreground">
-                        {t.features.title_primary} <span className="text-muted">{t.features.title_secondary}</span>
-                    </h2>
+                    <div className="flex flex-wrap justify-center gap-x-3 text-h-section-title">
+                        <SectionTitle 
+                            title={t.features.title_primary} 
+                            className="text-foreground"
+                        />
+                        <SectionTitle 
+                            title={t.features.title_secondary} 
+                            className="text-muted"
+                        />
+                    </div>
                 </div>
 
                 {/* Altitude Cards */}
