@@ -4,6 +4,7 @@ import React from 'react';
 import { ArrowUpRight, ArrowRight, Zap } from 'lucide-react';
 import Link from 'next/link';
 import TourCard from './TourCard';
+import SectionTitle from './ui/SectionTitle';
 import { useLanguage } from '../context/LanguageContext';
 import { Tour } from '../types/api';
 
@@ -47,14 +48,16 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                     <div className="flex flex-col md:block w-full md:w-auto">
                         <Link href="/tours" className="flex items-end md:hidden mb-4 group">
-                            <h2 className="text-display-xl text-foreground whitespace-pre-line text-left flex-1 group-hover:opacity-80 transition-opacity">
-                                {t.expeditions.title}
-                            </h2>
+                            <SectionTitle 
+                                title={t.expeditions.title} 
+                                className="text-display-xl whitespace-pre-line text-left flex-1 group-hover:opacity-80 transition-opacity"
+                            />
                             <ArrowRight className="w-6 h-6 text-foreground mb-2 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                        <h2 className="text-display-xl text-foreground mb-4 whitespace-pre-line text-left hidden md:block">
-                            {t.expeditions.title}
-                        </h2>
+                        <SectionTitle 
+                            title={t.expeditions.title} 
+                            className="text-display-xl whitespace-pre-line text-left mb-4 hidden md:block"
+                        />
                         <div className="flex items-center gap-2 justify-start">
                             <Zap className="w-5 h-5 text-blue-500 fill-blue-500/20" strokeWidth={2} />
                             <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-foreground">

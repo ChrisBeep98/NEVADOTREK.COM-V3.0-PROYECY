@@ -272,7 +272,7 @@ export default function DesktopHero() {
                             <div className="overflow-hidden"><span className="hero-text-reveal block">{t.hero.message.title_line4}</span></div>
                         </h2>
                         
-                        <p className="hero-tagline-reveal text-sm md:text-base text-white/60 tracking-[0.1em] font-light mix-blend-difference whitespace-pre-line leading-relaxed">
+                        <p className="hero-tagline-reveal text-sm md:text-xl text-white/60 tracking-[0.1em] font-light mix-blend-difference whitespace-pre-line leading-relaxed">
                             {t.hero.message.tagline}
                         </p>
 

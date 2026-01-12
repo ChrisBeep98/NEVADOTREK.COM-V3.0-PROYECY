@@ -127,3 +127,23 @@ El diseño debe ser flexible para soportar la expansión de texto del Español v
 - **2025-12-29:** Refinamiento visual del token `BTN-PRIMARY` (especificaciones de sombra y tipografía).
 - **2025-12-29:** Creación del token `H-SECTION-TITLE` (Leading 1.2).
 - **2025-12-29:** Adición de `Andean Green`.
+
+---
+
+## 🎬 8. MOTION TOKENS (GSAP)
+Estándares de animación para mantener la coherencia cinematográfica.
+
+### 8.1 TEXT REVEAL (Títulos de Sección)
+El efecto estándar para revelar títulos (`.text-h-section-title`) al hacer scroll.
+- **Estilo:** "Soft Fade Reveal" (Limpio y Optimizado).
+- **Trigger:** `top 85%` del viewport.
+- **Duration:** `1.0s`.
+- **Ease:** `power3.out`.
+- **Stagger:** `0.1s` (Entre líneas).
+- **Start State:** `y: 30, opacity: 0`.
+- **End State:** `y: 0, opacity: 1`.
+
+### 8.2 COMPONENT FADE (Tarjetas y Elementos)
+- **Duration:** `0.8s`.
+- **Ease:** `power2.out`.
+- **Distance:** `y: 30px`.
