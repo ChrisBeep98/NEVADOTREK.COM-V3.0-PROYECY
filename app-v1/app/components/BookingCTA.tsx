@@ -13,6 +13,7 @@ const FAUNA_STATIC = {
     barranquero: {
         sciName: "Momotus aequatorialis",
         img: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2000&auto=format&fit=crop", 
+        video: "https://res.cloudinary.com/dnx0dmhq3/video/upload/dreamina-2026-01-12-4862-Un_video_cinematogr%C3%A1fico_en_c%C3%A1mara_lenta..._irww9z.mp4",
         accentClass: "text-cyan-400"
     },
     danta: {
@@ -67,14 +68,14 @@ export default function BookingCTA() {
             const timePos = i * 1.5; // Espaciado amplio para buen ritmo
             const isLast = i === slides.length - 1;
 
-            // 1. Zoom FLUIDO
-            const img = slide.querySelector('img');
-            if (img) {
+            // 1. Zoom FLUIDO (Targeteamos tanto img como iframe vía clase .bg-media)
+            const media = slide.querySelector('.bg-media');
+            if (media) {
                 // Si es el último slide, el zoom debe terminar ANTES (para no alargar el scroll)
                 // Si no es el último, puede durar más para dar continuidad
                 const zoomDuration = isLast ? 1.5 : 3;
                 
-                tl.fromTo(img, 
+                tl.fromTo(media, 
                     { scale: 1 }, 
                     { scale: 1.15, duration: zoomDuration, ease: "power1.inOut" }, 
                     Math.max(0, timePos - 1)
@@ -117,11 +118,24 @@ export default function BookingCTA() {
                     >
                         {/* BACKGROUND: Optimizado (Sin mask-image pesada) */}
                         <div className="absolute inset-0 z-0 overflow-hidden transform-gpu">
-                            <img 
-                                src={animal.img} 
-                                alt={animal.name}
-                                className="w-full h-full object-cover saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu"
-                            />
+                            {animal.video ? (
+                                <video
+                                    src={animal.video}
+                                    className="bg-media w-full h-full object-cover object-top saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu scale-105"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    style={{ minWidth: '100%', minHeight: '100%' }}
+                                />
+                            ) : (
+                                <img 
+                                    src={animal.img} 
+                                    alt={animal.name}
+                                    className="bg-media w-full h-full object-cover saturate-[0.7] sepia-[0.1] brightness-[0.6] will-change-transform transform-gpu"
+                                />
+                            )}
+                            
                             {/* Gradiente sutil para enfoque visual (mucho más rápido que una máscara radial) */}
                             <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_30%,_#040918_90%] opacity-80 pointer-events-none"></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-[#040918] via-transparent to-transparent opacity-60"></div>
