@@ -57,7 +57,8 @@ export default function SectionTitle({ title, className = "", as: Tag = 'h2' }: 
     };
 
     return (
-        <Tag ref={titleRef} className={`text-foreground ${className}`}>
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+        <Tag ref={titleRef as any} className={`text-foreground ${className}`}>
             {renderContent()}
         </Tag>
     );

@@ -91,7 +91,7 @@ export default function BookingCTA() {
                 end: "+=350%", // Volvemos a un scroll largo para que las transiciones sean suaves
                 pin: true,
                 scrub: 0.5,
-                onUpdate: (self) => {
+                onUpdate: () => {
                    // Usamos self.progress si quisieramos calcularlo manual, 
                    // pero tl.time() ya nos da el tiempo relativo a la duracion de la timeline
                 }
