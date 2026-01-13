@@ -127,7 +127,9 @@ export default function TestimonialsSection() {
                         start: "top top",
                         end: () => `+=${scrollAmount + 200}`,
                         pin: true,
-                        scrub: 1,
+                        scrub: 0.5,
+                        fastScrollEnd: true,
+                        preventOverlaps: true,
                         invalidateOnRefresh: true,
                     }
                 });
@@ -140,7 +142,7 @@ export default function TestimonialsSection() {
     return (
         <section ref={containerRef} className="relative h-screen bg-background text-foreground overflow-hidden selection:bg-cyan-500/30 transition-colors duration-500">
             
-            <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute inset-0 z-0 pointer-events-none will-change-transform transform-gpu">
                 <div className="absolute inset-0 opacity-[0.04] mix-blend-multiply dark:mix-blend-screen"
                      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
                 </div>
@@ -168,7 +170,7 @@ export default function TestimonialsSection() {
             </div>
 
             {/* HORIZONTAL TRACK - Adjusted PT for Mobile */}
-            <div ref={trackRef} className="flex h-full items-center pl-[var(--page-frame)] pr-[20vw] md:pr-[50vw]">
+            <div ref={trackRef} className="flex h-full items-center pl-[var(--page-frame)] pr-[20vw] md:pr-[50vw] will-change-transform backface-hidden">
                 
                 {/* INTRO BLOCK */}
                 <div className="flex-shrink-0 w-[85vw] md:w-[25vw] mr-20 md:mr-32 flex flex-col justify-center z-10 pt-40 md:pt-20">
