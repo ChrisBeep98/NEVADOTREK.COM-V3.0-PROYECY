@@ -76,10 +76,18 @@ export default function BookingCTA() {
                     shouldPlay = time > 1.6;
                 }
 
+                // OPTIMIZACIÓN CRÍTICA: Solo invocar play/pause si el estado cambia
                 if (shouldPlay) {
-                    if (video.paused) video.play().catch(() => {});
+                    if (video.paused) {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(() => {});
+                        }
+                    }
                 } else {
-                    if (!video.paused) video.pause();
+                    if (!video.paused && video.currentTime > 0 && !video.ended) {
+                        video.pause();
+                    }
                 }
             });
         };
@@ -92,6 +100,8 @@ export default function BookingCTA() {
                 end: "+=350%", // Volvemos a un scroll largo para que las transiciones sean suaves
                 pin: true,
                 scrub: 0.5,
+                fastScrollEnd: true,
+                preventOverlaps: true,
                 onUpdate: () => {
                    // Usamos self.progress si quisieramos calcularlo manual, 
                    // pero tl.time() ya nos da el tiempo relativo a la duracion de la timeline
