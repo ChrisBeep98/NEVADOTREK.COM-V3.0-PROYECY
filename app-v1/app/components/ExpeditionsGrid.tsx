@@ -1,12 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { ArrowUpRight, ArrowRight, Zap } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import Link from 'next/link';
 import TourCard from './TourCard';
 import SectionTitle from './ui/SectionTitle';
 import { useLanguage } from '../context/LanguageContext';
 import { Tour } from '../types/api';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 interface ExpeditionsGridProps {
     initialTours: Tour[];
@@ -14,8 +19,35 @@ interface ExpeditionsGridProps {
 
 export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) {
     const { t, lang } = useLanguage();
+    const containerRef = useRef<HTMLDivElement>(null);
+    const subtitleRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
     // Slice only if we have more than 6, though usually parent should handle limiting logic if strictly needed, but design requires specific grid.
     const tours = initialTours.slice(0, 6);
+
+    useGSAP(() => {
+        const targets = [];
+        if (subtitleRef.current) targets.push(subtitleRef.current);
+        if (buttonRef.current) targets.push(buttonRef.current);
+
+        if (targets.length === 0) return;
+
+        gsap.fromTo(targets,
+            { y: 30, opacity: 0 },
+            { 
+                y: 0, 
+                opacity: 1, 
+                duration: 1.0, 
+                ease: "power3.out",
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+    }, { scope: containerRef });
 
     // Configuración del "Cinematic Rhythm"
     // Define tanto el ancho (cols) como la altura (h) para crear una narrativa visual.
@@ -41,7 +73,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
     };
 
     return (
-        <section className="bg-background section-v-spacing" style={{ paddingBottom: '0px' }}>
+        <section ref={containerRef} className="bg-background section-v-spacing" style={{ paddingBottom: '0px' }}>
             <div className="px-frame max-w-7xl mx-auto">
                 
                 {/* Header */}
@@ -58,14 +90,14 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             title={t.expeditions.title} 
                             className="text-display-xl whitespace-pre-line text-left mb-4 hidden md:block"
                         />
-                        <div className="flex items-center gap-2 justify-start">
+                        <div ref={subtitleRef} className="flex items-center gap-2 justify-start opacity-0">
                             <Zap className="w-5 h-5 text-blue-500 fill-blue-500/20" strokeWidth={2} />
                             <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-foreground">
                                 {t.expeditions.upcoming}
                             </span>
                         </div>
                     </div>
-                    <button className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center">
+                    <button ref={buttonRef} className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center opacity-0">
                         <span className="opacity-90 text-left text-xs">{t.expeditions.view_all}</span>
                         <div className="btn-icon-bubble shrink-0">
                             <ArrowUpRight width={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500" />

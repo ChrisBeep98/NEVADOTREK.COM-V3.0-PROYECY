@@ -28,6 +28,7 @@ const FEATURES_STATIC = {
 export default function FeaturesGrid() {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
+    const pretitleRef = useRef<HTMLSpanElement>(null);
 
     const features = t.features.items.map((item: FeatureItem) => ({
         ...item,
@@ -37,6 +38,23 @@ export default function FeaturesGrid() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     useGSAP(() => {
+        if (pretitleRef.current) {
+            gsap.fromTo(pretitleRef.current,
+                { y: 30, opacity: 0 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    duration: 1.0, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: pretitleRef.current,
+                        start: "top 90%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        }
+
         gsap.from(".altitude-card", {
             opacity: 0,
             y: 80,
@@ -54,7 +72,6 @@ export default function FeaturesGrid() {
 
     }, { scope: containerRef });
 
-    const altitudes = [0, 40, 80, 0];
     const iconColors = ['text-cyan-400', 'text-orange-400', 'text-emerald-400', 'text-purple-400'];
     const bgGradients = [
         'from-cyan-500/5 to-transparent',
@@ -63,6 +80,14 @@ export default function FeaturesGrid() {
         'from-purple-500/5 to-transparent'
     ];
     const borderColors = ['border-cyan-500/15', 'border-orange-500/15', 'border-emerald-400/15', 'border-purple-500/15'];
+    
+    // Configuración de "Escalón" (Staircase Effect) para Desktop
+    const stairSteps = [
+        'lg:mt-8',       // Inicio suave
+        'lg:mt-0',       // Punto alto
+        'lg:mt-12',      // Valle suave
+        'lg:mt-4'        // Recuperación
+    ];
 
     return (
         <section ref={containerRef} className="bg-background section-v-spacing relative overflow-hidden">
@@ -71,7 +96,7 @@ export default function FeaturesGrid() {
                 
                 {/* Header */}
                 <div className="mb-8 md:mb-16 text-center">
-                    <span className="text-sub-label mb-4 block">
+                    <span ref={pretitleRef} className="text-sub-label mb-4 block opacity-0">
                         {t.features.pretitle}
                     </span>
                     <div className="flex flex-wrap justify-center gap-x-3 text-h-section-title">
@@ -87,14 +112,14 @@ export default function FeaturesGrid() {
                 </div>
 
                 {/* Altitude Cards */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 lg:gap-x-8 gap-y-2 lg:gap-y-8 lg:items-end items-start">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-2 lg:gap-x-8 gap-y-2 lg:gap-y-0 items-start">
                     {features.map((f: FeatureItem & { icon: React.ComponentType<{ size?: number; strokeWidth?: number }> }, i: number) => {
                         const Icon = f.icon;
                         const isHovered = hoveredIndex === i;
                         
                         return (
                             <div key={f.id} 
-                                className="altitude-card relative group perspective-1000"
+                                className={`altitude-card relative group perspective-1000 ${stairSteps[i]}`}
                                 onMouseEnter={() => setHoveredIndex(i)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                             >
