@@ -78,7 +78,7 @@ export default function DesktopHero() {
 
         // 2. Monolith UI Details Reveal (REC & Info)
         // Subtle fade-in for the technical details inside/around the monolith
-        const uiTargets = [".monolith-ui"];
+        const uiTargets: (string | HTMLDivElement)[] = [".monolith-ui"];
         if (liveIndicator) uiTargets.push(liveIndicator);
         
         gsap.fromTo(uiTargets,
