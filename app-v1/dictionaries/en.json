@@ -85,11 +85,11 @@
         "location": "3,200M // ALTO QUINDÍO"
       },
       {
-        "id": "oso",
-        "name": "SPECTACLED BEAR",
-        "role": "THE WATER GUARDIAN",
-        "desc": "Sacred spirit of the Andes. Where he walks, life is born.",
-        "location": "3,600M // ROMERALES"
+        "id": "puma",
+        "name": "PUMA",
+        "role": "THE MOUNTAIN GHOST",
+        "desc": "Lord of the cliffs and shadows. His presence is a whisper that guards the ecosystem's balance.",
+        "location": "3,600M // PEAKS AND ROCKS"
       }
     ]
   },

@@ -24,9 +24,10 @@ const FAUNA_STATIC = {
         accentClass: "text-orange-400",
         videoPos: "object-center"
     },
-    oso: {
-        sciName: "Tremarctos ornatus",
+    puma: {
+        sciName: "Puma concolor",
         img: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=2000&auto=format&fit=crop",
+        video: "https://res.cloudinary.com/dnx0dmhq3/video/upload/v1768264511/dreamina-2026-01-12-9086-Cinematic_video_of_a_puma_in_a_rocky_ter..._zfoweo.mp4",
         accentClass: "text-purple-400",
         videoPos: "object-center"
     }

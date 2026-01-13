@@ -85,11 +85,11 @@
         "location": "3.200M // ALTO QUINDÍO"
       },
       {
-        "id": "oso",
-        "name": "OSO DE ANTEOJOS",
-        "role": "EL GUARDIÁN DE AGUA",
-        "desc": "Espíritu sagrado de los Andes. Donde él camina, nace la vida.",
-        "location": "3.600M // ROMERALES"
+        "id": "puma",
+        "name": "PUMA",
+        "role": "EL FANTASMA DE LA MONTAÑA",
+        "desc": "Señor de los riscos y las sombras. Su presencia es un susurro que vigila el equilibrio del ecosistema.",
+        "location": "3.600M // PÁRAMOS Y ROCAS"
       }
     ]
   },
