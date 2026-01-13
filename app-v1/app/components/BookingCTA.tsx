@@ -49,6 +49,7 @@ export default function BookingCTA() {
 
     useGSAP(() => {
         const slides = gsap.utils.toArray<HTMLElement>('.animal-slide');
+        const videos = sectionRef.current?.querySelectorAll('video');
         
         if (slides.length === 0) return;
 
@@ -56,6 +57,32 @@ export default function BookingCTA() {
         // Inicializamos todos visibles y sin recortes
         gsap.set(slides, { autoAlpha: 1, z: 0, clipPath: 'inset(0% 0% 0% 0%)' });
         
+        // Helper para gestionar videos de forma eficiente
+        const manageVideos = (time: number) => {
+            if (!videos) return;
+            
+            videos.forEach((video, i) => {
+                let shouldPlay = false;
+
+                if (i === 0) {
+                    // Slide 0: Visible mientras el tiempo sea menor a 1.5
+                    shouldPlay = time < 1.5; 
+                } else if (i === 1) {
+                    // Slide 1: Visible si Slide 0 empezó a irse (t > 0) Y Slide 1 aún no se ha ido (t < 3.0)
+                    shouldPlay = time > 0.1 && time < 3.0;
+                } else if (i === 2) {
+                    // Slide 2: Visible si Slide 1 empezó a irse (t > 1.5)
+                    shouldPlay = time > 1.6;
+                }
+
+                if (shouldPlay) {
+                    if (video.paused) video.play().catch(() => {});
+                } else {
+                    if (!video.paused) video.pause();
+                }
+            });
+        };
+
         // Creamos una única línea de tiempo para todas las resoluciones
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -63,7 +90,14 @@ export default function BookingCTA() {
                 start: "top top",
                 end: "+=350%", // Volvemos a un scroll largo para que las transiciones sean suaves
                 pin: true,
-                scrub: 0.5, 
+                scrub: 0.5,
+                onUpdate: (self) => {
+                   // Usamos self.progress si quisieramos calcularlo manual, 
+                   // pero tl.time() ya nos da el tiempo relativo a la duracion de la timeline
+                }
+            },
+            onUpdate: function() {
+                manageVideos(this.time());
             }
         });
 
