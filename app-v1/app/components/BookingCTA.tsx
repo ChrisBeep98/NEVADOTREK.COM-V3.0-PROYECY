@@ -20,9 +20,9 @@ const FAUNA_STATIC = {
     danta: {
         sciName: "Tapirus pinchaque",
         img: "https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=2000&auto=format&fit=crop",
-        video: "https://res.cloudinary.com/nevado-trek/video/upload/AIVideo_260112_fe3b30c7-fb83-450b-a773-8cfc216f8f0b_0_MiriCanvas_cm08k4.mp4",
+        video: "https://res.cloudinary.com/dnx0dmhq3/video/upload/dreamina-2026-01-12-5245-Cinematic_video_of_a_tapir_in_a_green_me..._rtyxgc.mp4",
         accentClass: "text-orange-400",
-        videoPos: "object-right"
+        videoPos: "object-center"
     },
     oso: {
         sciName: "Tremarctos ornatus",
