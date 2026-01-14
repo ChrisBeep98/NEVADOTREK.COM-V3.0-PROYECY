@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Camera } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import GalleryModal from '../ui/GalleryModal';
 
 if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
@@ -14,6 +15,13 @@ if (typeof window !== 'undefined') {
 export default function TourGallery({ images }: { images: string[] }) {
     const { t } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    const openModal = (index: number) => {
+        setSelectedIndex(index);
+        setIsModalOpen(true);
+    };
 
     useGSAP(() => {
         // 1. Text Reveal (Header)
@@ -95,9 +103,10 @@ export default function TourGallery({ images }: { images: string[] }) {
                         if (pattern === 5) desktopClass = "md:col-span-12 md:row-span-1";
 
                         return (
-                            <div 
+                            <button 
                                 key={i} 
-                                className={`${mobileClass} ${desktopClass} relative overflow-hidden rounded-[6px] group gallery-img opacity-0 will-change-transform shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
+                                onClick={() => openModal(i)}
+                                className={`${mobileClass} ${desktopClass} relative overflow-hidden rounded-[6px] group gallery-img opacity-0 will-change-transform shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)] cursor-zoom-in`}
                             >
                                 {/* Vignette & Gradient Overlay */}
                                 <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_40%,_rgba(4,9,24,0.4)_100%] z-10 opacity-100 group-hover:opacity-60 transition-opacity duration-1000 pointer-events-none"></div>
@@ -108,15 +117,22 @@ export default function TourGallery({ images }: { images: string[] }) {
                                     className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.03] transition-all duration-[1.5s] ease-out"
                                 />
                                 <div className="absolute bottom-2 left-2 md:bottom-6 md:left-6 flex items-center gap-3 z-20 hidden md:flex">
-                                    <span className="text-[9px] md:text-[10px] font-light text-white/90 tracking-widest uppercase bg-white/10 backdrop-blur-xl px-2.5 py-0.5 md:px-3 md:py-1 rounded-full border border-white/20 shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                                    <span className="text-[9px] md:text-[10px] font-light text-white/90 tracking-widest uppercase bg-white/10 backdrop-blur-xl px-2.5 py-0.5 md:px-3 md:py-1 rounded-full border border-white/20 shadow-[0_4px_10px_rgba(0,0,0,0.1)] group-hover:bg-white/20 transition-colors">
                                         {i + 1 < 10 ? `0${i + 1}` : i + 1} {pattern === 5 ? '/ Panorama' : i === 0 ? '/ Journal' : ''}
                                     </span>
                                 </div>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
              </div>
+
+             <GalleryModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                images={images} 
+                initialIndex={selectedIndex} 
+             />
         </section>
     );
 }
