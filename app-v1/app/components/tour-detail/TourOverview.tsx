@@ -23,7 +23,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     const body = splitIndex !== -1 ? fullDesc.substring(splitIndex + 1) : '';
 
     useGSAP(() => {
-        // 1. Reveal Hook & Body Text
+        // 1. Reveal Header & Hook
         gsap.fromTo(".reveal-content",
             { opacity: 0, y: 40 },
             {
@@ -35,6 +35,22 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                 scrollTrigger: {
                     trigger: ".overview-start",
                     start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            }
+        );
+
+        // 1.1 Reveal Body Text (Separate Trigger for Mobile Visibility)
+        gsap.fromTo(".reveal-body",
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1, 
+                y: 0, 
+                duration: 1.2, 
+                ease: "power3.out", 
+                scrollTrigger: {
+                    trigger: ".reveal-body",
+                    start: "top 85%",
                     toggleActions: "play none none none"
                 }
             }
@@ -86,19 +102,21 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         <span className="text-sub-label">{t.tour_detail.overview.pretitle}</span>
                     </div>
                     
-                    <h2 className="text-h-section-title text-foreground mb-12 reveal-content max-w-4xl">
+                    <h2 className="text-h-section-title text-foreground mb-12 reveal-content max-w-5xl leading-[1.1]">
                         {hook}
                     </h2>
 
                     {body && (
-                        <div className="md:columns-2 gap-20 reveal-content md:pl-3 md:border-l md:border-l-0 md:border-border">
-                            <p className="text-body-lead text-muted mb-4">{body}</p>
+                        <div className="reveal-body">
+                            <div className="md:columns-2 gap-20 md:pl-3 md:border-l md:border-l-0 md:border-border">
+                                <p className="text-body-lead text-muted mb-4">{body}</p>
+                            </div>
                         </div>
                     )}
                 </div>
 
                 {/* 2. HUD Stats Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 mb-24 hud-grid">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-3 mb-24 hud-grid">
                     {/* ALTITUDE */}
                     <div className="hud-card p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
