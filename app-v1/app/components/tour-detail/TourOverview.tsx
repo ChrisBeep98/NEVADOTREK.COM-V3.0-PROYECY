@@ -23,13 +23,52 @@ export default function TourOverview({ tour }: { tour: Tour }) {
     const body = splitIndex !== -1 ? fullDesc.substring(splitIndex + 1) : '';
 
     useGSAP(() => {
+        // 1. Reveal Hook & Body Text
         gsap.fromTo(".reveal-content",
-            { opacity: 0, y: 30 },
+            { opacity: 0, y: 40 },
             {
-                opacity: 1, y: 0, duration: 1.2, ease: "power3.out", stagger: 0.15,
+                opacity: 1, 
+                y: 0, 
+                duration: 1.4, 
+                ease: "power4.out", 
+                stagger: 0.2,
                 scrollTrigger: {
                     trigger: ".overview-start",
-                    start: "top 85%"
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            }
+        );
+
+        // 2. HUD Cards Reveal (Fast & Snap)
+        gsap.fromTo(".hud-card",
+            { opacity: 0, y: 15, scale: 0.97 },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: 0.05,
+                scrollTrigger: {
+                    trigger: ".hud-grid",
+                    start: "top 90%",
+                }
+            }
+        );
+
+        // 3. Inclusions/Exclusions Lists (Slide from sides)
+        gsap.fromTo(".logistics-col",
+            { opacity: 0, x: (i) => i === 0 ? -30 : 30 },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                stagger: 0.3,
+                scrollTrigger: {
+                    trigger: ".logistics-grid",
+                    start: "top 85%",
                 }
             }
         );
@@ -58,10 +97,10 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     )}
                 </div>
 
-                {/* 2. HUD Stats Grid - Refactored to Floating Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 mb-24 reveal-content">
+                {/* 2. HUD Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 mb-24 hud-grid">
                     {/* ALTITUDE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
+                    <div className="hud-card p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-cyan-500/10 text-cyan-500">
                                 <Mountain className="w-4 h-4" />
@@ -72,7 +111,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
                     
                     {/* DISTANCE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
+                    <div className="hud-card p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-blue-500/10 text-blue-500">
                                 <Ruler className="w-4 h-4" />
@@ -86,7 +125,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
 
                     {/* TEMPERATURE */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
+                    <div className="hud-card p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 md:p-3 rounded-lg bg-orange-500/10 text-orange-500">
                                 <Thermometer className="w-4 h-4" />
@@ -102,7 +141,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
 
                     {/* DIFFICULTY */}
-                    <div className="p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]" style={{ justifyContent: 'flex-start' }}>
+                    <div className="hud-card p-3 md:p-6 flex flex-col items-start justify-start group bg-blue-50/30 dark:bg-white/[0.02] border border-border rounded-[8px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-300 hover:bg-blue-50/60 dark:hover:bg-white/[0.04] hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]">
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`p-2 md:p-3 rounded-lg ${
                                 tour.difficulty === 'Extreme' ? 'bg-purple-500/10 text-purple-500' : 
@@ -116,12 +155,12 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                     </div>
                 </div>
 
-                {/* 3. Minimal Logistics - Radical Professional Style */}
-                <div className="reveal-content">
+                {/* 3. Minimal Logistics */}
+                <div className="logistics-grid">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0">
                         
                         {/* INCLUSIONS */}
-                        <div className="space-y-8 md:pr-12 lg:pr-24 pb-0">
+                        <div className="logistics-col space-y-8 md:pr-12 lg:pr-24 pb-0">
                             <h3 className="text-sub-label !text-foreground opacity-50 tracking-[0.2em]">{t.tour_detail.overview.inclusions}</h3>
                             <ul className="space-y-5">
                                 {tour.inclusions?.map((item, i) => (
@@ -136,7 +175,7 @@ export default function TourOverview({ tour }: { tour: Tour }) {
                         </div>
 
                         {/* EXCLUSIONS */}
-                        <div className="space-y-8 md:pl-12 lg:pl-24 border-t md:border-t-0 md:border-l border-border pt-12 md:pt-0">
+                        <div className="logistics-col space-y-8 md:pl-12 lg:pl-24 border-t md:border-t-0 md:border-l border-border pt-12 md:pt-0">
                             <h3 className="text-sub-label !text-muted tracking-[0.2em]">{t.tour_detail.overview.exclusions}</h3>
                             <ul className="space-y-5">
                                 {tour.exclusions?.map((item, i) => (
