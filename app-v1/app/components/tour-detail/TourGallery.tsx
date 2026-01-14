@@ -16,24 +16,42 @@ export default function TourGallery({ images }: { images: string[] }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        const imgs = gsap.utils.toArray('.gallery-img');
-        
-        imgs.forEach((img: unknown) => {
-            const element = img as HTMLElement;
-            gsap.fromTo(element, 
-                { y: 30, opacity: 0, scale: 0.98 },
-                {
-                    y: 0, opacity: 1, scale: 1, 
-                    duration: 1, 
-                    ease: "power2.out",
-                    force3D: true,
-                    scrollTrigger: {
-                        trigger: element,
-                        start: "top 92%",
-                        toggleActions: "play none none reverse",
-                    }
+        // 1. Text Reveal (Header)
+        gsap.fromTo(".gallery-text-reveal",
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: ".gallery-header",
+                    start: "top 85%",
+                    toggleActions: "play none none none"
                 }
-            );
+            }
+        );
+
+        // 2. High-Performance Image Batching (Solves Scroll Lag)
+        // Instead of one watcher per image, we batch them effectively.
+        ScrollTrigger.batch(".gallery-img", {
+            start: "top 85%",
+            once: true, // Key for performance: don't recalc on scroll up
+            onEnter: (batch) => {
+                gsap.fromTo(batch, 
+                    { autoAlpha: 0, y: 40, scale: 0.96 },
+                    {
+                        autoAlpha: 1, 
+                        y: 0, 
+                        scale: 1, 
+                        duration: 0.8, 
+                        ease: "power2.out", 
+                        stagger: 0.1, // Flow effect
+                        overwrite: true
+                    }
+                );
+            }
         });
 
     }, { scope: containerRef, dependencies: [images] });
@@ -45,12 +63,12 @@ export default function TourGallery({ images }: { images: string[] }) {
              <div className="absolute -right-24 top-1/4 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
              <div className="max-w-6xl mx-auto pt-12">
-                <div className="mb-10">
-                     <div className="flex items-center gap-2 mb-4">
+                <div className="mb-10 gallery-header">
+                     <div className="flex items-center gap-2 mb-4 gallery-text-reveal">
                         <Camera className="w-3.5 h-3.5 text-cyan-500" />
                         <span className="text-sub-label">{t.tour_detail.gallery.pretitle}</span>
                      </div>
-                     <h2 className="text-h-section-title text-foreground">{t.tour_detail.gallery.title}</h2>
+                     <h2 className="text-h-section-title text-foreground gallery-text-reveal">{t.tour_detail.gallery.title}</h2>
                 </div>
                 
                 {/* Grid Layout - Mosaico Asimétrico Dinámico */}
@@ -79,7 +97,7 @@ export default function TourGallery({ images }: { images: string[] }) {
                         return (
                             <div 
                                 key={i} 
-                                className={`${mobileClass} ${desktopClass} relative overflow-hidden rounded-[6px] group gallery-img shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface will-change-transform transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
+                                className={`${mobileClass} ${desktopClass} relative overflow-hidden rounded-[6px] group gallery-img opacity-0 will-change-transform shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] bg-surface transition-shadow duration-700 hover:shadow-[0_30px_60px_rgba(0,0,0,0.2)]`}
                             >
                                 {/* Vignette & Gradient Overlay */}
                                 <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_40%,_rgba(4,9,24,0.4)_100%] z-10 opacity-100 group-hover:opacity-60 transition-opacity duration-1000 pointer-events-none"></div>
