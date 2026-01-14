@@ -26,24 +26,18 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
     const tours = initialTours.slice(0, 6);
 
     useGSAP(() => {
-        const targets = [];
-        if (subtitleRef.current) targets.push(subtitleRef.current);
-        if (buttonRef.current) targets.push(buttonRef.current);
-
-        if (targets.length === 0) return;
-
-        gsap.fromTo(targets,
-            { y: 30, opacity: 0 },
+        gsap.fromTo(".section-reveal",
+            { y: 40, opacity: 0 },
             { 
                 y: 0, 
                 opacity: 1, 
-                duration: 1.0, 
-                ease: "power3.out",
-                stagger: 0.1,
+                duration: 1.4, 
+                ease: "power4.out",
+                stagger: 0.2,
                 scrollTrigger: {
                     trigger: containerRef.current,
-                    start: "top 90%",
-                    toggleActions: "play none none reverse"
+                    start: "top 85%",
+                    toggleActions: "play none none none"
                 }
             }
         );
@@ -79,7 +73,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                     <div className="flex flex-col md:block w-full md:w-auto">
-                        <Link href="/tours" className="flex items-end md:hidden mb-4 group">
+                        <Link href="/tours" className="flex items-end md:hidden mb-4 group section-reveal">
                             <SectionTitle 
                                 title={t.expeditions.title} 
                                 className="text-display-xl whitespace-pre-line text-left flex-1 group-hover:opacity-80 transition-opacity"
@@ -88,16 +82,16 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                         </Link>
                         <SectionTitle 
                             title={t.expeditions.title} 
-                            className="text-display-xl whitespace-pre-line text-left mb-4 hidden md:block"
+                            className="text-display-xl whitespace-pre-line text-left mb-4 hidden md:block section-reveal"
                         />
-                        <div ref={subtitleRef} className="flex items-center gap-2 justify-start opacity-0">
+                        <div ref={subtitleRef} className="flex items-center gap-2 justify-start section-reveal">
                             <Zap className="w-5 h-5 text-blue-500 fill-blue-500/20" strokeWidth={2} />
                             <span className="text-body-lead italic tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-500 to-foreground">
                                 {t.expeditions.upcoming}
                             </span>
                         </div>
                     </div>
-                    <button ref={buttonRef} className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center opacity-0">
+                    <button ref={buttonRef} className="btn-secondary group max-w-[160px] md:w-[160px] hidden md:flex justify-between items-center section-reveal">
                         <span className="opacity-90 text-left text-xs">{t.expeditions.view_all}</span>
                         <div className="btn-icon-bubble shrink-0">
                             <ArrowUpRight width={16} strokeWidth={2.5} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500" />

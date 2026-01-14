@@ -135,12 +135,12 @@ Estándares de animación para mantener la coherencia cinematográfica.
 
 ### 8.1 TEXT REVEAL (Títulos de Sección)
 El efecto estándar para revelar títulos (`.text-h-section-title`) al hacer scroll.
-- **Estilo:** "Soft Fade Reveal" (Limpio y Optimizado).
+- **Estilo:** "Cinematic Slide Up" (Elastic & Premium).
 - **Trigger:** `top 85%` del viewport.
-- **Duration:** `1.0s`.
-- **Ease:** `power3.out`.
-- **Stagger:** `0.1s` (Entre líneas).
-- **Start State:** `y: 30, opacity: 0`.
+- **Duration:** `1.4s`.
+- **Ease:** `power4.out`.
+- **Stagger:** `0.2s` (Entre líneas).
+- **Start State:** `y: 40, opacity: 0`.
 - **End State:** `y: 0, opacity: 1`.
 
 ### 8.2 COMPONENT FADE (Tarjetas y Elementos)
