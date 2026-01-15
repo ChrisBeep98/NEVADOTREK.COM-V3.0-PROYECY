@@ -3,9 +3,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2 } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
+import BoldCheckout from '../ui/BoldCheckout';
+import { createPrivateBooking } from '../../services/nevado-api';
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -33,6 +35,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [mode, setMode] = useState<'public' | 'private'>('public');
     const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(null);
     
+    // Booking Flow State
+    const [realBookingId, setRealBookingId] = useState<string | null>(null);
+    const [isCreatingBooking, setIsCreatingBooking] = useState(false);
+
     // Calendar Engine
     const [viewDate, setViewDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -46,7 +52,42 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         pax: 1 
     });
     
-    const publicDepartures = departures.filter(d => (d.maxPax - d.currentPax) > 0);
+    // --- SMART FORM LOGIC: Load & Save Draft ---
+    useEffect(() => {
+        // Load saved data on mount
+        if (typeof window !== 'undefined') {
+            const savedData = localStorage.getItem('nevado_user_draft');
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    setFormData(prev => ({
+                        ...prev,
+                        name: parsed.name || '',
+                        email: parsed.email || '',
+                        phone: parsed.phone || '',
+                        document: parsed.document || ''
+                    }));
+                } catch (e) {
+                    console.error("Error loading form draft", e);
+                }
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        // Save data when fields change (Debounced slightly by React batching)
+        if (formData.name || formData.email || formData.phone || formData.document) {
+            const draft = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                document: formData.document
+            };
+            localStorage.setItem('nevado_user_draft', JSON.stringify(draft));
+        }
+    }, [formData.name, formData.email, formData.phone, formData.document]);
+    
+    const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
     // Helpers
     const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -99,11 +140,64 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         }
     }, [step, mode]);
 
+    const handleCreateBooking = async () => {
+        try {
+            setIsCreatingBooking(true);
+            
+            // Format date for API (YYYY-MM-DD)
+            const dateObj = mode === 'public' && selectedDeparture 
+                ? new Date(selectedDeparture.date._seconds * 1000)
+                : selectedDate;
+            
+            if (!dateObj) throw new Error("Fecha no seleccionada");
+            
+            const formattedDate = dateObj.toISOString().split('T')[0];
+
+            // CRITICAL: Using 'test-tour-001' for Staging Tests
+            const tourIdToUse = "test-tour-001"; 
+
+            // Auto-format phone to international format (+57 default)
+            let finalPhone = formData.phone.trim();
+            if (!finalPhone.startsWith('+')) {
+                finalPhone = `+57${finalPhone}`;
+            }
+
+            const response = await createPrivateBooking({
+                tourId: tourIdToUse,
+                date: formattedDate,
+                pax: formData.pax,
+                customer: {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: finalPhone,
+                    document: formData.document
+                }
+            });
+
+            setRealBookingId(response.bookingId);
+            setStep(2); // Move to Ticket/Payment step
+        } catch (error: any) {
+            console.error("Booking Creation Error:", error);
+            alert("Error al crear la reserva: " + (error.message || "Inténtalo de nuevo"));
+        } finally {
+            setIsCreatingBooking(false);
+        }
+    };
+
+    const handleNextStep = () => {
+        if (step === 1) {
+            handleCreateBooking();
+        } else {
+            setStep(s => Math.min(s + 1, 2));
+        }
+    };
+
     const handleClose = () => {
         const isMobile = window.innerWidth < 768;
         gsap.to(modalRef.current, { autoAlpha: 0, y: isMobile ? '100vh' : 10, duration: 0.3, ease: "power2.in", onComplete: onClose });
         setTimeout(() => {
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
+            setRealBookingId(null);
         }, 300);
     };
 
@@ -138,6 +232,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     };
 
     if (!isOpen) return null;
+
     return (
         <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24 transform-gpu will-change-transform">
             <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-3 md:px-0 transform-gpu will-change-transform">
@@ -231,7 +326,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                         </div>
                                                         <span className="text-3xl font-bold leading-none tracking-tighter mb-1">{date.getDate()}</span>
                                                         <span className={`text-[9px] font-bold uppercase tracking-widest mb-3 ${isSelected ? 'text-background/60' : 'text-emerald-400'}`}>
-                                                            {t.booking_modal.slots_left.replace('{count}', (dep.maxPax - dep.currentPax).toString())}
+                                                            {t.booking_modal.slots_left.replace('{count}', (dep.maxPax - (dep.currentPax || 0)).toString())}
                                                         </span>
                                                         <span className="text-xs font-bold font-mono tracking-tighter mt-auto">{formatMoney(price)}</span>
                                                     </button>
@@ -273,12 +368,25 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <div className="grid gap-8">
                                         <div className="relative">
                                             <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.name_label}</label>
-                                            <input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" placeholder={t.booking_modal.form.name_placeholder} />
+                                            <input 
+                                                value={formData.name} 
+                                                onChange={e => setFormData({...formData, name: e.target.value})} 
+                                                className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+                                                placeholder={t.booking_modal.form.name_placeholder} 
+                                                autoComplete="name"
+                                            />
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.email_label}</label>
-                                                <input value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" placeholder={t.booking_modal.form.email_placeholder} />
+                                                <input 
+                                                    value={formData.email} 
+                                                    onChange={e => setFormData({...formData, email: e.target.value})} 
+                                                    className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+                                                    placeholder={t.booking_modal.form.email_placeholder} 
+                                                    autoComplete="email"
+                                                    type="email"
+                                                />
                                             </div>
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.pax_count_label}</label>
@@ -292,11 +400,23 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.phone_label}</label>
-                                                <input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" placeholder={t.booking_modal.form.phone_placeholder} />
+                                                <input 
+                                                    value={formData.phone} 
+                                                    onChange={e => setFormData({...formData, phone: e.target.value})} 
+                                                    className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+                                                    placeholder={t.booking_modal.form.phone_placeholder} 
+                                                    autoComplete="tel"
+                                                    type="tel"
+                                                />
                                             </div>
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.document_label}</label>
-                                                <input value={formData.document} onChange={e => setFormData({...formData, document: e.target.value})} className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" placeholder={t.booking_modal.form.document_placeholder} />
+                                                <input 
+                                                    value={formData.document} 
+                                                    onChange={e => setFormData({...formData, document: e.target.value})} 
+                                                    className="w-full bg-transparent border border-border focus:border-foreground rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/10" 
+                                                    placeholder={t.booking_modal.form.document_placeholder} 
+                                                />
                                             </div>
                                         </div>
                                         <div className="relative">
@@ -368,15 +488,31 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                     <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
                         {step > 0 ? (
-                            <button onClick={() => setStep(s => s - 1)} className="text-[9px] font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em]">{t.booking_modal.footer.back}</button>
+                            <button 
+                                disabled={isCreatingBooking}
+                                onClick={() => setStep(s => s - 1)} 
+                                className="text-[9px] font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em] disabled:opacity-20"
+                            >
+                                {t.booking_modal.footer.back}
+                            </button>
                         ) : <div />}
-                        <button 
-                            disabled={!isStepValid()}
-                            onClick={() => setStep(s => Math.min(s + 1, 2))}
-                            className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
-                        >
-                            {step === 2 ? t.booking_modal.footer.confirm_send : t.booking_modal.footer.continue}
-                        </button>
+                        
+                        {step === 2 && realBookingId ? (
+                            <div className="w-full max-w-[280px]">
+                                <BoldCheckout 
+                                    bookingId={realBookingId} 
+                                />
+                            </div>
+                        ) : (
+                            <button 
+                                disabled={!isStepValid() || isCreatingBooking}
+                                onClick={handleNextStep}
+                                className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all flex items-center gap-3 ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
+                            >
+                                {isCreatingBooking && <Loader2 className="w-3 h-3 animate-spin" />}
+                                {isCreatingBooking ? 'Procesando...' : t.booking_modal.footer.continue}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
