@@ -7,7 +7,7 @@ import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, P
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
-import { createPrivateBooking } from '../../services/nevado-api';
+import { createPrivateBooking, getStagingTestTour } from '../../services/nevado-api';
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -40,6 +40,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [isCreatingBooking, setIsCreatingBooking] = useState(false);
     const [paymentRef, setPaymentRef] = useState<string | null>(null);
 
+    // Test Mode State
+    const [isTestMode, setIsTestMode] = useState(false);
+    const [testTour, setTestTour] = useState<Tour | null>(null);
+
     // Calendar Engine
     const [viewDate, setViewDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -52,6 +56,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         note: '', 
         pax: 1 
     });
+    
+    const effectiveTour = testTour || tour;
     
     // --- SMART FORM LOGIC: Load & Save Draft ---
     useEffect(() => {
@@ -87,6 +93,24 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             localStorage.setItem('nevado_user_draft', JSON.stringify(draft));
         }
     }, [formData.name, formData.email, formData.phone, formData.document]);
+
+    // Load test tour from staging when modal opens
+    useEffect(() => {
+        if (!isOpen) return;
+
+        async function loadTestTour() {
+            const fetched = await getStagingTestTour();
+            if (fetched) {
+                setTestTour(fetched);
+                setIsTestMode(true);
+                console.log("Test tour loaded from staging:", fetched);
+            } else {
+                console.log("Test tour not available, using production tour");
+            }
+        }
+
+        loadTestTour();
+    }, [isOpen]);
     
     const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
@@ -160,7 +184,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const handleCreateBooking = async () => {
         try {
             setIsCreatingBooking(true);
-            
+             
             // Format date for API (YYYY-MM-DD)
             const dateObj = mode === 'public' && selectedDeparture 
                 ? new Date(selectedDeparture.date._seconds * 1000)
@@ -170,8 +194,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             
             const formattedDate = dateObj.toISOString().split('T')[0];
 
-            // CRITICAL: Using 'test-tour-001' for Staging Tests
-            const tourIdToUse = "test-tour-001"; 
+            // Use effectiveTour.tourId (test tour or production tour)
+            const tourIdToUse = effectiveTour.tourId;
 
             // Auto-format phone to international format (+57 default)
             let finalPhone = formData.phone.trim();
@@ -193,9 +217,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
             setRealBookingId(response.bookingId);
             setStep(2); // Move to Ticket/Payment step
-        } catch (error: any) {
+        } catch (error) {
             console.error("Booking Creation Error:", error);
-            alert("Error al crear la reserva: " + (error.message || "Inténtalo de nuevo"));
+            const errorMessage = error instanceof Error ? error.message : "Inténtalo de nuevo";
+            alert("Error al crear la reserva: " + errorMessage);
         } finally {
             setIsCreatingBooking(false);
         }
@@ -229,7 +254,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const getMonthName = (date: Date) => date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
     
     const getPrice = () => {
-        const pricing = mode === 'public' && selectedDeparture ? selectedDeparture.pricingSnapshot : tour.pricingTiers;
+        const pricing = mode === 'public' && selectedDeparture ? selectedDeparture.pricingSnapshot : effectiveTour.pricingTiers;
         const totalPax = (mode === 'public' && selectedDeparture ? selectedDeparture.currentPax : 0) + formData.pax;
         const tier = pricing.find(t => totalPax >= t.minPax && totalPax <= t.maxPax) || pricing[0];
         return tier.priceCOP;
@@ -259,14 +284,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     <div className="relative z-10 flex flex-col h-full">
                         <div className="space-y-2 mb-10">
                             <h1 className="text-[10px] font-bold text-muted uppercase tracking-[0.4em]">{t.booking_modal.step_label}</h1>
-                            <h2 className="text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">{tour.name[l]}</h2>
+                            <h2 className="text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">{effectiveTour.name[l]}</h2>
                         </div>
                         <div className="space-y-8">
                             <div className="space-y-3">
                                 <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
                                 <div className="bg-surface/50 border border-border rounded-lg overflow-hidden backdrop-blur-sm">
-                                    {tour.pricingTiers.map((tier, i) => (
-                                        <div key={i} className={`flex justify-between items-center p-3 ${i !== tour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
+                                    {effectiveTour.pricingTiers.map((tier, i) => (
+                                        <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
                                             <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
                                                 {tier.minPax === tier.maxPax 
                                                     ? `${tier.minPax} ${t.booking_modal.pax_label}` 
@@ -286,7 +311,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 <div className="flex-1 flex flex-col bg-transparent relative h-full">
                     
                     {/* Tactical Animated Progress Header */}
-                    <div className="h-16 md:h-20 flex items-center justify-between px-frame md:px-10 border-b border-border shrink-0">
+                    <div className="h-16 md:h-20 flex items-center justify-between px-frame md:px-10 border-b border-border shrink-0 relative">
+                        {/* Test Mode Indicator */}
+                        {isTestMode && (
+                            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-amber-500/10 border border-amber-500/50 text-amber-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 z-30">
+                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                TEST MODE
+                            </div>
+                        )}
+                        
                         <div className="relative w-32 md:w-48 flex items-center h-4">
                             {/* Track Background */}
                             <div className="absolute w-full h-[1px] bg-white/10"></div>
@@ -331,10 +364,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                     {mode === 'public' ? (
                                         <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-2 md:gap-3">
-                                            {publicDepartures.map((dep) => {
+                                    {publicDepartures.map((dep) => {
                                                 const isSelected = selectedDeparture?.departureId === dep.departureId;
                                                 const date = new Date(dep.date._seconds * 1000);
-                                                const price = tour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || tour.pricingTiers[0].priceCOP;
+                                                const price = effectiveTour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || effectiveTour.pricingTiers[0].priceCOP;
                                                 return (
                                                     <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-surface text-foreground border border-border md:border-transparent hover:border-border'}`}>
                                                         <div className="flex items-center gap-1.5 mb-2">

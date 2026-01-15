@@ -2,6 +2,7 @@ import { Tour, Departure } from "../types/api";
 
 const API_BASE_URL = 'https://us-central1-nevadotrektest01.cloudfunctions.net/api/public';
 const PAYMENTS_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
+const STAGING_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
 
 export interface BoldPaymentData {
     paymentReference: string;
@@ -156,5 +157,28 @@ export async function getDeparturesByTourId(tourId: string): Promise<Departure[]
     } catch (error) {
         console.error("Error fetching departures:", error);
         return [];
+    }
+}
+
+/**
+ * Fetches the test tour from staging backend for testing purposes.
+ * Returns the 'test-tour-001' tour or null if not found.
+ */
+export async function getStagingTestTour(): Promise<Tour | null> {
+    try {
+        const response = await fetch(`${STAGING_API_URL}/tours`, {
+            // No cache for test tour - always fetch fresh data
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch staging tours: ${response.status}`);
+        }
+
+        const tours: Tour[] = await response.json();
+        return tours.find(t => t.tourId === 'test-tour-001') || null;
+    } catch (error) {
+        console.error("Error fetching staging test tour:", error);
+        return null;
     }
 }
