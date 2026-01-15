@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -22,6 +22,16 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
     const imageRef = useRef<HTMLImageElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Auto-open modal if returning from payment (Vanilla JS to avoid Suspense issues)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('payment_status') === 'approved') {
+                setIsModalOpen(true);
+            }
+        }
+    }, []);
 
     useGSAP(() => {
         const tl = gsap.timeline();

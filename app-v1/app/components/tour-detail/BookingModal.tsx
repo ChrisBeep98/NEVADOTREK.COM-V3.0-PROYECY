@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
@@ -38,6 +38,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     // Booking Flow State
     const [realBookingId, setRealBookingId] = useState<string | null>(null);
     const [isCreatingBooking, setIsCreatingBooking] = useState(false);
+    const [paymentRef, setPaymentRef] = useState<string | null>(null);
 
     // Calendar Engine
     const [viewDate, setViewDate] = useState(new Date());
@@ -89,6 +90,17 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     
     const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
+    // Check for payment return (Vanilla JS for safety)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('payment_status') === 'approved') {
+                setStep(3);
+                setPaymentRef(params.get('ref'));
+            }
+        }
+    }, []);
+
     // Helpers
     const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     const getFirstDayOfMonth = (date: Date) => {
@@ -123,6 +135,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     useGSAP(() => {
         if (isOpen) {
+            // Save path immediately upon opening
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('lastTourPath', window.location.pathname);
+            }
+
             const isMobile = window.innerWidth < 768;
             gsap.fromTo(modalRef.current,
                 { autoAlpha: 0, y: isMobile ? '100vh' : 20 },
@@ -483,11 +500,44 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                 </div>
                             )}
+
+                            {/* STEP 3: SUCCESS STATE */}
+                            {step === 3 && (
+                                <div className="space-y-8 animate-in fade-in duration-700 max-w-xl text-center flex flex-col items-center justify-center py-10">
+                                    <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mb-4 ring-1 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                                        <CheckCircle className="w-12 h-12 text-emerald-500" />
+                                    </div>
+                                    
+                                    <div className="space-y-3">
+                                        <h3 className="text-3xl font-bold text-foreground tracking-tight">¡Todo Listo!</h3>
+                                        <p className="text-muted text-sm max-w-xs mx-auto leading-relaxed">
+                                            Tu lugar en la montaña está asegurado. Hemos enviado el itinerario detallado a tu correo.
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-surface/50 border border-border rounded-xl p-6 w-full max-w-sm mt-4 backdrop-blur-sm">
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] mb-2">Referencia de Transacción</p>
+                                        <p className="text-lg font-mono font-bold text-foreground tracking-tight">{paymentRef || 'N/A'}</p>
+                                    </div>
+
+                                    <div className="mt-8 flex flex-col gap-4 w-full max-w-xs">
+                                        <button 
+                                            onClick={handleClose} 
+                                            className="h-12 w-full bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg hover:shadow-xl"
+                                        >
+                                            Volver al Tour
+                                        </button>
+                                        <p className="text-[10px] text-muted/60 text-center">
+                                            ¿Necesitas ayuda? <span className="underline hover:text-foreground cursor-pointer">Contáctanos</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
-                        {step > 0 ? (
+                        {step > 0 && step < 3 ? (
                             <button 
                                 disabled={isCreatingBooking}
                                 onClick={() => setStep(s => s - 1)} 
@@ -503,7 +553,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     bookingId={realBookingId} 
                                 />
                             </div>
-                        ) : (
+                        ) : step < 2 ? (
                             <button 
                                 disabled={!isStepValid() || isCreatingBooking}
                                 onClick={handleNextStep}
@@ -512,7 +562,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 {isCreatingBooking && <Loader2 className="w-3 h-3 animate-spin" />}
                                 {isCreatingBooking ? 'Procesando...' : t.booking_modal.footer.continue}
                             </button>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </div>

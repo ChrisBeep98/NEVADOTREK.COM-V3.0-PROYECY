@@ -25,12 +25,23 @@ To avoid the common "data-api-key required" error in React/Next.js, the `BoldChe
 | `data-order-id` | API | Maps to `paymentReference` |
 | `data-redirection-url` | API | Targeted to `/payment-result` |
 
-## 2. API Endpoints (Hybrid)
+## 3. Circular Payment Flow (UX)
 
-### Content (Production)
-- `GET /public/tours`: List all active tours.
-- `GET /public/departures`: List all future departure dates.
+To provide a seamless experience, the application uses a "Circular Flow" that returns the user exactly where they started after payment.
 
-### Transactions (Staging)
-- `POST /public/bookings/private`: Create temporary reservation.
-- `POST /public/payments/init`: Generate Bold signature and reference.
+### 3.1 Path Persistence
+- **Trigger:** When the `BookingModal` is opened, it immediately saves the current `window.location.pathname` to `localStorage` under the key `lastTourPath`.
+- **Reason:** This ensures that even if the user is redirected to an external gateway (Bold), the application remembers which tour they were booking.
+
+### 3.2 The Redirect Loop
+1.  **Bold Gateway:** Upon completion, redirects to `/payment-result?bold-tx-status=approved`.
+2.  **Trampoline Page (`/payment-result`):**
+    - Reads `lastTourPath` from `localStorage`.
+    - Redirects the user back to the tour page, appending `?payment_status=approved&ref=...`.
+3.  **Auto-Aperture (Client-side):**
+    - `TourHeader` and `BookingModal` use vanilla JavaScript (`window.location.search`) to detect the success parameter.
+    - If detected, the modal opens automatically and skips to **Step 3 (Success State)**.
+
+### 3.3 Technical Stability (No-Suspense Pattern)
+To maintain the high-end GSAP animations and static build performance, we avoid Next.js `useSearchParams` in the main layout components. Instead, we use a standard `useEffect` with `URLSearchParams(window.location.search)`. This prevents "Hydration Bailout" and "Missing Suspense" errors that would otherwise break the Hero section's visual integrity.
+
