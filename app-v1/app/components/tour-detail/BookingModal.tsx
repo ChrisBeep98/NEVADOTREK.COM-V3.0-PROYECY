@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock, FileCheck, MessageCircle, ShieldCheck } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
@@ -373,22 +373,63 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             <h2 className="text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">{effectiveTour.name[l]}</h2>
                         </div>
                         <div className="space-y-8">
-                            <div className="space-y-3">
-                                <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
-                                <div className="bg-surface/50 border border-border rounded-lg overflow-hidden backdrop-blur-sm">
-                                    {effectiveTour.pricingTiers.map((tier, i) => (
-                                        <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
-                                            <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
-                                                {tier.minPax === tier.maxPax 
-                                                    ? `${tier.minPax} ${t.booking_modal.pax_label}` 
-                                                    : `${tier.minPax}-${tier.maxPax} ${t.booking_modal.pax_label}`
-                                                }
-                                            </span>
-                                            <span className="text-xs font-bold text-foreground tabular-nums">{formatMoney(tier.priceCOP)}</span>
+                            {isWaitingForPayment ? (
+                                <div className="animate-in fade-in zoom-in-95 duration-700">
+                                    <div className="w-full aspect-[4/3] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl border border-white/10 shadow-2xl relative overflow-hidden p-6 flex flex-col justify-between group">
+                                        {/* Background Effects */}
+                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(6,182,212,0.15),transparent)]" />
+                                        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/40 to-transparent" />
+                                        
+                                        {/* Header */}
+                                        <div className="flex justify-between items-start z-10">
+                                            <div className="w-10 h-6 rounded bg-gradient-to-r from-amber-200 to-amber-400 shadow-lg opacity-80" />
+                                            <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                         </div>
-                                    ))}
+
+                                        {/* Dynamic Status */}
+                                        <div className="z-10 space-y-4">
+                                            <div className="flex gap-1.5 justify-center py-4">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_0ms]" />
+                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_200ms]" />
+                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_400ms]" />
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Footer Info */}
+                                        <div className="space-y-1 z-10">
+                                            <p className="text-[9px] font-mono text-cyan-400/60 tracking-widest uppercase">SECURE GATEWAY</p>
+                                            <div className="flex justify-between items-end">
+                                                <p className="text-lg font-bold text-white tracking-widest font-mono">BOLD™</p>
+                                                <CreditCard className="w-5 h-5 text-white/20" />
+                                            </div>
+                                        </div>
+
+                                        {/* Scanline Effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[10px] w-full animate-[scan_3s_linear_infinite] pointer-events-none" />
+                                    </div>
+                                    
+                                    <div className="mt-6 text-center">
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Sincronizando Pago...</p>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
+                                    <div className="bg-surface/50 border border-border rounded-lg overflow-hidden backdrop-blur-sm">
+                                        {effectiveTour.pricingTiers.map((tier, i) => (
+                                            <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
+                                                <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
+                                                    {tier.minPax === tier.maxPax 
+                                                        ? `${tier.minPax} ${t.booking_modal.pax_label}` 
+                                                        : `${tier.minPax}-${tier.maxPax} ${t.booking_modal.pax_label}`
+                                                    }
+                                                </span>
+                                                <span className="text-xs font-bold text-foreground tabular-nums">{formatMoney(tier.priceCOP)}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -438,36 +479,42 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             {isWaitingForPayment && step === 2 ? (
                                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center max-w-lg mx-auto">
                                     <div className="relative">
-                                        <div className="w-20 h-20 rounded-full bg-cyan-500/10 flex items-center justify-center animate-pulse">
-                                            <ExternalLink className="w-8 h-8 text-cyan-400" />
+                                        <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center animate-pulse">
+                                            <FileCheck className="w-8 h-8 text-emerald-500" />
                                         </div>
-                                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1">
+                                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-lg border border-border">
                                             <Loader2 className="w-5 h-5 text-cyan-500 animate-spin" />
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3">
-                                        <h3 className="text-2xl font-bold text-foreground">Finalizando tu reserva...</h3>
-                                        <p className="text-muted text-sm leading-relaxed">
-                                            La pasarela de pagos segura de <strong>Bold</strong> se ha abierto en una nueva pestaña.
-                                            <br className="hidden md:block" />
-                                            Por favor completa el pago allí para confirmar tu cupo.
-                                        </p>
+                                    <div className="space-y-4 w-full max-w-sm">
+                                        <h3 className="text-2xl font-bold text-foreground">¡Reserva Recibida!</h3>
+                                        
+                                        <div className="bg-surface/50 border border-border rounded-xl p-5 flex items-start gap-4 text-left backdrop-blur-sm">
+                                            <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" />
+                                            <p className="text-muted text-base leading-relaxed">
+                                                Hemos recibido tus <strong className="text-foreground font-semibold">datos de forma segura</strong>. 
+                                                <br className="mb-1"/>
+                                                Ahora solo estamos esperando la <strong className="text-foreground font-semibold">confirmación del pago</strong> en la otra pestaña para asegurar tus cupos.
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div className="flex flex-col gap-3 w-full max-w-xs mt-4">
-                                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 flex items-start gap-3 text-left">
-                                            <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                                            <div>
-                                                <p className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-0.5">Tiempo restante</p>
-                                                <p className="text-xs text-amber-200/80">Tienes 15 minutos para completar la transacción antes de que se libere el cupo.</p>
-                                            </div>
-                                        </div>
-                                        
+                                        <a 
+                                            href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="h-12 w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                        >
+                                            <MessageCircle className="w-4 h-4" />
+                                            <span>Ayuda / WhatsApp</span>
+                                        </a>
+
                                         <button 
                                             onClick={() => checkPaymentStatus(true)}
                                             disabled={isCheckingStatus}
-                                            className="h-12 w-full bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2 mt-2"
+                                            className="h-12 w-full bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                                         >
                                             {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                                             {isCheckingStatus ? 'Verificando...' : 'Ya realicé el pago'}
@@ -477,7 +524,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             onClick={() => setIsWaitingForPayment(false)}
                                             className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
                                         >
-                                            El botón no abrió o tuve un problema
+                                            Cancelar espera
                                         </button>
                                     </div>
                                 </div>
@@ -763,6 +810,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 .custom-scrollbar::-webkit-scrollbar { width: 2px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+
+                @keyframes scan {
+                    0% { transform: translateY(-100%); }
+                    100% { transform: translateY(500%); }
+                }
             `}</style>
         </div>
     );
