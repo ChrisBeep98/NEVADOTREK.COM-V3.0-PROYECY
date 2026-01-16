@@ -473,11 +473,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12 transform-gpu will-change-transform" ref={contentRef}>
-                        <div className="max-w-4xl">
+                        <div className="w-full">
                             
                             {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
                             {isWaitingForPayment && step === 2 ? (
-                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center max-w-lg mx-auto">
+                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
                                     <div className="relative">
                                         <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center animate-pulse">
                                             <FileCheck className="w-8 h-8 text-emerald-500" />
@@ -487,16 +487,43 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4 w-full max-w-sm">
-                                        <h3 className="text-2xl font-bold text-foreground">¡Reserva Recibida!</h3>
+                                    <div className="space-y-6 w-full">
+                                        <h3 className="text-2xl md:text-3xl font-bold text-foreground">¡Reserva Recibida!</h3>
                                         
-                                        <div className="bg-surface/50 border border-border rounded-xl p-5 flex items-start gap-4 text-left backdrop-blur-sm">
-                                            <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" />
-                                            <p className="text-muted text-base leading-relaxed">
-                                                Hemos recibido tus <strong className="text-foreground font-semibold">datos de forma segura</strong>. 
-                                                <br className="mb-1"/>
-                                                Ahora solo estamos esperando la <strong className="text-foreground font-semibold">confirmación del pago</strong> en la otra pestaña para asegurar tus cupos.
-                                            </p>
+                                        <div className="flex flex-col md:flex-row md:items-stretch gap-4 w-full">
+                                            {/* Left side: Message */}
+                                            <div className="flex-1 bg-surface/50 border border-border rounded-xl p-5 md:p-6 flex items-start gap-4 text-left backdrop-blur-sm shadow-sm">
+                                                <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" />
+                                                <p className="text-muted text-base leading-relaxed">
+                                                    Hemos recibido tus <strong className="text-foreground font-semibold">datos de forma segura</strong>. 
+                                                    Ahora solo estamos esperando la <strong className="text-foreground font-semibold">confirmación del pago</strong> en la otra pestaña para asegurar tus cupos.
+                                                </p>
+                                            </div>
+
+                                            {/* Right side: Summary Card */}
+                                            <div className="flex-1 bg-surface/30 border border-border/50 rounded-xl p-5 md:p-6 text-xs space-y-3 shadow-sm flex flex-col justify-center">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Titular</span>
+                                                    <span className="font-medium text-foreground text-sm truncate max-w-[160px]">{formData.name}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Fecha</span>
+                                                    <span className="font-medium text-foreground text-sm">
+                                                        {mode === 'public' && selectedDeparture 
+                                                            ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
+                                                            : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
+                                                    }
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Pasajeros</span>
+                                                    <span className="font-medium text-foreground text-sm">{formData.pax} {formData.pax === 1 ? 'Pers.' : 'Pers.'}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center pt-3 border-t border-white/5 mt-1">
+                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Total</span>
+                                                    <span className="font-bold text-emerald-400 font-mono text-lg tracking-tighter">{formatMoney(getPrice() * formData.pax)}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
