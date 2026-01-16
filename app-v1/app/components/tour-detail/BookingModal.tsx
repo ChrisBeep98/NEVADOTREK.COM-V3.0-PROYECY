@@ -138,7 +138,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 toast.dismiss('payment-wait');
                 
                 toast.custom((t) => (
-                    <div className="bg-[#059669] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
+                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
                         <div className="relative shrink-0">
                             <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center">
                                 <img 
@@ -150,7 +150,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                         <div className="flex-1">
                             <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">¡Pago Aprobado!</p>
-                            <p className="text-[11px] text-emerald-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
+                            <p className="text-[11px] text-blue-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
                         </div>
                     </div>
                 ));
@@ -331,7 +331,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setIsWaitingForPayment(true);
                 
                 toast.custom((t) => (
-                    <div className="bg-[#059669] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
+                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
                         <div className="relative shrink-0">
                             <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
                                 {/* Official Bold Logo */}
@@ -344,12 +344,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                         <div className="flex-1">
                             <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Sincronizando Banco</h4>
-                            <p className="text-[11px] text-emerald-50 leading-tight font-medium">
+                            <p className="text-[11px] text-blue-50 leading-tight font-medium">
                                 Procesando con **Bold**. No cierres esta ventana.
                             </p>
-                            {/* Simple Progress Bar */}
-                            <div className="mt-2.5 w-full h-0.5 bg-black/20 rounded-full overflow-hidden">
-                                <div className="h-full bg-white/80 w-1/3 animate-[shimmer_1.5s_infinite_linear] rounded-full" />
+                            {/* Technical Progress Bar with Bold Gradient */}
+                            <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
                             </div>
                         </div>
                     </div>
