@@ -598,12 +598,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col md:flex-row gap-4 w-full max-w-2xl mt-8">
+                                    <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full max-w-2xl mt-6 md:mt-8">
                                         <a 
                                             href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="h-12 flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                            className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
                                         >
                                             <MessageCircle className="w-4 h-4" />
                                             <span>Ayuda / WhatsApp</span>
@@ -612,7 +612,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         <button 
                                             onClick={() => checkPaymentStatus(true)}
                                             disabled={isCheckingStatus}
-                                            className="h-12 flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                                            className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                                         >
                                             {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                                             {isCheckingStatus ? 'Verificando...' : 'Ya realicé el pago'}
