@@ -12,7 +12,7 @@ The user provides frontend requirements: a component, page, application, or inte
 
 Before coding, understand the context and commit to a BOLD aesthetic direction:
 - **Purpose**: What problem does this interface solve? Who uses it?
-- **Tone**: For **Nevado Trek**, the tone is **Editorial, Cinematic, High-Altitude, and Premium**. It is not just "adventure"; it is "Expedition". Think National Geographic meets high-end fashion editorial.
+- **Tone**: For **Nevado Trek**, the tone is **Editorial, Cinematic, High-Altitude, and Premium**. It is **NOT** generic tech, cyberpunk, or SaaS. It is "National Geographic meets Apple".
 - **Constraints**: Technical requirements (Next.js, Tailwind v4, GSAP, TypeScript).
 - **Differentiation**: What makes this UNFORGETTABLE? What's the one thing someone will remember?
 
@@ -44,7 +44,11 @@ Focus on:
 - **Backgrounds & Visual Details**: 
     - Avoid flat backgrounds. Use subtle gradients (e.g., `from-slate-900 to-slate-950`) or noise textures.
     - Use `backdrop-blur` for overlays but keep them legible.
-  
-NEVER use generic AI-generated aesthetics like overused font families, cliched color schemes (particularly purple gradients on white backgrounds unless specified by brand), predictable layouts, and cookie-cutter design.
+
+### 🚫 Anti-Patterns (Visuals to Avoid)
+- **NO Tech Clichés**: Avoid chips, circuit board lines, radar sweeps, or "hacker" aesthetics unless explicitly requested for a dev tool.
+- **NO Generic Gradients**: Do not use the standard "purple-pink" gradient unless it's strictly tied to a brand color.
+- **NO Over-Decoration**: If an element doesn't serve a purpose (emotional or functional), remove it. Simplicity > Decoration.
+- **NO "Standard" Cards**: Don't just slap a border and a shadow. Use glassmorphism, masks, or typographic grouping to separate content.
 
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.

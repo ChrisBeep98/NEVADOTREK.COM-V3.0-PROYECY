@@ -375,43 +375,49 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         <div className="space-y-8">
                             {isWaitingForPayment ? (
                                     <div className="animate-in fade-in zoom-in-95 duration-700">
-                                        <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#4A148C] via-[#311B92] to-[#4A148C] rounded-xl border border-purple-400/20 shadow-2xl shadow-purple-950/50 relative overflow-hidden p-6 flex flex-col justify-between group">
-                                            {/* Background Effects */}
-                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(170,100,255,0.2),transparent)] opacity-70" />
-                                            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
-                                            
-                                            {/* Header */}
-                                            <div className="flex justify-between items-start z-10">
-                                                <div className="w-10 h-6 rounded bg-gradient-to-r from-amber-200 to-amber-400 shadow-lg" />
-                                                <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                                            </div>
+                                <div className="w-full aspect-[3/4] bg-surface/20 rounded-2xl border border-white/5 relative overflow-hidden flex flex-col items-center justify-between p-8 group shadow-sm">
+                                    {/* Living Aurora Background - More Subtle */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-cyan-500/10 opacity-30" />
+                                    <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08),transparent_50%)] animate-[spin_15s_linear_infinite]" />
+                                    
+                                    {/* Glass Overlay - Higher integration */}
+                                    <div className="absolute inset-0 backdrop-blur-md bg-white/[0.01]" />
 
-                                            {/* Dynamic Status */}
-                                            <div className="z-10 space-y-4">
-                                                <div className="flex gap-1.5 justify-center py-4">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_0ms]" />
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_200ms]" />
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_400ms]" />
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Footer Info */}
-                                            <div className="space-y-1 z-10">
-                                                <p className="text-[9px] font-mono text-purple-300/70 tracking-widest uppercase">SECURE GATEWAY</p>
-                                                <div className="flex justify-between items-end">
-                                                    <p className="text-xl font-black text-white tracking-[0.2em] font-sans">BOLD</p>
-                                                    <CreditCard className="w-5 h-5 text-white/20" />
-                                                </div>
-                                            </div>
+                                    {/* Header: Nevado Node */}
+                                    <div className="relative z-10 flex flex-col items-center">
+                                        <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                                            <div className="text-[10px] font-bold text-white">NV</div>
+                                        </div>
+                                        <span className="text-[9px] font-medium text-white/50 tracking-widest uppercase">Tu Reserva</span>
+                                    </div>
 
-                                            {/* Scanline Effect */}
-                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[10px] w-full animate-[scan_3s_linear_infinite] pointer-events-none" />
+                                    {/* The Bridge (Connection Flow) */}
+                                    <div className="relative z-10 flex-1 w-px bg-white/10 flex justify-center overflow-hidden my-4">
+                                        {/* Flowing Light Packet */}
+                                        <div className="absolute top-0 w-0.5 h-1/2 bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-[drop_2s_ease-in-out_infinite]" />
+                                    </div>
+
+                                    {/* Center Status Pill */}
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                                        <div className="px-4 py-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full shadow-xl flex items-center gap-3">
+                                            <div className="flex gap-1">
+                                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-white tracking-wider uppercase">Sincronizando</span>
                                         </div>
-                                        
-                                        <div className="mt-6 text-center">
-                                            <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Sincronizando Pago...</p>
+                                    </div>
+
+                                    {/* Footer: Bold Node */}
+                                    <div className="relative z-10 flex flex-col items-center">
+                                        <span className="text-[9px] font-medium text-white/50 tracking-widest uppercase mb-2">Pasarela</span>
+                                        <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                                            <ShieldCheck className="w-5 h-5 text-emerald-400" />
                                         </div>
+                                    </div>
                                 </div>
+                                    </div>
                             ) : (
                                 <div className="space-y-3">
                                     <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
@@ -843,6 +849,22 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 @keyframes scan {
                     0% { transform: translateY(-100%); }
                     100% { transform: translateY(500%); }
+                }
+
+                @keyframes shimmer {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(400%); }
+                }
+
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px); }
+                    50% { transform: translateY(-10px); }
+                }
+
+                @keyframes drop {
+                    0% { top: -50%; opacity: 0; }
+                    50% { opacity: 1; }
+                    100% { top: 100%; opacity: 0; }
                 }
             `}</style>
         </div>
