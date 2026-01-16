@@ -527,12 +527,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-3 w-full max-w-xs mt-4">
+                                    <div className="flex flex-col md:flex-row gap-4 w-full max-w-2xl mt-8">
                                         <a 
                                             href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="h-12 w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                            className="h-12 flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
                                         >
                                             <MessageCircle className="w-4 h-4" />
                                             <span>Ayuda / WhatsApp</span>
@@ -541,19 +541,19 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         <button 
                                             onClick={() => checkPaymentStatus(true)}
                                             disabled={isCheckingStatus}
-                                            className="h-12 w-full bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                                            className="h-12 flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                                         >
                                             {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
                                             {isCheckingStatus ? 'Verificando...' : 'Ya realicé el pago'}
                                         </button>
-                                        
-                                        <button 
-                                            onClick={() => setIsWaitingForPayment(false)}
-                                            className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
-                                        >
-                                            Cancelar espera
-                                        </button>
                                     </div>
+                                    
+                                    <button 
+                                        onClick={() => setIsWaitingForPayment(false)}
+                                        className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
+                                    >
+                                        Cancelar espera
+                                    </button>
                                 </div>
                             ) : (
                                 // === REGULAR STEPS ===
@@ -782,54 +782,56 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                     </div>
 
-                    <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
-                        {step > 0 && step < 3 && !isWaitingForPayment ? (
-                            <button 
-                                disabled={isCreatingBooking}
-                                onClick={() => setStep(s => s - 1)} 
-                                className="text-[9px] font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em] disabled:opacity-20"
-                            >
-                                {t.booking_modal.footer.back}
-                            </button>
-                        ) : <div />}
-                        
-                        {/* Only show the Payment Bridge Button if we are in step 2 AND NOT waiting/success */}
-                        {step === 2 && !isWaitingForPayment && !isCheckingStatus ? (
-                            <div className="w-full max-w-[280px] flex flex-col gap-3">
-                                {paymentError && (
-                                    <div className="text-[10px] text-rose-500 font-medium text-center bg-rose-500/5 border border-rose-500/20 p-2 rounded-lg animate-in fade-in slide-in-from-bottom-1">
-                                        {paymentError}
-                                    </div>
-                                )}
+                    {!isWaitingForPayment && (
+                        <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
+                            {step > 0 && step < 3 ? (
                                 <button 
-                                    onClick={handlePay}
                                     disabled={isCreatingBooking}
-                                    className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group disabled:opacity-70 disabled:scale-100"
+                                    onClick={() => setStep(s => s - 1)} 
+                                    className="text-[9px] font-bold text-muted hover:text-foreground transition-colors uppercase tracking-[0.2em] disabled:opacity-20"
                                 >
-                                    {isCreatingBooking ? (
-                                        <>
-                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                            <span>Procesando...</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span>Ir a Pagar</span>
-                                            <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
-                                        </>
-                                    )}
+                                    {t.booking_modal.footer.back}
                                 </button>
-                            </div>
-                        ) : step < 2 ? (
-                            <button 
-                                disabled={!isStepValid() || isCreatingBooking}
-                                onClick={handleNextStep}
-                                className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all flex items-center gap-3 ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
-                            >
-                                {isCreatingBooking && <Loader2 className="w-3 h-3 animate-spin" />}
-                                {isCreatingBooking ? 'Procesando...' : t.booking_modal.footer.continue}
-                            </button>
-                        ) : null}
-                    </div>
+                            ) : <div />}
+                            
+                            {/* Only show the Payment Bridge Button if we are in step 2 AND NOT waiting/success */}
+                            {step === 2 && !isWaitingForPayment && !isCheckingStatus ? (
+                                <div className="w-full max-w-[280px] flex flex-col gap-3">
+                                    {paymentError && (
+                                        <div className="text-[10px] text-rose-500 font-medium text-center bg-rose-500/5 border border-rose-500/20 p-2 rounded-lg animate-in fade-in slide-in-from-bottom-1">
+                                            {paymentError}
+                                        </div>
+                                    )}
+                                    <button 
+                                        onClick={handlePay}
+                                        disabled={isCreatingBooking}
+                                        className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group disabled:opacity-70 disabled:scale-100"
+                                    >
+                                        {isCreatingBooking ? (
+                                            <>
+                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                <span>Procesando...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Ir a Pagar</span>
+                                                <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            ) : step < 2 ? (
+                                <button 
+                                    disabled={!isStepValid() || isCreatingBooking}
+                                    onClick={handleNextStep}
+                                    className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all flex items-center gap-3 ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
+                                >
+                                    {isCreatingBooking && <Loader2 className="w-3 h-3 animate-spin" />}
+                                    {isCreatingBooking ? 'Procesando...' : t.booking_modal.footer.continue}
+                                </button>
+                            ) : null}
+                        </div>
+                    )}
                 </div>
             </div>
 
