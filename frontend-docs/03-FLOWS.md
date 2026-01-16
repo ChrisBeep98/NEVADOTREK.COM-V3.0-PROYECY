@@ -1,33 +1,49 @@
 # 🔄 System Flows
 
-## 1. Booking & Payment Sequence
+## 1. Booking & Payment Sequence (Bridge Pattern)
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant Frontend as Next.js App
-    participant Backend as Backend (Staging)
-    participant Bold as Bold Gateway
+    participant MainTab as Booking Modal (Tab A)
+    participant Bridge as Payment Bridge (Tab B)
+    participant Backend
+    participant Bold
 
-    User->>Frontend: Fill Info -> Click "Continue"
-    Frontend->>Frontend: Auto-format phone (+57)
-    Frontend->>Backend: POST /bookings/private
-    Backend-->>Frontend: Return bookingId
+    User->>MainTab: Fill Info -> Click "Ir a Pagar"
+    MainTab->>Backend: POST /bookings/private
+    Backend-->>MainTab: Return bookingId
     
-    Note over Frontend: Step 2: Payment Prep
+    par Parallel Processes
+        MainTab->>User: Show "Finalizando reserva..." (Step 2.5)
+        MainTab->>Backend: Polling GET /bookings/:id (Every 5s)
+    and
+        MainTab->>Bridge: window.open('/payment-bridge?id=...')
+        Bridge->>Backend: POST /payments/init
+        Backend-->>Bridge: Payload
+        Bridge->>Bold: Render Payment Button
+        User->>Bold: Click Pay -> Transaction
+    end
     
-    Frontend->>Backend: POST /payments/init {bookingId}
-    Backend-->>Frontend: Return Secure Payload (Signature, API Key)
-    
-    Frontend->>Frontend: [Clean Injection] Inject Bold Script
-    Frontend->>User: Render "PAGAR AHORA" Button
-    
-    User->>Bold: Click Pay -> Complete Sandbox Transaction
-    Bold->>Frontend: Redirect to /payment-result
-    Frontend->>User: Show Success State
+    alt Payment Approved
+        Bold->>Backend: Webhook (SALE_APPROVED)
+        Backend->>Backend: Update DB (status: confirmed)
+        
+        Note right of MainTab: Polling detects change
+        MainTab->>User: Show Success (Step 3)
+        
+        Bold->>Bridge: Redirect to /payment-result
+    else Payment Rejected
+        Bold->>Backend: Webhook (SALE_REJECTED)
+        Backend->>Backend: Update DB (paymentStatus: rejected)
+        
+        Note right of MainTab: Polling detects rejection
+        MainTab->>User: Show Error "Pago rechazado"
+        MainTab->>User: Return to Step 2 (Retry)
+    end
 ```
 
 ## 2. Navigation Flow
-- **Tour Detail:** Main conversion point.
-- **Bold Checkout:** In-modal interaction (Step 2).
-- **Payment Result:** Standalone landing page for transaction status confirmation.
+- **Tour Detail (Modal):** Main conversion point. Maintains state via Polling.
+- **Payment Bridge (`/payment-bridge`):** Dedicated tab for Bold interaction.
+- **Payment Result:** Landing page for the Bridge tab (User confirmation).

@@ -1,47 +1,60 @@
 # 🔌 External Integrations & Bold Payments
 
-## 1. Bold Checkout Integration (v1.0)
+## 1. Bold Checkout Integration (v2.0 - Payment Bridge Pattern)
 
-The Bold payment button is integrated following a secure "Backend-First" handshake pattern.
+> **Changed in v2.0:** Moved from direct in-modal script injection to a "Payment Bridge" pattern to handle third-party script hijacking and improve UX stability.
 
-### 1.1 The Handshake Flow
-1.  **Booking Creation:** Frontend sends user data to `POST /bookings/private` (Staging).
-2.  **Payment Init:** Frontend calls `POST /payments/init` with the resulting `bookingId`.
-3.  **Secure Payload:** Backend returns signed data (`integritySignature`, `apiKey`, `paymentReference`).
-4.  **Clean Injection:** Frontend injects the Bold script programmatically into a dedicated container.
+### 1.1 The Payment Bridge Pattern
+Instead of rendering the Bold button directly inside the `BookingModal`, we isolate the payment process in a separate "disposable" tab.
 
-### 1.2 "Clean Injection" Pattern
-To avoid the common "data-api-key required" error in React/Next.js, the `BoldCheckout` component uses a strict injection sequence:
-- **Wipe Container:** Clear previous script/elements using `innerHTML = ''`.
-- **Pre-configure:** Create `<script>` element and set all `data-` attributes *before* appending to DOM.
-- **Append & Execute:** Append to DOM to trigger script loading and execution.
+1.  **Modal (Main Tab):** User clicks "Ir a Pagar" -> Opens `/payment-bridge` in new tab.
+2.  **Bridge (New Tab):** Loads the Bold script safely. User completes payment here.
+3.  **Synchronization:** The Main Tab enters a "Waiting/Polling" state, checking the backend status periodically until the payment is confirmed or rejected.
 
-### 1.3 Mandatory Attributes
-| Attribute | Source | Description |
-| :--- | :--- | :--- |
-| `data-bold-button` | Static | Always "true" |
-| `data-api-key` | API | Public key from backend |
-| `data-integrity-signature` | API | Secure hash for the transaction |
-| `data-order-id` | API | Maps to `paymentReference` |
-| `data-redirection-url` | API | Targeted to `/payment-result` |
+### 1.2 Component Responsibilities
+*   **`BookingModal.tsx`**: Orchestrator. Handles booking creation, opens the bridge, and polls for status.
+*   **`payment-bridge/page.tsx`**: Isolation container. Renders `BoldCheckout` and handles the visual transition for the user in the new tab.
+*   **`BoldCheckout.tsx`**: Pure UI wrapper. Injects the Bold script into the bridge page.
+
+### 1.3 The Handshake Flow
+1.  **Booking Creation:** Frontend sends user data to `POST /bookings/private`.
+2.  **Bridge Open:** Frontend opens `window.open('/payment-bridge?bookingId=...', '_blank')`.
+3.  **Payment Init (In Bridge):** The bridge page calls `POST /payments/init`.
+4.  **Polling (In Modal):** The modal starts calling `GET /public/bookings/:id` every 5 seconds.
+
+---
+
+## 2. API Endpoints (Polling & Status)
+
+To support the bridge pattern, we use a public endpoint to monitor the transaction status from the main tab.
+
+### 2.1 Get Booking Status
+**Endpoint:** `GET /public/bookings/:bookingId`
+
+**Response:**
+```json
+{
+  "bookingId": "B7Gs...",
+  "status": "confirmed",        // 'pending' | 'confirmed'
+  "paymentStatus": "approved",  // 'pending' | 'approved' | 'rejected'
+  "paymentRef": "NTK-..."       // Full transaction reference (optional)
+}
+```
+
+**Logic:**
+- **Approved:** If `paymentStatus === 'approved'`, the modal closes and shows the Success screen using `paymentRef`.
+- **Rejected:** If `paymentStatus === 'rejected'`, the modal stops polling and shows an inline error ("Pago rechazado"), allowing the user to retry.
+
+---
 
 ## 3. Circular Payment Flow (UX)
 
-To provide a seamless experience, the application uses a "Circular Flow" that returns the user exactly where they started after payment.
+Even with the Bridge pattern, we maintain the circular flow for the user's peace of mind.
 
-### 3.1 Path Persistence
-- **Trigger:** When the `BookingModal` is opened, it immediately saves the current `window.location.pathname` to `localStorage` under the key `lastTourPath`.
-- **Reason:** This ensures that even if the user is redirected to an external gateway (Bold), the application remembers which tour they were booking.
+### 3.1 Bridge Behavior
+The Bridge page (`/payment-bridge`) is designed to be a "dead end" for the application logic but a "live wire" for the payment.
+- If the payment is successful, Bold redirects the Bridge Tab to `/payment-result`.
+- **Parallel Sync:** Simultaneously, the Main Tab detects the success via polling and updates its UI, often faster than the user can return to it.
 
-### 3.2 The Redirect Loop
-1.  **Bold Gateway:** Upon completion, redirects to `/payment-result?bold-tx-status=approved`.
-2.  **Trampoline Page (`/payment-result`):**
-    - Reads `lastTourPath` from `localStorage`.
-    - Redirects the user back to the tour page, appending `?payment_status=approved&ref=...`.
-3.  **Auto-Aperture (Client-side):**
-    - `TourHeader` and `BookingModal` use vanilla JavaScript (`window.location.search`) to detect the success parameter.
-    - If detected, the modal opens automatically and skips to **Step 3 (Success State)**.
-
-### 3.3 Technical Stability (No-Suspense Pattern)
-To maintain the high-end GSAP animations and static build performance, we avoid Next.js `useSearchParams` in the main layout components. Instead, we use a standard `useEffect` with `URLSearchParams(window.location.search)`. This prevents "Hydration Bailout" and "Missing Suspense" errors that would otherwise break the Hero section's visual integrity.
-
+### 3.2 Resilience
+- **Unhappy Path:** If the payment fails (e.g., insufficient funds), the backend Webhook updates the status to `rejected`. The Modal picks this up via polling and alerts the user *without* reloading the page, preserving their form data.
