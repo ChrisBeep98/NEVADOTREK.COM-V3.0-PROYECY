@@ -537,15 +537,57 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <div className="space-y-6 w-full relative min-h-[120px]">
                                         <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">¡Reserva Recibida!</h3>
                                         
-                                        {/* Right side: Summary Card (Simplified) */}
-                                        <div className="w-full bg-surface/30 border border-border/50 rounded-xl p-4 flex justify-between items-center shadow-sm">
-                                            <div className="flex flex-col text-left">
-                                                <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Total a Pagar</span>
-                                                <span className="font-bold text-emerald-400 font-mono text-lg tracking-tighter">{formatMoney(getPrice() * formData.pax)}</span>
+                                        {/* Grouped Data Ticket (Enriched with Icons) */}
+                                        <div className="w-full bg-surface/40 border border-white/5 rounded-xl p-5 shadow-sm backdrop-blur-sm text-left space-y-5">
+                                            {/* Block 1: Name */}
+                                            <div className="flex flex-col gap-1.5">
+                                                <span className="text-xs text-muted">Titular de la reserva</span>
+                                                <div className="flex items-center gap-2 text-foreground/90">
+                                                    <User className="w-3.5 h-3.5 opacity-50" />
+                                                    <span className="text-base font-medium truncate">{formData.name || 'Invitado'}</span>
+                                                </div>
                                             </div>
-                                            <div className="text-right">
-                                                 <span className="text-muted text-[9px] uppercase tracking-wider font-bold block">Referencia</span>
-                                                 <span className="font-mono text-xs text-foreground opacity-70">#{realBookingId ? realBookingId.slice(-6).toUpperCase() : 'PENDING'}</span>
+
+                                            {/* Block 2: Details Grid */}
+                                            <div className="grid grid-cols-2 gap-4">
+                                                {/* Left: Date */}
+                                                <div className="flex flex-col gap-1.5">
+                                                    <span className="text-xs text-muted">Fecha de inicio</span>
+                                                    <div className="flex items-center gap-2 text-foreground/90">
+                                                        <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
+                                                        <span className="text-sm font-medium">
+                                                            {mode === 'public' && selectedDeparture 
+                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Right: Pax (Aligned Right) */}
+                                                <div className="flex flex-col items-end gap-1.5 text-right">
+                                                    <span className="text-xs text-muted">Viajeros</span>
+                                                    <div className="flex items-center gap-2 text-foreground/90">
+                                                        <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? 'Persona' : 'Personas'}</span>
+                                                        <Users className="w-3.5 h-3.5 opacity-50" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Block 3: Financial Footer */}
+                                            <div className="pt-4 border-t border-white/5 flex justify-between items-end">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-xs text-muted">Total a pagar</span>
+                                                    <span className="text-xl text-emerald-400 font-medium tracking-tight">
+                                                        {formatMoney(getPrice() * formData.pax)}
+                                                    </span>
+                                                </div>
+                                                <div className="text-right pb-1">
+                                                    <span className="text-[10px] text-muted block mb-0.5">Referencia</span>
+                                                    <span className="text-[10px] font-mono text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded">
+                                                        {realBookingId ? realBookingId.slice(-8).toUpperCase() : '...'}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

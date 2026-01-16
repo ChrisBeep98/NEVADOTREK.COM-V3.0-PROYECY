@@ -1,6 +1,6 @@
 # 🏗️ Frontend Architecture & Tech Stack
 
-> **Last Updated:** 2026-01-14
+> **Last Updated:** 2026-01-16
 > **Project:** Nevado Trek Frontend (App v1)
 
 ## 1. Core Technology Stack
@@ -8,6 +8,7 @@
 - **Language:** TypeScript 5.x
 - **Styling:** Tailwind CSS v4
 - **Animation:** GSAP (GreenSock) + ScrollTrigger
+- **Notifications:** Sonner (Toast System)
 - **Icons:** Lucide React
 - **Package Manager:** NPM
 
