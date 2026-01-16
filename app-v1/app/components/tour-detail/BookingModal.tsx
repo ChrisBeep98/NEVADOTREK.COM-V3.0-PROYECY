@@ -118,9 +118,18 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('payment_status') === 'approved') {
+            const paymentStatus = params.get('payment_status');
+            const ref = params.get('ref');
+            console.log("BookingModal - Payment Status:", paymentStatus, "Ref:", ref); // DEBUG
+
+            if (paymentStatus === 'approved') {
+                console.log("BookingModal - Setting to Step 3 and opening modal"); // DEBUG
                 setStep(3);
-                setPaymentRef(params.get('ref'));
+                setPaymentRef(ref);
+                // Ensure modal is open if parent controls it
+                if (typeof window !== 'undefined') {
+                    window.scrollTo(0, 0);
+                }
             }
         }
     }, []);

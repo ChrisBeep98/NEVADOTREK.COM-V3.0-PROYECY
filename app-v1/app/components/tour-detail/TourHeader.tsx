@@ -27,8 +27,15 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('payment_status') === 'approved') {
-                setIsModalOpen(true);
+            const paymentStatus = params.get('payment_status');
+            console.log("TourHeader - Payment Status:", paymentStatus, "isModalOpen:", isModalOpen); // DEBUG
+
+            if (paymentStatus === 'approved') {
+                console.log("TourHeader - Opening modal for approved payment"); // DEBUG
+                // Small delay to avoid synchronous setState
+                setTimeout(() => {
+                    setIsModalOpen(true);
+                }, 100);
             }
         }
     }, []);

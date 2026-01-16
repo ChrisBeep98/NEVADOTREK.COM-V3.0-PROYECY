@@ -13,30 +13,36 @@ function PaymentResultLogic() {
     useEffect(() => {
         const txStatus = searchParams.get('bold-tx-status');
         const orderId = searchParams.get('bold-order-id');
-        
+
         // 1. Get the path we saved in BookingModal
         const savedPath = typeof window !== 'undefined' ? localStorage.getItem('lastTourPath') : null;
-        console.log("Payment Result - Saved Path:", savedPath); // DEBUG
-        
+        console.log("Payment Result - Saved Path:", savedPath, "txStatus:", txStatus, "orderId:", orderId); // DEBUG
+
         const returnPath = savedPath || '/';
 
         if (txStatus === 'approved') {
-            setStatus('success');
-            setMessage("¡Pago Exitoso! Volviendo a tu aventura...");
-            
-            // 2. Build URL with params that BookingModal will read
-            const finalUrl = `${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_status=approved&ref=${orderId}`;
+            // Use setTimeout to avoid synchronous setState
+            setTimeout(() => {
+                setStatus('success');
+                setMessage("¡Pago Exitoso! Volviendo a tu aventura...");
 
-            // 3. Redirect after delay
-            const timer = setTimeout(() => {
-                localStorage.removeItem('lastTourPath'); // Clean up
-                router.replace(finalUrl);
-            }, 2500); // 2.5s delay to see the success message
-            return () => clearTimeout(timer);
+                // 2. Build URL with params that BookingModal will read
+                const finalUrl = `${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_status=approved&ref=${orderId}`;
+                console.log("Payment Result - Final Redirect URL:", finalUrl); // DEBUG
+
+                // 3. Redirect after delay using window.location.href for absolute navigation
+                setTimeout(() => {
+                    localStorage.removeItem('lastTourPath'); // Clean up
+                    window.location.href = finalUrl;
+                }, 2500); // 2.5s delay to see the success message
+            }, 0);
 
         } else {
-            setStatus('error');
-            setMessage("El pago no fue completado.");
+            setTimeout(() => {
+                setStatus('error');
+                setMessage("El pago no fue completado.");
+                console.log("Payment Result - txStatus not approved:", txStatus); // DEBUG
+            }, 0);
         }
 
     }, [searchParams, router]);
