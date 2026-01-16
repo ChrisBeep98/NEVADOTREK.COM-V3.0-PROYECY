@@ -374,43 +374,43 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                         <div className="space-y-8">
                             {isWaitingForPayment ? (
-                                <div className="animate-in fade-in zoom-in-95 duration-700">
-                                    <div className="w-full aspect-[4/3] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl border border-white/10 shadow-2xl relative overflow-hidden p-6 flex flex-col justify-between group">
-                                        {/* Background Effects */}
-                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(6,182,212,0.15),transparent)]" />
-                                        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/40 to-transparent" />
-                                        
-                                        {/* Header */}
-                                        <div className="flex justify-between items-start z-10">
-                                            <div className="w-10 h-6 rounded bg-gradient-to-r from-amber-200 to-amber-400 shadow-lg opacity-80" />
-                                            <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                                        </div>
-
-                                        {/* Dynamic Status */}
-                                        <div className="z-10 space-y-4">
-                                            <div className="flex gap-1.5 justify-center py-4">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_0ms]" />
-                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_200ms]" />
-                                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-[bounce_1s_infinite_400ms]" />
+                                    <div className="animate-in fade-in zoom-in-95 duration-700">
+                                        <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#4A148C] via-[#311B92] to-[#4A148C] rounded-xl border border-purple-400/20 shadow-2xl shadow-purple-950/50 relative overflow-hidden p-6 flex flex-col justify-between group">
+                                            {/* Background Effects */}
+                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(170,100,255,0.2),transparent)] opacity-70" />
+                                            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
+                                            
+                                            {/* Header */}
+                                            <div className="flex justify-between items-start z-10">
+                                                <div className="w-10 h-6 rounded bg-gradient-to-r from-amber-200 to-amber-400 shadow-lg" />
+                                                <ShieldCheck className="w-5 h-5 text-emerald-400" />
                                             </div>
+
+                                            {/* Dynamic Status */}
+                                            <div className="z-10 space-y-4">
+                                                <div className="flex gap-1.5 justify-center py-4">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_0ms]" />
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_200ms]" />
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-300 animate-[bounce_1s_infinite_400ms]" />
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Footer Info */}
+                                            <div className="space-y-1 z-10">
+                                                <p className="text-[9px] font-mono text-purple-300/70 tracking-widest uppercase">SECURE GATEWAY</p>
+                                                <div className="flex justify-between items-end">
+                                                    <p className="text-xl font-black text-white tracking-[0.2em] font-sans">BOLD</p>
+                                                    <CreditCard className="w-5 h-5 text-white/20" />
+                                                </div>
+                                            </div>
+
+                                            {/* Scanline Effect */}
+                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[10px] w-full animate-[scan_3s_linear_infinite] pointer-events-none" />
                                         </div>
                                         
-                                        {/* Footer Info */}
-                                        <div className="space-y-1 z-10">
-                                            <p className="text-[9px] font-mono text-cyan-400/60 tracking-widest uppercase">SECURE GATEWAY</p>
-                                            <div className="flex justify-between items-end">
-                                                <p className="text-lg font-bold text-white tracking-widest font-mono">BOLD™</p>
-                                                <CreditCard className="w-5 h-5 text-white/20" />
-                                            </div>
+                                        <div className="mt-6 text-center">
+                                            <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Sincronizando Pago...</p>
                                         </div>
-
-                                        {/* Scanline Effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[10px] w-full animate-[scan_3s_linear_infinite] pointer-events-none" />
-                                    </div>
-                                    
-                                    <div className="mt-6 text-center">
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-widest animate-pulse">Sincronizando Pago...</p>
-                                    </div>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
