@@ -1,63 +1,52 @@
 # 💳 BookingModal & Bold Integration
 
-> **Last Updated:** 2026-01-15
+> **Last Updated:** 2026-01-16
 > **Component:** `app-v1/app/components/tour-detail/BookingModal.tsx`
-> **Version:** v2.0 (Payment Bridge)
+> **Version:** v2.1 (Just-in-Time Booking)
 
 ## 1. Visión General
 
-El `BookingModal` v2.0 implementa el patrón **Payment Bridge**. En lugar de inyectar scripts de terceros directamente, delega el pago a una pestaña segura y monitorea el resultado en tiempo real.
-
-### Características Principales
-- **Estados:** Selección → Datos → Puente (Espera) → Éxito/Error.
-- **Payment Bridge:** Abre `/payment-bridge` para aislar el script de Bold.
-- **Polling Inteligente:** Consulta el estado de la reserva cada 5 segundos.
-- **Manejo de Errores:** Soporte nativo para pagos rechazados (`rejected`) sin recargar la página.
+El `BookingModal` v2.1 refina el flujo de datos. Para evitar "reservas fantasma" en la base de datos, la creación de la reserva (`POST /bookings/private`) se ha movido del Step 1 al botón de pago final, utilizando una estrategia de **"Pre-open Tab"** para evitar bloqueos de popups.
 
 ---
 
-## 2. Componente BookingModal
+## 2. Flujo Multi-Step (v2.1)
 
-### 2.2 Estados Internos Actualizados
+### Step 1: Datos del Usuario
+- **Validación:** Local (Client-side).
+- **Acción "Continuar":** Solo avanza al Step 2 en memoria. **NO** contacta al backend.
+- **Beneficio:** Permite al usuario volver y corregir datos sin ensuciar la base de datos.
+
+### Step 2: Resumen y Pago (Just-in-Time)
+Aquí ocurre la magia. Al hacer clic en **"IR A PAGAR"**:
+
+1.  **Browser Action:** Se abre inmediatamente una nueva pestaña (`window.open('', '_blank')`) para "reservar" el hilo del navegador y evitar bloqueos de popups.
+2.  **Visual Feedback:** La nueva pestaña muestra un spinner de carga ("Iniciando pasarela...").
+3.  **Backend Call:** En paralelo, el Modal llama a `createPrivateBooking`.
+4.  **Redirección:** Una vez obtenido el `bookingId`, la pestaña pre-abierta se redirige a `/payment-bridge?bookingId=...`.
+
+### Step 2.5: Sala de Espera
+El Modal entra en modo polling (`isWaitingForPayment`), consultando el estado de esa reserva recién creada.
+
+---
+
+## 3. Implementación Técnica (`handlePay`)
 
 ```typescript
-// Booking & Pago
-const [realBookingId, setRealBookingId] = useState<string | null>(null);
-const [paymentRef, setPaymentRef] = useState<string | null>(null);
-
-// Payment Bridge State (New)
-const [isWaitingForPayment, setIsWaitingForPayment] = useState(false); // Activa Step 2.5
-const [isCheckingStatus, setIsCheckingStatus] = useState(false);       // Spinner manual
-const [paymentError, setPaymentError] = useState<string | null>(null); // Mensajes de rechazo
+const handlePay = async () => {
+    // 1. Bypass Popup Blockers
+    const bridgeWindow = window.open('', '_blank');
+    
+    // 2. Create Booking (Only if not already created)
+    if (!realBookingId) {
+        const response = await createPrivateBooking({...});
+        setRealBookingId(response.bookingId);
+    }
+    
+    // 3. Redirect the pre-opened tab
+    bridgeWindow.location.href = `/payment-bridge?bookingId=${id}`;
+}
 ```
-
----
-
-## 3. Flujo Multi-Step (v2.0)
-
-### Step 2: Resumen y Puente
-En lugar de mostrar el botón de Bold, mostramos un botón propio:
-- **Botón:** "IR A PAGAR" (Abre nueva pestaña).
-- **Acción:** 
-  1. `setIsWaitingForPayment(true)`
-  2. `window.open('/payment-bridge?bookingId=...', '_blank')`
-
-### Step 2.5: Sala de Espera (Polling)
-Vista intermedia mientras el usuario paga en la otra pestaña.
-- **UI:** "Finalizando tu reserva...", Spinner, Timer visual.
-- **Botones:** 
-  - "Ya realicé el pago" (Polling manual).
-  - "El botón no abrió" (Cancelar espera).
-- **Lógica:** Ejecuta `checkPaymentStatus` automáticamente cada 5s.
-
-### Step 3: Éxito
-Se activa automáticamente cuando el Polling recibe `status: confirmed` o `paymentStatus: approved`.
-
-### Manejo de Errores (Unhappy Path)
-Si el Polling recibe `paymentStatus: rejected`:
-1. `setIsWaitingForPayment(false)` (Sale de la sala de espera).
-2. `setPaymentError("El pago fue rechazado...")`.
-3. El usuario regresa al **Step 2** con el mensaje de error visible y puede intentar pagar de nuevo.
 
 ---
 
@@ -72,43 +61,12 @@ const checkPaymentStatus = async () => {
     // CASO 1: Éxito (Bold confirmó por Webhook)
     if (data.paymentStatus === 'approved' || data.status === 'confirmed') {
         setIsWaitingForPayment(false);
-        setPaymentRef(data.paymentRef); // Usar referencia real del backend
         setStep(3);
     } 
-    // CASO 2: Rechazo (Tarjeta denegada, fondos insuficientes)
+    // CASO 2: Rechazo
     else if (data.paymentStatus === 'rejected') {
         setIsWaitingForPayment(false);
         setPaymentError("Pago rechazado. Intenta con otro medio.");
     }
-    // CASO 3: Pendiente (Seguir esperando)
-    // No hace nada, el intervalo volverá a ejecutar en 5s.
 };
-```
-
----
-
-## 5. Payment Bridge Page
-
-Ubicación: `app-v1/app/payment-bridge/page.tsx`
-
-Esta página es un contenedor ligero y seguro.
-- **Propósito:** Cargar `BoldCheckout.tsx` en un entorno aislado.
-- **Ventaja:** Si el script de Bold secuestra el historial o redirige, solo afecta a esta pestaña "desechable", protegiendo la sesión principal del usuario en el Modal.
-
----
-
-## 13. Estructura de Archivos (Actualizada)
-
-```
-app-v1/
-├── app/
-│   ├── components/
-│   │   ├── tour-detail/
-│   │   │   ├── BookingModal.tsx      # Lógica de Polling y Estados
-│   │   └── ui/
-│   │       └── BoldCheckout.tsx      # Solo inyección de script (Simplificado)
-│   ├── payment-bridge/
-│   │   └── page.tsx                  # Nueva página "Puente"
-│   └── services/
-│       └── nevado-api.ts             # getBookingStatus() polling endpoint
 ```

@@ -236,56 +236,86 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         }
     }, [step, mode, isWaitingForPayment]); // Added isWaitingForPayment to trigger anim
 
-    const handleCreateBooking = async () => {
-        try {
-            setIsCreatingBooking(true);
-             
-            // Format date for API (YYYY-MM-DD)
-            const dateObj = mode === 'public' && selectedDeparture 
-                ? new Date(selectedDeparture.date._seconds * 1000)
-                : selectedDate;
-            
-            if (!dateObj) throw new Error("Fecha no seleccionada");
-            
-            const formattedDate = dateObj.toISOString().split('T')[0];
-
-            // Use effectiveTour.tourId (test tour or production tour)
-            const tourIdToUse = effectiveTour.tourId;
-
-            // Auto-format phone to international format (+57 default)
-            let finalPhone = formData.phone.trim();
-            if (!finalPhone.startsWith('+')) {
-                finalPhone = `+57${finalPhone}`;
-            }
-
-            const response = await createPrivateBooking({
-                tourId: tourIdToUse,
-                date: formattedDate,
-                pax: formData.pax,
-                customer: {
-                    name: formData.name,
-                    email: formData.email,
-                    phone: finalPhone,
-                    document: formData.document
-                }
-            });
-
-            setRealBookingId(response.bookingId);
-            setStep(2); // Move to Ticket/Payment step
-        } catch (error) {
-            console.error("Booking Creation Error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Inténtalo de nuevo";
-            alert("Error al crear la reserva: " + errorMessage);
-        } finally {
-            setIsCreatingBooking(false);
-        }
+    const handleNextStep = () => {
+        setStep(s => Math.min(s + 1, 2));
     };
 
-    const handleNextStep = () => {
-        if (step === 1) {
-            handleCreateBooking();
-        } else {
-            setStep(s => Math.min(s + 1, 2));
+    const handlePay = async () => {
+        // 1. Pre-open tab to bypass popup blockers (Crucial: Must happen immediately on user click)
+        const bridgeWindow = window.open('', '_blank');
+        
+        if (!bridgeWindow) {
+            setPaymentError("El navegador bloqueó la ventana de pago. Por favor habilita popups.");
+            return;
+        }
+
+        // UX: Show loading state in the new tab while backend processes
+        bridgeWindow.document.write(`
+            <html>
+                <head><title>Iniciando Pago...</title></head>
+                <body style="background:#09090b;color:#e4e4e7;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:system-ui,sans-serif;">
+                    <div style="text-align:center">
+                        <div style="width:40px;height:40px;border:3px solid #3f3f46;border-top-color:#06b6d4;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
+                        <h3 style="font-weight:500;letter-spacing:0.05em;">Iniciando pasarela segura...</h3>
+                    </div>
+                    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+                </body>
+            </html>
+        `);
+
+        try {
+            setIsCreatingBooking(true);
+            setPaymentError(null);
+
+            let bookingIdToUse = realBookingId;
+
+            // 2. Create Booking ONLY if it doesn't exist yet
+            if (!bookingIdToUse) {
+                // Format date for API (YYYY-MM-DD)
+                const dateObj = mode === 'public' && selectedDeparture 
+                    ? new Date(selectedDeparture.date._seconds * 1000)
+                    : selectedDate;
+                
+                if (!dateObj) throw new Error("Fecha no seleccionada");
+                
+                const formattedDate = dateObj.toISOString().split('T')[0];
+                const tourIdToUse = effectiveTour.tourId;
+
+                let finalPhone = formData.phone.trim();
+                if (!finalPhone.startsWith('+')) {
+                    finalPhone = `+57${finalPhone}`;
+                }
+
+                const response = await createPrivateBooking({
+                    tourId: tourIdToUse,
+                    date: formattedDate,
+                    pax: formData.pax,
+                    customer: {
+                        name: formData.name,
+                        email: formData.email,
+                        phone: finalPhone,
+                        document: formData.document
+                    }
+                });
+
+                bookingIdToUse = response.bookingId;
+                setRealBookingId(response.bookingId);
+            }
+
+            // 3. Redirect the pre-opened tab to the Bridge
+            if (bookingIdToUse) {
+                bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
+                setIsWaitingForPayment(true);
+            } else {
+                throw new Error("No se pudo generar el ID de reserva.");
+            }
+
+        } catch (error) {
+            console.error("Payment Start Error:", error);
+            bridgeWindow.close(); // Close the dead tab
+            setPaymentError(error instanceof Error ? error.message : "Error al iniciar el pago.");
+        } finally {
+            setIsCreatingBooking(false);
         }
     };
 
@@ -690,7 +720,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         ) : <div />}
                         
                         {/* Only show the Payment Bridge Button if we are in step 2 AND NOT waiting/success */}
-                        {step === 2 && realBookingId && !isWaitingForPayment && !isCheckingStatus ? (
+                        {step === 2 && !isWaitingForPayment && !isCheckingStatus ? (
                             <div className="w-full max-w-[280px] flex flex-col gap-3">
                                 {paymentError && (
                                     <div className="text-[10px] text-rose-500 font-medium text-center bg-rose-500/5 border border-rose-500/20 p-2 rounded-lg animate-in fade-in slide-in-from-bottom-1">
@@ -698,16 +728,21 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                 )}
                                 <button 
-                                    onClick={() => {
-                                        setIsWaitingForPayment(true);
-                                        setPaymentError(null);
-                                        // Open the bridge in a new tab
-                                        window.open(`/payment-bridge?bookingId=${realBookingId}`, '_blank');
-                                    }}
-                                    className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group"
+                                    onClick={handlePay}
+                                    disabled={isCreatingBooking}
+                                    className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group disabled:opacity-70 disabled:scale-100"
                                 >
-                                    <span>Ir a Pagar</span>
-                                    <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                    {isCreatingBooking ? (
+                                        <>
+                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                            <span>Procesando...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>Ir a Pagar</span>
+                                            <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         ) : step < 2 ? (
