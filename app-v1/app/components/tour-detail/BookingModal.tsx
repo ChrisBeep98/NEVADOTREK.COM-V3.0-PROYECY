@@ -43,6 +43,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     // Payment Waiting State (Step 2.5)
     const [isWaitingForPayment, setIsWaitingForPayment] = useState(false);
     const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+    const [paymentError, setPaymentError] = useState<string | null>(null);
 
     // Test Mode State
     const [isTestMode, setIsTestMode] = useState(false);
@@ -122,6 +123,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         
         try {
             if (manual) setIsCheckingStatus(true);
+            setPaymentError(null); // Clear previous errors on new check
             
             const data = await getBookingStatus(realBookingId);
             console.log("Checking Booking Status (Staging):", data);
@@ -135,7 +137,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             } else if (data.paymentStatus === 'rejected') {
                 // Handle failed payment
                 setIsWaitingForPayment(false);
-                alert("El pago fue declinado. Por favor, intenta de nuevo o usa otro método de pago.");
+                setPaymentError("El pago fue rechazado por el banco. Intenta con otro medio de pago.");
             }
         } catch (error) {
             console.error("Error checking payment status:", error);
@@ -689,10 +691,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         
                         {/* Only show the Payment Bridge Button if we are in step 2 AND NOT waiting/success */}
                         {step === 2 && realBookingId && !isWaitingForPayment && !isCheckingStatus ? (
-                            <div className="w-full max-w-[280px]">
+                            <div className="w-full max-w-[280px] flex flex-col gap-3">
+                                {paymentError && (
+                                    <div className="text-[10px] text-rose-500 font-medium text-center bg-rose-500/5 border border-rose-500/20 p-2 rounded-lg animate-in fade-in slide-in-from-bottom-1">
+                                        {paymentError}
+                                    </div>
+                                )}
                                 <button 
                                     onClick={() => {
                                         setIsWaitingForPayment(true);
+                                        setPaymentError(null);
                                         // Open the bridge in a new tab
                                         window.open(`/payment-bridge?bookingId=${realBookingId}`, '_blank');
                                     }}
