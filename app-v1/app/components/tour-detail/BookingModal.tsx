@@ -535,7 +535,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             {isWaitingForPayment && step === 2 ? (
                                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
                                     <div className="space-y-6 w-full relative min-h-[120px]">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">¡Reserva Recibida!</h3>
+                                        <div className="text-center space-y-3 mb-8">
+                                            <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
+                                            <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
+                                                Esta ventana se <strong className="text-white/80 font-medium">actualizará automáticamente</strong> una vez confirmemos tu transacción.
+                                            </p>
+                                        </div>
                                         
                                         {/* Grouped Data Ticket (Enriched with Icons) */}
                                         <div className="w-full bg-surface/40 border border-white/5 rounded-xl p-5 shadow-sm backdrop-blur-sm text-left space-y-5">
@@ -551,14 +556,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             {/* Block 2: Details Grid */}
                                             <div className="grid grid-cols-2 gap-4">
                                                 {/* Left: Date */}
-                                                <div className="flex flex-col gap-1.5">
+                                                <div className="flex flex-col gap-1.5 text-left">
                                                     <span className="text-xs text-muted">Fecha de inicio</span>
                                                     <div className="flex items-center gap-2 text-foreground/90">
                                                         <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
                                                         <span className="text-sm font-medium">
                                                             {mode === 'public' && selectedDeparture 
-                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
-                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
                                                             }
                                                         </span>
                                                     </div>
@@ -574,18 +579,22 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 </div>
                                             </div>
 
-                                            {/* Block 3: Financial Footer */}
-                                            <div className="pt-4 border-t border-white/5 flex justify-between items-end">
-                                                <div className="flex flex-col gap-1">
-                                                    <span className="text-xs text-muted">Total a pagar</span>
-                                                    <span className="text-xl text-emerald-400 font-medium tracking-tight">
-                                                        {formatMoney(getPrice() * formData.pax)}
-                                                    </span>
+                                            {/* Block 3: Financial Footer (Updated for Partial Payments) */}
+                                            <div className="pt-4 border-t border-white/5 space-y-3">
+                                                <div className="flex justify-between items-center opacity-60">
+                                                    <span className="text-xs text-muted">Total de la reserva</span>
+                                                    <span className="text-sm font-medium">{formatMoney(getPrice() * formData.pax)}</span>
                                                 </div>
-                                                <div className="text-right pb-1">
-                                                    <span className="text-[10px] text-muted block mb-0.5">Referencia</span>
-                                                    <span className="text-[10px] font-mono text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded">
-                                                        {realBookingId ? realBookingId.slice(-8).toUpperCase() : '...'}
+                                                
+                                                <div className="flex justify-between items-end">
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-xs text-emerald-400 font-bold">Monto a pagar ahora</span>
+                                                        <span className="text-[10px] font-mono text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded">
+                                                            {realBookingId ? `REF: ${realBookingId.slice(-8).toUpperCase()}` : 'REF: ...'}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-2xl text-emerald-400 font-mono font-bold tracking-tight">
+                                                        {formatMoney(getPrice() * formData.pax)}
                                                     </span>
                                                 </div>
                                             </div>
