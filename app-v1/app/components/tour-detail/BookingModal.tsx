@@ -137,23 +137,26 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 window.scrollTo(0, 0);
                 toast.dismiss('payment-wait');
                 
-                toast.custom((t) => (
-                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
-                        <div className="relative shrink-0">
-                            <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center">
-                                <img 
-                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
-                                    alt="Bold" 
-                                    className="h-3 w-auto" 
-                                />
+                // Only show success toast on Desktop
+                if (window.innerWidth >= 768) {
+                    toast.custom((t) => (
+                        <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
+                            <div className="relative shrink-0">
+                                <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                    <img 
+                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                        alt="Bold" 
+                                        className="h-3 w-auto" 
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">¡Pago Aprobado!</p>
+                                <p className="text-[11px] text-blue-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
                             </div>
                         </div>
-                        <div className="flex-1">
-                            <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">¡Pago Aprobado!</p>
-                            <p className="text-[11px] text-blue-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
-                        </div>
-                    </div>
-                ));
+                    ));
+                }
             } else if (data.paymentStatus === 'rejected') {
                 // Handle failed payment
                 setIsWaitingForPayment(false);
@@ -330,30 +333,33 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
                 setIsWaitingForPayment(true);
                 
-                toast.custom((t) => (
-                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
-                        <div className="relative shrink-0">
-                            <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
-                                {/* Official Bold Logo */}
-                                <img 
-                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
-                                    alt="Bold" 
-                                    className="h-3 w-auto"
-                                />
+                // Only show floating toast on Desktop (since it's integrated inline on mobile)
+                if (window.innerWidth >= 768) {
+                    toast.custom((t) => (
+                        <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
+                            <div className="relative shrink-0">
+                                <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                    {/* Official Bold Logo */}
+                                    <img 
+                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                        alt="Bold" 
+                                        className="h-3 w-auto"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Sincronizando Banco</h4>
+                                <p className="text-[11px] text-blue-50 leading-tight font-medium">
+                                    Procesando con **Bold**. No cierres esta ventana.
+                                </p>
+                                {/* Technical Progress Bar with Bold Gradient */}
+                                <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
+                                    <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
+                                </div>
                             </div>
                         </div>
-                        <div className="flex-1">
-                            <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Sincronizando Banco</h4>
-                            <p className="text-[11px] text-blue-50 leading-tight font-medium">
-                                Procesando con **Bold**. No cierres esta ventana.
-                            </p>
-                            {/* Technical Progress Bar with Bold Gradient */}
-                            <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
-                                <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
-                            </div>
-                        </div>
-                    </div>
-                ), { id: 'payment-wait', duration: Infinity });
+                    ), { id: 'payment-wait', duration: Infinity });
+                }
             } else {
                 throw new Error("No se pudo generar el ID de reserva.");
             }
@@ -413,7 +419,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24 transform-gpu will-change-transform">
-            <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-3 md:px-0 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
                 <div className="hidden md:flex w-[32%] bg-background border-r border-border flex-col p-8 lg:p-10 relative overflow-hidden shrink-0">
@@ -500,23 +506,39 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12 transform-gpu will-change-transform" ref={contentRef}>
-                        <div className="w-full">
-                            
-                            {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
-                            {isWaitingForPayment && step === 2 ? (
-                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
-                                    <div className="space-y-6 w-full relative min-h-[120px]">
-                                        <div className="text-center space-y-3 mb-8">
-                                            <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
-                                            <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
-                                                Esta ventana se <strong className="text-white/80 font-medium">actualizará automáticamente</strong> una vez confirmemos tu transacción.
-                                            </p>
-                                        </div>
-                                        
-                                        {/* Grouped Data Ticket (Enriched with Icons) */}
-                                        <div className="w-full bg-surface/40 border border-white/5 rounded-xl p-5 shadow-sm backdrop-blur-sm text-left space-y-5">
-                                            {/* Block 1: Name */}
+                                        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 md:p-10 lg:p-12 transform-gpu will-change-transform" ref={contentRef}>
+                                            <div className="w-full">
+                                                
+                                                {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
+                                                {isWaitingForPayment && step === 2 ? (
+                                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
+                                                        <div className="space-y-6 w-full relative min-h-[120px]">
+                                                            <div className="text-center space-y-3 mb-6">
+                                                                <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
+                                                                <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
+                                                                    Esta ventana se <strong className="text-white/80 font-medium">actualizará automáticamente</strong> una vez confirmemos tu transacción.
+                                                                </p>
+                                                            </div>
+                    
+                                                            {/* Integrated Toast (Mobile Only) */}
+                                                            <div className="md:hidden w-full bg-[#1E40AF] text-white p-4 rounded-xl shadow-lg border border-white/10 flex items-center gap-4 animate-pulse">
+                                                                <div className="shrink-0 px-2 py-1.5 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                                                    <img 
+                                                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                                                        alt="Bold" 
+                                                                        className="h-2.5 w-auto"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1 text-left">
+                                                                    <p className="text-[10px] font-bold uppercase tracking-wider">Sincronizando con Bold</p>
+                                                                    <div className="mt-1.5 w-full h-0.5 bg-black/20 rounded-full overflow-hidden">
+                                                                        <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear]" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            {/* Grouped Data Ticket (Enriched with Icons) */}
+                                                            <div className="w-full bg-surface/40 border border-white/5 rounded-xl p-4 md:p-5 shadow-sm backdrop-blur-sm text-left space-y-5">                                            {/* Block 1: Name */}
                                             <div className="flex flex-col gap-1.5">
                                                 <span className="text-xs text-muted">Titular de la reserva</span>
                                                 <div className="flex items-center gap-2 text-foreground/90">
