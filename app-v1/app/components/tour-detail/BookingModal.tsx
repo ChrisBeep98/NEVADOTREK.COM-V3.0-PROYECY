@@ -8,6 +8,7 @@ import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
 import { createPrivateBooking, getStagingTestTour, getBookingStatus } from '../../services/nevado-api';
+import { toast } from 'sonner';
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -134,10 +135,31 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setPaymentRef(data.paymentRef || realBookingId); 
                 setStep(3);
                 window.scrollTo(0, 0);
+                toast.dismiss('payment-wait');
+                
+                toast.custom((t) => (
+                    <div className="bg-[#059669] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
+                        <div className="relative shrink-0">
+                            <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                <img 
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                    alt="Bold" 
+                                    className="h-3 w-auto" 
+                                />
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">¡Pago Aprobado!</p>
+                            <p className="text-[11px] text-emerald-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
+                        </div>
+                    </div>
+                ));
             } else if (data.paymentStatus === 'rejected') {
                 // Handle failed payment
                 setIsWaitingForPayment(false);
                 setPaymentError("El pago fue rechazado por el banco. Intenta con otro medio de pago.");
+                toast.dismiss('payment-wait');
+                toast.error('Pago Rechazado', { description: 'La transacción no fue aprobada por el banco.' });
             }
         } catch (error) {
             console.error("Error checking payment status:", error);
@@ -246,6 +268,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         
         if (!bridgeWindow) {
             setPaymentError("El navegador bloqueó la ventana de pago. Por favor habilita popups.");
+            toast.error("Ventana Bloqueada", { description: "Habilita los popups para continuar con el pago." });
             return;
         }
 
@@ -306,6 +329,31 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             if (bookingIdToUse) {
                 bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
                 setIsWaitingForPayment(true);
+                
+                toast.custom((t) => (
+                    <div className="bg-[#059669] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
+                        <div className="relative shrink-0">
+                            <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                {/* Official Bold Logo */}
+                                <img 
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                    alt="Bold" 
+                                    className="h-3 w-auto"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Sincronizando Banco</h4>
+                            <p className="text-[11px] text-emerald-50 leading-tight font-medium">
+                                Procesando con **Bold**. No cierres esta ventana.
+                            </p>
+                            {/* Simple Progress Bar */}
+                            <div className="mt-2.5 w-full h-0.5 bg-black/20 rounded-full overflow-hidden">
+                                <div className="h-full bg-white/80 w-1/3 animate-[shimmer_1.5s_infinite_linear] rounded-full" />
+                            </div>
+                        </div>
+                    </div>
+                ), { id: 'payment-wait', duration: Infinity });
             } else {
                 throw new Error("No se pudo generar el ID de reserva.");
             }
@@ -313,7 +361,9 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         } catch (error) {
             console.error("Payment Start Error:", error);
             bridgeWindow.close(); // Close the dead tab
-            setPaymentError(error instanceof Error ? error.message : "Error al iniciar el pago.");
+            const msg = error instanceof Error ? error.message : "Error al iniciar el pago.";
+            setPaymentError(msg);
+            toast.error('Error al iniciar', { description: msg });
         } finally {
             setIsCreatingBooking(false);
         }
@@ -484,51 +534,18 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
                             {isWaitingForPayment && step === 2 ? (
                                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
-                                    <div className="relative">
-                                        <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center animate-pulse">
-                                            <FileCheck className="w-8 h-8 text-emerald-500" />
-                                        </div>
-                                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-lg border border-border">
-                                            <Loader2 className="w-5 h-5 text-cyan-500 animate-spin" />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-6 w-full">
-                                        <h3 className="text-2xl md:text-3xl font-bold text-foreground">¡Reserva Recibida!</h3>
+                                    <div className="space-y-6 w-full relative min-h-[120px]">
+                                        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">¡Reserva Recibida!</h3>
                                         
-                                        <div className="flex flex-col md:flex-row md:items-stretch gap-4 w-full">
-                                            {/* Left side: Message */}
-                                            <div className="flex-1 bg-surface/50 border border-border rounded-xl p-5 md:p-6 flex items-start gap-4 text-left backdrop-blur-sm shadow-sm">
-                                                <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0 mt-0.5" />
-                                                <p className="text-muted text-base leading-relaxed">
-                                                    Hemos recibido tus <strong className="text-foreground font-semibold">datos de forma segura</strong>. 
-                                                    Ahora solo estamos esperando la <strong className="text-foreground font-semibold">confirmación del pago</strong> en la otra pestaña para asegurar tus cupos.
-                                                </p>
+                                        {/* Right side: Summary Card (Simplified) */}
+                                        <div className="w-full bg-surface/30 border border-border/50 rounded-xl p-4 flex justify-between items-center shadow-sm">
+                                            <div className="flex flex-col text-left">
+                                                <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Total a Pagar</span>
+                                                <span className="font-bold text-emerald-400 font-mono text-lg tracking-tighter">{formatMoney(getPrice() * formData.pax)}</span>
                                             </div>
-
-                                            {/* Right side: Summary Card */}
-                                            <div className="flex-1 bg-surface/30 border border-border/50 rounded-xl p-5 md:p-6 text-xs space-y-3 shadow-sm flex flex-col justify-center">
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Titular</span>
-                                                    <span className="font-medium text-foreground text-sm truncate max-w-[160px]">{formData.name}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Fecha</span>
-                                                    <span className="font-medium text-foreground text-sm">
-                                                        {mode === 'public' && selectedDeparture 
-                                                            ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
-                                                            : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
-                                                    }
-                                                    </span>
-                                                </div>
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Pasajeros</span>
-                                                    <span className="font-medium text-foreground text-sm">{formData.pax} {formData.pax === 1 ? 'Pers.' : 'Pers.'}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center pt-3 border-t border-white/5 mt-1">
-                                                    <span className="text-muted text-[9px] uppercase tracking-wider font-bold">Total</span>
-                                                    <span className="font-bold text-emerald-400 font-mono text-lg tracking-tighter">{formatMoney(getPrice() * formData.pax)}</span>
-                                                </div>
+                                            <div className="text-right">
+                                                 <span className="text-muted text-[9px] uppercase tracking-wider font-bold block">Referencia</span>
+                                                 <span className="font-mono text-xs text-foreground opacity-70">#{realBookingId ? realBookingId.slice(-6).toUpperCase() : 'PENDING'}</span>
                                             </div>
                                         </div>
                                     </div>

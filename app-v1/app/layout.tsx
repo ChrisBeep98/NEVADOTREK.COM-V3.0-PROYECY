@@ -3,6 +3,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import { ToursProvider } from "./context/ToursContext";
 import CursorFollower from "./components/CursorFollower";
 import { getTours } from "./services/nevado-api";
+import { Toaster } from 'sonner';
 
 // Font setup with system fallbacks to prevent network-related build failures
 const geistSans = { variable: '--font-geist-sans', className: 'font-sans' };
@@ -27,6 +28,7 @@ export default async function RootLayout({
         <LanguageProvider>
           <ToursProvider initialTours={initialTours}>
             <CursorFollower />
+            <Toaster position="top-right" theme="dark" richColors closeButton />
             {children}
           </ToursProvider>
         </LanguageProvider>
