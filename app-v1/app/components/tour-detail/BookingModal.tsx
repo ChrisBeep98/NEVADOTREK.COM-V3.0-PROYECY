@@ -552,12 +552,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             </div>
 
                                             {/* Block 3: Financial Footer (Updated for Partial Payments) */}
-                                            <div className="pt-4 border-t border-white/5 space-y-3">
+                                            <div className="pt-4 border-t border-white/5 space-y-4">
                                                 <div className="flex justify-between items-center opacity-60">
                                                     <span className="text-xs text-muted">Total de la reserva</span>
                                                     <span className="text-sm font-medium">{formatMoney(getPrice() * formData.pax)}</span>
                                                 </div>
                                                 
+                                                {/* Internal Financial Divider */}
+                                                <div className="h-px w-full bg-white/5" />
+
                                                 <div className="flex justify-between items-end">
                                                     <div className="flex flex-col gap-1">
                                                         <span className="text-xs text-emerald-400 font-bold">Monto a pagar ahora</span>
