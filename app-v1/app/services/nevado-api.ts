@@ -104,6 +104,26 @@ export async function initBoldPayment(bookingId: string): Promise<BoldPaymentDat
 }
 
 /**
+ * Checks the status of a specific booking.
+ */
+export async function getBookingStatus(bookingId: string): Promise<{ status: string; paymentStatus?: string; paymentRef?: string }> {
+    try {
+        const response = await fetch(`${PAYMENTS_API_URL}/bookings/${bookingId}`, {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to check booking status');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error("Error checking booking status:", error);
+        throw error;
+    }
+}
+
+/**
  * Fetches list of active tours.
  */
 export async function getTours(): Promise<Tour[]> {

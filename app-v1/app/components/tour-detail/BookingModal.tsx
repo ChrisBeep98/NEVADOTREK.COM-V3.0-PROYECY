@@ -3,11 +3,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
-import { createPrivateBooking, getStagingTestTour } from '../../services/nevado-api';
+import { createPrivateBooking, getStagingTestTour, getBookingStatus } from '../../services/nevado-api';
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -39,6 +39,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [realBookingId, setRealBookingId] = useState<string | null>(null);
     const [isCreatingBooking, setIsCreatingBooking] = useState(false);
     const [paymentRef, setPaymentRef] = useState<string | null>(null);
+    
+    // Payment Waiting State (Step 2.5)
+    const [isWaitingForPayment, setIsWaitingForPayment] = useState(false);
+    const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
     // Test Mode State
     const [isTestMode, setIsTestMode] = useState(false);
@@ -111,10 +115,50 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
         loadTestTour();
     }, [isOpen]);
+
+    // --- PAYMENT POLLING LOGIC ---
+    const checkPaymentStatus = async (manual = false) => {
+        if (!realBookingId) return;
+        
+        try {
+            if (manual) setIsCheckingStatus(true);
+            
+            const data = await getBookingStatus(realBookingId);
+            console.log("Checking Booking Status (Staging):", data);
+
+            // Check for approved payment status from backend (populated by Bold Webhook)
+            if (data.paymentStatus === 'approved' || data.status === 'confirmed') {
+                setIsWaitingForPayment(false);
+                setPaymentRef(data.paymentRef || realBookingId); 
+                setStep(3);
+                window.scrollTo(0, 0);
+            } else if (data.paymentStatus === 'rejected') {
+                // Handle failed payment
+                setIsWaitingForPayment(false);
+                alert("El pago fue declinado. Por favor, intenta de nuevo o usa otro método de pago.");
+            }
+        } catch (error) {
+            console.error("Error checking payment status:", error);
+        } finally {
+            if (manual) setIsCheckingStatus(false);
+        }
+    };
+
+    // Auto-poll every 5 seconds when waiting
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (isWaitingForPayment && realBookingId) {
+            interval = setInterval(() => {
+                checkPaymentStatus();
+            }, 5000);
+        }
+        return () => clearInterval(interval);
+    }, [isWaitingForPayment, realBookingId]);
+
     
     const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
-    // Check for payment return (Vanilla JS for safety)
+    // Check for payment return (Vanilla JS for safety - Legacy Redirect Support)
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
@@ -188,7 +232,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.025, ease: "power2.out", force3D: true }
             );
         }
-    }, [step, mode]);
+    }, [step, mode, isWaitingForPayment]); // Added isWaitingForPayment to trigger anim
 
     const handleCreateBooking = async () => {
         try {
@@ -249,6 +293,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         setTimeout(() => {
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
             setRealBookingId(null);
+            setIsWaitingForPayment(false); // Reset waiting state
         }, 300);
     };
 
@@ -356,7 +401,58 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-frame md:p-10 lg:p-12 transform-gpu will-change-transform" ref={contentRef}>
                         <div className="max-w-4xl">
-                            {step === 0 && (
+                            
+                            {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
+                            {isWaitingForPayment && step === 2 ? (
+                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center max-w-lg mx-auto">
+                                    <div className="relative">
+                                        <div className="w-20 h-20 rounded-full bg-cyan-500/10 flex items-center justify-center animate-pulse">
+                                            <ExternalLink className="w-8 h-8 text-cyan-400" />
+                                        </div>
+                                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1">
+                                            <Loader2 className="w-5 h-5 text-cyan-500 animate-spin" />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <h3 className="text-2xl font-bold text-foreground">Finalizando tu reserva...</h3>
+                                        <p className="text-muted text-sm leading-relaxed">
+                                            La pasarela de pagos segura de <strong>Bold</strong> se ha abierto en una nueva pestaña.
+                                            <br className="hidden md:block" />
+                                            Por favor completa el pago allí para confirmar tu cupo.
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-3 w-full max-w-xs mt-4">
+                                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 flex items-start gap-3 text-left">
+                                            <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                                            <div>
+                                                <p className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-0.5">Tiempo restante</p>
+                                                <p className="text-xs text-amber-200/80">Tienes 15 minutos para completar la transacción antes de que se libere el cupo.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <button 
+                                            onClick={() => checkPaymentStatus(true)}
+                                            disabled={isCheckingStatus}
+                                            className="h-12 w-full bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2 mt-2"
+                                        >
+                                            {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                                            {isCheckingStatus ? 'Verificando...' : 'Ya realicé el pago'}
+                                        </button>
+                                        
+                                        <button 
+                                            onClick={() => setIsWaitingForPayment(false)}
+                                            className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
+                                        >
+                                            El botón no abrió o tuve un problema
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                // === REGULAR STEPS ===
+                                <>
+                                    {step === 0 && (
                                 <div className="space-y-8 animate-in fade-in duration-500">
                                     <div className="flex gap-8 border-b border-border max-w-fit">
                                         <button onClick={() => setMode('public')} className={`pb-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative flex items-center gap-2 ${mode === 'public' ? 'text-foreground' : 'text-muted hover:text-foreground/40'}`}>
@@ -486,8 +582,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             )}
 
-                            {/* STEP 2: REFINED MINIMAL TICKET */}
-                            {step === 2 && (
+                            {/* STEP 2: REFINED MINIMAL TICKET (Standard View) */}
+                            {step === 2 && !isWaitingForPayment && (
                                 <div className="space-y-10 animate-in fade-in duration-700 max-w-xl">
                                     <h3 className="text-2xl font-bold text-foreground tracking-tight ml-1">{t.booking_modal.confirmation.title}</h3>
                                     
@@ -575,11 +671,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                 </div>
                             )}
+                                </>
+                            )}
                         </div>
                     </div>
 
                     <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
-                        {step > 0 && step < 3 ? (
+                        {step > 0 && step < 3 && !isWaitingForPayment ? (
                             <button 
                                 disabled={isCreatingBooking}
                                 onClick={() => setStep(s => s - 1)} 
@@ -589,11 +687,20 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             </button>
                         ) : <div />}
                         
-                        {step === 2 && realBookingId ? (
+                        {/* Only show the Payment Bridge Button if we are in step 2 AND NOT waiting/success */}
+                        {step === 2 && realBookingId && !isWaitingForPayment && !isCheckingStatus ? (
                             <div className="w-full max-w-[280px]">
-                                <BoldCheckout 
-                                    bookingId={realBookingId} 
-                                />
+                                <button 
+                                    onClick={() => {
+                                        setIsWaitingForPayment(true);
+                                        // Open the bridge in a new tab
+                                        window.open(`/payment-bridge?bookingId=${realBookingId}`, '_blank');
+                                    }}
+                                    className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group"
+                                >
+                                    <span>Ir a Pagar</span>
+                                    <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                                </button>
                             </div>
                         ) : step < 2 ? (
                             <button 

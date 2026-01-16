@@ -8,7 +8,6 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const hasInitialized = useRef(false); // Ref to prevent double-init in Strict Mode
 
     useEffect(() => {
         let isMounted = true;
@@ -20,24 +19,19 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                 setStatus('loading');
                 setErrorMsg(null);
 
-                // 1. Fetch secure payload
                 const data: BoldPaymentData = await initBoldPayment(bookingId);
                 
                 if (!isMounted) return;
                 
                 console.log("Bold Payload Ready:", data.paymentReference);
 
-                // 2. Prepare the container
                 if (containerRef.current) {
-                    // WIPE everything inside to ensure a clean slate
                     containerRef.current.innerHTML = '';
 
-                    // 3. Create the script element
                     const script = document.createElement('script');
                     script.src = "https://checkout.bold.co/library/boldPaymentButton.js";
                     script.async = true;
 
-                    // 4. Set attributes - CRITICAL: Must be set before append or right after creation
                     script.setAttribute('data-bold-button', 'true');
                     script.setAttribute('data-api-key', data.apiKey);
                     script.setAttribute('data-amount', data.amount.toString());
@@ -47,12 +41,9 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                     script.setAttribute('data-integrity-signature', data.integritySignature);
                     script.setAttribute('data-description', data.description);
                     script.setAttribute('data-redirection-url', data.redirectionUrl);
-                    script.setAttribute('data-style-label', 'PAGAR AHORA'); // Etiqueta personalizada
+                    script.setAttribute('data-style-label', 'PAGAR AHORA');
 
-                    // 5. Append to DOM - This triggers the script execution
                     containerRef.current.appendChild(script);
-                    console.log("Bold Script Injected into DOM");
-                    
                     setStatus('ready');
                 }
 
@@ -68,8 +59,6 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
 
         return () => {
             isMounted = false;
-            // Optional: cleanup on unmount if needed, but Bold usually handles itself.
-            // Clearing innerHTML here might remove the iframe abruptly.
         };
     }, [bookingId]);
 
@@ -88,15 +77,12 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                         <AlertCircle className="w-4 h-4" />
                         <span className="text-[10px] font-bold uppercase">No se pudo cargar el botón</span>
                     </div>
-                    {/* Retry button re-triggers the effect by simple logic or could be a reload */}
                     <span className="text-[9px] opacity-70">{errorMsg}</span>
                 </div>
             )}
 
-            {/* Container for the Bold Script/Button */}
             <div ref={containerRef} className={`transition-all duration-500 ${status === 'ready' ? 'opacity-100' : 'opacity-0'}`}></div>
 
-            {/* CSS Override for Bold Button appearance */}
             <style jsx global>{`
                 .bold-payment-button {
                     background-color: #000000 !important;
