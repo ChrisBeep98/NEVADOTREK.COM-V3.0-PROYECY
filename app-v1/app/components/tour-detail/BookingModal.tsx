@@ -895,7 +895,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     </div>
 
                     {!isWaitingForPayment && (
-                        <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-background/80 backdrop-blur-md border-t border-border">
+                        <div className="h-16 md:h-20 px-frame md:px-10 flex items-center justify-between shrink-0 z-20 bg-transparent border-t border-border">
                             {step > 0 && step < 3 ? (
                                 <button 
                                     disabled={isCreatingBooking}
