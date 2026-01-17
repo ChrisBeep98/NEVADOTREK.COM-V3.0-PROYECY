@@ -529,39 +529,43 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 
                                                 {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
                                                 {isWaitingForPayment && step === 2 ? (
-                                                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center w-full max-w-xl mx-auto py-4">
+                                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-start w-full max-w-xl pt-2 pb-4">
                                                         
-                                                        {/* Header Section: Status & Icon */}
-                                                        <div className="text-center space-y-6 w-full">
-                                                            {/* Large Hero Icon with Process Indicator */}
-                                                            <div className="relative w-20 h-20 mx-auto">
-                                                                <div className="absolute inset-0 bg-emerald-500/10 rounded-full animate-pulse blur-2xl" />
-                                                                <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
-                                                                    <Info className="w-8 h-8 text-orange-400" />
-                                                                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
-                                                                        <RefreshCw className="w-3.5 h-3.5 text-white animate-spin-slow" />
+                                                        {/* Header Section: Status & Icon (Flex Layout) */}
+                                                        <div className="w-full space-y-4">
+                                                            <div className="flex items-center gap-5">
+                                                                {/* Hero Icon */}
+                                                                <div className="relative w-16 h-16 shrink-0">
+                                                                    <div className="absolute inset-0 bg-orange-500/10 rounded-full animate-pulse blur-xl" />
+                                                                    <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-xl">
+                                                                        <Info className="w-6 h-6 text-orange-400" />
+                                                                        <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
+                                                                            <RefreshCw className="w-3 h-3 text-white animate-spin-slow" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div className="space-y-2">
-                                                                <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Reserva Recibida</h3>
-                                                                <p className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em]">{lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending'}</p>
+                                                                <div className="space-y-1 text-left">
+                                                                    <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">Reserva Recibida</h3>
+                                                                    <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em]">{lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending'}</p>
+                                                                </div>
                                                             </div>
                                                                 
+                                                            <div className="flex items-center pl-1">
                                                                 <a 
                                                                     href={`/payment-bridge?bookingId=${realBookingId}`} 
                                                                     target="_blank" 
                                                                     rel="noopener noreferrer"
-                                                                    className="inline-flex text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all items-center gap-1.5 mx-auto"
+                                                                    className="inline-flex text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all items-center gap-1.5"
                                                                 >
                                                                     <span>¿Se cerró la pestaña de pago?</span>
                                                                     <ExternalLink className="w-3 h-3" />
                                                                 </a>
                                                             </div>
+                                                        </div>
 
                                                             {/* Digital Manifest Ticket (Now flowing naturally) */}
-                                                        <div className="w-full bg-surface/30 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
+                                                        <div className="w-full bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-2xl relative">
                                                             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                                                             
                                                             <div className="p-6 md:p-8 space-y-6 relative z-10">
@@ -630,7 +634,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 </button>
                                                             </div>
                                                             
-                                                            <div className="flex justify-center">
+                                                            <div className="flex justify-start">
                                                                 <button 
                                                                     onClick={() => setIsWaitingForPayment(false)}
                                                                     className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all"
