@@ -8,7 +8,7 @@
   },
   "navigation": {
     "home": "Home",
-    "tours": "Expediciones",
+    "tours": "Expeditions",
     "about": "About Us",
     "philosophy": "Philosophy"
   },
@@ -221,12 +221,46 @@
       "pax_singular": "person",
       "pax_plural": "people",
       "total_investment": "Total investment",
+      "balance_due": "Balance Due (70%)",
+      "pay_now": "Pay Now (30%)",
+      "initial_deposit": "Initial Deposit (30%)",
+      "immediate_confirmation": "Immediate confirmation",
       "guest": "Guest"
+    },
+    "waiting": {
+      "title": "Booking Received!",
+      "auto_update": "This window will update automatically once we confirm your transaction.",
+      "processing_payment": "We are processing your payment in a new tab.",
+      "booking_created": "Your booking has been created with ID",
+      "dont_close": "Please do not close this window until confirmed.",
+      "payment_tab_closed": "Did the payment tab close?",
+      "syncing_bold": "Syncing with Bold",
+      "syncing_bank": "Syncing Bank",
+      "processing_msg": "Processing with Bold. Do not close this window.",
+      "help_whatsapp": "Help / WhatsApp",
+      "verify_payment": "I already paid",
+      "verifying": "Verifying...",
+      "cancel_wait": "Cancel wait",
+      "deposit_label": "Deposit (30%)",
+      "holder": "Holder",
+      "start": "Start"
+    },
+    "success": {
+      "title": "All Set!",
+      "message": "Your spot on the mountain is secured. We have sent the detailed itinerary to your email.",
+      "transaction_ref": "Transaction Reference",
+      "back_to_tour": "Back to Tour",
+      "need_help": "Need help?",
+      "contact_us": "Contact us",
+      "payment_approved": "Payment Approved!",
+      "booking_confirmed": "Your booking is confirmed."
     },
     "footer": {
       "back": "Back",
       "continue": "Continue",
-      "confirm_send": "Confirm and Send"
+      "confirm_send": "Confirm and Send",
+      "pay_action": "Go to Pay",
+      "processing": "Processing..."
     }
   },
   "page_footer": {

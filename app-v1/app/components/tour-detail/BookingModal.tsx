@@ -151,8 +151,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             </div>
                             <div className="flex-1">
-                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">¡Pago Aprobado!</p>
-                                <p className="text-[11px] text-blue-50 leading-tight font-medium">Tu reserva en la montaña está **confirmada**.</p>
+                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
+                                <p className="text-[11px] text-blue-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
                             </div>
                         </div>
                     ));
@@ -348,9 +348,9 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             </div>
                             <div className="flex-1">
-                                <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Sincronizando Banco</h4>
+                                <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.waiting.syncing_bank}</h4>
                                 <p className="text-[11px] text-blue-50 leading-tight font-medium">
-                                    Procesando con **Bold**. No cierres esta ventana.
+                                    {t.booking_modal.waiting.processing_msg}
                                 </p>
                                 {/* Technical Progress Bar with Bold Gradient */}
                                 <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
@@ -540,7 +540,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 Estamos procesando tu pago en una nueva pestaña.
                                                             </p>
                                                             <p className="text-xs text-blue-200/60 leading-relaxed">
-                                                                Tu reserva ya fue creada con el ID <span className="font-mono text-blue-300 opacity-100">{realBookingId ? realBookingId.slice(-6).toUpperCase() : '...'}</span>. Por favor no cierres esta ventana hasta confirmar.
+                                                                {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300 opacity-100">{realBookingId || '...'}</span>. {t.booking_modal.waiting.dont_close}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -571,68 +571,53 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     />
                                                                 </div>
                                                                 <div className="flex-1 text-left">
-                                                                    <p className="text-[10px] font-bold uppercase tracking-wider">Sincronizando con Bold</p>
+                                                                    <p className="text-[10px] font-bold uppercase tracking-wider">{t.booking_modal.waiting.syncing_bold}</p>
                                                                     <div className="mt-1.5 w-full h-0.5 bg-black/20 rounded-full overflow-hidden">
                                                                         <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear]" />
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             
-                                                            {/* Grouped Data Ticket (Enriched with Icons) */}
-                                                            <div className="w-full bg-surface/40 border border-white/5 rounded-xl p-4 md:p-5 shadow-sm backdrop-blur-sm text-left space-y-5">                                            {/* Block 1: Name */}
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-xs text-muted">Titular de la reserva</span>
-                                                <div className="flex items-center gap-2 text-foreground/90">
-                                                    <User className="w-3.5 h-3.5 opacity-50" />
-                                                    <span className="text-base font-medium truncate">{formData.name || 'Invitado'}</span>
+                                        {/* Anchored Manifest Ticket (Integrated) */}
+                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#020617] via-[#020617]/95 to-transparent pt-16 pb-8 px-8 animate-in slide-in-from-bottom-10 duration-1000">
+                                            <div className="space-y-6">
+                                                {/* Primary Info: User */}
+                                                <div className="space-y-1">
+                                                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.waiting.holder}</span>
+                                                    <p className="text-xl text-white font-medium tracking-tight truncate">{formData.name || t.booking_modal.confirmation.guest}</p>
                                                 </div>
-                                            </div>
 
-                                            {/* Block 2: Details Grid */}
-                                            <div className="grid grid-cols-2 gap-4">
-                                                {/* Left: Date */}
-                                                <div className="flex flex-col gap-1.5 text-left">
-                                                    <span className="text-xs text-muted">Fecha de inicio</span>
-                                                    <div className="flex items-center gap-2 text-foreground/90">
-                                                        <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
-                                                        <span className="text-sm font-medium">
-                                                            {mode === 'public' && selectedDeparture 
-                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                            }
-                                                        </span>
+                                                {/* Secondary Info: Grid */}
+                                                <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-4">
+                                                    <div className="space-y-1">
+                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.waiting.start}</span>
+                                                        <div className="flex items-center gap-2 text-white/90">
+                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-60" />
+                                                            <span className="text-sm font-medium">
+                                                                {mode === 'public' && selectedDeparture 
+                                                                    ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
+                                                                    : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.pax_label}</span>
+                                                        <div className="flex items-center gap-2 text-white/90">
+                                                            <Users className="w-3.5 h-3.5 opacity-60" />
+                                                            <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                
-                                                {/* Right: Pax (Aligned Right) */}
-                                                <div className="flex flex-col items-end gap-1.5 text-right">
-                                                    <span className="text-xs text-muted">Viajeros</span>
-                                                    <div className="flex items-center gap-2 text-foreground/90">
-                                                        <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? 'Persona' : 'Personas'}</span>
-                                                        <Users className="w-3.5 h-3.5 opacity-50" />
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            {/* Block 3: Financial Footer (Updated for Partial Payments) */}
-                                            <div className="pt-4 border-t border-white/5 space-y-4">
-                                                <div className="flex justify-between items-center opacity-60">
-                                                    <span className="text-xs text-muted">Total de la reserva</span>
-                                                    <span className="text-sm font-medium">{formatMoney(getPrice() * formData.pax)}</span>
-                                                </div>
-                                                
-                                                {/* Internal Financial Divider */}
-                                                <div className="h-px w-full bg-white/5" />
-
-                                                <div className="flex justify-between items-end">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-xs text-emerald-400 font-bold">Monto a pagar ahora</span>
-                                                        <span className="text-[10px] font-mono text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded">
-                                                            {realBookingId ? `REF: ${realBookingId}` : 'REF: ...'}
-                                                        </span>
+                                                {/* Financial Focus */}
+                                                <div className="flex justify-between items-end pt-2">
+                                                    <div className="space-y-1">
+                                                        <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{t.booking_modal.waiting.deposit_label}</span>
+                                                        <p className="text-[10px] font-mono text-white/30">{realBookingId || '...'}</p>
                                                     </div>
-                                                    <span className="text-2xl text-emerald-400 font-mono font-bold tracking-tight">
-                                                        {formatMoney(getPrice() * formData.pax)}
+                                                    <span className="text-3xl text-emerald-400 font-mono font-bold tracking-tighter">
+                                                        {formatMoney((getPrice() * formData.pax) * 0.3)}
                                                     </span>
                                                 </div>
                                             </div>
@@ -647,7 +632,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
                                         >
                                             <MessageCircle className="w-4 h-4" />
-                                            <span>Ayuda / WhatsApp</span>
+                                            <span>{t.booking_modal.waiting.help_whatsapp}</span>
                                         </a>
 
                                         <button 
@@ -656,7 +641,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                                         >
                                             {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-                                            {isCheckingStatus ? 'Verificando...' : 'Ya realicé el pago'}
+                                            {isCheckingStatus ? t.booking_modal.waiting.verifying : t.booking_modal.waiting.verify_payment}
                                         </button>
                                     </div>
                                     
@@ -664,7 +649,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         onClick={() => setIsWaitingForPayment(false)}
                                         className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
                                     >
-                                        Cancelar espera
+                                        {t.booking_modal.waiting.cancel_wait}
                                     </button>
                                 </div>
                             ) : (
@@ -800,59 +785,84 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 </div>
                             )}
 
-                            {/* STEP 2: REFINED MINIMAL TICKET (Standard View) */}
+                            {/* STEP 2: REFINED DIGITAL LEDGER (Standard View) */}
                             {step === 2 && !isWaitingForPayment && (
-                                <div className="space-y-10 animate-in fade-in duration-700 max-w-xl">
-                                    <h3 className="text-2xl font-bold text-foreground tracking-tight ml-1">{t.booking_modal.confirmation.title}</h3>
+                                <div className="space-y-8 animate-in fade-in duration-700 max-w-xl w-full flex flex-col items-start">
+                                    <h3 className="text-2xl font-bold text-foreground tracking-tight">{t.booking_modal.confirmation.title}</h3>
                                     
-                                    <div className="relative">
-                                        {/* THE TICKET BODY */}
-                                        <div className="bg-white text-slate-950 rounded-2xl shadow-xl overflow-hidden relative">
-                                            {[
-                                                { label: t.booking_modal.confirmation.responsible, value: formData.name || t.booking_modal.confirmation.guest, icon: User },
-                                                { 
-                                                    label: t.booking_modal.confirmation.start_date, 
-                                                    value: mode === 'public' && selectedDeparture 
-                                                        ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: '2-digit', month: 'long', year: 'numeric' })
-                                                        : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: '2-digit', month: 'long', year: 'numeric' }),
-                                                    icon: CalendarIcon
-                                                },
-                                                { label: t.booking_modal.confirmation.travelers, value: `${formData.pax} ${formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}`, icon: Users }
-                                            ].map((item, i) => (
-                                                <div 
-                                                    key={i} 
-                                                    className="px-10 py-6 flex justify-between items-center border-b border-slate-100"
-                                                >
-                                                    <div className="flex items-center gap-3 text-muted">
-                                                        <item.icon className="w-3.5 h-3.5 opacity-50" />
-                                                        <span className="text-[11px] font-medium">{item.label}</span>
-                                                    </div>
-                                                    <span className="text-base font-bold text-slate-900 tracking-tight text-right">
-                                                        {item.value}
-                                                    </span>
+                                    <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
+                                        {/* Ultra-subtle Aurora Tint Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-indigo-500/[0.03] pointer-events-none" />
+                                        
+                                        {/* Header: Trip Details */}
+                                        <div className="p-6 md:p-8 space-y-6">
+                                            <div className="flex items-start justify-between">
+                                                <div className="space-y-1">
+                                                    <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.responsible}</span>
+                                                    <p className="text-lg font-medium text-foreground">{formData.name || t.booking_modal.confirmation.guest}</p>
                                                 </div>
-                                            ))}
+                                                <div className="w-10 h-10 rounded-full bg-surface border border-white/10 flex items-center justify-center">
+                                                    <User className="w-4 h-4 text-muted" />
+                                                </div>
+                                            </div>
 
-                                            {/* Perforated Total Section */}
-                                            <div className="relative px-10 py-7 bg-slate-50/50">
-                                                {/* Top Dashed Line */}
-                                                <div className="absolute top-0 left-10 right-10 border-t border-dashed border-slate-200"></div>
-                                                
-                                                <div className="flex justify-between items-center">
-                                                    <div className="flex items-center gap-3 text-muted">
-                                                        <CreditCard className="w-3.5 h-3.5 opacity-50" />
-                                                        <span className="text-[11px] font-medium">{t.booking_modal.confirmation.total_investment}</span>
+                                            <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
+                                                <div className="space-y-1">
+                                                    <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.start_date}</span>
+                                                    <div className="flex items-center gap-2 text-foreground/90">
+                                                        <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
+                                                        <span className="text-sm font-medium">
+                                                            {mode === 'public' && selectedDeparture 
+                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                            }
+                                                        </span>
                                                     </div>
-                                                    <span className="text-base font-bold text-slate-900 tracking-tight font-mono">
-                                                        {formatMoney(getPrice() * formData.pax)}
-                                                    </span>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
+                                                    <div className="flex items-center gap-2 text-foreground/90">
+                                                        <Users className="w-3.5 h-3.5 opacity-50" />
+                                                        <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Physical Ticket Notches (Side circles) */}
-                                        <div className="absolute top-[218px] -left-3 w-6 h-6 bg-background rounded-full border-r border-border z-10"></div>
-                                        <div className="absolute top-[218px] -right-3 w-6 h-6 bg-background rounded-full border-l border-border z-10"></div>
+                                        {/* Digital Perforation Detail */}
+                                        <div className="relative flex items-center px-4 h-5">
+                                            <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                            <div className="flex-1 border-t border-dashed border-white/10" />
+                                            <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                        </div>
+
+                                        {/* Footer: Financial Breakdown (Unified) */}
+                                        <div className="p-6 md:p-8 space-y-5">
+                                            {/* Summary Lines */}
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center text-sm">
+                                                    <span className="text-muted">{t.booking_modal.confirmation.total_investment}</span>
+                                                    <span className="text-foreground/70 font-mono">{formatMoney(getPrice() * formData.pax)}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-sm">
+                                                    <span className="text-muted">{t.booking_modal.confirmation.balance_due}</span>
+                                                    <span className="text-foreground/70 font-mono">{formatMoney((getPrice() * formData.pax) * 0.7)}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="h-px w-full bg-white/5" />
+
+                                            {/* Actionable Amount */}
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t.booking_modal.confirmation.pay_now}</span>
+                                                    <span className="text-[10px] text-muted">{t.booking_modal.confirmation.immediate_confirmation}</span>
+                                                </div>
+                                                <span className="text-3xl font-bold text-emerald-400 font-mono tracking-tight">
+                                                    {formatMoney((getPrice() * formData.pax) * 0.3)}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -865,14 +875,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                     
                                     <div className="space-y-3">
-                                        <h3 className="text-3xl font-bold text-foreground tracking-tight">¡Todo Listo!</h3>
+                                        <h3 className="text-3xl font-bold text-foreground tracking-tight">{t.booking_modal.success.title}</h3>
                                         <p className="text-muted text-sm max-w-xs mx-auto leading-relaxed">
-                                            Tu lugar en la montaña está asegurado. Hemos enviado el itinerario detallado a tu correo.
+                                            {t.booking_modal.success.message}
                                         </p>
                                     </div>
 
                                     <div className="bg-surface/50 border border-border rounded-xl p-6 w-full max-w-sm mt-4 backdrop-blur-sm">
-                                        <p className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] mb-2">Referencia de Transacción</p>
+                                        <p className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] mb-2">{t.booking_modal.success.transaction_ref}</p>
                                         <p className="text-lg font-mono font-bold text-foreground tracking-tight">{paymentRef || 'N/A'}</p>
                                     </div>
 
@@ -881,10 +891,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             onClick={handleClose} 
                                             className="h-12 w-full bg-foreground text-background rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg hover:shadow-xl"
                                         >
-                                            Volver al Tour
+                                            {t.booking_modal.success.back_to_tour}
                                         </button>
                                         <p className="text-[10px] text-muted/60 text-center">
-                                            ¿Necesitas ayuda? <span className="underline hover:text-foreground cursor-pointer">Contáctanos</span>
+                                            {t.booking_modal.success.need_help} <span className="underline hover:text-foreground cursor-pointer">{t.booking_modal.success.contact_us}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -922,11 +932,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         {isCreatingBooking ? (
                                             <>
                                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                                <span>Procesando...</span>
+                                                <span>{t.booking_modal.footer.processing}</span>
                                             </>
                                         ) : (
                                             <>
-                                                <span>Ir a Pagar</span>
+                                                <span>{t.booking_modal.footer.pay_action}</span>
                                                 <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                                             </>
                                         )}
@@ -939,7 +949,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     className={`h-10 md:h-12 px-8 md:px-10 rounded-full font-bold text-[9px] uppercase tracking-[0.2em] transition-all flex items-center gap-3 ${isStepValid() ? 'bg-foreground text-background hover:scale-105 active:scale-95 shadow-xl' : 'bg-surface text-muted/20 cursor-not-allowed'}`}
                                 >
                                     {isCreatingBooking && <Loader2 className="w-3 h-3 animate-spin" />}
-                                    {isCreatingBooking ? 'Procesando...' : t.booking_modal.footer.continue}
+                                    {isCreatingBooking ? t.booking_modal.footer.processing : t.booking_modal.footer.continue}
                                 </button>
                             ) : null}
                         </div>

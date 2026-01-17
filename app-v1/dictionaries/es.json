@@ -103,7 +103,7 @@
         "id": "01",
         "title": "Seguridad primero",
         "tag": "Seguridad total",
-        "highlights": ["150+ Expediciones", "Guías certificados", "Equipos alta gama"],
+        "highlights": ["150+ Expeditions", "Guías certificados", "Equipos alta gama"],
         "desc": "Nuestros guías están certificados, usamos equipos de primeras marcas y seguimos protocolos de seguridad en cada expedición."
       },
       {
@@ -221,12 +221,46 @@
       "pax_singular": "persona",
       "pax_plural": "personas",
       "total_investment": "Inversión total",
+      "balance_due": "Saldo Pendiente (70%)",
+      "pay_now": "Pagar Ahora (30%)",
+      "initial_deposit": "Pago Inicial (30%)",
+      "immediate_confirmation": "Confirmación inmediata",
       "guest": "Invitado"
+    },
+    "waiting": {
+      "title": "¡Reserva Recibida!",
+      "auto_update": "Esta ventana se actualizará automáticamente una vez confirmemos tu transacción.",
+      "processing_payment": "Estamos procesando tu pago en una nueva pestaña.",
+      "booking_created": "Tu reserva ya fue creada con el ID",
+      "dont_close": "Por favor no cierres esta ventana hasta confirmar.",
+      "payment_tab_closed": "¿Se cerró la pestaña de pago?",
+      "syncing_bold": "Sincronizando con Bold",
+      "syncing_bank": "Sincronizando Banco",
+      "processing_msg": "Procesando con Bold. No cierres esta ventana.",
+      "help_whatsapp": "Ayuda / WhatsApp",
+      "verify_payment": "Ya realicé el pago",
+      "verifying": "Verificando...",
+      "cancel_wait": "Cancelar espera",
+      "deposit_label": "Depósito (30%)",
+      "holder": "Titular",
+      "start": "Inicio"
+    },
+    "success": {
+      "title": "¡Todo Listo!",
+      "message": "Tu lugar en la montaña está asegurado. Hemos enviado el itinerario detallado a tu correo.",
+      "transaction_ref": "Referencia de Transacción",
+      "back_to_tour": "Volver al Tour",
+      "need_help": "¿Necesitas ayuda?",
+      "contact_us": "Contáctanos",
+      "payment_approved": "¡Pago Aprobado!",
+      "booking_confirmed": "Tu reserva en la montaña está confirmada."
     },
     "footer": {
       "back": "Volver",
       "continue": "Continuar",
-      "confirm_send": "Confirmar y Enviar"
+      "confirm_send": "Confirmar y Enviar",
+      "pay_action": "Ir a Pagar",
+      "processing": "Procesando..."
     }
   },
   "page_footer": {
