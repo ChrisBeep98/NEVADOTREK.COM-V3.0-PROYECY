@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock, FileCheck, MessageCircle, ShieldCheck } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock, FileCheck, MessageCircle, ShieldCheck, Info } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
@@ -386,11 +386,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     };
 
     const formatMoney = (amount: number) => {
-        return new Intl.NumberFormat(lang === 'ES' ? 'es-CO' : 'en-US', { 
-            style: 'currency', 
-            currency: 'COP', 
+        const val = new Intl.NumberFormat(lang === 'ES' ? 'es-CO' : 'en-US', { 
+            style: 'decimal', 
             maximumFractionDigits: 0 
         }).format(amount);
+        return `$ ${val} COP`;
     };
 
     const getMonthName = (date: Date) => date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
@@ -841,12 +841,28 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             {/* Summary Lines */}
                                             <div className="space-y-3">
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-muted">{t.booking_modal.confirmation.total_investment}</span>
-                                                    <span className="text-foreground/70 font-mono">{formatMoney(getPrice() * formData.pax)}</span>
+                                                    <div className="flex items-center gap-1.5 group/tooltip relative">
+                                                        <span className="text-muted">{t.booking_modal.confirmation.total_investment}</span>
+                                                        <Info className="w-3 h-3 text-muted/40 cursor-help hover:text-cyan-500 transition-colors" />
+                                                        
+                                                        {/* Tooltip Card */}
+                                                        <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
+                                                            {t.booking_modal.confirmation.tooltip_total}
+                                                            <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-foreground font-bold font-mono">{formatMoney(getPrice() * formData.pax)}</span>
+                                                </div>
+
+                                                <div className="h-px w-full bg-white/10" />
+
+                                                <div className="flex justify-between items-center text-sm">
+                                                    <span className="text-muted">{t.booking_modal.confirmation.deposit_label}</span>
+                                                    <span className="text-foreground font-bold font-mono">{formatMoney((getPrice() * formData.pax) * 0.3)}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-muted">{t.booking_modal.confirmation.balance_due}</span>
-                                                    <span className="text-foreground/70 font-mono">{formatMoney((getPrice() * formData.pax) * 0.7)}</span>
+                                                    <span className="text-muted">{t.booking_modal.confirmation.tax_label}</span>
+                                                    <span className="text-foreground font-bold font-mono">{formatMoney(((getPrice() * formData.pax) * 0.3) * 0.05)}</span>
                                                 </div>
                                             </div>
 
@@ -855,11 +871,20 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             {/* Actionable Amount */}
                                             <div className="flex justify-between items-center">
                                                 <div className="flex flex-col gap-1">
-                                                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t.booking_modal.confirmation.pay_now}</span>
+                                                    <div className="flex items-center gap-1.5 group/tooltip relative">
+                                                        <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t.booking_modal.confirmation.pay_now}</span>
+                                                        <Info className="w-3 h-3 text-emerald-400/40 cursor-help hover:text-emerald-400 transition-colors" />
+                                                        
+                                                        {/* Tooltip Card */}
+                                                        <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
+                                                            {t.booking_modal.confirmation.tooltip_pay_now}
+                                                            <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
+                                                        </div>
+                                                    </div>
                                                     <span className="text-[10px] text-muted">{t.booking_modal.confirmation.immediate_confirmation}</span>
                                                 </div>
                                                 <span className="text-3xl font-bold text-emerald-400 font-mono tracking-tight">
-                                                    {formatMoney((getPrice() * formData.pax) * 0.3)}
+                                                    {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                 </span>
                                             </div>
                                         </div>

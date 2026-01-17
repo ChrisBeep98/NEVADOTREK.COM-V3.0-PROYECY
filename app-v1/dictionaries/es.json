@@ -220,12 +220,16 @@
       "travelers": "Viajeros",
       "pax_singular": "persona",
       "pax_plural": "personas",
-      "total_investment": "Inversión total",
+      "total_investment": "Total de la reserva",
+      "deposit_label": "Depósito (30%)",
+      "tax_label": "Tax Transaccional (5%)",
       "balance_due": "Saldo Pendiente (70%)",
       "pay_now": "Pagar Ahora (30%)",
       "initial_deposit": "Pago Inicial (30%)",
       "immediate_confirmation": "Confirmación inmediata",
-      "guest": "Invitado"
+      "guest": "Invitado",
+      "tooltip_total": "Valor total de la experiencia. Hoy solo abonas el 30%.",
+      "tooltip_pay_now": "Procesado de forma segura por Bold (PSE/Tarjetas)."
     },
     "waiting": {
       "title": "¡Reserva Recibida!",

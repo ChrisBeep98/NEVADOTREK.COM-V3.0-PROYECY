@@ -220,12 +220,16 @@
       "travelers": "Travelers",
       "pax_singular": "person",
       "pax_plural": "people",
-      "total_investment": "Total investment",
+      "total_investment": "Total booking",
+      "deposit_label": "Deposit (30%)",
+      "tax_label": "Transactional Tax (5%)",
       "balance_due": "Balance Due (70%)",
       "pay_now": "Pay Now (30%)",
       "initial_deposit": "Initial Deposit (30%)",
       "immediate_confirmation": "Immediate confirmation",
-      "guest": "Guest"
+      "guest": "Guest",
+      "tooltip_total": "Full experience value. Today you only deposit 30%.",
+      "tooltip_pay_now": "Securely processed via Bold (Cards)."
     },
     "waiting": {
       "title": "Booking Received!",
