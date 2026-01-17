@@ -952,7 +952,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <button 
                                         onClick={handlePay}
                                         disabled={isCreatingBooking}
-                                        className="h-12 w-full bg-slate-900 text-white rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group disabled:opacity-70 disabled:scale-100"
+                                        className="h-12 w-full bg-foreground text-background rounded-full font-bold text-[10px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-xl flex items-center justify-center gap-2 group disabled:opacity-70 disabled:scale-100"
                                     >
                                         {isCreatingBooking ? (
                                             <>
