@@ -564,23 +564,28 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             </div>
                                                         </div>
 
-                                                            {/* Digital Manifest Ticket (Now flowing naturally) */}
-                                                        <div className="w-full bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-2xl relative">
-                                                            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                                                            {/* Digital Manifest Ticket (Refined Version from Confirmation Step) */}
+                                                        <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
+                                                            {/* Ultra-subtle Aurora Tint Overlay */}
+                                                            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-indigo-500/[0.03] pointer-events-none" />
                                                             
-                                                            <div className="p-6 md:p-8 space-y-6 relative z-10">
-                                                                {/* Primary Info: User */}
-                                                                <div className="space-y-1">
-                                                                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.waiting.holder}</span>
-                                                                    <p className="text-lg font-medium text-white tracking-tight truncate">{formData.name || t.booking_modal.confirmation.guest}</p>
+                                                            {/* Header: Trip Details */}
+                                                            <div className="p-6 md:p-8 space-y-6">
+                                                                <div className="flex items-start justify-between">
+                                                                    <div className="space-y-1">
+                                                                        <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.responsible}</span>
+                                                                        <p className="text-lg font-medium text-foreground">{formData.name || t.booking_modal.confirmation.guest}</p>
+                                                                    </div>
+                                                                    <div className="w-10 h-10 rounded-full bg-surface border border-white/10 flex items-center justify-center">
+                                                                        <User className="w-4 h-4 text-muted" />
+                                                                    </div>
                                                                 </div>
 
-                                                                {/* Secondary Info: Grid */}
-                                                                <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-6">
+                                                                <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
                                                                     <div className="space-y-1">
-                                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.waiting.start}</span>
-                                                                        <div className="flex items-center gap-2 text-white/90">
-                                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-60" />
+                                                                        <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.start_date}</span>
+                                                                        <div className="flex items-center gap-2 text-foreground/90">
+                                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
                                                                             <span className="text-sm font-medium">
                                                                                 {mode === 'public' && selectedDeparture 
                                                                                     ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -590,21 +595,68 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         </div>
                                                                     </div>
                                                                     <div className="space-y-1">
-                                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.pax_label}</span>
-                                                                        <div className="flex items-center gap-2 text-white/90">
-                                                                            <Users className="w-3.5 h-3.5 opacity-60" />
+                                                                        <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
+                                                                        <div className="flex items-center gap-2 text-foreground/90">
+                                                                            <Users className="w-3.5 h-3.5 opacity-50" />
                                                                             <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                            </div>
 
-                                                                {/* Financial Focus */}
-                                                                <div className="flex justify-between items-end pt-4 border-t border-dashed border-white/10">
-                                                                    <div className="space-y-1">
-                                                                        <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{t.booking_modal.waiting.deposit_label}</span>
+                                                            {/* Digital Perforation Detail */}
+                                                            <div className="relative flex items-center px-4 h-5">
+                                                                <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                                                <div className="flex-1 border-t border-dashed border-white/10" />
+                                                                <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                                            </div>
+
+                                                            {/* Footer: Financial Breakdown (Unified) */}
+                                                            <div className="p-6 md:p-8 space-y-5">
+                                                                {/* Summary Lines */}
+                                                                <div className="space-y-3">
+                                                                    <div className="flex justify-between items-center text-sm">
+                                                                        <div className="flex items-center gap-1.5 group/tooltip relative">
+                                                                            <span className="text-muted">{t.booking_modal.confirmation.total_investment}</span>
+                                                                            <Info className="w-3 h-3 text-muted/40 cursor-help hover:text-cyan-500 transition-colors" />
+                                                                            
+                                                                            <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
+                                                                                {t.booking_modal.confirmation.tooltip_total}
+                                                                                <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <span className="text-foreground font-bold font-mono">{formatMoney(getPrice() * formData.pax)}</span>
+                                                                    </div>
+
+                                                                    <div className="h-px w-full bg-white/10" />
+
+                                                                    <div className="flex justify-between items-center text-sm">
+                                                                        <span className="text-muted">{t.booking_modal.confirmation.deposit_label}</span>
+                                                                        <span className="text-foreground font-bold font-mono">{formatMoney((getPrice() * formData.pax) * 0.3)}</span>
+                                                                    </div>
+                                                                    <div className="flex justify-between items-center text-sm">
+                                                                        <span className="text-muted">{t.booking_modal.confirmation.tax_label}</span>
+                                                                        <span className="text-foreground font-bold font-mono">{formatMoney(((getPrice() * formData.pax) * 0.3) * 0.05)}</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="h-px w-full bg-white/5" />
+
+                                                                {/* Actionable Amount */}
+                                                                <div className="flex justify-between items-end">
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <div className="flex items-center gap-1.5 group/tooltip relative">
+                                                                            <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t.booking_modal.confirmation.pay_now}</span>
+                                                                            <Info className="w-3 h-3 text-emerald-400/40 cursor-help hover:text-emerald-400 transition-colors" />
+                                                                            
+                                                                            <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
+                                                                                {t.booking_modal.confirmation.tooltip_pay_now}
+                                                                                <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
+                                                                            </div>
+                                                                        </div>
                                                                         <p className="text-[10px] font-mono text-white/30">{realBookingId || '...'}</p>
                                                                     </div>
-                                                                    <span className="text-3xl text-emerald-400 font-mono font-bold tracking-tighter">
+                                                                    <span className="text-3xl font-bold text-emerald-400 font-mono tracking-tighter leading-none">
                                                                         {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                                     </span>
                                                                 </div>
