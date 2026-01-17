@@ -135,7 +135,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setPaymentRef(data.paymentRef || realBookingId); 
                 setStep(3);
                 window.scrollTo(0, 0);
-                toast.dismiss('payment-wait');
+                toast.dismiss('payment-status-stack');
                 
                 // Only show success toast on Desktop
                 if (window.innerWidth >= 768) {
@@ -161,7 +161,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 // Handle failed payment
                 setIsWaitingForPayment(false);
                 setPaymentError("El pago fue rechazado por el banco. Intenta con otro medio de pago.");
-                toast.dismiss('payment-wait');
+                toast.dismiss('payment-status-stack');
                 toast.error('Pago Rechazado', { description: 'La transacción no fue aprobada por el banco.' });
             }
         } catch (error) {
@@ -333,32 +333,48 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
                 setIsWaitingForPayment(true);
                 
-                // Only show floating toast on Desktop (since it's integrated inline on mobile)
+                // Only show floating toast stack on Desktop
                 if (window.innerWidth >= 768) {
                     toast.custom((_toast) => (
-                        <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-top-2">
-                            <div className="relative shrink-0">
-                                <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
-                                    {/* Official Bold Logo */}
-                                    <img 
-                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
-                                        alt="Bold" 
-                                        className="h-3 w-auto"
-                                    />
+                        <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-top-2">
+                            {/* Primary Status Card */}
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                                <div className="relative shrink-0">
+                                    <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <img 
+                                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                            alt="Bold" 
+                                            className="h-3 w-auto"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.waiting.syncing_bank}</h4>
+                                    <p className="text-[11px] text-blue-50 leading-tight font-medium">
+                                        {t.booking_modal.waiting.processing_msg}
+                                    </p>
+                                    <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.waiting.syncing_bank}</h4>
-                                <p className="text-[11px] text-blue-50 leading-tight font-medium">
-                                    {t.booking_modal.waiting.processing_msg}
-                                </p>
-                                {/* Technical Progress Bar with Bold Gradient */}
-                                <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
+
+                            {/* Booking Info Card */}
+                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="px-3 py-2 bg-blue-500/20 rounded border border-blue-500/20 flex items-center justify-center min-w-[59px]">
+                                        <FileCheck className="w-5 h-5 text-blue-400" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-blue-100 leading-tight">Detalles de Reserva</p>
+                                    <p className="text-[11px] text-blue-200/60 leading-relaxed mt-0.5">
+                                        {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300">{bookingIdToUse}</span>. {t.booking_modal.waiting.dont_close}
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    ), { id: 'payment-wait', duration: Infinity });
+                    ), { id: 'payment-status-stack', duration: Infinity });
                 }
             } else {
                 throw new Error("No se pudo generar el ID de reserva.");
@@ -382,6 +398,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
             setRealBookingId(null);
             setIsWaitingForPayment(false); // Reset waiting state
+            toast.dismiss('payment-wait');
+            toast.dismiss('booking-info');
         }, 300);
     };
 
@@ -511,147 +529,116 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 
                                                 {/* === WAITING FOR PAYMENT STATE (Step 2.5) === */}
                                                 {isWaitingForPayment && step === 2 ? (
-                                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
-                                                        <div className="space-y-6 w-full relative min-h-[120px]">
-                                        <div className="text-center space-y-6 mb-8">
-                                            {/* Large Hero Icon with Process Indicator */}
-                                            <div className="relative w-24 h-24 mx-auto mb-2">
-                                                <div className="absolute inset-0 bg-emerald-500/10 rounded-full animate-pulse blur-2xl" />
-                                                <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
-                                                    <ShieldCheck className="w-10 h-10 text-emerald-400" />
-                                                    
-                                                    {/* Animated Sub-icon Badge */}
-                                                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
-                                                        <RefreshCw className="w-4 h-4 text-white animate-spin-slow" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-4">
-                                                <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
-                                                
-                                                {/* Heuristic Improvement: Clear Status & Location */}
-                                                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-left max-w-md mx-auto relative overflow-hidden">
-                                                    <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50" />
-                                                    <div className="flex gap-3">
-                                                        <ExternalLink className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-                                                        <div className="space-y-1">
-                                                            <p className="text-sm font-bold text-blue-100 leading-tight">
-                                                                Estamos procesando tu pago en una nueva pestaña.
-                                                            </p>
-                                                            <p className="text-xs text-blue-200/60 leading-relaxed">
-                                                                {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300 opacity-100">{realBookingId || '...'}</span>. {t.booking_modal.waiting.dont_close}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Error Recovery: Re-open Link */}
-                                                <div className="flex justify-center">
-                                                    <a 
-                                                        href={`/payment-bridge?bookingId=${realBookingId}`} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        className="text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all flex items-center gap-1.5"
-                                                    >
-                                                        <span>¿Se cerró la pestaña de pago?</span>
-                                                        <ExternalLink className="w-3 h-3" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                    
-                                                            {/* Integrated Toast (Mobile Only) */}
-                                                            <div className="md:hidden w-full bg-[#1E40AF] text-white p-4 rounded-xl shadow-lg border border-white/10 flex items-center gap-4 animate-pulse">
-                                                                <div className="shrink-0 px-2 py-1.5 bg-white/10 rounded border border-white/10 flex items-center justify-center">
-                                                                    <img 
-                                                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
-                                                                        alt="Bold" 
-                                                                        className="h-2.5 w-auto"
-                                                                    />
-                                                                </div>
-                                                                <div className="flex-1 text-left">
-                                                                    <p className="text-[10px] font-bold uppercase tracking-wider">{t.booking_modal.waiting.syncing_bold}</p>
-                                                                    <div className="mt-1.5 w-full h-0.5 bg-black/20 rounded-full overflow-hidden">
-                                                                        <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear]" />
+                                                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center w-full max-w-xl mx-auto py-4">
+                                                        
+                                                        {/* Header Section: Status & Icon */}
+                                                        <div className="text-center space-y-6 w-full">
+                                                            {/* Large Hero Icon with Process Indicator */}
+                                                            <div className="relative w-20 h-20 mx-auto">
+                                                                <div className="absolute inset-0 bg-emerald-500/10 rounded-full animate-pulse blur-2xl" />
+                                                                <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
+                                                                    <ShieldCheck className="w-8 h-8 text-emerald-400" />
+                                                                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
+                                                                        <RefreshCw className="w-3.5 h-3.5 text-white animate-spin-slow" />
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div className="space-y-4">
+                                                                <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
+                                                                
+                                                                <a 
+                                                                    href={`/payment-bridge?bookingId=${realBookingId}`} 
+                                                                    target="_blank" 
+                                                                    rel="noopener noreferrer"
+                                                                    className="inline-flex text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all items-center gap-1.5 mx-auto"
+                                                                >
+                                                                    <span>¿Se cerró la pestaña de pago?</span>
+                                                                    <ExternalLink className="w-3 h-3" />
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Digital Manifest Ticket (Now flowing naturally) */}
+                                                        <div className="w-full bg-surface/30 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
+                                                            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                                                             
-                                        {/* Anchored Manifest Ticket (Integrated) */}
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#020617] via-[#020617]/95 to-transparent pt-16 pb-8 px-8 animate-in slide-in-from-bottom-10 duration-1000">
-                                            <div className="space-y-6">
-                                                {/* Primary Info: User */}
-                                                <div className="space-y-1">
-                                                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.waiting.holder}</span>
-                                                    <p className="text-xl text-white font-medium tracking-tight truncate">{formData.name || t.booking_modal.confirmation.guest}</p>
-                                                </div>
+                                                            <div className="p-6 md:p-8 space-y-6 relative z-10">
+                                                                {/* Primary Info: User */}
+                                                                <div className="space-y-1">
+                                                                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.waiting.holder}</span>
+                                                                    <p className="text-lg font-medium text-white tracking-tight truncate">{formData.name || t.booking_modal.confirmation.guest}</p>
+                                                                </div>
 
-                                                {/* Secondary Info: Grid */}
-                                                <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-4">
-                                                    <div className="space-y-1">
-                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.waiting.start}</span>
-                                                        <div className="flex items-center gap-2 text-white/90">
-                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-60" />
-                                                            <span className="text-sm font-medium">
-                                                                {mode === 'public' && selectedDeparture 
-                                                                    ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
-                                                                    : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short' })
-                                                                }
-                                                            </span>
+                                                                {/* Secondary Info: Grid */}
+                                                                <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-6">
+                                                                    <div className="space-y-1">
+                                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.waiting.start}</span>
+                                                                        <div className="flex items-center gap-2 text-white/90">
+                                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-60" />
+                                                                            <span className="text-sm font-medium">
+                                                                                {mode === 'public' && selectedDeparture 
+                                                                                    ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                                                    : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                                                }
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="space-y-1">
+                                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">{t.booking_modal.pax_label}</span>
+                                                                        <div className="flex items-center gap-2 text-white/90">
+                                                                            <Users className="w-3.5 h-3.5 opacity-60" />
+                                                                            <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Financial Focus */}
+                                                                <div className="flex justify-between items-end pt-4 border-t border-dashed border-white/10">
+                                                                    <div className="space-y-1">
+                                                                        <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{t.booking_modal.waiting.deposit_label}</span>
+                                                                        <p className="text-[10px] font-mono text-white/30">{realBookingId || '...'}</p>
+                                                                    </div>
+                                                                    <span className="text-3xl text-emerald-400 font-mono font-bold tracking-tighter">
+                                                                        {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Action Buttons Section */}
+                                                        <div className="space-y-4 w-full">
+                                                            <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
+                                                                <a 
+                                                                    href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                >
+                                                                    <MessageCircle className="w-4 h-4" />
+                                                                    <span>{t.booking_modal.waiting.help_whatsapp}</span>
+                                                                </a>
+
+                                                                <button 
+                                                                    onClick={() => checkPaymentStatus(true)}
+                                                                    disabled={isCheckingStatus}
+                                                                    className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                                                                >
+                                                                    {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                                                                    {isCheckingStatus ? t.booking_modal.waiting.verifying : t.booking_modal.waiting.verify_payment}
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div className="flex justify-center">
+                                                                <button 
+                                                                    onClick={() => setIsWaitingForPayment(false)}
+                                                                    className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all"
+                                                                >
+                                                                    {t.booking_modal.waiting.cancel_wait}
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="space-y-1">
-                                                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-medium">{t.booking_modal.pax_label}</span>
-                                                        <div className="flex items-center gap-2 text-white/90">
-                                                            <Users className="w-3.5 h-3.5 opacity-60" />
-                                                            <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Financial Focus */}
-                                                <div className="flex justify-between items-end pt-2">
-                                                    <div className="space-y-1">
-                                                        <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{t.booking_modal.waiting.deposit_label}</span>
-                                                        <p className="text-[10px] font-mono text-white/30">{realBookingId || '...'}</p>
-                                                    </div>
-                                                    <span className="text-3xl text-emerald-400 font-mono font-bold tracking-tighter">
-                                                        {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full max-w-2xl mt-6 md:mt-8">
-                                        <a 
-                                            href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-                                        >
-                                            <MessageCircle className="w-4 h-4" />
-                                            <span>{t.booking_modal.waiting.help_whatsapp}</span>
-                                        </a>
-
-                                        <button 
-                                            onClick={() => checkPaymentStatus(true)}
-                                            disabled={isCheckingStatus}
-                                            className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
-                                        >
-                                            {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-                                            {isCheckingStatus ? t.booking_modal.waiting.verifying : t.booking_modal.waiting.verify_payment}
-                                        </button>
-                                    </div>
-                                    
-                                    <button 
-                                        onClick={() => setIsWaitingForPayment(false)}
-                                        className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all mt-2"
-                                    >
-                                        {t.booking_modal.waiting.cancel_wait}
-                                    </button>
-                                </div>
                             ) : (
                                 // === REGULAR STEPS ===
                                 <>
