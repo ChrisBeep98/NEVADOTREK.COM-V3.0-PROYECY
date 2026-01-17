@@ -537,15 +537,17 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             <div className="relative w-20 h-20 mx-auto">
                                                                 <div className="absolute inset-0 bg-emerald-500/10 rounded-full animate-pulse blur-2xl" />
                                                                 <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
-                                                                    <ShieldCheck className="w-8 h-8 text-emerald-400" />
+                                                                    <Info className="w-8 h-8 text-orange-400" />
                                                                     <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
                                                                         <RefreshCw className="w-3.5 h-3.5 text-white animate-spin-slow" />
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            <div className="space-y-4">
-                                                                <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
+                                                            <div className="space-y-2">
+                                                                <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Reserva Recibida</h3>
+                                                                <p className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em]">{lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending'}</p>
+                                                            </div>
                                                                 
                                                                 <a 
                                                                     href={`/payment-bridge?bookingId=${realBookingId}`} 
@@ -557,9 +559,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     <ExternalLink className="w-3 h-3" />
                                                                 </a>
                                                             </div>
-                                                        </div>
 
-                                                        {/* Digital Manifest Ticket (Now flowing naturally) */}
+                                                            {/* Digital Manifest Ticket (Now flowing naturally) */}
                                                         <div className="w-full bg-surface/30 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-2xl relative">
                                                             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                                                             
