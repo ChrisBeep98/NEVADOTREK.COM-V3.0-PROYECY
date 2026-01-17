@@ -2,92 +2,44 @@
 
 > **Last Updated:** 2026-01-16
 > **Component:** `app-v1/app/components/tour-detail/BookingModal.tsx`
-> **Version:** v2.2 (Ticket & Toasts)
+> **Version:** v2.3 (Cinematic Waiting State)
 
 ## 1. Visión General
 
-El `BookingModal` v2.2 refina el flujo de datos y la experiencia de usuario. Mantiene el patrón "Just-in-Time" para la creación de reservas pero mejora significativamente el feedback visual en el estado de espera mediante un "Ticket Editorial" y notificaciones flotantes persistentes.
+El `BookingModal` v2.3 perfecciona la experiencia de espera durante el pago. Hemos sustituido las ilustraciones abstractas por una **Experiencia Cinemática Inmersiva** que utiliza la fotografía real del tour para mantener la conexión emocional con el usuario.
 
 ---
 
-## 2. Flujo Multi-Step (v2.2)
+## 2. Cambios Visuales (v2.3)
 
-### Step 1: Datos del Usuario
-- **Validación:** Local (Client-side).
-- **Acción "Continuar":** Solo avanza al Step 2 en memoria. **NO** contacta al backend.
-- **Beneficio:** Permite al usuario volver y corregir datos sin ensuciar la base de datos.
+### 2.1 Sala de Espera Cinemática (Left Pane)
+En lugar de vectores o gradientes genéricos, ahora mostramos:
+- **Fondo:** La imagen principal del tour (`effectiveTour.images[0]`) en alta calidad.
+- **Tratamiento:** Opacidad al 90%, filtros de mezcla de marca y un viñetado profundo (`radial-gradient`) que funde la imagen con el fondo oscuro del modal (`#020617`).
+- **Minimalismo:** Se han eliminado todas las animaciones de carga, partículas y textos redundantes de esta sección para ofrecer una estética de "póster de película" limpia y serena.
 
-### Step 2: Resumen y Pago (Just-in-Time)
-Aquí ocurre la magia. Al hacer clic en **"IR A PAGAR"**:
+### 2.2 Ticket de Reserva (Right Pane)
+- **Diseño Editorial:** Información organizada en bloques lógicos (Titular, Fecha, Viajeros) con iconos sutiles.
+- **Claridad Financiera:** Separación explícita entre el "Total de la Reserva" y el "Monto a Pagar Ahora" (preparado para pagos parciales).
+- **Feedback de Estado:**
+    - **Header Centrado:** Título grande y mensaje de UX claro: *"Esta ventana se actualizará automáticamente"*.
+    - **Confirmación de Seguridad:** Un bloque azul informa explícitamente que la reserva **YA ha sido creada** en la base de datos (mostrando el ID real) y que el pago ocurre en una pestaña paralela.
+    - **Recuperación:** Enlace *"¿Se cerró la pestaña de pago?"* para reabrir la pasarela sin perder datos.
 
-1.  **Browser Action:** Se abre inmediatamente una nueva pestaña (`window.open('', '_blank')`) para evitar bloqueos de popups.
-2.  **Visual Feedback:** La nueva pestaña muestra un spinner de carga ("Iniciando pasarela...").
-3.  **Backend Call:** En paralelo, el Modal llama a `createPrivateBooking`.
-4.  **Redirección:** Una vez obtenido el `bookingId`, la pestaña pre-abierta se redirige a `/payment-bridge?bookingId=...`.
-
-### Step 2.5: Sala de Espera (Rediseñada)
-El Modal entra en modo polling (`isWaitingForPayment`), transformando la interfaz:
-
-*   **Left Column (Visual):** Ilustración "Aurora Bridge" sutil (`bg-surface/20`) que representa la conexión de datos.
-*   **Right Column (Data):** Se muestra un **"Ticket de Reserva Editorial"** detallado:
-    *   Diseño limpio en bloques agrupados.
-    *   Datos claros: Titular, Fecha, Pax.
-    *   Desglose Financiero: Total Reserva vs Pago Pendiente.
-    *   Estética: `bg-surface/40`, bordes finos, tipografía técnica.
-*   **Notificación (Toast):** Se dispara un Toast persistente de `sonner` en la esquina superior derecha (`top-right`).
-    *   **Estilo:** Azul Profesional (`#1E40AF`) con el logo oficial de **BOLD** (SVG).
-    *   **Función:** Informa que el sistema está "Sincronizando Banco" y advierte no cerrar la pestaña.
+### 2.3 Adaptabilidad Móvil
+- **Layout:** Márgenes ajustados a 12px exactos (`p-3`).
+- **Toast Integrado:** En pantallas pequeñas, la notificación flotante se reemplaza por un bloque de estado integrado (inline) para evitar obstrucciones visuales.
+- **Botones:** Altura táctil garantizada de 48px en todas las acciones críticas.
 
 ---
 
-## 3. Implementación Técnica (`handlePay`)
+## 3. Flujo de Datos
 
+### 3.1 Creación de Reserva
+El ID que se muestra al usuario es el **Booking ID Real** retornado por el backend (`POST /bookings/private`).
 ```typescript
-const handlePay = async () => {
-    // 1. Bypass Popup Blockers
-    const bridgeWindow = window.open('', '_blank');
-    
-    // 2. Create Booking (Only if not already created)
-    if (!realBookingId) {
-        const response = await createPrivateBooking({...});
-        setRealBookingId(response.bookingId);
-    }
-    
-    // 3. Redirect the pre-opened tab & Show Toast
-    bridgeWindow.location.href = `/payment-bridge?bookingId=${id}`;
-    setIsWaitingForPayment(true);
-    
-    // Trigger Persistent Toast
-    toast.custom((t) => (
-        <div className="bg-[#1E40AF] ...">
-            {/* Bold Logo & Status */}
-        </div>
-    ), { duration: Infinity, id: 'payment-wait' });
-}
+const response = await createPrivateBooking({...});
+setRealBookingId(response.bookingId); // Database ID (Firestore)
 ```
 
----
-
-## 4. Polling & Status Check
-
-### 4.1 Función `checkPaymentStatus`
-
-```typescript
-const checkPaymentStatus = async () => {
-    const data = await getBookingStatus(realBookingId);
-    
-    // CASO 1: Éxito (Bold confirmó por Webhook)
-    if (data.paymentStatus === 'approved' || data.status === 'confirmed') {
-        setIsWaitingForPayment(false);
-        setStep(3);
-        toast.dismiss('payment-wait');
-        toast.custom(...); // Success Toast
-    } 
-    // CASO 2: Rechazo
-    else if (data.paymentStatus === 'rejected') {
-        setIsWaitingForPayment(false);
-        toast.dismiss('payment-wait');
-        toast.error("Pago Rechazado");
-    }
-};
-```
+Este ID es la garantía del usuario de que su cupo está apartado "Pending Payment" mientras interactúa con la pasarela Bold.

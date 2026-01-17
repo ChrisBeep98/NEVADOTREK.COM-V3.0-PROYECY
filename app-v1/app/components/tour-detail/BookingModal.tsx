@@ -418,11 +418,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-950/60 backdrop-blur-md p-0 md:p-8 lg:p-12 xl:p-24 transform-gpu will-change-transform">
-            <div ref={modalRef} className="w-full h-[90vh] md:h-full max-w-7xl bg-background rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 transform-gpu will-change-transform">
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-900/20 dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900/80 via-black/90 to-black/95 backdrop-blur-3xl p-0 md:py-0 md:px-8 lg:px-12 xl:px-24 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full h-[90vh] md:h-[94vh] max-w-7xl bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
-                <div className="hidden md:flex w-[32%] bg-background border-r border-border flex-col p-8 lg:p-10 relative overflow-hidden shrink-0">
+                <div className="hidden md:flex w-[32%] bg-[#F1F5F9] dark:bg-[#020617] border-r border-border flex-col p-8 lg:p-10 relative overflow-hidden shrink-0">
                     <div className="relative z-10 flex flex-col h-full">
                         <div className="space-y-2 mb-10">
                             <h1 className="text-[10px] font-bold text-muted uppercase tracking-[0.4em]">{t.booking_modal.step_label}</h1>
@@ -513,12 +513,53 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 {isWaitingForPayment && step === 2 ? (
                                                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center justify-center h-full min-h-[300px] text-center w-full">
                                                         <div className="space-y-6 w-full relative min-h-[120px]">
-                                                            <div className="text-center space-y-3 mb-6">
-                                                                <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
-                                                                <p className="text-sm text-white/50 leading-relaxed max-w-md mx-auto">
-                                                                    Esta ventana se <strong className="text-white/80 font-medium">actualizará automáticamente</strong> una vez confirmemos tu transacción.
-                                                                </p>
-                                                            </div>
+                                        <div className="text-center space-y-6 mb-8">
+                                            {/* Large Hero Icon with Process Indicator */}
+                                            <div className="relative w-24 h-24 mx-auto mb-2">
+                                                <div className="absolute inset-0 bg-emerald-500/10 rounded-full animate-pulse blur-2xl" />
+                                                <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl">
+                                                    <ShieldCheck className="w-10 h-10 text-emerald-400" />
+                                                    
+                                                    {/* Animated Sub-icon Badge */}
+                                                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
+                                                        <RefreshCw className="w-4 h-4 text-white animate-spin-slow" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <h3 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">¡Reserva Recibida!</h3>
+                                                
+                                                {/* Heuristic Improvement: Clear Status & Location */}
+                                                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-left max-w-md mx-auto relative overflow-hidden">
+                                                    <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50" />
+                                                    <div className="flex gap-3">
+                                                        <ExternalLink className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+                                                        <div className="space-y-1">
+                                                            <p className="text-sm font-bold text-blue-100 leading-tight">
+                                                                Estamos procesando tu pago en una nueva pestaña.
+                                                            </p>
+                                                            <p className="text-xs text-blue-200/60 leading-relaxed">
+                                                                Tu reserva ya fue creada con el ID <span className="font-mono text-blue-300 opacity-100">{realBookingId ? realBookingId.slice(-6).toUpperCase() : '...'}</span>. Por favor no cierres esta ventana hasta confirmar.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Error Recovery: Re-open Link */}
+                                                <div className="flex justify-center">
+                                                    <a 
+                                                        href={`/payment-bridge?bookingId=${realBookingId}`} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer"
+                                                        className="text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all flex items-center gap-1.5"
+                                                    >
+                                                        <span>¿Se cerró la pestaña de pago?</span>
+                                                        <ExternalLink className="w-3 h-3" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                     
                                                             {/* Integrated Toast (Mobile Only) */}
                                                             <div className="md:hidden w-full bg-[#1E40AF] text-white p-4 rounded-xl shadow-lg border border-white/10 flex items-center gap-4 animate-pulse">
@@ -587,7 +628,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                     <div className="flex flex-col gap-1">
                                                         <span className="text-xs text-emerald-400 font-bold">Monto a pagar ahora</span>
                                                         <span className="text-[10px] font-mono text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded">
-                                                            {realBookingId ? `REF: ${realBookingId.slice(-8).toUpperCase()}` : 'REF: ...'}
+                                                            {realBookingId ? `REF: ${realBookingId}` : 'REF: ...'}
                                                         </span>
                                                     </div>
                                                     <span className="text-2xl text-emerald-400 font-mono font-bold tracking-tight">
