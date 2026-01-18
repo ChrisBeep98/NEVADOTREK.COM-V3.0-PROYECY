@@ -536,49 +536,44 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             <div ref={modalRef} className="w-full h-[90vh] md:h-[94vh] max-w-7xl bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
-                <div className="hidden md:flex w-[32%] bg-[#F1F5F9] dark:bg-[#020617] border-r border-border flex-col p-8 lg:p-10 relative overflow-hidden shrink-0">
-                    <div className="relative z-10 flex flex-col h-full">
+                <div className={`hidden md:flex w-[32%] bg-[#F1F5F9] dark:bg-[#020617] border-r border-border flex-col relative overflow-hidden shrink-0 ${isWaitingForPayment ? 'p-0' : 'p-8 lg:p-10'}`}>
+                    {/* Background Image for Waiting State */}
+                    {isWaitingForPayment && (
+                        <div className="absolute inset-0 z-0 animate-in fade-in duration-1000">
+                            <img 
+                                src={effectiveTour?.images?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000"} 
+                                alt={effectiveTour?.name?.[l] || "Tour Atmosphere"} 
+                                className="w-full h-full object-cover opacity-90"
+                            />
+                            {/* Sophisticated Vignette / Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+                        </div>
+                    )}
+
+                    <div className={`relative z-10 flex flex-col h-full ${isWaitingForPayment ? 'p-8 lg:p-10' : ''}`}>
                         <div className="space-y-2 mb-10">
-                            <h1 className="text-[10px] font-bold text-muted uppercase tracking-[0.4em]">{t.booking_modal.step_label}</h1>
-                            <h2 className="text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">{effectiveTour.name[l]}</h2>
+                            <h1 className={`text-[10px] font-bold uppercase tracking-[0.4em] ${isWaitingForPayment ? 'text-white/60' : 'text-muted'}`}>{t.booking_modal.step_label}</h1>
+                            <h2 className={`text-2xl lg:text-3xl font-bold leading-tight tracking-tight ${isWaitingForPayment ? 'text-white' : 'text-foreground'}`}>{effectiveTour.name[l]}</h2>
                         </div>
-                        <div className="space-y-8">
-                            {isWaitingForPayment ? (
-                                <div className="animate-in fade-in zoom-in-95 duration-1000">
-                                    <div className="w-full aspect-[3/5] bg-[#020617] rounded-3xl relative overflow-hidden flex items-center justify-center shadow-2xl backdrop-blur-3xl group border-none">
-                                        
-                                        {/* Vibrant Tour Background with Seamless Vignette */}
-                                        <div className="absolute inset-0">
-                                            <img 
-                                                src={effectiveTour?.images?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000"} 
-                                                alt={effectiveTour?.name?.[l] || "Tour Atmosphere"} 
-                                                className="w-full h-full object-cover opacity-90 transition-opacity duration-700"
-                                            />
-                                            {/* Seamless Vignette - Blending with #020617 */}
-                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#020617_100%)]" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-90" />
+                        
+                        {!isWaitingForPayment && (
+                            <div className="space-y-3">
+                                <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
+                                <div className="bg-surface/50 border border-border rounded-lg overflow-hidden backdrop-blur-sm">
+                                    {effectiveTour.pricingTiers.map((tier, i) => (
+                                        <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
+                                            <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
+                                                {tier.minPax === tier.maxPax 
+                                                    ? `${tier.minPax} ${t.booking_modal.pax_label}` 
+                                                    : `${tier.minPax}-${tier.maxPax} ${t.booking_modal.pax_label}`
+                                                }
+                                            </span>
+                                            <span className="text-xs font-bold text-foreground tabular-nums">{formatMoney(tier.priceCOP)}</span>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
-                            ) : (
-                                <div className="space-y-3">
-                                    <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
-                                    <div className="bg-surface/50 border border-border rounded-lg overflow-hidden backdrop-blur-sm">
-                                        {effectiveTour.pricingTiers.map((tier, i) => (
-                                            <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
-                                                <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
-                                                    {tier.minPax === tier.maxPax 
-                                                        ? `${tier.minPax} ${t.booking_modal.pax_label}` 
-                                                        : `${tier.minPax}-${tier.maxPax} ${t.booking_modal.pax_label}`
-                                                    }
-                                                </span>
-                                                <span className="text-xs font-bold text-foreground tabular-nums">{formatMoney(tier.priceCOP)}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -679,12 +674,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                         </div>
 
                                                             {/* Digital Manifest Ticket (Refined Version from Confirmation Step) */}
-                                                        <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
+                                                        <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-[6px] md:rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
                                                             {/* Ultra-subtle Aurora Tint Overlay */}
                                                             <div className={`absolute inset-0 bg-gradient-to-br ${paymentSuccess ? 'from-emerald-500/[0.05]' : 'from-orange-500/[0.03]'} via-transparent to-indigo-500/[0.03] pointer-events-none transition-all duration-700`} />
                                                             
                                                             {/* Header: Trip Details */}
-                                                            <div className="p-6 md:p-8 space-y-6">
+                                                            <div className="p-3 md:p-8 space-y-6">
                                                                 <div className="flex items-start justify-between">
                                                                     <div className="space-y-1">
                                                                         <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.responsible}</span>
@@ -705,14 +700,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                             </span>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="space-y-1">
+                                                                    <div className="space-y-1 text-right">
                                                                         <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
-                                                                        <div className="flex items-center gap-2 text-foreground/90">
+                                                                        <div className="flex items-center justify-end gap-2 text-foreground/90">
                                                                             <Users className="w-3.5 h-3.5 opacity-50" />
                                                                             <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
+                                                                    </div>                                                                </div>
                                                             </div>
 
                                                             {/* Digital Perforation Detail */}
@@ -723,7 +717,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             </div>
 
                                                             {/* Footer: Financial Breakdown (Unified) */}
-                                                            <div className="p-6 md:p-8 space-y-5">
+                                                            <div className="p-3 md:p-8 space-y-5">
                                                                 {/* Summary Lines */}
                                                                 <div className="space-y-3">
                                                                     <div className="flex justify-between items-center text-sm">
@@ -769,7 +763,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         </div>
                                                                         <p className="text-[10px] font-mono text-white/30">{paymentRef || realBookingId || '...'}</p>
                                                                     </div>
-                                                                    <span className={`text-3xl font-bold font-mono tracking-tighter leading-none transition-all duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
+                                                                    <span className={`text-xl md:text-3xl font-bold font-mono tracking-tighter leading-none transition-all duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
                                                                         {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                                     </span>
                                                                 </div>
@@ -961,12 +955,12 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 <div className="space-y-8 animate-in fade-in duration-700 max-w-xl w-full flex flex-col items-start">
                                     <h3 className="text-2xl font-bold text-foreground tracking-tight">{t.booking_modal.confirmation.title}</h3>
                                     
-                                    <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
+                                    <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-[6px] md:rounded-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
                                         {/* Ultra-subtle Aurora Tint Overlay */}
                                         <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-indigo-500/[0.03] pointer-events-none" />
                                         
                                         {/* Header: Trip Details */}
-                                        <div className="p-6 md:p-8 space-y-6">
+                                        <div className="p-3 md:p-8 space-y-6">
                                             <div className="flex items-start justify-between">
                                                 <div className="space-y-1">
                                                     <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.responsible}</span>
@@ -987,14 +981,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             </span>
                                                         </div>
                                                     </div>
-                                                <div className="space-y-1">
-                                                    <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
-                                                    <div className="flex items-center gap-2 text-foreground/90">
-                                                        <Users className="w-3.5 h-3.5 opacity-50" />
-                                                        <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    <div className="space-y-1 text-right">
+                                                        <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
+                                                        <div className="flex items-center justify-end gap-2 text-foreground/90">
+                                                            <Users className="w-3.5 h-3.5 opacity-50" />
+                                                            <span className="text-sm font-medium">{formData.pax} {formData.pax === 1 ? t.booking_modal.confirmation.pax_singular : t.booking_modal.confirmation.pax_plural}</span>
+                                                        </div>
+                                                    </div>                                            </div>
                                         </div>
 
                                         {/* Digital Perforation Detail */}
@@ -1005,7 +998,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
 
                                         {/* Footer: Financial Breakdown (Unified) */}
-                                        <div className="p-6 md:p-8 space-y-5">
+                                        <div className="p-3 md:p-8 space-y-5">
                                             {/* Summary Lines */}
                                             <div className="space-y-3">
                                                 <div className="flex justify-between items-center text-sm">
@@ -1051,7 +1044,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                     </div>
                                                     <span className="text-[10px] text-muted">{t.booking_modal.confirmation.immediate_confirmation}</span>
                                                 </div>
-                                                <span className="text-3xl font-bold text-emerald-400 font-mono tracking-tight">
+                                                <span className="text-xl md:text-3xl font-bold text-emerald-400 font-mono tracking-tight">
                                                     {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                 </span>
                                             </div>
