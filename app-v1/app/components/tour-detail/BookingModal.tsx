@@ -782,7 +782,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 {paymentSuccess ? (
                                                                     <button 
                                                                         onClick={handleClose}
-                                                                        className="h-12 min-h-[48px] w-[152px] bg-foreground text-background rounded-full font-bold text-[10px] uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                        className="h-12 min-h-[48px] px-10 w-auto bg-foreground text-background rounded-full font-bold text-[10px] uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
                                                                     >
                                                                         <CheckCircle className="w-4 h-4" />
                                                                         <span>{lang === 'ES' ? 'VOLVER AL TOUR' : 'BACK TO TOUR'}</span>
