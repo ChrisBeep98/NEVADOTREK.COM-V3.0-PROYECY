@@ -633,7 +633,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 {/* Hero Icon */}
                                                                 <div className="relative w-16 h-16 shrink-0">
                                                                     <div className={`absolute inset-0 ${paymentSuccess ? 'bg-emerald-500/20' : 'bg-orange-500/10'} rounded-full animate-pulse blur-xl`} />
-                                                                    <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-xl transition-all duration-700">
+                                                                    <div className="relative w-full h-full bg-white/40 dark:bg-surface/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-full flex items-center justify-center shadow-xl transition-all duration-700">
                                                                         {paymentSuccess ? (
                                                                             <CheckCircle className="w-7 h-7 text-emerald-400 animate-in zoom-in duration-500" />
                                                                         ) : (
@@ -679,7 +679,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                         </div>
 
                                                             {/* Digital Manifest Ticket (Refined Version from Confirmation Step) */}
-                                                        <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
+                                                        <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
                                                             {/* Ultra-subtle Aurora Tint Overlay */}
                                                             <div className={`absolute inset-0 bg-gradient-to-br ${paymentSuccess ? 'from-emerald-500/[0.05]' : 'from-orange-500/[0.03]'} via-transparent to-indigo-500/[0.03] pointer-events-none transition-all duration-700`} />
                                                             
@@ -717,9 +717,9 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                                             {/* Digital Perforation Detail */}
                                                             <div className="relative flex items-center px-4 h-5">
-                                                                <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
-                                                                <div className="flex-1 border-t border-dashed border-white/10" />
-                                                                <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                                                <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-black/5 dark:border-white/5 shadow-inner z-10" />
+                                                                <div className="flex-1 border-t border-dashed border-black/10 dark:border-white/10" />
+                                                                <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-black/5 dark:border-white/5 shadow-inner z-10" />
                                                             </div>
 
                                                             {/* Footer: Financial Breakdown (Unified) */}
@@ -739,7 +739,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         <span className="text-foreground font-bold font-mono">{formatMoney(getPrice() * formData.pax)}</span>
                                                                     </div>
 
-                                                                    <div className="h-px w-full bg-white/10" />
+                                                                    <div className="h-px w-full bg-black/5 dark:bg-white/10" />
 
                                                                     <div className="flex justify-between items-center text-sm">
                                                                         <span className="text-muted">{t.booking_modal.confirmation.deposit_label}</span>
@@ -751,7 +751,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     </div>
                                                                 </div>
 
-                                                                <div className="h-px w-full bg-white/5" />
+                                                                <div className="h-px w-full bg-black/5 dark:bg-white/5" />
 
                                                                 {/* Actionable Amount */}
                                                                 <div className="flex justify-between items-end">
@@ -961,7 +961,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 <div className="space-y-8 animate-in fade-in duration-700 max-w-xl w-full flex flex-col items-start">
                                     <h3 className="text-2xl font-bold text-foreground tracking-tight">{t.booking_modal.confirmation.title}</h3>
                                     
-                                    <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
+                                    <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
                                         {/* Ultra-subtle Aurora Tint Overlay */}
                                         <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-indigo-500/[0.03] pointer-events-none" />
                                         
@@ -999,9 +999,9 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                         {/* Digital Perforation Detail */}
                                         <div className="relative flex items-center px-4 h-5">
-                                            <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
-                                            <div className="flex-1 border-t border-dashed border-white/10" />
-                                            <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-white/5 shadow-inner z-10" />
+                                            <div className="absolute -left-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-black/5 dark:border-white/5 shadow-inner z-10" />
+                                            <div className="flex-1 border-t border-dashed border-black/10 dark:border-white/10" />
+                                            <div className="absolute -right-2.5 w-5 h-5 rounded-full bg-[#F8FAFC] dark:bg-[#040918] border border-black/5 dark:border-white/5 shadow-inner z-10" />
                                         </div>
 
                                         {/* Footer: Financial Breakdown (Unified) */}
@@ -1022,7 +1022,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                     <span className="text-foreground font-bold font-mono">{formatMoney(getPrice() * formData.pax)}</span>
                                                 </div>
 
-                                                <div className="h-px w-full bg-white/10" />
+                                                <div className="h-px w-full bg-black/5 dark:bg-white/10" />
 
                                                 <div className="flex justify-between items-center text-sm">
                                                     <span className="text-muted">{t.booking_modal.confirmation.deposit_label}</span>
@@ -1034,7 +1034,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 </div>
                                             </div>
 
-                                            <div className="h-px w-full bg-white/5" />
+                                            <div className="h-px w-full bg-black/5 dark:bg-white/5" />
 
                                             {/* Actionable Amount */}
                                             <div className="flex justify-between items-center">
