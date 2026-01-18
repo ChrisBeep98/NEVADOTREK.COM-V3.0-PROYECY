@@ -536,11 +536,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-900/20 dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900/80 via-black/90 to-black/95 backdrop-blur-3xl p-0 md:py-0 md:px-8 lg:px-12 xl:px-24 transform-gpu will-change-transform">
-            <div ref={modalRef} className="w-full h-[96vh] md:h-[94vh] max-w-7xl bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[8px] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
+        <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-900/20 dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900/80 via-black/90 to-black/95 backdrop-blur-3xl p-0 md:py-0 md:px-0 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full md:w-[92vw] h-[96vh] md:h-[94vh] max-w-[1520px] bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[8px] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
-                <div className={`hidden md:flex w-[32%] bg-[#F1F5F9] dark:bg-[#020617] border-r border-border flex-col relative overflow-hidden shrink-0 ${isWaitingForPayment ? 'p-0' : 'p-8 lg:p-10'}`}>
+                <div className={`hidden md:flex w-[32%] bg-transparent border-r border-border flex-col relative overflow-hidden shrink-0 ${isWaitingForPayment ? 'p-0' : 'p-8 lg:p-10'}`}>
                     {/* Background Image for Waiting State */}
                     {isWaitingForPayment && (
                         <div className="absolute inset-0 z-0 animate-in fade-in duration-1000">

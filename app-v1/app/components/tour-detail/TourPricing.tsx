@@ -16,9 +16,6 @@ export default function TourPricing({ pricing }: TourPricingProps) {
     return (
         <section id="pricing" className="bg-background section-v-spacing px-frame border-t border-white/5 relative overflow-hidden">
             
-            {/* Background Decorative Element */}
-            <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/[0.02] -skew-x-12 translate-x-1/4 pointer-events-none"></div>
-
             <div className="max-w-7xl mx-auto relative z-10">
                 
                 {/* 1. Header Standardized */}
@@ -47,10 +44,7 @@ export default function TourPricing({ pricing }: TourPricingProps) {
                                 key={i}
                                 className={`
                                     relative p-8 rounded-[6px] flex flex-col h-full transition-all duration-500 group
-                                    ${isBestValue 
-                                        ? 'bg-blue-500/[0.05] border border-blue-500/20 shadow-[0_20px_40px_rgba(0,0,0,0.3)]' 
-                                        : 'bg-white/[0.02] border border-white/5 hover:bg-white/[0.04]'
-                                    }
+                                    bg-white/[0.02] border border-white/5 hover:bg-white/[0.04]
                                 `}
                             >
                                 {/* Group Size Indicator */}
