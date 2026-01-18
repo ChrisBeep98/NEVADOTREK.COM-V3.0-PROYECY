@@ -257,7 +257,8 @@
       "need_help": "¿Necesitas ayuda?",
       "contact_us": "Contáctanos",
       "payment_approved": "¡Pago Aprobado!",
-      "booking_confirmed": "Tu reserva en la montaña está confirmada."
+      "booking_confirmed": "Tu reserva en la montaña está confirmada.",
+      "success_contact": "Nos comunicaremos a los datos proporcionados para confirmar todo."
     },
     "footer": {
       "back": "Volver",

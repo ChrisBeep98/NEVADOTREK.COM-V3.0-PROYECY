@@ -40,6 +40,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [realBookingId, setRealBookingId] = useState<string | null>(null);
     const [isCreatingBooking, setIsCreatingBooking] = useState(false);
     const [paymentRef, setPaymentRef] = useState<string | null>(null);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
     
     // Payment Waiting State (Step 2.5)
     const [isWaitingForPayment, setIsWaitingForPayment] = useState(false);
@@ -131,32 +132,42 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
             // Check for approved payment status from backend (populated by Bold Webhook)
             if (data.paymentStatus === 'approved' || data.status === 'confirmed') {
-                setIsWaitingForPayment(false);
+                setPaymentSuccess(true);
                 setPaymentRef(data.paymentRef || realBookingId); 
-                setStep(3);
-                window.scrollTo(0, 0);
                 toast.dismiss('payment-status-stack');
                 
-                // Only show success toast on Desktop
-                if (window.innerWidth >= 768) {
-                    toast.custom((_toast) => (
-                        <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 min-w-[340px] animate-in fade-in slide-in-from-right-5">
-                            <div className="relative shrink-0">
-                                <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center">
-                                    <img 
-                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1IDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
-                                        alt="Bold" 
-                                        className="h-3 w-auto" 
-                                    />
+                // Show success toast stack with emerald background (Persistent)
+                toast.custom((_toast) => (
+                    <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                        {/* Primary Success Card */}
+                        <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                            <div className="shrink-0">
+                                <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                    <CheckCircle className="w-5 h-5 text-white/80" />
                                 </div>
                             </div>
                             <div className="flex-1">
                                 <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
-                                <p className="text-[11px] text-blue-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
+                                <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
                             </div>
                         </div>
-                    ));
-                }
+
+                        {/* Contact Info Card */}
+                        <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="shrink-0">
+                                <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                    <MessageCircle className="w-5 h-5 text-white/40" />
+                                </div>
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
+                                <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                    {t.booking_modal.success.success_contact}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ), { id: 'success-toast-stack', duration: Infinity });
             } else if (data.paymentStatus === 'rejected') {
                 // Handle failed payment
                 setIsWaitingForPayment(false);
@@ -194,9 +205,45 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             console.log("BookingModal - Payment Status:", paymentStatus, "Ref:", ref); // DEBUG
 
             if (paymentStatus === 'approved') {
-                console.log("BookingModal - Setting to Step 3 and opening modal"); // DEBUG
-                setStep(3);
+                console.log("BookingModal - Payment Success Redirect detected"); // DEBUG
+                setStep(2);
+                setIsWaitingForPayment(true);
+                setPaymentSuccess(true);
                 setPaymentRef(ref);
+                
+                // Show success toast stack with emerald background (Persistent)
+                toast.custom((_toast) => (
+                    <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                        {/* Primary Success Card */}
+                        <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                            <div className="shrink-0">
+                                <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                    <CheckCircle className="w-5 h-5 text-white/80" />
+                                </div>
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
+                                <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
+                            </div>
+                        </div>
+
+                        {/* Contact Info Card */}
+                        <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="shrink-0">
+                                <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                    <MessageCircle className="w-5 h-5 text-white/40" />
+                                </div>
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
+                                <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                    {t.booking_modal.success.success_contact}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ), { id: 'success-toast-stack', duration: Infinity });
+
                 // Ensure modal is open if parent controls it
                 if (typeof window !== 'undefined') {
                     window.scrollTo(0, 0);
@@ -332,25 +379,24 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             if (bookingIdToUse) {
                 bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
                 setIsWaitingForPayment(true);
-                
                 // Only show floating toast stack on Desktop
                 if (window.innerWidth >= 768) {
                     toast.custom((_toast) => (
                         <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-top-2">
                             {/* Primary Status Card */}
                             <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
-                                <div className="relative shrink-0">
-                                    <div className="px-3 py-2 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center shadow-inner">
                                         <img 
                                             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
                                             alt="Bold" 
-                                            className="h-3 w-auto"
+                                            className="h-2.5 w-auto"
                                         />
                                     </div>
                                 </div>
                                 <div className="flex-1">
                                     <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.waiting.syncing_bank}</h4>
-                                    <p className="text-[11px] text-blue-50 leading-tight font-medium">
+                                    <p className="text-[11px] text-blue-50 leading-tight font-medium opacity-90">
                                         {t.booking_modal.waiting.processing_msg}
                                     </p>
                                     <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
@@ -362,13 +408,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             {/* Booking Info Card */}
                             <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="px-3 py-2 bg-blue-500/20 rounded border border-blue-500/20 flex items-center justify-center min-w-[59px]">
-                                        <FileCheck className="w-5 h-5 text-blue-400" />
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                        <FileCheck className="w-5 h-5 text-white/40" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-blue-100 leading-tight">Detalles de Reserva</p>
-                                    <p className="text-[11px] text-blue-200/60 leading-relaxed mt-0.5">
+                                    <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
+                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
                                         {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300">{bookingIdToUse}</span>. {t.booking_modal.waiting.dont_close}
                                     </p>
                                 </div>
@@ -397,9 +443,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         setTimeout(() => {
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
             setRealBookingId(null);
+            setPaymentRef(null);
+            setPaymentSuccess(false);
             setIsWaitingForPayment(false); // Reset waiting state
-            toast.dismiss('payment-wait');
-            toast.dismiss('booking-info');
+            toast.dismiss('payment-status-stack');
+            toast.dismiss('success-toast-stack');
         }, 300);
     };
 
@@ -536,38 +584,56 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             <div className="flex items-center gap-5">
                                                                 {/* Hero Icon */}
                                                                 <div className="relative w-16 h-16 shrink-0">
-                                                                    <div className="absolute inset-0 bg-orange-500/10 rounded-full animate-pulse blur-xl" />
-                                                                    <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-xl">
-                                                                        <Info className="w-6 h-6 text-orange-400" />
-                                                                        <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
-                                                                            <RefreshCw className="w-3 h-3 text-white animate-spin-slow" />
-                                                                        </div>
+                                                                    <div className={`absolute inset-0 ${paymentSuccess ? 'bg-emerald-500/20' : 'bg-orange-500/10'} rounded-full animate-pulse blur-xl`} />
+                                                                    <div className="relative w-full h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-xl transition-all duration-700">
+                                                                        {paymentSuccess ? (
+                                                                            <CheckCircle className="w-7 h-7 text-emerald-400 animate-in zoom-in duration-500" />
+                                                                        ) : (
+                                                                            <Info className="w-6 h-6 text-orange-400" />
+                                                                        )}
+                                                                        
+                                                                        {!paymentSuccess && (
+                                                                            <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
+                                                                                <RefreshCw className="w-3 h-3 text-white animate-spin-slow" />
+                                                                            </div>
+                                                                        )}
                                                                     </div>
                                                                 </div>
 
                                                                 <div className="space-y-1 text-left">
-                                                                    <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">Reserva Recibida</h3>
-                                                                    <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em]">{lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending'}</p>
+                                                                    <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight transition-all duration-700">
+                                                                        {paymentSuccess ? (lang === 'ES' ? '¡Reserva Confirmada!' : 'Booking Confirmed!') : (lang === 'ES' ? 'Reserva Recibida' : 'Booking Received')}
+                                                                    </h3>
+                                                                    <p className={`text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-700 ${paymentSuccess ? 'text-emerald-500' : 'text-orange-500'}`}>
+                                                                        {paymentSuccess ? (lang === 'ES' ? 'Todo listo para la montaña' : 'Ready for the mountain') : (lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending')}
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                                 
-                                                            <div className="flex items-center pl-1">
-                                                                <a 
-                                                                    href={`/payment-bridge?bookingId=${realBookingId}`} 
-                                                                    target="_blank" 
-                                                                    rel="noopener noreferrer"
-                                                                    className="inline-flex text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all items-center gap-1.5"
-                                                                >
-                                                                    <span>¿Se cerró la pestaña de pago?</span>
-                                                                    <ExternalLink className="w-3 h-3" />
-                                                                </a>
+                                                            <div className="flex items-center pl-1 h-4">
+                                                                {!paymentSuccess ? (
+                                                                    <a 
+                                                                        href={`/payment-bridge?bookingId=${realBookingId}`} 
+                                                                        target="_blank" 
+                                                                        rel="noopener noreferrer"
+                                                                        className="inline-flex text-[10px] text-muted hover:text-cyan-400 underline underline-offset-4 decoration-muted/30 hover:decoration-cyan-400/50 transition-all items-center gap-1.5"
+                                                                    >
+                                                                        <span>¿Se cerró la pestaña de pago?</span>
+                                                                        <ExternalLink className="w-3 h-3" />
+                                                                    </a>
+                                                                ) : (
+                                                                    <div className="flex items-center gap-2 text-emerald-500/60 animate-in fade-in slide-in-from-left-2 duration-1000">
+                                                                        <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                                                                        <span className="text-[10px] font-bold uppercase tracking-widest">Transacción Exitosa</span>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </div>
 
                                                             {/* Digital Manifest Ticket (Refined Version from Confirmation Step) */}
-                                                        <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group">
+                                                        <div className="bg-surface/30 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
                                                             {/* Ultra-subtle Aurora Tint Overlay */}
-                                                            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] via-transparent to-indigo-500/[0.03] pointer-events-none" />
+                                                            <div className={`absolute inset-0 bg-gradient-to-br ${paymentSuccess ? 'from-emerald-500/[0.05]' : 'from-orange-500/[0.03]'} via-transparent to-indigo-500/[0.03] pointer-events-none transition-all duration-700`} />
                                                             
                                                             {/* Header: Trip Details */}
                                                             <div className="p-6 md:p-8 space-y-6">
@@ -646,17 +712,19 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 <div className="flex justify-between items-end">
                                                                     <div className="flex flex-col gap-1">
                                                                         <div className="flex items-center gap-1.5 group/tooltip relative">
-                                                                            <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{t.booking_modal.confirmation.pay_now}</span>
-                                                                            <Info className="w-3 h-3 text-emerald-400/40 cursor-help hover:text-emerald-400 transition-colors" />
+                                                                            <span className={`text-xs font-bold uppercase tracking-widest transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
+                                                                                {paymentSuccess ? (lang === 'ES' ? 'Pagado con éxito' : 'Successfully Paid') : t.booking_modal.confirmation.pay_now}
+                                                                            </span>
+                                                                            <Info className={`w-3 h-3 cursor-help transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400/40' : 'text-emerald-400/40'} hover:text-emerald-400`} />
                                                                             
                                                                             <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
                                                                                 {t.booking_modal.confirmation.tooltip_pay_now}
                                                                                 <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
                                                                             </div>
                                                                         </div>
-                                                                        <p className="text-[10px] font-mono text-white/30">{realBookingId || '...'}</p>
+                                                                        <p className="text-[10px] font-mono text-white/30">{paymentRef || realBookingId || '...'}</p>
                                                                     </div>
-                                                                    <span className="text-3xl font-bold text-emerald-400 font-mono tracking-tighter leading-none">
+                                                                    <span className={`text-3xl font-bold font-mono tracking-tighter leading-none transition-all duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
                                                                         {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                                     </span>
                                                                 </div>
@@ -666,34 +734,48 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                         {/* Action Buttons Section */}
                                                         <div className="space-y-4 w-full">
                                                             <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
-                                                                <a 
-                                                                    href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-                                                                >
-                                                                    <MessageCircle className="w-4 h-4" />
-                                                                    <span>{t.booking_modal.waiting.help_whatsapp}</span>
-                                                                </a>
+                                                                {paymentSuccess ? (
+                                                                    <button 
+                                                                        onClick={handleClose}
+                                                                        className="h-12 min-h-[48px] w-[152px] bg-foreground text-background rounded-full font-bold text-[10px] uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                    >
+                                                                        <CheckCircle className="w-4 h-4" />
+                                                                        <span>{lang === 'ES' ? 'VOLVER AL TOUR' : 'BACK TO TOUR'}</span>
+                                                                    </button>
+                                                                ) : (
+                                                                    <>
+                                                                        <a 
+                                                                            href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                        >
+                                                                            <MessageCircle className="w-4 h-4" />
+                                                                            <span>{t.booking_modal.waiting.help_whatsapp}</span>
+                                                                        </a>
 
-                                                                <button 
-                                                                    onClick={() => checkPaymentStatus(true)}
-                                                                    disabled={isCheckingStatus}
-                                                                    className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
-                                                                >
-                                                                    {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-                                                                    {isCheckingStatus ? t.booking_modal.waiting.verifying : t.booking_modal.waiting.verify_payment}
-                                                                </button>
+                                                                        <button 
+                                                                            onClick={() => checkPaymentStatus(true)}
+                                                                            disabled={isCheckingStatus}
+                                                                            className="h-12 min-h-[48px] flex-1 bg-transparent border border-border hover:bg-surface text-foreground rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                                                                        >
+                                                                            {isCheckingStatus ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                                                                            {isCheckingStatus ? t.booking_modal.waiting.verifying : t.booking_modal.waiting.verify_payment}
+                                                                        </button>
+                                                                    </>
+                                                                )}
                                                             </div>
                                                             
-                                                            <div className="flex justify-start">
-                                                                <button 
-                                                                    onClick={() => setIsWaitingForPayment(false)}
-                                                                    className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all"
-                                                                >
-                                                                    {t.booking_modal.waiting.cancel_wait}
-                                                                </button>
-                                                            </div>
+                                                            {!paymentSuccess && (
+                                                                <div className="flex justify-start">
+                                                                    <button 
+                                                                        onClick={() => setIsWaitingForPayment(false)}
+                                                                        className="text-[10px] text-muted hover:text-foreground underline underline-offset-4 decoration-muted/30 hover:decoration-foreground transition-all"
+                                                                    >
+                                                                        {t.booking_modal.waiting.cancel_wait}
+                                                                    </button>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                             ) : (

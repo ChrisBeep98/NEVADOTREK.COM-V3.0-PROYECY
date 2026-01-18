@@ -257,7 +257,8 @@
       "need_help": "Need help?",
       "contact_us": "Contact us",
       "payment_approved": "Payment Approved!",
-      "booking_confirmed": "Your booking is confirmed."
+      "booking_confirmed": "Your booking is confirmed.",
+      "success_contact": "We will contact you at the provided details to confirm everything."
     },
     "footer": {
       "back": "Back",
