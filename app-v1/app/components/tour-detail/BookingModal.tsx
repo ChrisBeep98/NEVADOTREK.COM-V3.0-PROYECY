@@ -682,7 +682,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             {paymentSuccess ? (
                                                                 <>
                                                                     {/* Primary Success Card (Mobile) */}
-                                                                    <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
+                                                                    <div className="bg-[#10B981] text-white px-3 py-3 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
                                                                             <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
                                                                                 <CheckCircle className="w-5 h-5 text-white/80" />
@@ -695,7 +695,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     </div>
 
                                                                     {/* Contact Info Card (Mobile) */}
-                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-3 py-3 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
                                                                             <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
                                                                                 <MessageCircle className="w-5 h-5 text-white/40" />
@@ -712,7 +712,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             ) : (
                                                                 <>
                                                                     {/* Primary Waiting Card (Mobile) */}
-                                                                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
+                                                                    <div className="bg-[#1E40AF] text-white px-3 py-3 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
                                                                             <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center shadow-inner">
                                                                                 <img 
@@ -734,7 +734,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     </div>
 
                                                                     {/* Booking Detail Card (Mobile) */}
-                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-3 py-3 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
                                                                             <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
                                                                                 <FileCheck className="w-5 h-5 text-white/40" />
