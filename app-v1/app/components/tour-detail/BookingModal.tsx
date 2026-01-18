@@ -79,8 +79,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         name: parsed.name || '',
                         email: parsed.email || '',
                         phone: parsed.phone || '',
-                        document: parsed.document || ''
+                        document: parsed.document || '',
+                        pax: parsed.pax || 1
                     }));
+
+                    if (parsed.mode) setMode(parsed.mode);
+                    if (parsed.selectedDate) setSelectedDate(new Date(parsed.selectedDate));
+                    if (parsed.selectedDeparture) setSelectedDeparture(parsed.selectedDeparture);
+                    if (parsed.realBookingId) setRealBookingId(parsed.realBookingId);
+                    
                 } catch (e) {
                     console.error("Error loading form draft", e);
                 }
@@ -90,16 +97,21 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     useEffect(() => {
         // Save data when fields change (Debounced slightly by React batching)
-        if (formData.name || formData.email || formData.phone || formData.document) {
+        if (formData.name || formData.email || formData.phone || formData.document || selectedDate || selectedDeparture || realBookingId) {
             const draft = {
                 name: formData.name,
                 email: formData.email,
                 phone: formData.phone,
-                document: formData.document
+                document: formData.document,
+                pax: formData.pax,
+                mode: mode,
+                selectedDate: selectedDate?.toISOString(),
+                selectedDeparture: selectedDeparture,
+                realBookingId: realBookingId
             };
             localStorage.setItem('nevado_user_draft', JSON.stringify(draft));
         }
-    }, [formData.name, formData.email, formData.phone, formData.document]);
+    }, [formData.name, formData.email, formData.phone, formData.document, formData.pax, mode, selectedDate, selectedDeparture, realBookingId]);
 
     // Load test tour from staging when modal opens
     useEffect(() => {
@@ -441,6 +453,23 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         const isMobile = window.innerWidth < 768;
         gsap.to(modalRef.current, { autoAlpha: 0, y: isMobile ? '100vh' : 10, duration: 0.3, ease: "power2.in", onComplete: onClose });
         setTimeout(() => {
+            // Clean up booking data from draft if successful, but keep user info
+            if (paymentSuccess && typeof window !== 'undefined') {
+                const savedData = localStorage.getItem('nevado_user_draft');
+                if (savedData) {
+                    try {
+                        const parsed = JSON.parse(savedData);
+                        const cleanDraft = {
+                            name: parsed.name,
+                            email: parsed.email,
+                            phone: parsed.phone,
+                            document: parsed.document
+                        };
+                        localStorage.setItem('nevado_user_draft', JSON.stringify(cleanDraft));
+                    } catch (e) { console.error(e); }
+                }
+            }
+
             setStep(0); setSelectedDeparture(null); setSelectedDate(null); setMode('public');
             setRealBookingId(null);
             setPaymentRef(null);
@@ -457,6 +486,25 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             maximumFractionDigits: 0 
         }).format(amount);
         return `$ ${val} COP`;
+    };
+
+    const getFormattedDate = () => {
+        try {
+            // Case 1: Public Departure
+            if (mode === 'public' && selectedDeparture) {
+                const seconds = selectedDeparture.date?._seconds;
+                if (seconds) {
+                    return new Date(seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                }
+            }
+            // Case 2: Private Selected Date
+            if (selectedDate) {
+                return selectedDate.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+        } catch (e) {
+            console.error("Error formatting date:", e);
+        }
+        return '---';
     };
 
     const getMonthName = (date: Date) => date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'long', year: 'numeric' });
@@ -653,10 +701,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         <div className="flex items-center gap-2 text-foreground/90">
                                                                             <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
                                                                             <span className="text-sm font-medium">
-                                                                                {mode === 'public' && selectedDeparture 
-                                                                                    ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                                                    : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                                                }
+                                                                                {getFormattedDate()}
                                                                             </span>
                                                                         </div>
                                                                     </div>
@@ -932,19 +977,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
-                                                <div className="space-y-1">
-                                                    <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.start_date}</span>
-                                                    <div className="flex items-center gap-2 text-foreground/90">
-                                                        <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
-                                                        <span className="text-sm font-medium">
-                                                            {mode === 'public' && selectedDeparture 
-                                                                ? new Date(selectedDeparture.date._seconds * 1000).toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                                : selectedDate?.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                            }
-                                                        </span>
+                                                <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
+                                                    <div className="space-y-1">
+                                                        <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.start_date}</span>
+                                                        <div className="flex items-center gap-2 text-foreground/90">
+                                                            <CalendarIcon className="w-3.5 h-3.5 opacity-50" />
+                                                            <span className="text-sm font-medium">
+                                                                {getFormattedDate()}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
                                                 <div className="space-y-1">
                                                     <span className="text-[10px] uppercase tracking-widest text-muted font-bold">{t.booking_modal.confirmation.travelers}</span>
                                                     <div className="flex items-center gap-2 text-foreground/90">
