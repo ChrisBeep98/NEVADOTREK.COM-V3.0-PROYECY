@@ -148,38 +148,40 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setPaymentRef(data.paymentRef || realBookingId); 
                 toast.dismiss('payment-status-stack');
                 
-                // Show success toast stack with emerald background (Persistent)
-                toast.custom((_toast) => (
-                    <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
-                        {/* Primary Success Card */}
-                        <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
-                            <div className="shrink-0">
-                                <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
-                                    <CheckCircle className="w-5 h-5 text-white/80" />
+                // Show success toast stack with emerald background (Persistent) - Desktop Only
+                if (window.innerWidth >= 768) {
+                    toast.custom((_toast) => (
+                        <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                            {/* Primary Success Card */}
+                            <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                        <CheckCircle className="w-5 h-5 text-white/80" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
+                                    <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
-                                <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
-                            </div>
-                        </div>
 
-                        {/* Contact Info Card */}
-                        <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
-                            <div className="shrink-0">
-                                <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                    <MessageCircle className="w-5 h-5 text-white/40" />
+                            {/* Contact Info Card */}
+                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                        <MessageCircle className="w-5 h-5 text-white/40" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
+                                    <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                        {t.booking_modal.success.success_contact}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
-                                <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
-                                    {t.booking_modal.success.success_contact}
-                                </p>
-                            </div>
                         </div>
-                    </div>
-                ), { id: 'success-toast-stack', duration: Infinity });
+                    ), { id: 'success-toast-stack', duration: Infinity });
+                }
             } else if (data.paymentStatus === 'rejected') {
                 // Handle failed payment
                 setIsWaitingForPayment(false);
@@ -223,38 +225,40 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setPaymentSuccess(true);
                 setPaymentRef(ref);
                 
-                // Show success toast stack with emerald background (Persistent)
-                toast.custom((_toast) => (
-                    <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
-                        {/* Primary Success Card */}
-                        <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
-                            <div className="shrink-0">
-                                <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
-                                    <CheckCircle className="w-5 h-5 text-white/80" />
+                // Show success toast stack with emerald background (Persistent) - Desktop Only
+                if (window.innerWidth >= 768) {
+                    toast.custom((_toast) => (
+                        <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                            {/* Primary Success Card */}
+                            <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                        <CheckCircle className="w-5 h-5 text-white/80" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
+                                    <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
-                                <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
-                            </div>
-                        </div>
 
-                        {/* Contact Info Card */}
-                        <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
-                            <div className="shrink-0">
-                                <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                    <MessageCircle className="w-5 h-5 text-white/40" />
+                            {/* Contact Info Card */}
+                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                        <MessageCircle className="w-5 h-5 text-white/40" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
+                                    <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                        {t.booking_modal.success.success_contact}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
-                                <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
-                                    {t.booking_modal.success.success_contact}
-                                </p>
-                            </div>
                         </div>
-                    </div>
-                ), { id: 'success-toast-stack', duration: Infinity });
+                    ), { id: 'success-toast-stack', duration: Infinity });
+                }
 
                 // Ensure modal is open if parent controls it
                 if (typeof window !== 'undefined') {
@@ -533,7 +537,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-900/20 dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900/80 via-black/90 to-black/95 backdrop-blur-3xl p-0 md:py-0 md:px-8 lg:px-12 xl:px-24 transform-gpu will-change-transform">
-            <div ref={modalRef} className="w-full h-[90vh] md:h-[94vh] max-w-7xl bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[2rem] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full h-[96vh] md:h-[94vh] max-w-7xl bg-[#F8FAFC] dark:bg-[#040918] rounded-t-[8px] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-border shadow-2xl relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
                 <div className={`hidden md:flex w-[32%] bg-[#F1F5F9] dark:bg-[#020617] border-r border-border flex-col relative overflow-hidden shrink-0 ${isWaitingForPayment ? 'p-0' : 'p-8 lg:p-10'}`}>
@@ -673,7 +677,79 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             </div>
                                                         </div>
 
-                                                            {/* Digital Manifest Ticket (Refined Version from Confirmation Step) */}
+                                                        {/* Mobile Embedded Status Notifications (Visible only on < 768px) - Positioned below Link */}
+                                                        <div className="flex md:hidden flex-col gap-3 w-full animate-in fade-in slide-in-from-bottom-2 duration-700">
+                                                            {paymentSuccess ? (
+                                                                <>
+                                                                    {/* Primary Success Card (Mobile) */}
+                                                                    <div className="bg-[#10B981] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
+                                                                        <div className="shrink-0">
+                                                                            <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                                                                <CheckCircle className="w-5 h-5 text-white/80" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex-1 text-left">
+                                                                            <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.success.payment_approved}</p>
+                                                                            <p className="text-[11px] text-emerald-50 leading-tight font-medium">{t.booking_modal.success.booking_confirmed}</p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* Contact Info Card (Mobile) */}
+                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                        <div className="shrink-0">
+                                                                            <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                                                                <MessageCircle className="w-5 h-5 text-white/40" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex-1 text-left">
+                                                                            <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
+                                                                            <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                                                                {t.booking_modal.success.success_contact}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    {/* Primary Waiting Card (Mobile) */}
+                                                                    <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
+                                                                        <div className="shrink-0">
+                                                                            <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center shadow-inner">
+                                                                                <img 
+                                                                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTkiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA1OSAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE4LjA3NDEgMTMuNTY2NEgzMi4zNDlDMzIuMDA1OCAxNy4xNzAxIDI4LjkzNjUgMTkuOTk5NCAyNS4yMTA5IDE5Ljk5OTRDMjEuNDg1NCAxOS45OTk0IDE4LjQxNjcgMTcuMTcwMSAxOC4wNzM1IDEzLjU2NjRIMTguMDc0MVpNNy44ODk2NyA1LjgyNDVWMTkuOTY3NEMxMS41MjUyIDE5LjYyNzMgMTQuMzgxNyAxNi41ODU5IDE0LjM4MTcgMTIuODk1N0MxNC4zODE3IDkuMjA1NDMgMTEuNTI1MiA2LjE2NTIgNy44ODk2NyA1LjgyNTA5VjUuODI0NVpNMjUuMjExNSA1Ljc5MjVDMjEuNDg2NiA1Ljc5MjUgMTguNDE3MyA4LjYyMjk4IDE4LjA3NDEgMTIuMjI2N0gzMi4zNDlDMzIuMDA1OCA4LjYyMjk4IDI4LjkzNjUgNS43OTI1IDI1LjIxMDkgNS43OTI1SDI1LjIxMTVaTTAuNjc5Njg4IDEwLjk1NDZWMjBINi40OTQzM1YwSDAuNjc5Njg4VjEwLjk1NDZaTTUyLjUwNTcgMFYxOS45OTk0SDU4LjMyMDNWMEg1Mi41MDU3Wk00NC42NTk5IDEyLjg5NjJDNDQuNjU5OSAxMy4zNDU0IDQ0LjcwNDEgMTMuNzgzOCA0NC43ODUgMTQuMjA5OUM0NS4zNjg4IDE3LjI4NTEgNDcuOTU4OCAxOS42NjgyIDUxLjE1MjYgMTkuOTY2OFY1LjgyNDVDNDcuNTE3MSA2LjE2NDYgNDQuNjYwNSA5LjIwNjAyIDQ0LjY2MDUgMTIuODk2Mkg0NC42NTk5Wk0zNS4yODk2IDE5Ljk5OTRINDEuMTA0MlYwSDM1LjI4OTZWMTkuOTk5NFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" 
+                                                                                    alt="Bold" 
+                                                                                    className="h-2.5 w-auto"
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex-1 text-left">
+                                                                            <h4 className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.waiting.syncing_bank}</h4>
+                                                                            <p className="text-[11px] text-blue-50 leading-tight font-medium opacity-90">
+                                                                                {t.booking_modal.waiting.processing_msg}
+                                                                            </p>
+                                                                            <div className="mt-2.5 w-full h-1 bg-black/20 rounded-full overflow-hidden">
+                                                                                <div className="h-full bg-gradient-to-r from-[#EE424E] via-[#8B5CF6] to-[#121E6C] w-1/2 animate-[shimmer_2s_infinite_linear] rounded-full shadow-[0_0_10px_rgba(238,66,78,0.4)]" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* Booking Detail Card (Mobile) */}
+                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                        <div className="shrink-0">
+                                                                            <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                                                                <FileCheck className="w-5 h-5 text-white/40" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="flex-1 text-left">
+                                                                            <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
+                                                                            <p className="text-[11px] text-blue-200/60 leading-relaxed font-medium mt-0.5">
+                                                                                {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300">{realBookingId}</span>. {t.booking_modal.waiting.dont_close}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                         <div className="bg-white/40 dark:bg-surface/30 bg-gradient-to-br from-white/80 via-blue-50/20 to-indigo-50/30 dark:bg-none backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-[6px] md:rounded-xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative w-full group transition-all duration-700">
                                                             {/* Ultra-subtle Aurora Tint Overlay */}
                                                             <div className={`absolute inset-0 bg-gradient-to-br ${paymentSuccess ? 'from-emerald-500/[0.05]' : 'from-orange-500/[0.03]'} via-transparent to-indigo-500/[0.03] pointer-events-none transition-all duration-700`} />
