@@ -918,7 +918,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 const date = new Date(dep.date._seconds * 1000);
                                                 const price = effectiveTour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || effectiveTour.pricingTiers[0].priceCOP;
                                                 return (
-                                                    <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-white/40 dark:bg-white/5 text-foreground border border-slate-200/60 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
+                                                    <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-white/40 dark:bg-white/5 text-foreground border border-slate-200 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
                                                         <div className="flex items-center gap-1.5 mb-2">
                                                             <CalendarIcon className={`w-2.5 h-2.5 ${isSelected ? 'opacity-60' : 'text-muted'}`} />
                                                             <span className={`text-[9px] font-bold uppercase tracking-wider ${isSelected ? 'opacity-60' : 'text-muted'}`}>{date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'short' }).toUpperCase()}</span>
@@ -970,7 +970,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             <input 
                                                 value={formData.name} 
                                                 onChange={e => setFormData({...formData, name: e.target.value})} 
-                                                className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                 placeholder={t.booking_modal.form.name_placeholder} 
                                                 autoComplete="name"
                                             />
@@ -981,7 +981,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.email} 
                                                     onChange={e => setFormData({...formData, email: e.target.value})} 
-                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.email_placeholder} 
                                                     autoComplete="email"
                                                     type="email"
@@ -989,7 +989,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             </div>
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.pax_count_label}</label>
-                                                <div className="flex items-center justify-between border border-slate-200/60 dark:border-white/10 rounded-lg h-14 px-4 bg-white/40 dark:bg-white/5">
+                                                <div className="flex items-center justify-between border border-slate-200 dark:border-white/10 rounded-lg h-14 px-4 bg-white/40 dark:bg-white/5">
                                                     <button onClick={() => updatePax(-1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Minus className="w-4 h-4" /></button>
                                                     <span className="text-xl font-bold tabular-nums text-foreground">{formData.pax}</span>
                                                     <button onClick={() => updatePax(1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Plus className="w-4 h-4" /></button>
@@ -1002,7 +1002,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.phone} 
                                                     onChange={e => setFormData({...formData, phone: e.target.value})} 
-                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.phone_placeholder} 
                                                     autoComplete="tel"
                                                     type="tel"
@@ -1013,14 +1013,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.document} 
                                                     onChange={e => setFormData({...formData, document: e.target.value})} 
-                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.document_placeholder} 
                                                 />
                                             </div>
                                         </div>
                                         <div className="relative">
                                             <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.notes_label}</label>
-                                            <textarea value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
+                                            <textarea value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
                                         </div>
                                     </div>
                                 </div>
