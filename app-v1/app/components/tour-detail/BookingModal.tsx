@@ -537,7 +537,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-slate-900/20 dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900/80 via-black/90 to-black/95 backdrop-blur-3xl p-0 md:py-0 md:px-0 transform-gpu will-change-transform">
-            <div ref={modalRef} className="w-full md:w-[92vw] h-[96vh] md:h-[94vh] max-w-[1520px] bg-white/92 dark:bg-[#040918]/70 backdrop-blur-[40px] rounded-t-[8px] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-slate-200 dark:border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
+            <div ref={modalRef} className="w-full md:w-[92vw] h-[96vh] md:h-[94vh] max-w-[1520px] bg-white/80 dark:bg-[#040918]/70 bg-gradient-to-br from-white/95 via-blue-50/20 to-indigo-50/20 dark:from-transparent dark:via-transparent dark:to-transparent backdrop-blur-[40px] rounded-t-[8px] md:rounded-2xl overflow-hidden flex flex-col md:flex-row border-none md:border border-slate-200/60 dark:border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] relative px-0 ring-1 ring-black/5 dark:ring-white/10 transform-gpu will-change-transform">
                 
                 {/* LEFT PANE */}
                 <div className={`hidden md:flex w-[32%] bg-transparent border-r border-border flex-col relative overflow-hidden shrink-0 ${isWaitingForPayment ? 'p-0' : 'p-8 lg:p-10'}`}>
@@ -563,7 +563,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         {!isWaitingForPayment && (
                             <div className="space-y-3">
                                 <span className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] block ml-1">{t.booking_modal.price_per_person}</span>
-                                <div className="bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg overflow-hidden backdrop-blur-sm">
+                                <div className="bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 rounded-lg overflow-hidden backdrop-blur-sm">
                                     {effectiveTour.pricingTiers.map((tier, i) => (
                                         <div key={i} className={`flex justify-between items-center p-3 ${i !== effectiveTour.pricingTiers.length - 1 ? 'border-b border-border' : ''} hover:bg-white/[0.01] transition-colors`}>
                                             <span className="text-[10px] font-bold text-muted uppercase tracking-wider">
@@ -918,7 +918,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 const date = new Date(dep.date._seconds * 1000);
                                                 const price = effectiveTour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || effectiveTour.pricingTiers[0].priceCOP;
                                                 return (
-                                                    <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-slate-100/80 dark:bg-white/5 text-foreground border border-slate-200 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
+                                                    <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-white/40 dark:bg-white/5 text-foreground border border-slate-200/60 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
                                                         <div className="flex items-center gap-1.5 mb-2">
                                                             <CalendarIcon className={`w-2.5 h-2.5 ${isSelected ? 'opacity-60' : 'text-muted'}`} />
                                                             <span className={`text-[9px] font-bold uppercase tracking-wider ${isSelected ? 'opacity-60' : 'text-muted'}`}>{date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'short' }).toUpperCase()}</span>
@@ -950,7 +950,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                     const disabled = isPast(day);
                                                     const active = isDateSelected(day);
                                                     return (
-                                                        <button key={day} disabled={disabled} onClick={() => handleDateSelect(day)} className={`w-10 h-10 rounded-lg text-xs font-bold transition-all flex items-center justify-center relative shadow-sm ${active ? 'bg-foreground text-background shadow-xl scale-110 z-10' : disabled ? 'bg-transparent text-muted/10 cursor-not-allowed' : 'bg-slate-100/80 dark:bg-white/5 text-foreground/60 border border-slate-200 dark:border-white/10 hover:bg-white/10 hover:text-foreground'}`}>
+                                                        <button key={day} disabled={disabled} onClick={() => handleDateSelect(day)} className={`w-10 h-10 rounded-lg text-xs font-bold transition-all flex items-center justify-center relative shadow-sm ${active ? 'bg-foreground text-background shadow-xl scale-110 z-10' : disabled ? 'bg-transparent text-muted/10 cursor-not-allowed' : 'bg-white/40 dark:bg-white/5 text-foreground/60 border border-slate-200/60 dark:border-white/10 hover:bg-white/10 hover:text-foreground'}`}>
                                                             {day}{active && <div className="absolute bottom-1 w-1 h-1 bg-cyan-500 rounded-full animate-pulse"></div>}
                                                         </button>
                                                     );
@@ -970,7 +970,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             <input 
                                                 value={formData.name} 
                                                 onChange={e => setFormData({...formData, name: e.target.value})} 
-                                                className="w-full bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                 placeholder={t.booking_modal.form.name_placeholder} 
                                                 autoComplete="name"
                                             />
@@ -981,7 +981,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.email} 
                                                     onChange={e => setFormData({...formData, email: e.target.value})} 
-                                                    className="w-full bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.email_placeholder} 
                                                     autoComplete="email"
                                                     type="email"
@@ -989,7 +989,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             </div>
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.pax_count_label}</label>
-                                                <div className="flex items-center justify-between border border-slate-200 dark:border-white/10 rounded-lg h-14 px-4 bg-slate-100/80 dark:bg-white/5">
+                                                <div className="flex items-center justify-between border border-slate-200/60 dark:border-white/10 rounded-lg h-14 px-4 bg-white/40 dark:bg-white/5">
                                                     <button onClick={() => updatePax(-1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Minus className="w-4 h-4" /></button>
                                                     <span className="text-xl font-bold tabular-nums text-foreground">{formData.pax}</span>
                                                     <button onClick={() => updatePax(1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Plus className="w-4 h-4" /></button>
@@ -1002,7 +1002,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.phone} 
                                                     onChange={e => setFormData({...formData, phone: e.target.value})} 
-                                                    className="w-full bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.phone_placeholder} 
                                                     autoComplete="tel"
                                                     type="tel"
@@ -1013,14 +1013,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 <input 
                                                     value={formData.document} 
                                                     onChange={e => setFormData({...formData, document: e.target.value})} 
-                                                    className="w-full bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
+                                                    className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
                                                     placeholder={t.booking_modal.form.document_placeholder} 
                                                 />
                                             </div>
                                         </div>
                                         <div className="relative">
                                             <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.notes_label}</label>
-                                            <textarea value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-slate-100/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
+                                            <textarea value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
                                         </div>
                                     </div>
                                 </div>
@@ -1143,7 +1143,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </p>
                                     </div>
 
-                                    <div className="bg-slate-100/80 dark:bg-surface/50 border border-slate-200 dark:border-border rounded-xl p-6 w-full max-w-sm mt-4 backdrop-blur-sm">
+                                    <div className="bg-white/40 dark:bg-surface/50 border border-slate-200/60 dark:border-border rounded-xl p-6 w-full max-w-sm mt-4 backdrop-blur-sm">
                                         <p className="text-[10px] font-bold text-muted uppercase tracking-[0.2em] mb-2">{t.booking_modal.success.transaction_ref}</p>
                                         <p className="text-lg font-mono font-bold text-foreground tracking-tight">{paymentRef || 'N/A'}</p>
                                     </div>
