@@ -39,7 +39,8 @@ sequenceDiagram
         Backend->>Backend: Update DB
         
         Note right of MainTab: Polling detects change
-        MainTab->>User: Show Success (Step 3)
+        Note right of MainTab: IN-PLACE MUTATION (Orange -> Emerald)
+        MainTab->>User: Show Success State (Step 2.5 Refined)
     else Payment Rejected
         Bold->>Backend: Webhook (SALE_REJECTED)
         

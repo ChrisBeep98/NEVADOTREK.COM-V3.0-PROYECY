@@ -6,30 +6,34 @@
 
 ## 1. Visión General
 
-El `BookingModal` v2.3 perfecciona la experiencia de espera durante el pago. Hemos sustituido las ilustraciones abstractas por una **Experiencia Cinemática Inmersiva** que utiliza la fotografía real del tour para mantener la conexión emocional con el usuario.
+El `BookingModal` v2.5 implementa una interfaz de cristal líquido (**Liquid Glass**) de alta gama. La modal ha sido expandida a **92vw** con un tope de **1520px** para un impacto visual máximo en monitores de alta resolución.
 
 ---
 
-## 2. Cambios Visuales (v2.3)
+## 2. Cambios Visuales & UI (v2.5)
 
-### 2.1 Sala de Espera Cinemática (Left Pane)
-En lugar de vectores o gradientes genéricos, ahora mostramos:
-- **Fondo:** La imagen principal del tour (`effectiveTour.images[0]`) en alta calidad.
-- **Tratamiento:** Opacidad al 90%, filtros de mezcla de marca y un viñetado profundo (`radial-gradient`) que funde la imagen con el fondo oscuro del modal (`#020617`).
-- **Minimalismo:** Se han eliminado todas las animaciones de carga, partículas y textos redundantes de esta sección para ofrecer una estética de "póster de película" limpia y serena.
+### 2.1 Liquid Glass (Apple-Style)
+- **Dark Mode:** Fondo `#040918/70` con desenfoque de 40px y bordes `white/10`. Sensación de profundidad tecnológica.
+- **Light Mode:** Fondo `white/80` con degradado iridiscente (`white` -> `blue-50` -> `indigo-50`). Los inputs usan `bg-white/40` con bordes `border-slate-200` para garantizar legibilidad.
+- **Micro-interacciones:** Los botones de selección y fechas ahora usan cristales translúcidos que reaccionan al hover con sutiles cambios de opacidad.
 
-### 2.2 Ticket de Reserva (Right Pane)
-- **Diseño Editorial:** Información organizada en bloques lógicos (Titular, Fecha, Viajeros) con iconos sutiles.
-- **Claridad Financiera:** Separación explícita entre el "Total de la Reserva" y el "Monto a Pagar Ahora" (preparado para pagos parciales).
-- **Feedback de Estado:**
-    - **Header Centrado:** Título grande y mensaje de UX claro: *"Esta ventana se actualizará automáticamente"*.
-    - **Confirmación de Seguridad:** Un bloque azul informa explícitamente que la reserva **YA ha sido creada** en la base de datos (mostrando el ID real) y que el pago ocurre en una pestaña paralela.
-    - **Recuperación:** Enlace *"¿Se cerró la pestaña de pago?"* para reabrir la pasarela sin perder datos.
+### 2.2 Notificaciones Inteligentes
+- **Desktop:** Toasts flotantes en la esquina superior derecha (Stack de Estado).
+- **Mobile:** Notificaciones **incrustadas** integradas directamente en el flujo, ubicadas debajo del enlace de ayuda del pago para evitar obstrucciones.
+- **Estado In-Place:** El paso 2.5 muta de "Esperando" (Naranja) a "Éxito" (Esmeralda) sin recargar la página ni cambiar de paso, manteniendo el ticket visible.
 
 ### 2.3 Adaptabilidad Móvil
-- **Layout:** Márgenes ajustados a 12px exactos (`p-3`).
-- **Toast Integrado:** En pantallas pequeñas, la notificación flotante se reemplaza por un bloque de estado integrado (inline) para evitar obstrucciones visuales.
-- **Botones:** Altura táctil garantizada de 48px en todas las acciones críticas.
+- **Altura:** 96% de la pantalla (`96vh`).
+- **Radio:** Bordes superiores de 8px para un look más "App-Native".
+- **Márgenes:** Estándar de 12px (`p-3`) en todos los contenedores de información.
+
+---
+
+## 3. Lógica Financiera (v2.5)
+Se ha implementado un desglose transparente del 5% de tasa transaccional:
+- **Reserva:** 30% del valor total del tour.
+- **Tasa:** 5% adicional sobre el valor de la reserva (cobro de pasarela).
+- **Total a Pagar:** `(Total * 0.3) * 1.05`.
 
 ---
 

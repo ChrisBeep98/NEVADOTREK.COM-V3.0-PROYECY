@@ -19,8 +19,12 @@ Instead of rendering the Bold button directly inside the `BookingModal`, we isol
 ### 1.3 The Handshake Flow
 1.  **Booking Creation:** Frontend sends user data to `POST /bookings/private`.
 2.  **Bridge Open:** Frontend opens `window.open('/payment-bridge?bookingId=...', '_blank')`.
-3.  **Payment Init (In Bridge):** The bridge page calls `POST /payments/init`.
-4.  **Polling (In Modal):** The modal starts calling `GET /public/bookings/:id` every 5 seconds.
+3.  **Financial Formula:** 
+    - `Total = Price * Pax`.
+    - `Deposit = 30% of Total`.
+    - `Final Pay Now = Deposit * 1.05` (Includes 5% Transactional Tax).
+4.  **Payment Init (In Bridge):** The bridge page calls `POST /payments/init`.
+5.  **Polling (In Modal):** The modal starts calling `GET /public/bookings/:id` every 5 seconds.
 
 ---
 

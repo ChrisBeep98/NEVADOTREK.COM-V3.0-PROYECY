@@ -14,9 +14,15 @@
 
 ## 2. Architectural Patterns
 
-### 2.1 Component Strategy
+### 2.1 Design System: Liquid Glass (Apple-Style)
+We use a high-end "Liquid Glass" aesthetic characterized by:
+- **Depth:** High-intensity backdrop blur (40px) and semi-transparent layers.
+- **Atmosphere:** Dynamic gradients (Iridescent White in Light Mode, Deep Navy in Dark Mode).
+- **Precision:** Sub-pixel borders (`border-slate-200/60` or `white/10`) and inner rings for object definition.
+
+### 2.2 Component Strategy
 - **Server Components (RSC):** Used for initial data fetching (`page.tsx`) to ensure SEO and performance.
-- **Client Components (`'use client'`):** Used for interactive elements like the `BookingModal`, `BoldCheckout`, and GSAP animations.
+- **Client Components (`'use client'`):** Used for interactive elements like the `BookingModal` (92vw width, max-width 1520px), `BoldCheckout`, and GSAP animations.
 - **Defensive Rendering:** Components use optional chaining and fallbacks to handle incomplete API data gracefully.
 
 ### 2.2 Hybrid API Architecture
