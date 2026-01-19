@@ -1,50 +1,42 @@
 # 🔄 System Flows
 
-## 1. Booking & Payment Sequence (Just-in-Time Pattern)
+## 1. Booking & Payment Sequence (Multi-Mode Bridge Pattern)
 
 ```mermaid
 sequenceDiagram
     actor User
     participant MainTab as Booking Modal (Tab A)
-    participant PreTab as Pre-Opened Tab (Tab B)
     participant Bridge as Payment Bridge (Tab B)
     participant Backend
     participant Bold
 
-    User->>MainTab: Fill Info -> Click "Continuar"
-    Note over MainTab: Step 2: Review (No DB write yet)
-    
+    User->>MainTab: Select Mode (Public/Private) -> Fill Data
     User->>MainTab: Click "IR A PAGAR"
     
-    par Async Process
-        MainTab->>PreTab: window.open('about:blank') (Spinner)
-        MainTab->>Backend: POST /bookings/private (Create)
-        Backend-->>MainTab: Return bookingId
-        
-        MainTab->>PreTab: Redirect to /payment-bridge?id=...
-    and
-        MainTab->>User: Show "Finalizando reserva..." (Polling)
-        MainTab->>Backend: Polling GET /bookings/:id (Every 5s)
+    MainTab->>Bridge: window.open('/payment-bridge')
+    
+    alt Private Mode
+        MainTab->>Backend: POST /bookings/private
+    else Public Mode
+        MainTab->>Backend: POST /bookings/join
     end
     
-    PreTab->>Bridge: Load Bridge Page
+    Backend-->>MainTab: Return bookingId
+    Note over MainTab: Polling Starts (Every 5s)
+    
+    MainTab->>Bridge: Update URL with bookingId
     Bridge->>Backend: POST /payments/init
-    Backend-->>Bridge: Payload
+    Backend-->>Bridge: Bold Payload
     Bridge->>Bold: Render Payment Button
     
-    User->>Bold: Click Pay -> Transaction
+    User->>Bold: Complete Transaction
+    Bold->>Backend: Webhook Notification
     
-    alt Payment Approved
-        Bold->>Backend: Webhook (SALE_APPROVED)
-        Backend->>Backend: Update DB
-        
-        Note right of MainTab: Polling detects change
-        Note right of MainTab: IN-PLACE MUTATION (Orange -> Emerald)
-        MainTab->>User: Show Success State (Step 2.5 Refined)
-    else Payment Rejected
-        Bold->>Backend: Webhook (SALE_REJECTED)
-        
-        Note right of MainTab: Polling detects rejection
-        MainTab->>User: Show Error "Pago rechazado"
-    end
+    Backend->>Backend: Update Status to 'confirmed'
+    
+    MainTab->>Backend: GET /public/bookings/:id
+    Backend-->>MainTab: status: 'confirmed'
+    
+    Note over MainTab: UI Mutation (Success State)
+    MainTab->>User: Show Success Ticket
 ```

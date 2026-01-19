@@ -3,6 +3,7 @@ import { Tour, Departure } from "../types/api";
 const API_BASE_URL = 'https://us-central1-nevadotrektest01.cloudfunctions.net/api/public';
 const PAYMENTS_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
 const STAGING_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
+const ADMIN_SECRET_KEY = 'ntk_admin_staging_key_2026_x8K9mP3nR7wE5vJ2hQ9zY4cA6bL8sD1fG5jH3mN0pX7';
 
 export interface BoldPaymentData {
     paymentReference: string;
@@ -80,6 +81,33 @@ export async function createPrivateBooking(data: {
         const error = await response.json().catch(() => ({}));
         // Backend returns { error: "Message" } or { message: "Message" }
         throw new Error(error.error || error.message || `Failed to create booking: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/**
+ * Joins an existing public departure (Group Tour).
+ */
+export async function joinPublicBooking(data: {
+    departureId: string;
+    pax: number;
+    customer: {
+        name: string;
+        email: string;
+        phone: string;
+        document: string;
+    };
+}): Promise<BookingResponse> {
+    const response = await fetch(`${PAYMENTS_API_URL}/bookings/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || error.message || `Failed to join booking: ${response.status}`);
     }
 
     return response.json();
@@ -200,5 +228,32 @@ export async function getStagingTestTour(): Promise<Tour | null> {
     } catch (error) {
         console.error("Error fetching staging test tour:", error);
         return null;
+    }
+}
+
+/**
+ * Fetches departures for the staging test tour.
+ */
+export async function getTestTourDepartures(): Promise<Departure[]> {
+    try {
+        const response = await fetch(`${STAGING_API_URL}/departures`, {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch staging departures: ${response.status}`);
+        }
+
+        const departures: Departure[] = await response.json();
+        const now = Math.floor(Date.now() / 1000);
+        
+        return departures.filter(dep => 
+            dep.tourId === 'test-tour-001' && 
+            dep.date._seconds > now &&
+            dep.status === 'open'
+        ).sort((a, b) => a.date._seconds - b.date._seconds);
+    } catch (error) {
+        console.error("Error fetching staging test departures:", error);
+        return [];
     }
 }

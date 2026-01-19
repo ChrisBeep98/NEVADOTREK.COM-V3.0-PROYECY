@@ -35,3 +35,15 @@ vi.mock('gsap', () => ({
 vi.mock('@gsap/react', () => ({
   useGSAP: (callback: any) => callback(),
 }));
+
+// Mock window methods
+window.scrollTo = vi.fn();
+window.open = vi.fn().mockReturnValue({
+    document: {
+        write: vi.fn(),
+    },
+    location: {
+        href: '',
+    },
+    close: vi.fn(),
+});

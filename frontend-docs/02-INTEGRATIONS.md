@@ -2,63 +2,43 @@
 
 ## 1. Bold Checkout Integration (v2.0 - Payment Bridge Pattern)
 
-> **Changed in v2.0:** Moved from direct in-modal script injection to a "Payment Bridge" pattern to handle third-party script hijacking and improve UX stability.
-
 ### 1.1 The Payment Bridge Pattern
-Instead of rendering the Bold button directly inside the `BookingModal`, we isolate the payment process in a separate "disposable" tab.
+We isolate the payment process in a separate "disposable" tab to handle third-party script hijacking and improve UX stability.
 
 1.  **Modal (Main Tab):** User clicks "Ir a Pagar" -> Opens `/payment-bridge` in new tab.
 2.  **Bridge (New Tab):** Loads the Bold script safely. User completes payment here.
-3.  **Synchronization:** The Main Tab enters a "Waiting/Polling" state, checking the backend status periodically until the payment is confirmed or rejected.
+3.  **Synchronization:** The Main Tab enters a "Waiting/Polling" state, checking the backend status periodically.
 
-### 1.2 Component Responsibilities
-*   **`BookingModal.tsx`**: Orchestrator. Handles booking creation, opens the bridge, and polls for status.
-*   **`payment-bridge/page.tsx`**: Isolation container. Renders `BoldCheckout` and handles the visual transition for the user in the new tab.
-*   **`BoldCheckout.tsx`**: Pure UI wrapper. Injects the Bold script into the bridge page.
+### 1.2 Handshake Flow & Dual-Endpoint Strategy
+The frontend determines the appropriate backend endpoint based on the booking mode:
 
-### 1.3 The Handshake Flow
-1.  **Booking Creation:** Frontend sends user data to `POST /bookings/private`.
-2.  **Bridge Open:** Frontend opens `window.open('/payment-bridge?bookingId=...', '_blank')`.
-3.  **Financial Formula:** 
-    - `Total = Price * Pax`.
-    - `Deposit = 30% of Total`.
-    - `Final Pay Now = Deposit * 1.05` (Includes 5% Transactional Tax).
-4.  **Payment Init (In Bridge):** The bridge page calls `POST /payments/init`.
-5.  **Polling (In Modal):** The modal starts calling `GET /public/bookings/:id` every 5 seconds.
+- **Private Mode:** Calls `POST /bookings/private` with `tourId` and `date`.
+- **Public Mode:** Calls `POST /bookings/join` with `departureId`.
+
+**Financial Formula:** 
+- `Total = Price * Pax`.
+- `Deposit = 30% of Total`.
+- `Final Pay Now = Deposit * 1.05` (Includes 5% Transactional Tax).
+
+### 1.3 Synchronization & Polling
+While the Payment Bridge is open, the `BookingModal` polls the following endpoint every 5 seconds:
+**Endpoint:** `GET /public/bookings/:bookingId`
+
+**Status Logic:**
+- **`approved`:** Polling stops, modal mutates to Success state.
+- **`rejected`:** Polling stops, modal shows error message allowing for retry.
 
 ---
 
-## 2. API Endpoints (Polling & Status)
+## 2. Notification Hooks (Telegram/Instagram)
 
-To support the bridge pattern, we use a public endpoint to monitor the transaction status from the main tab.
-
-### 2.1 Get Booking Status
-**Endpoint:** `GET /public/bookings/:bookingId`
-
-**Response:**
-```json
-{
-  "bookingId": "B7Gs...",
-  "status": "confirmed",        // 'pending' | 'confirmed'
-  "paymentStatus": "approved",  // 'pending' | 'approved' | 'rejected'
-  "paymentRef": "NTK-..."       // Full transaction reference (optional)
-}
-```
-
-**Logic:**
-- **Approved:** If `paymentStatus === 'approved'`, the modal closes and shows the Success screen using `paymentRef`.
-- **Rejected:** If `paymentStatus === 'rejected'`, the modal stops polling and shows an inline error ("Pago rechazado"), allowing the user to retry.
+The Staging Backend is configured to send notifications to Telegram upon successful booking creation.
+- **Requirement:** The `tourId` sent must exist in the Staging database.
+- **Dev Bypass:** The frontend forces `test-tour-001` during local development to ensure these notifications are triggered regardless of the page content.
 
 ---
 
 ## 3. Circular Payment Flow (UX)
 
-Even with the Bridge pattern, we maintain the circular flow for the user's peace of mind.
-
-### 3.1 Bridge Behavior
-The Bridge page (`/payment-bridge`) is designed to be a "dead end" for the application logic but a "live wire" for the payment.
-- If the payment is successful, Bold redirects the Bridge Tab to `/payment-result`.
-- **Parallel Sync:** Simultaneously, the Main Tab detects the success via polling and updates its UI, often faster than the user can return to it.
-
-### 3.2 Resilience
-- **Unhappy Path:** If the payment fails (e.g., insufficient funds), the backend Webhook updates the status to `rejected`. The Modal picks this up via polling and alerts the user *without* reloading the page, preserving their form data.
+- **Bridge Redirection:** Upon successful payment, Bold redirects the Bridge Tab to `/payment-result`.
+- **Parallel Sync:** Simultaneously, the Main Tab detects the success via polling and updates its UI, ensuring the user sees the confirmation immediately upon returning to the site.

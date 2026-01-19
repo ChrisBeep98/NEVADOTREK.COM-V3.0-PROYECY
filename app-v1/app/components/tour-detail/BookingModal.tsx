@@ -7,7 +7,7 @@ import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, P
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
 import BoldCheckout from '../ui/BoldCheckout';
-import { createPrivateBooking, getStagingTestTour, getBookingStatus } from '../../services/nevado-api';
+import { createPrivateBooking, joinPublicBooking, getStagingTestTour, getTestTourDepartures, getBookingStatus } from '../../services/nevado-api';
 import { toast } from 'sonner';
 
 interface BookingModalProps {
@@ -50,6 +50,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     // Test Mode State
     const [isTestMode, setIsTestMode] = useState(false);
     const [testTour, setTestTour] = useState<Tour | null>(null);
+    const [testDepartures, setTestDepartures] = useState<Departure[]>([]);
 
     // Calendar Engine
     const [viewDate, setViewDate] = useState(new Date());
@@ -86,7 +87,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     if (parsed.mode) setMode(parsed.mode);
                     if (parsed.selectedDate) setSelectedDate(new Date(parsed.selectedDate));
                     if (parsed.selectedDeparture) setSelectedDeparture(parsed.selectedDeparture);
-                    if (parsed.realBookingId) setRealBookingId(parsed.realBookingId);
+                    // if (parsed.realBookingId) setRealBookingId(parsed.realBookingId); // DISABLED FOR TESTING: Prevent Zombie State
                     
                 } catch (e) {
                     console.error("Error loading form draft", e);
@@ -123,6 +124,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setTestTour(fetched);
                 setIsTestMode(true);
                 console.log("Test tour loaded from staging:", fetched);
+                
+                // Also load test departures
+                const fetchedDepartures = await getTestTourDepartures();
+                if (fetchedDepartures && fetchedDepartures.length > 0) {
+                    setTestDepartures(fetchedDepartures);
+                    console.log("Test departures loaded:", fetchedDepartures);
+                }
             } else {
                 console.log("Test tour not available, using production tour");
             }
@@ -208,7 +216,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     }, [isWaitingForPayment, realBookingId]);
 
     
-    const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
+    const availableDepartures = isTestMode ? testDepartures : departures;
+    const publicDepartures = availableDepartures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
     // Check for payment return (Vanilla JS for safety - Legacy Redirect Support)
     useEffect(() => {
@@ -360,32 +369,64 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
             // 2. Create Booking ONLY if it doesn't exist yet
             if (!bookingIdToUse) {
-                // Format date for API (YYYY-MM-DD)
-                const dateObj = mode === 'public' && selectedDeparture 
-                    ? new Date(selectedDeparture.date._seconds * 1000)
-                    : selectedDate;
+                // Sanitize phone: Remove spaces, parens, dashes. Keep only + and digits.
+                let finalPhone = formData.phone.replace(/[^0-9+]/g, '').trim();
                 
-                if (!dateObj) throw new Error("Fecha no seleccionada");
-                
-                const formattedDate = dateObj.toISOString().split('T')[0];
-                const tourIdToUse = effectiveTour.tourId;
-
-                let finalPhone = formData.phone.trim();
+                // Add default country code if missing
                 if (!finalPhone.startsWith('+')) {
                     finalPhone = `+57${finalPhone}`;
                 }
 
-                const response = await createPrivateBooking({
-                    tourId: tourIdToUse,
-                    date: formattedDate,
-                    pax: formData.pax,
-                    customer: {
-                        name: formData.name,
-                        email: formData.email,
-                        phone: finalPhone,
-                        document: formData.document
-                    }
-                });
+                console.log("🚀 Payload Customer Phone:", finalPhone); // Debug log
+
+                const customer = {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: finalPhone,
+                    document: formData.document
+                };
+
+                let response;
+
+                // --- STAGING FORCE LOGIC ---
+                // If we are in test mode or on a local environment, we MUST use a Staging ID
+                // to ensure the Backend finds the tour and sends the Telegram notification.
+                let tourIdToUse = effectiveTour.tourId;
+                
+                // Aggressive check: If on localhost, ALWAYS force test-tour-001 to ensure notifications work
+                const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+                if (tourIdToUse !== 'test-tour-001' && (isTestMode || isLocalhost)) {
+                    console.log("🛠️ Force Staging Mode (Local/Test): Swapping", tourIdToUse, "for test-tour-001");
+                    tourIdToUse = 'test-tour-001';
+                    toast.info('Modo Desarrollo Detectado', { description: 'Usando "test-tour-001" para asegurar notificación.' });
+                }
+
+                console.log("🚀 [DEBUG] Final Booking Payload:");
+                console.log("   - Mode:", mode);
+                console.log("   - Tour ID:", tourIdToUse);
+                console.log("   - Customer:", customer.name, customer.phone);
+
+                if (mode === 'public') {
+                    if (!selectedDeparture) throw new Error("Salida no seleccionada");
+                    
+                    response = await joinPublicBooking({
+                        departureId: selectedDeparture.departureId,
+                        pax: formData.pax,
+                        customer
+                    });
+                } else {
+                    if (!selectedDate) throw new Error("Fecha no seleccionada");
+                    
+                    const formattedDate = selectedDate.toISOString().split('T')[0];
+
+                    response = await createPrivateBooking({
+                        tourId: tourIdToUse,
+                        date: formattedDate,
+                        pax: formData.pax,
+                        customer
+                    });
+                }
 
                 bookingIdToUse = response.bookingId;
                 setRealBookingId(response.bookingId);

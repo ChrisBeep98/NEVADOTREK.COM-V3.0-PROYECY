@@ -1,23 +1,18 @@
 # 📂 Project Structure Map
 
-## New Additions
+## Core Components
 
-### `/app`
-- **`/payment-bridge`**: **(New)** Isolated environment for Bold payment gateway execution.
-- **`/payment-result`**: Landing page for Bold payment status feedback.
-- **`layout.tsx`**: Updated with system font fallbacks for build stability.
-
-### `/app/components/ui`
-- **`BoldCheckout.tsx`**: Specialized component for secure Bold script injection.
+### `/app/components/tour-detail`
+- **`BookingModal.tsx`**: **Orchestrator.** Handles step management, Public/Private routing, Phone sanitization, and the Staging Force Mode logic.
 
 ### `/app/services`
-- **`nevado-api.ts`**: Updated with `getBookingStatus` polling logic.
+- **`nevado-api.ts`**: Centralizes all backend communication including the `joinPublicBooking` and `getTestTourDepartures` methods.
 
-## Key Files
-- **`BookingModal.tsx`**: Orchestrates the multi-step booking process, handles Payment Bridge flow, and polls for transaction status.
+### `/app/payment-bridge`
+- Isolated environment for secure script injection.
 
 ## 💾 State Persistence Strategy
 We use `localStorage` under the key `'nevado_user_draft'` to ensure data survival:
-- **User Info:** Name, email, phone, and document are saved as the user types.
-- **Booking Context:** During the payment phase, we store the `realBookingId`, date, and pax to ensure the ticket can be reconstructed if the user returns via a redirect (e.g., from Bold's success page).
-- **Cleanup:** On a successful transaction completion, the booking context is cleared but user personal info is kept for future convenience.
+- **Automatic Draft:** User Info (Name, email, etc.) is saved in real-time.
+- **Booking Persistence:** The `bookingId` is stored to allow UI recovery upon returning from an external tab.
+- **Testing Bypass:** During the current testing phase, `bookingId` restoration is partially bypassed to ensure fresh test cycles and notification triggers.
