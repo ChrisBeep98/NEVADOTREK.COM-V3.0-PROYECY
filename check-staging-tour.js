@@ -27,6 +27,7 @@ https.get(url, (res) => {
       if (testTour) {
         console.log('✅ FOUND: test-tour-001 exists!');
         console.log('Name:', JSON.stringify(testTour.name));
+        console.log('Pricing Tiers:', JSON.stringify(testTour.pricingTiers, null, 2));
       } else {
         console.log('❌ NOT FOUND: test-tour-001 is missing from the list.');
         console.log('Available IDs:', tours.map(t => t.tourId).join(', '));

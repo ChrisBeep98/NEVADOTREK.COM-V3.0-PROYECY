@@ -2,46 +2,41 @@
 
 > **Last Updated:** 2026-01-19
 > **Component:** `app-v1/app/components/tour-detail/BookingModal.tsx`
-> **Version:** v2.6 (Staging Robustness)
+> **Version:** v2.7 (Final Staging Polish)
 
 ## 1. Visión General
 
-El `BookingModal` v2.6 implementa una lógica agnóstica al tipo de reserva (Public/Private) y garantiza la entrega de notificaciones en entornos de Staging.
+El `BookingModal` v2.7 es la versión definitiva para pruebas en Staging, optimizada para garantizar la trazabilidad de las notificaciones y la limpieza de datos.
 
 ---
 
-## 2. Lógica de Reserva Dual
+## 2. Lógica de Reserva Dual (Agnóstica)
 
-El componente detecta automáticamente el modo seleccionado por el usuario:
+El componente detecta automáticamente el modo seleccionado y utiliza el endpoint correspondiente en el backend de Staging:
 
-- **Modo Grupal (Public):** El usuario elige una fecha de la grilla. Se utiliza el endpoint `/bookings/join`.
-- **Modo Privado (Private):** El usuario elige una fecha del calendario. Se utiliza el endpoint `/bookings/private`.
-
----
-
-## 3. Robustez en Staging & Desarrollo
-
-### 3.1 Force Staging Mode (Local)
-Para evitar fallos en las notificaciones de Telegram durante el desarrollo local (`localhost`), el modal sobreescribe automáticamente cualquier `tourId` real con `test-tour-001`. Esto garantiza que el backend de Staging encuentre el tour y dispare los webhooks de notificación.
-
-### 3.2 Saneamiento de Teléfono
-Se aplica una limpieza estricta mediante RegEx antes del envío:
-- Entrada: `(300) 123 4567`
-- Salida: `+573001234567` (Cumple con estándar E.164 para APIs de mensajería).
+- **Modo Grupal (Public):** Utiliza `POST /bookings/join`. Requiere un `departureId` válido.
+- **Modo Privado (Private):** Utiliza `POST /bookings/private`. Requiere `tourId` y `date`.
 
 ---
 
-## 4. Cambios Visuales & UI (v2.6)
+## 3. Robustez y Testing en Staging
 
-### 4.1 Liquid Glass (Apple-Style)
-- **Desenfoque:** 40px backdrop blur constante.
-- **Micro-interacciones:** Feedback visual inmediato al alternar entre modos Grupal y Privado.
-- **Toasts de Desarrollo:** Notificaciones de sistema (Sonner) informan al desarrollador cuando se está aplicando la lógica de "Force Mode".
+### 3.1 Force Staging Mode (Localhost)
+Para asegurar que las notificaciones de **Telegram/Instagram** lleguen siempre durante el desarrollo:
+- El modal detecta si la app corre en `localhost`.
+- Sobreescribe cualquier `tourId` real con `test-tour-001`.
+- Esto garantiza que el backend encuentre el tour en su base de datos de pruebas y dispare el mensaje.
+
+### 3.2 Saneamiento de Datos
+- **Teléfono:** Limpieza estricta mediante RegEx (`replace(/[^0-9+]/g, '')`). Convierte formatos como `(300) 123 4567` en `+573001234567` para compatibilidad con APIs de mensajería.
+- **Precios:** Lógica de `getPrice()` blindada para asegurar comparaciones numéricas correctas entre Pax y Tiers.
+
+### 3.3 Prevención de Estado Zombie
+- Se ha desactivado temporalmente la restauración automática del `realBookingId` desde `localStorage`. 
+- **Objetivo:** Forzar la creación de una reserva nueva en cada ciclo de prueba para validar siempre el trigger de notificación.
 
 ---
 
-## 5. Lógica Financiera
-Desglose transparente del 5% de tasa transaccional:
-- **Reserva:** 30% del valor total.
-- **Tasa Pasarela:** 5% sobre el valor del depósito.
-- **Fórmula:** `(Total * 0.3) * 1.05`.
+## 4. UI & UX (Liquid Glass)
+- **Feedback de Desarrollo:** Se incluyen Toasts informativos (Sonner) cuando el "Force Mode" está activo.
+- **In-Place Mutation:** El paso de espera (2.5) cambia visualmente de Naranja (Pendiente) a Esmeralda (Éxito) sin recargar, manteniendo la coherencia visual del ticket.
