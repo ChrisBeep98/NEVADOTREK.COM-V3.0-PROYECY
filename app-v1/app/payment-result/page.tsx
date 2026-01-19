@@ -40,8 +40,16 @@ function PaymentResultLogic() {
         } else {
             setTimeout(() => {
                 setStatus('error');
-                setMessage("El pago no fue completado.");
+                setMessage("El pago no fue completado. Redirigiendo...");
                 console.log("Payment Result - txStatus not approved:", txStatus); // DEBUG
+
+                // Redirect even on error so BookingModal can show the "Safe Reservation" UI
+                const finalUrl = `${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_status=failed&ref=${orderId || 'N/A'}`;
+                
+                setTimeout(() => {
+                    localStorage.removeItem('lastTourPath'); // Clean up
+                    window.location.href = finalUrl;
+                }, 3000); // 3s delay to read the error message
             }, 0);
         }
 

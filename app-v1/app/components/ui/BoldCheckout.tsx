@@ -36,6 +36,7 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                     script.setAttribute('data-api-key', data.apiKey);
                     script.setAttribute('data-amount', data.amount.toString());
                     script.setAttribute('data-currency', data.currency);
+                    if (data.tax) script.setAttribute('data-tax', data.tax.toString());
                     script.setAttribute('data-order-id', data.paymentReference);
                     script.setAttribute('data-reference', data.paymentReference);
                     script.setAttribute('data-integrity-signature', data.integritySignature);
@@ -47,11 +48,11 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                     setStatus('ready');
                 }
 
-            } catch (err: any) {
+            } catch (err) {
                 if (!isMounted) return;
                 console.error("Bold Widget Error:", err);
                 setStatus('error');
-                setErrorMsg(err.message || "Error cargando pasarela");
+                setErrorMsg((err as Error).message || "Error cargando pasarela");
             }
         }
 

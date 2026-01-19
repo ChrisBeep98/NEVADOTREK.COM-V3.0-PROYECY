@@ -41,6 +41,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [isCreatingBooking, setIsCreatingBooking] = useState(false);
     const [paymentRef, setPaymentRef] = useState<string | null>(null);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [paymentRejected, setPaymentRejected] = useState(false);
     
     // Payment Waiting State (Step 2.5)
     const [isWaitingForPayment, setIsWaitingForPayment] = useState(false);
@@ -190,12 +191,47 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                     ), { id: 'success-toast-stack', duration: Infinity });
                 }
-            } else if (data.paymentStatus === 'rejected') {
-                // Handle failed payment
-                setIsWaitingForPayment(false);
-                setPaymentError("El pago fue rechazado por el banco. Intenta con otro medio de pago.");
+            } else if (data.paymentStatus === 'rejected' || data.paymentStatus === 'failed' || data.paymentStatus === 'cancelled') {
+                // Handle failed payment BUT KEEP BOOKING (Do NOT close waiting screen)
+                setPaymentRejected(true);
+                setPaymentSuccess(false);
+                
                 toast.dismiss('payment-status-stack');
-                toast.error('Pago Rechazado', { description: 'La transacción no fue aprobada por el banco.' });
+                
+                // Show WARNING toast stack (Persistent) - Desktop Only
+                if (window.innerWidth >= 768) {
+                    toast.custom((_toast) => (
+                        <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                            {/* Primary Warning Card */}
+                            <div className="bg-[#E11D48] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                        <ShieldCheck className="w-5 h-5 text-white/80" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Pago Rechazado</p>
+                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">La transacción no fue exitosa.</p>
+                                </div>
+                            </div>
+
+                            {/* Reassurance Info Card */}
+                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                        <FileCheck className="w-5 h-5 text-white/40" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white leading-tight">Tu Reserva Existe</p>
+                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
+                                        Ya tenemos tus datos. Nos comunicaremos contigo lo antes posible para gestionar el pago.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ), { id: 'warning-toast-stack', duration: Infinity });
+                }
             }
         } catch (error) {
             console.error("Error checking payment status:", error);
@@ -207,13 +243,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     // Auto-poll every 5 seconds when waiting
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if (isWaitingForPayment && realBookingId) {
+        if (isWaitingForPayment && realBookingId && !paymentSuccess && !paymentRejected) {
             interval = setInterval(() => {
                 checkPaymentStatus();
             }, 5000);
         }
         return () => clearInterval(interval);
-    }, [isWaitingForPayment, realBookingId]);
+    }, [isWaitingForPayment, realBookingId, paymentSuccess, paymentRejected]);
 
     
     const availableDepartures = isTestMode ? testDepartures : departures;
@@ -272,6 +308,45 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 // Ensure modal is open if parent controls it
                 if (typeof window !== 'undefined') {
                     window.scrollTo(0, 0);
+                }
+            } else if (paymentStatus === 'rejected' || paymentStatus === 'failed') {
+                console.log("BookingModal - Payment Rejected/Failed Redirect detected");
+                setStep(2);
+                setIsWaitingForPayment(true);
+                setPaymentRejected(true);
+                setPaymentSuccess(false);
+
+                // Show WARNING toast stack (Persistent) - Desktop Only
+                if (window.innerWidth >= 768) {
+                    toast.custom((_toast) => (
+                        <div className="flex flex-col gap-3 min-w-[360px] animate-in fade-in slide-in-from-right-5">
+                            <div className="bg-[#E11D48] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center">
+                                        <ShieldCheck className="w-5 h-5 text-white/80" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Pago No Completado</p>
+                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">La transacción fue rechazada o cancelada.</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                                <div className="shrink-0">
+                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
+                                        <FileCheck className="w-5 h-5 text-white/40" />
+                                    </div>
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-white leading-tight">Tu Reserva Está Segura</p>
+                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
+                                        No te preocupes, ya recibimos tus datos. Te contactaremos para finalizar tu reserva.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ), { id: 'warning-toast-stack', duration: Infinity });
                 }
             }
         }
@@ -364,6 +439,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         try {
             setIsCreatingBooking(true);
             setPaymentError(null);
+            setPaymentRejected(false);
 
             let bookingIdToUse = realBookingId;
 
@@ -519,9 +595,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             setRealBookingId(null);
             setPaymentRef(null);
             setPaymentSuccess(false);
+            setPaymentRejected(false);
             setIsWaitingForPayment(false); // Reset waiting state
             toast.dismiss('payment-status-stack');
             toast.dismiss('success-toast-stack');
+            toast.dismiss('warning-toast-stack');
         }, 300);
     };
 
@@ -672,15 +750,17 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             <div className="flex items-center gap-5">
                                                                 {/* Hero Icon */}
                                                                 <div className="relative w-16 h-16 shrink-0">
-                                                                    <div className={`absolute inset-0 ${paymentSuccess ? 'bg-emerald-500/20' : 'bg-orange-500/10'} rounded-full animate-pulse blur-xl`} />
+                                                                    <div className={`absolute inset-0 ${paymentSuccess ? 'bg-emerald-500/20' : paymentRejected ? 'bg-rose-500/20' : 'bg-orange-500/10'} rounded-full animate-pulse blur-xl`} />
                                                                     <div className="relative w-full h-full bg-white/40 dark:bg-surface/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-full flex items-center justify-center shadow-xl transition-all duration-700">
                                                                         {paymentSuccess ? (
                                                                             <CheckCircle className="w-7 h-7 text-emerald-400 animate-in zoom-in duration-500" />
+                                                                        ) : paymentRejected ? (
+                                                                            <ShieldCheck className="w-7 h-7 text-rose-500 animate-in zoom-in duration-500" />
                                                                         ) : (
                                                                             <Info className="w-6 h-6 text-orange-400" />
                                                                         )}
                                                                         
-                                                                        {!paymentSuccess && (
+                                                                        {(!paymentSuccess && !paymentRejected) && (
                                                                             <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 bg-[#1E40AF] rounded-full border-2 border-background flex items-center justify-center shadow-lg">
                                                                                 <RefreshCw className="w-3 h-3 text-white animate-spin-slow" />
                                                                             </div>
@@ -690,10 +770,18 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                                                 <div className="space-y-1 text-left">
                                                                     <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight transition-all duration-700">
-                                                                        {paymentSuccess ? (lang === 'ES' ? '¡Reserva Confirmada!' : 'Booking Confirmed!') : (lang === 'ES' ? 'Reserva Recibida' : 'Booking Received')}
+                                                                        {paymentSuccess 
+                                                                            ? (lang === 'ES' ? '¡Reserva Confirmada!' : 'Booking Confirmed!') 
+                                                                            : (lang === 'ES' ? 'Reserva Recibida' : 'Booking Received')
+                                                                        }
                                                                     </h3>
-                                                                    <p className={`text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-700 ${paymentSuccess ? 'text-emerald-500' : 'text-orange-500'}`}>
-                                                                        {paymentSuccess ? (lang === 'ES' ? 'Todo listo para la montaña' : 'Ready for the mountain') : (lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending')}
+                                                                    <p className={`text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-700 ${paymentSuccess ? 'text-emerald-500' : paymentRejected ? 'text-rose-500' : 'text-orange-500'}`}>
+                                                                        {paymentSuccess 
+                                                                            ? (lang === 'ES' ? 'Todo listo para la montaña' : 'Ready for the mountain') 
+                                                                            : paymentRejected
+                                                                                ? (lang === 'ES' ? 'Transacción Fallida' : 'Transaction Failed')
+                                                                                : (lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending')
+                                                                        }
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -898,6 +986,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         <CheckCircle className="w-4 h-4" />
                                                                         <span>{lang === 'ES' ? 'VOLVER AL TOUR' : 'BACK TO TOUR'}</span>
                                                                     </button>
+                                                                ) : paymentRejected ? (
+                                                                    <a 
+                                                                        href={`https://wa.me/573103953530?text=${encodeURIComponent(`Hola Nevado Trek, intenté pagar mi reserva ${realBookingId} pero fue rechazada. Ayuda por favor.`)}`}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="h-12 min-h-[48px] w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                    >
+                                                                        <MessageCircle className="w-4 h-4" />
+                                                                        <span>{lang === 'ES' ? 'SOLUCIONAR POR WHATSAPP' : 'SOLVE VIA WHATSAPP'}</span>
+                                                                    </a>
                                                                 ) : (
                                                                     <>
                                                                         <a 
@@ -922,7 +1020,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 )}
                                                             </div>
                                                             
-                                                            {!paymentSuccess && (
+                                                            {!paymentSuccess && !paymentRejected && (
                                                                 <div className="flex justify-start">
                                                                     <button 
                                                                         onClick={() => setIsWaitingForPayment(false)}
@@ -931,6 +1029,11 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         {t.booking_modal.waiting.cancel_wait}
                                                                     </button>
                                                                 </div>
+                                                            )}
+                                                            {paymentRejected && (
+                                                                <p className="text-[10px] text-center text-muted">
+                                                                    Tu cupo está reservado. Nuestro equipo te contactará en breve.
+                                                                </p>
                                                             )}
                                                         </div>
                                                     </div>
