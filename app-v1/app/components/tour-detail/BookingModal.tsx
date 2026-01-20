@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react';
 import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock, FileCheck, MessageCircle, ShieldCheck, Info } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
-import { createPrivateBooking, joinPublicBooking, getStagingTestTour, getTestTourDepartures, getBookingStatus, initBoldPayment } from '../../services/nevado-api';
+import { createPrivateBooking, joinPublicBooking, getBookingStatus, initBoldPayment } from '../../services/nevado-api';
 import { toast } from 'sonner';
 
 interface BookingModalProps {
@@ -47,11 +47,6 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     const [isCheckingStatus, setIsCheckingStatus] = useState(false);
     const [paymentError, setPaymentError] = useState<string | null>(null);
 
-    // Test Mode State
-    const [isTestMode, setIsTestMode] = useState(false);
-    const [testTour, setTestTour] = useState<Tour | null>(null);
-    const [testDepartures, setTestDepartures] = useState<Departure[]>([]);
-
     // Calendar Engine
     const [viewDate, setViewDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -65,7 +60,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
         pax: 1 
     });
     
-    const effectiveTour = testTour || tour;
+    // Production: Always use the passed tour prop
+    const effectiveTour = tour;
     
     // --- SMART FORM LOGIC: Load & Save Draft ---
     useEffect(() => {
@@ -113,31 +109,6 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
             localStorage.setItem('nevado_user_draft', JSON.stringify(draft));
         }
     }, [formData.name, formData.email, formData.phone, formData.document, formData.pax, mode, selectedDate, selectedDeparture, realBookingId]);
-
-    // Load test tour from staging when modal opens
-    useEffect(() => {
-        if (!isOpen) return;
-
-        async function loadTestTour() {
-            const fetched = await getStagingTestTour();
-            if (fetched) {
-                setTestTour(fetched);
-                setIsTestMode(true);
-                console.log("Test tour loaded from staging:", fetched);
-                
-                // Also load test departures
-                const fetchedDepartures = await getTestTourDepartures();
-                if (fetchedDepartures && fetchedDepartures.length > 0) {
-                    setTestDepartures(fetchedDepartures);
-                    console.log("Test departures loaded:", fetchedDepartures);
-                }
-            } else {
-                console.log("Test tour not available, using production tour");
-            }
-        }
-
-        loadTestTour();
-    }, [isOpen]);
 
     // --- PAYMENT POLLING LOGIC ---
     const checkPaymentStatus = async (manual = false) => {
@@ -263,8 +234,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     }, [isWaitingForPayment, realBookingId, paymentSuccess, paymentRejected]);
 
     
-    const availableDepartures = isTestMode ? testDepartures : departures;
-    const publicDepartures = availableDepartures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
+    const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
     // Check for payment return (Vanilla JS for safety - Legacy Redirect Support)
     useEffect(() => {
@@ -475,19 +445,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                 let response;
 
-                // --- STAGING FORCE LOGIC ---
-                // If we are in test mode or on a local environment, we MUST use a Staging ID
-                // to ensure the Backend finds the tour and sends the Telegram notification.
-                let tourIdToUse = effectiveTour.tourId;
-                
-                // Aggressive check: If on localhost, ALWAYS force test-tour-001 to ensure notifications work
-                const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-                if (tourIdToUse !== 'test-tour-001' && (isTestMode || isLocalhost)) {
-                    console.log("🛠️ Force Staging Mode (Local/Test): Swapping", tourIdToUse, "for test-tour-001");
-                    tourIdToUse = 'test-tour-001';
-                    toast.info('Modo Desarrollo Detectado', { description: 'Usando "test-tour-001" para asegurar notificación.' });
-                }
+                // Use the real tour ID directly from props
+                const tourIdToUse = effectiveTour.tourId;
 
                 console.log("🚀 [DEBUG] Final Booking Payload:");
                 console.log("   - Mode:", mode);
@@ -721,13 +680,6 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                     
                     {/* Tactical Animated Progress Header */}
                     <div className="h-16 md:h-20 flex items-center justify-between px-frame md:px-10 border-b border-border shrink-0 relative">
-                        {/* Test Mode Indicator */}
-                        {isTestMode && (
-                            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-amber-500/10 border border-amber-500/50 text-amber-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1.5 z-30">
-                                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
-                                TEST MODE
-                            </div>
-                        )}
                         
                         <div className="relative w-32 md:w-48 flex items-center h-4">
                             {/* Track Background */}

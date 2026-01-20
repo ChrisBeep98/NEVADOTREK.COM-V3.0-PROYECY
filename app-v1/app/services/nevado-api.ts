@@ -1,8 +1,11 @@
 import { Tour, Departure } from "../types/api";
 
-const API_BASE_URL = 'https://us-central1-nevadotrektest01.cloudfunctions.net/api/public';
-const PAYMENTS_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
-const STAGING_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
+// 🚀 PRODUCTION API CONFIGURATION
+const API_BASE_URL = 'https://api-wgfhwjbpva-uc.a.run.app/public';
+const PAYMENTS_API_URL = 'https://api-wgfhwjbpva-uc.a.run.app/public';
+// Legacy Staging URL kept for reference/fallback if needed, but app now defaults to Prod
+const STAGING_API_URL = 'https://api-wgfhwjbpva-uc.a.run.app/public'; 
+
 const ADMIN_SECRET_KEY = 'ntk_admin_staging_key_2026_x8K9mP3nR7wE5vJ2hQ9zY4cA6bL8sD1fG5jH3mN0pX7';
 
 export interface BoldPaymentData {
