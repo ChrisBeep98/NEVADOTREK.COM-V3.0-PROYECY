@@ -222,14 +222,14 @@
       "pax_plural": "personas",
       "total_investment": "Total de la reserva",
       "deposit_label": "Depósito (30%)",
-      "tax_label": "Tax Transaccional (5%)",
+      "tax_label": "Gestión Administrativa (5%)",
       "balance_due": "Saldo Pendiente (70%)",
-      "pay_now": "Pagar Ahora (30%)",
+      "pay_now": "Reserva + Gestión",
       "initial_deposit": "Pago Inicial (30%)",
       "immediate_confirmation": "Confirmación inmediata",
       "guest": "Invitado",
       "tooltip_total": "Valor total de la experiencia. Hoy solo abonas el 30%.",
-      "tooltip_pay_now": "Procesado de forma segura por Bold (PSE/Tarjetas)."
+      "tooltip_pay_now": "Cubre el depósito de reserva más el costo de gestión transaccional (Bold)."
     },
     "waiting": {
       "title": "¡Reserva Recibida!",
@@ -259,6 +259,30 @@
       "payment_approved": "¡Pago Aprobado!",
       "booking_confirmed": "Tu reserva en la montaña está confirmada.",
       "success_contact": "Nos comunicaremos a los datos proporcionados para confirmar todo."
+    },
+    "payment_rejected": {
+      "title": "Pago Rechazado",
+      "desc": "La transacción no fue exitosa.",
+      "title_failed": "Pago No Completado",
+      "desc_failed": "La transacción fue rechazada o cancelada.",
+      "title_expired": "Enlace Expirado",
+      "desc_expired": "El tiempo de pago expiró. Por favor intenta nuevamente.",
+      "title_voided": "Transacción Anulada",
+      "desc_voided": "La transacción fue anulada administrativamente."
+    },
+    "safe_reservation": {
+      "title": "Tu Reserva Existe",
+      "desc": "Ya tenemos tus datos. Nos comunicaremos contigo lo antes posible para gestionar el pago.",
+      "title_redirect": "Tu Reserva Está Segura",
+      "desc_redirect": "No te preocupes, ya recibimos tus datos. Te contactaremos para finalizar tu reserva.",
+      "status_label": "Reserva Guardada - Pago Pendiente",
+      "status_failed": "Transacción Fallida",
+      "footer_msg": "Tu cupo está reservado. Nuestro equipo te contactará en breve."
+    },
+    "actions": {
+      "solve_whatsapp": "SOLUCIONAR POR WHATSAPP",
+      "retry_payment": "Reintentar Pago",
+      "whatsapp_msg": "Hola Nevado Trek, intenté pagar mi reserva {id} pero fue rechazada. Ayuda por favor."
     },
     "footer": {
       "back": "Volver",

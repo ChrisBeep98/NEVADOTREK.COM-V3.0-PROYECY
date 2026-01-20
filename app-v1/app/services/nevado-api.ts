@@ -6,14 +6,11 @@ const STAGING_API_URL = 'https://api-6ups4cehla-uc.a.run.app/public';
 const ADMIN_SECRET_KEY = 'ntk_admin_staging_key_2026_x8K9mP3nR7wE5vJ2hQ9zY4cA6bL8sD1fG5jH3mN0pX7';
 
 export interface BoldPaymentData {
+    paymentUrl: string;
     paymentReference: string;
     amount: number;
     currency: string;
-    apiKey: string;
-    integritySignature: string;
-    redirectionUrl: string;
     description: string;
-    tax: number;
 }
 
 export interface BookingResponse {

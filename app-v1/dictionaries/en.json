@@ -222,14 +222,14 @@
       "pax_plural": "people",
       "total_investment": "Total booking",
       "deposit_label": "Deposit (30%)",
-      "tax_label": "Transactional Tax (5%)",
+      "tax_label": "Service Fee (5%)",
       "balance_due": "Balance Due (70%)",
-      "pay_now": "Pay Now (30%)",
+      "pay_now": "Booking + Service Fee",
       "initial_deposit": "Initial Deposit (30%)",
       "immediate_confirmation": "Immediate confirmation",
       "guest": "Guest",
       "tooltip_total": "Full experience value. Today you only deposit 30%.",
-      "tooltip_pay_now": "Securely processed via Bold (Cards)."
+      "tooltip_pay_now": "Covers the booking deposit plus transactional service fees (Bold)."
     },
     "waiting": {
       "title": "Booking Received!",
@@ -259,6 +259,30 @@
       "payment_approved": "Payment Approved!",
       "booking_confirmed": "Your booking is confirmed.",
       "success_contact": "We will contact you at the provided details to confirm everything."
+    },
+    "payment_rejected": {
+      "title": "Payment Rejected",
+      "desc": "The transaction was not successful.",
+      "title_failed": "Payment Not Completed",
+      "desc_failed": "The transaction was rejected or cancelled.",
+      "title_expired": "Link Expired",
+      "desc_expired": "Payment time expired. Please try again.",
+      "title_voided": "Transaction Voided",
+      "desc_voided": "The transaction was administratively voided."
+    },
+    "safe_reservation": {
+      "title": "Booking Saved",
+      "desc": "We have your details. We will contact you shortly to manage the payment.",
+      "title_redirect": "Your Booking is Safe",
+      "desc_redirect": "Don't worry, we received your data. We will contact you to finalize your booking.",
+      "status_label": "Booking Saved - Payment Pending",
+      "status_failed": "Transaction Failed",
+      "footer_msg": "Your spot is reserved. Our team will contact you shortly."
+    },
+    "actions": {
+      "solve_whatsapp": "SOLVE VIA WHATSAPP",
+      "retry_payment": "Retry Payment",
+      "whatsapp_msg": "Hello Nevado Trek, I tried to pay for my booking {id} but it was rejected. Please help."
     },
     "footer": {
       "back": "Back",

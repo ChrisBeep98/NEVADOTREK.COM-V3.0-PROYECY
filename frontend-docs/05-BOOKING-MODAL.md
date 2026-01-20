@@ -2,41 +2,42 @@
 
 > **Last Updated:** 2026-01-19
 > **Component:** `app-v1/app/components/tour-detail/BookingModal.tsx`
-> **Version:** v2.7 (Final Staging Polish)
+> **Version:** v2.7.5 (Smart Link Redirection)
 
 ## 1. Visión General
 
-El `BookingModal` v2.7 es la versión definitiva para pruebas en Staging, optimizada para garantizar la trazabilidad de las notificaciones y la limpieza de datos.
+El `BookingModal` v2.7.5 implementa el patrón de **Smart Links**, eliminando el widget embebido para delegar la seguridad y renderizado de la pasarela a Bold. Esto soluciona problemas de habilitación de tarjetas en Sandbox y mejora la estabilidad móvil.
 
 ---
 
-## 2. Lógica de Reserva Dual (Agnóstica)
+## 2. Flujo de Pago "Smart Link"
 
-El componente detecta automáticamente el modo seleccionado y utiliza el endpoint correspondiente en el backend de Staging:
-
-- **Modo Grupal (Public):** Utiliza `POST /bookings/join`. Requiere un `departureId` válido.
-- **Modo Privado (Private):** Utiliza `POST /bookings/private`. Requiere `tourId` y `date`.
-
----
-
-## 3. Robustez y Testing en Staging
-
-### 3.1 Force Staging Mode (Localhost)
-Para asegurar que las notificaciones de **Telegram/Instagram** lleguen siempre durante el desarrollo:
-- El modal detecta si la app corre en `localhost`.
-- Sobreescribe cualquier `tourId` real con `test-tour-001`.
-- Esto garantiza que el backend encuentre el tour en su base de datos de pruebas y dispare el mensaje.
-
-### 3.2 Saneamiento de Datos
-- **Teléfono:** Limpieza estricta mediante RegEx (`replace(/[^0-9+]/g, '')`). Convierte formatos como `(300) 123 4567` en `+573001234567` para compatibilidad con APIs de mensajería.
-- **Precios:** Lógica de `getPrice()` blindada para asegurar comparaciones numéricas correctas entre Pax y Tiers.
-
-### 3.3 Prevención de Estado Zombie
-- Se ha desactivado temporalmente la restauración automática del `realBookingId` desde `localStorage`. 
-- **Objetivo:** Forzar la creación de una reserva nueva en cada ciclo de prueba para validar siempre el trigger de notificación.
+1.  **Pre-apertura:** Al hacer clic en pagar, se abre una pestaña en blanco (`about:blank`) inmediatamente para evitar bloqueos de popups.
+2.  **Inicialización:** Se llama a `/init` para obtener la `paymentUrl`.
+3.  **Redirección:** La pestaña en blanco es redirigida a la URL segura de Bold (`checkout.bold.co/...`).
 
 ---
 
-## 4. UI & UX (Liquid Glass)
-- **Feedback de Desarrollo:** Se incluyen Toasts informativos (Sonner) cuando el "Force Mode" está activo.
-- **In-Place Mutation:** El paso de espera (2.5) cambia visualmente de Naranja (Pendiente) a Esmeralda (Éxito) sin recargar, manteniendo la coherencia visual del ticket.
+## 3. Manejo de Estados y Feedback
+
+El modal implementa un sistema de polling robusto que maneja 5 estados posibles devueltos por el backend:
+
+-   **`approved` (Verde):** Transacción exitosa. Muestra tarjeta de éxito y confeti visual.
+-   **`rejected` (Rojo):** Rechazo bancario. Muestra alerta y botones de acción (WhatsApp/Reintentar).
+-   **`expired` (Rojo/Naranja):** El usuario tardó mucho. Permite generar un nuevo link.
+-   **`voided` (Rojo):** Anulación administrativa.
+-   **`pending` (Azul):** Estado de espera animado con el mensaje "Procesando en nueva pestaña".
+
+---
+
+## 4. Transparencia Financiera
+
+Debido a la lógica de backend v2.7.5, el modal ya no calcula impuestos localmente.
+-   **Display:** Muestra el `amount` total entregado por el backend.
+-   **Disclaimer:** Incluye el texto *"Cubres el 30% del valor total + costos de gestión"* para aclarar el recargo del 5% sin usar términos fiscales complejos como "IVA".
+
+---
+
+## 5. Accesibilidad y Limpieza
+-   **Formulario:** Todos los inputs tienen atributos `id`, `name` y `autoComplete` correctos.
+-   **Internacionalización:** Todos los textos, incluidos los mensajes de la página de resultados (`payment-result`), responden al idioma seleccionado (`ES/EN`).

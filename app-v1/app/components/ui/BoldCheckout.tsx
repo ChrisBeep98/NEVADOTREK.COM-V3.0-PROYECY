@@ -36,7 +36,12 @@ export default function BoldCheckout({ bookingId }: { bookingId: string }) {
                     script.setAttribute('data-api-key', data.apiKey);
                     script.setAttribute('data-amount', data.amount.toString());
                     script.setAttribute('data-currency', data.currency);
-                    if (data.tax) script.setAttribute('data-tax', data.tax.toString());
+                    
+                    // CRITICAL: Payer Email enables Credit Card methods in Sandbox
+                    if (data.payerEmail) {
+                        script.setAttribute('data-payer-email', data.payerEmail);
+                    }
+
                     script.setAttribute('data-order-id', data.paymentReference);
                     script.setAttribute('data-reference', data.paymentReference);
                     script.setAttribute('data-integrity-signature', data.integritySignature);

@@ -4,10 +4,15 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 
+import { useLanguage } from '../context/LanguageContext';
+
 function PaymentResultLogic() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const [message, setMessage] = useState("Verificando pago...");
+    const { lang } = useLanguage(); // Get current language preference
+    
+    // Initial loading message based on language
+    const [message, setMessage] = useState(lang === 'ES' ? "Verificando pago..." : "Verifying payment...");
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
     useEffect(() => {
@@ -16,7 +21,7 @@ function PaymentResultLogic() {
 
         // 1. Get the path we saved in BookingModal
         const savedPath = typeof window !== 'undefined' ? localStorage.getItem('lastTourPath') : null;
-        console.log("Payment Result - Saved Path:", savedPath, "txStatus:", txStatus, "orderId:", orderId); // DEBUG
+        console.log("Payment Result - Saved Path:", savedPath, "txStatus:", txStatus, "orderId:", orderId); 
 
         const returnPath = savedPath || '/';
 
@@ -24,36 +29,35 @@ function PaymentResultLogic() {
             // Use setTimeout to avoid synchronous setState
             setTimeout(() => {
                 setStatus('success');
-                setMessage("¡Pago Exitoso! Volviendo a tu aventura...");
+                setMessage(lang === 'ES' ? "¡Pago Exitoso! Volviendo a tu aventura..." : "Payment Successful! Returning to your adventure...");
 
                 // 2. Build URL with params that BookingModal will read
                 const finalUrl = `${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_status=approved&ref=${orderId}`;
-                console.log("Payment Result - Final Redirect URL:", finalUrl); // DEBUG
+                console.log("Payment Result - Final Redirect URL:", finalUrl); 
 
-                // 3. Redirect after delay using window.location.href for absolute navigation
+                // 3. Redirect after delay
                 setTimeout(() => {
-                    localStorage.removeItem('lastTourPath'); // Clean up
+                    localStorage.removeItem('lastTourPath'); 
                     window.location.href = finalUrl;
-                }, 2500); // 2.5s delay to see the success message
+                }, 2500); 
             }, 0);
 
         } else {
             setTimeout(() => {
                 setStatus('error');
-                setMessage("El pago no fue completado. Redirigiendo...");
-                console.log("Payment Result - txStatus not approved:", txStatus); // DEBUG
+                setMessage(lang === 'ES' ? "El pago no fue completado. Redirigiendo..." : "Payment was not completed. Redirecting...");
+                console.log("Payment Result - txStatus not approved:", txStatus); 
 
-                // Redirect even on error so BookingModal can show the "Safe Reservation" UI
                 const finalUrl = `${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_status=failed&ref=${orderId || 'N/A'}`;
                 
                 setTimeout(() => {
-                    localStorage.removeItem('lastTourPath'); // Clean up
+                    localStorage.removeItem('lastTourPath'); 
                     window.location.href = finalUrl;
-                }, 3000); // 3s delay to read the error message
+                }, 3000); 
             }, 0);
         }
 
-    }, [searchParams, router]);
+    }, [searchParams, router, lang]); // Added lang dependency
 
     return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-6">
@@ -78,7 +82,7 @@ function PaymentResultLogic() {
                 <h2 className="text-xl font-bold text-foreground tracking-tight">{message}</h2>
                 {status === 'error' && (
                     <button onClick={() => router.back()} className="text-xs underline text-muted hover:text-foreground mt-4">
-                        Volver a intentar
+                        {lang === 'ES' ? "Volver a intentar" : "Try again"}
                     </button>
                 )}
             </div>

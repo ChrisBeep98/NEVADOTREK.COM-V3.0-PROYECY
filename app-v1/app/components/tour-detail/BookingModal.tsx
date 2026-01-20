@@ -6,8 +6,7 @@ import { useGSAP } from '@gsap/react';
 import { X, ChevronLeft, ChevronRight, Users, Crown, Calendar as CalendarIcon, Plus, Minus, User, CreditCard, Loader2, CheckCircle, ExternalLink, RefreshCw, Clock, FileCheck, MessageCircle, ShieldCheck, Info } from 'lucide-react';
 import { Tour, Departure } from '../../types/api';
 import { useLanguage } from '../../context/LanguageContext';
-import BoldCheckout from '../ui/BoldCheckout';
-import { createPrivateBooking, joinPublicBooking, getStagingTestTour, getTestTourDepartures, getBookingStatus } from '../../services/nevado-api';
+import { createPrivateBooking, joinPublicBooking, getStagingTestTour, getTestTourDepartures, getBookingStatus, initBoldPayment } from '../../services/nevado-api';
 import { toast } from 'sonner';
 
 interface BookingModalProps {
@@ -175,15 +174,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             </div>
 
                             {/* Contact Info Card */}
-                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                        <MessageCircle className="w-5 h-5 text-white/40" />
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <MessageCircle className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
-                                    <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                    <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
                                         {t.booking_modal.success.success_contact}
                                     </p>
                                 </div>
@@ -191,12 +190,24 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                         </div>
                     ), { id: 'success-toast-stack', duration: Infinity });
                 }
-            } else if (data.paymentStatus === 'rejected' || data.paymentStatus === 'failed' || data.paymentStatus === 'cancelled') {
-                // Handle failed payment BUT KEEP BOOKING (Do NOT close waiting screen)
+            } else if (data.paymentStatus === 'rejected' || data.paymentStatus === 'failed' || data.paymentStatus === 'cancelled' || data.paymentStatus === 'expired' || data.paymentStatus === 'voided') {
+                // Handle failed/expired payment BUT KEEP BOOKING (Do NOT close waiting screen)
                 setPaymentRejected(true);
                 setPaymentSuccess(false);
                 
                 toast.dismiss('payment-status-stack');
+                
+                // Determine specific messages based on status
+                let errorTitle = t.booking_modal.payment_rejected.title;
+                let errorDesc = t.booking_modal.payment_rejected.desc;
+
+                if (data.paymentStatus === 'expired') {
+                    errorTitle = t.booking_modal.payment_rejected.title_expired;
+                    errorDesc = t.booking_modal.payment_rejected.desc_expired;
+                } else if (data.paymentStatus === 'voided') {
+                    errorTitle = t.booking_modal.payment_rejected.title_voided;
+                    errorDesc = t.booking_modal.payment_rejected.desc_voided;
+                }
                 
                 // Show WARNING toast stack (Persistent) - Desktop Only
                 if (window.innerWidth >= 768) {
@@ -210,22 +221,22 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Pago Rechazado</p>
-                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">La transacción no fue exitosa.</p>
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{errorTitle}</p>
+                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">{errorDesc}</p>
                                 </div>
                             </div>
 
                             {/* Reassurance Info Card */}
-                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                        <FileCheck className="w-5 h-5 text-white/40" />
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <MessageCircle className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-white leading-tight">Tu Reserva Existe</p>
-                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
-                                        Ya tenemos tus datos. Nos comunicaremos contigo lo antes posible para gestionar el pago.
+                                    <p className="text-sm font-bold text-white leading-tight">{t.booking_modal.safe_reservation.title}</p>
+                                    <p className="text-[11px] text-blue-50 leading-tight font-medium opacity-90 mt-0.5">
+                                        {t.booking_modal.safe_reservation.desc}
                                     </p>
                                 </div>
                             </div>
@@ -288,15 +299,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             </div>
 
                             {/* Contact Info Card */}
-                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                        <MessageCircle className="w-5 h-5 text-white/40" />
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <MessageCircle className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
-                                    <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                    <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
                                         {t.booking_modal.success.success_contact}
                                     </p>
                                 </div>
@@ -327,21 +338,21 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">Pago No Completado</p>
-                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">La transacción fue rechazada o cancelada.</p>
+                                    <p className="text-sm font-bold text-white mb-0.5 tracking-tight uppercase">{t.booking_modal.payment_rejected.title_failed}</p>
+                                    <p className="text-[11px] text-rose-50 leading-tight font-medium">{t.booking_modal.payment_rejected.desc_failed}</p>
                                 </div>
                             </div>
 
-                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                        <FileCheck className="w-5 h-5 text-white/40" />
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <MessageCircle className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-sm font-bold text-white leading-tight">Tu Reserva Está Segura</p>
-                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
-                                        No te preocupes, ya recibimos tus datos. Te contactaremos para finalizar tu reserva.
+                                    <p className="text-sm font-bold text-white leading-tight">{t.booking_modal.safe_reservation.title_redirect}</p>
+                                    <p className="text-[11px] text-blue-50 leading-tight font-medium opacity-90 mt-0.5">
+                                        {t.booking_modal.safe_reservation.desc_redirect}
                                     </p>
                                 </div>
                             </div>
@@ -508,9 +519,14 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                 setRealBookingId(response.bookingId);
             }
 
-            // 3. Redirect the pre-opened tab to the Bridge
-            if (bookingIdToUse) {
-                bridgeWindow.location.href = `/payment-bridge?bookingId=${bookingIdToUse}`;
+            // 3. Init Payment (Smart Link)
+            // Now we ask the backend for the payment URL directly
+            const paymentData = await initBoldPayment(bookingIdToUse);
+
+            if (paymentData && paymentData.paymentUrl) {
+                // REDIRECT the pre-opened tab to the official Bold Smart Link
+                bridgeWindow.location.href = paymentData.paymentUrl;
+                
                 setIsWaitingForPayment(true);
                 // Only show floating toast stack on Desktop
                 if (window.innerWidth >= 768) {
@@ -539,16 +555,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                             </div>
 
                             {/* Booking Info Card */}
-                            <div className="bg-slate-900/90 backdrop-blur-md text-white px-5 py-4 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4">
+                            <div className="bg-[#1E40AF] text-white px-5 py-4 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4">
                                 <div className="shrink-0">
-                                    <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                        <FileCheck className="w-5 h-5 text-white/40" />
+                                    <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                        <FileCheck className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
-                                    <p className="text-[11px] text-blue-100/60 leading-relaxed font-medium mt-0.5">
-                                        {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300">{bookingIdToUse}</span>. {t.booking_modal.waiting.dont_close}
+                                    <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
+                                        {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-200">{bookingIdToUse}</span>. {t.booking_modal.waiting.dont_close}
                                     </p>
                                 </div>
                             </div>
@@ -779,7 +795,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         {paymentSuccess 
                                                                             ? (lang === 'ES' ? 'Todo listo para la montaña' : 'Ready for the mountain') 
                                                                             : paymentRejected
-                                                                                ? (lang === 'ES' ? 'Transacción Fallida' : 'Transaction Failed')
+                                                                                ? t.booking_modal.safe_reservation.status_failed
                                                                                 : (lang === 'ES' ? 'Pago Pendiente' : 'Payment Pending')
                                                                         }
                                                                     </p>
@@ -824,15 +840,15 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     </div>
 
                                                                     {/* Contact Info Card (Mobile) */}
-                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-3 py-3 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                    <div className="bg-[#1E40AF] text-white px-3 py-3 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
-                                                                            <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                                                                <MessageCircle className="w-5 h-5 text-white/40" />
+                                                                            <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                                                                <MessageCircle className="w-5 h-5 text-white/80" />
                                                                             </div>
                                                                         </div>
                                                                         <div className="flex-1 text-left">
                                                                             <p className="text-sm font-bold text-white leading-tight">Próximos Pasos</p>
-                                                                            <p className="text-[11px] text-emerald-100/60 leading-relaxed font-medium mt-0.5">
+                                                                            <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
                                                                                 {t.booking_modal.success.success_contact}
                                                                             </p>
                                                                         </div>
@@ -863,16 +879,16 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                     </div>
 
                                                                     {/* Booking Detail Card (Mobile) */}
-                                                                    <div className="bg-slate-900/90 backdrop-blur-md text-white px-3 py-3 rounded-lg shadow-2xl border border-white/10 flex items-center gap-4 w-full">
+                                                                    <div className="bg-[#1E40AF] text-white px-3 py-3 rounded-lg shadow-2xl border-t border-white/20 flex items-center gap-4 w-full">
                                                                         <div className="shrink-0">
-                                                                            <div className="w-[59px] h-10 bg-white/5 rounded border border-white/5 flex items-center justify-center">
-                                                                                <FileCheck className="w-5 h-5 text-white/40" />
+                                                                            <div className="w-[59px] h-10 bg-white/10 rounded border border-white/10 flex items-center justify-center shadow-inner">
+                                                                                <FileCheck className="w-5 h-5 text-white/80" />
                                                                             </div>
                                                                         </div>
                                                                         <div className="flex-1 text-left">
                                                                             <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
-                                                                            <p className="text-[11px] text-blue-200/60 leading-relaxed font-medium mt-0.5">
-                                                                                {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-300">{realBookingId}</span>. {t.booking_modal.waiting.dont_close}
+                                                                            <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
+                                                                                {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-200">{realBookingId}</span>. {t.booking_modal.waiting.dont_close}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -952,23 +968,26 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
 
                                                                 <div className="h-px w-full bg-black/5 dark:bg-white/5" />
 
-                                                                {/* Actionable Amount */}
-                                                                <div className="flex justify-between items-end">
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <div className="flex items-center gap-1.5 group/tooltip relative">
-                                                                            <span className={`text-xs font-bold uppercase tracking-widest transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
-                                                                                {paymentSuccess ? (lang === 'ES' ? 'Pagado con éxito' : 'Successfully Paid') : t.booking_modal.confirmation.pay_now}
-                                                                            </span>
-                                                                            <Info className={`w-3 h-3 cursor-help transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400/40' : 'text-emerald-400/40'} hover:text-emerald-400`} />
-                                                                            
-                                                                            <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
-                                                                                {t.booking_modal.confirmation.tooltip_pay_now}
-                                                                                <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <p className="text-[10px] font-mono text-white/30">{paymentRef || realBookingId || '...'}</p>
-                                                                    </div>
-                                                                    <span className={`text-xl md:text-3xl font-bold font-mono tracking-tighter leading-none transition-all duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
+                                                {/* Actionable Amount */}
+                                                <div className="flex justify-between items-center">
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-1.5 group/tooltip relative">
+                                                            <span className={`text-xs font-bold uppercase tracking-widest transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
+                                                                {paymentSuccess ? (lang === 'ES' ? 'Pagado con éxito' : 'Successfully Paid') : t.booking_modal.confirmation.pay_now}
+                                                            </span>
+                                                            <Info className={`w-3 h-3 cursor-help transition-colors duration-700 ${paymentSuccess ? 'text-emerald-400/40' : 'text-emerald-400/40'} hover:text-emerald-400`} />
+                                                            
+                                                            <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-lg text-[10px] leading-relaxed text-white font-medium shadow-xl opacity-0 translate-y-1 pointer-events-none group-hover/tooltip:opacity-100 group-hover/tooltip:translate-y-0 transition-all z-50">
+                                                                {t.booking_modal.confirmation.tooltip_pay_now}
+                                                                <div className="absolute top-full left-4 -translate-y-px border-8 border-transparent border-t-slate-900/95"></div>
+                                                            </div>
+                                                        </div>
+                                                        <span className="text-[10px] text-muted max-w-[140px] leading-tight">
+                                                            {lang === 'ES' ? 'Cubres el 30% del valor total + costos de gestión.' : 'Covers 30% deposit + management fees.'}
+                                                        </span>
+                                                        <p className="text-[10px] font-mono text-white/30">{paymentRef || realBookingId || '...'}</p>
+                                                    </div>
+                                                    <span className={`text-xl md:text-3xl font-bold font-mono tracking-tighter leading-none transition-all duration-700 ${paymentSuccess ? 'text-emerald-400' : 'text-emerald-400'}`}>
                                                                         {formatMoney(((getPrice() * formData.pax) * 0.3) * 1.05)}
                                                                     </span>
                                                                 </div>
@@ -987,15 +1006,23 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                         <span>{lang === 'ES' ? 'VOLVER AL TOUR' : 'BACK TO TOUR'}</span>
                                                                     </button>
                                                                 ) : paymentRejected ? (
-                                                                    <a 
-                                                                        href={`https://wa.me/573103953530?text=${encodeURIComponent(`Hola Nevado Trek, intenté pagar mi reserva ${realBookingId} pero fue rechazada. Ayuda por favor.`)}`}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="h-12 min-h-[48px] w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
-                                                                    >
-                                                                        <MessageCircle className="w-4 h-4" />
-                                                                        <span>{lang === 'ES' ? 'SOLUCIONAR POR WHATSAPP' : 'SOLVE VIA WHATSAPP'}</span>
-                                                                    </a>
+                                                                    <div className="flex flex-col gap-2 w-full">
+                                                                        <a 
+                                                                            href={`https://wa.me/573103953530?text=${encodeURIComponent(t.booking_modal.actions.whatsapp_msg.replace('{id}', realBookingId || ''))}`}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="h-12 min-h-[48px] w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                        >
+                                                                            <MessageCircle className="w-4 h-4" />
+                                                                            <span>{t.booking_modal.actions.solve_whatsapp}</span>
+                                                                        </a>
+                                                                        <button 
+                                                                            onClick={handlePay}
+                                                                            className="h-10 w-full bg-transparent text-muted hover:text-foreground text-[10px] font-bold uppercase tracking-[0.2em] transition-colors underline underline-offset-4 decoration-muted/30 hover:decoration-foreground"
+                                                                        >
+                                                                            {t.booking_modal.actions.retry_payment}
+                                                                        </button>
+                                                                    </div>
                                                                 ) : (
                                                                     <>
                                                                         <a 
@@ -1032,7 +1059,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                             )}
                                                             {paymentRejected && (
                                                                 <p className="text-[10px] text-center text-muted">
-                                                                    Tu cupo está reservado. Nuestro equipo te contactará en breve.
+                                                                    {t.booking_modal.safe_reservation.footer_msg}
                                                                 </p>
                                                             )}
                                                         </div>
@@ -1110,8 +1137,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                     <h3 className="text-2xl font-bold text-foreground tracking-tight">{t.booking_modal.info_title}</h3>
                                     <div className="grid gap-8">
                                         <div className="relative">
-                                            <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.name_label}</label>
+                                            <label htmlFor="pax-name" className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.name_label}</label>
                                             <input 
+                                                id="pax-name"
+                                                name="name"
                                                 value={formData.name} 
                                                 onChange={e => setFormData({...formData, name: e.target.value})} 
                                                 className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
@@ -1121,8 +1150,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="relative">
-                                                <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.email_label}</label>
+                                                <label htmlFor="pax-email" className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.email_label}</label>
                                                 <input 
+                                                    id="pax-email"
+                                                    name="email"
                                                     value={formData.email} 
                                                     onChange={e => setFormData({...formData, email: e.target.value})} 
                                                     className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
@@ -1134,16 +1165,18 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             <div className="relative">
                                                 <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.pax_count_label}</label>
                                                 <div className="flex items-center justify-between border border-slate-200 dark:border-white/10 rounded-lg h-14 px-4 bg-white/40 dark:bg-white/5">
-                                                    <button onClick={() => updatePax(-1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Minus className="w-4 h-4" /></button>
+                                                    <button type="button" onClick={() => updatePax(-1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Minus className="w-4 h-4" /></button>
                                                     <span className="text-xl font-bold tabular-nums text-foreground">{formData.pax}</span>
-                                                    <button onClick={() => updatePax(1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Plus className="w-4 h-4" /></button>
+                                                    <button type="button" onClick={() => updatePax(1)} className="w-10 h-10 flex items-center justify-center text-muted hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md transition-all"><Plus className="w-4 h-4" /></button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             <div className="relative">
-                                                <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.phone_label}</label>
+                                                <label htmlFor="pax-phone" className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.phone_label}</label>
                                                 <input 
+                                                    id="pax-phone"
+                                                    name="phone"
                                                     value={formData.phone} 
                                                     onChange={e => setFormData({...formData, phone: e.target.value})} 
                                                     className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
@@ -1153,8 +1186,10 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                 />
                                             </div>
                                             <div className="relative">
-                                                <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.document_label}</label>
+                                                <label htmlFor="pax-document" className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.document_label}</label>
                                                 <input 
+                                                    id="pax-document"
+                                                    name="document"
                                                     value={formData.document} 
                                                     onChange={e => setFormData({...formData, document: e.target.value})} 
                                                     className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg h-14 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40" 
@@ -1163,8 +1198,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                             </div>
                                         </div>
                                         <div className="relative">
-                                            <label className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.notes_label}</label>
-                                            <textarea value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
+                                            <label htmlFor="pax-note" className="text-[11px] text-muted font-medium mb-2 block">{t.booking_modal.form.notes_label}</label>
+                                            <textarea id="pax-note" name="note" value={formData.note} onChange={e => setFormData({...formData, note: e.target.value})} className="w-full bg-white/40 dark:bg-white/5 border border-slate-200 dark:border-white/10 focus:border-cyan-500/50 rounded-lg py-4 px-5 text-base text-foreground transition-all outline-none placeholder:text-muted/40 resize-none h-32" placeholder={t.booking_modal.form.notes_placeholder} />
                                         </div>
                                     </div>
                                 </div>
