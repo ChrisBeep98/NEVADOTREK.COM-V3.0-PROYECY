@@ -236,6 +236,7 @@
       "auto_update": "Esta ventana se actualizará automáticamente una vez confirmemos tu transacción.",
       "processing_payment": "Estamos procesando tu pago en una nueva pestaña.",
       "booking_created": "Tu reserva ya fue creada con el ID",
+      "booking_details": "Detalles de Reserva",
       "dont_close": "Por favor no cierres esta ventana hasta confirmar.",
       "payment_tab_closed": "¿Se cerró la pestaña de pago?",
       "syncing_bold": "Sincronizando con Bold",

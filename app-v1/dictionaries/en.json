@@ -236,6 +236,7 @@
       "auto_update": "This window will update automatically once we confirm your transaction.",
       "processing_payment": "We are processing your payment in a new tab.",
       "booking_created": "Your booking has been created with ID",
+      "booking_details": "Booking Details",
       "dont_close": "Please do not close this window until confirmed.",
       "payment_tab_closed": "Did the payment tab close?",
       "syncing_bold": "Syncing with Bold",

@@ -561,8 +561,8 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                         <FileCheck className="w-5 h-5 text-white/80" />
                                     </div>
                                 </div>
-                                <div className="flex-1">
-                                    <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
+                                <div className="flex-1 text-left">
+                                    <p className="text-sm font-bold text-white leading-tight">{t.booking_modal.waiting.booking_details}</p>
                                     <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
                                         {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-200">{bookingIdToUse}</span>. {t.booking_modal.waiting.dont_close}
                                     </p>
@@ -886,7 +886,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                             </div>
                                                                         </div>
                                                                         <div className="flex-1 text-left">
-                                                                            <p className="text-sm font-bold text-white leading-tight">Detalles de Reserva</p>
+                                                                            <p className="text-sm font-bold text-white leading-tight">{t.booking_modal.waiting.booking_details}</p>
                                                                             <p className="text-[11px] text-blue-50 leading-relaxed font-medium mt-0.5 opacity-90">
                                                                                 {t.booking_modal.waiting.booking_created} <span className="font-mono text-blue-200">{realBookingId}</span>. {t.booking_modal.waiting.dont_close}
                                                                             </p>
