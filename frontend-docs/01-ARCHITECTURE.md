@@ -2,6 +2,7 @@
 
 > **Last Updated:** 2026-01-19
 > **Project:** Nevado Trek Frontend (App v1)
+> **Environment:** 🟢 PRODUCTION
 
 ## 1. Core Technology Stack
 - **Framework:** Next.js 16 (App Router)
@@ -22,17 +23,19 @@ We use a high-end "Liquid Glass" aesthetic characterized by:
 
 ### 2.2 Component Strategy
 - **Server Components (RSC):** Used for initial data fetching (`page.tsx`) to ensure SEO and performance.
-- **Client Components (`'use client'`):** Used for interactive elements like the `BookingModal` (92vw width, max-width 1520px), `BoldCheckout`, and GSAP animations.
+- **Client Components (`'use client'`):** Used for interactive elements like the `BookingModal` (92vw width, max-width 1520px) and GSAP animations.
 - **Defensive Rendering:** Components use optional chaining and fallbacks to handle incomplete API data gracefully.
 
-### 2.3 Hybrid API Architecture
-We employ a split API strategy to maintain content reliability while testing new features:
-- **Production API (Content):** Fetches tour content, prices, and departures from the production database.
-- **Staging API (Transactions):** Handles secure booking creation and payment initialization (Bold Sandbox).
+### 2.3 API Architecture (Production)
+We employ a centralized API strategy pointing to the Production Environment:
+- **Base URL:** `https://api-wgfhwjbpva-uc.a.run.app/public`
+- **Responsibilities:**
+    - **Content:** Fetches tour content, prices, and departures from the live database.
+    - **Transactions:** Handles real booking creation and payment initialization via Bold Smart Links.
 
-### 2.4 Development Guards (Testing Mode)
-- **Force Staging Mode:** When running on `localhost`, the system automatically overrides any Production Tour ID with `test-tour-001`. This ensures the Staging Backend triggers Telegram/Instagram notifications correctly by finding a valid tour record.
+### 2.4 Production Guards
 - **Phone Sanitization:** Automatic removal of spaces and non-numeric characters from phone numbers to comply with messaging API standards.
+- **Error Handling:** Robust error catching for API failures with user-friendly Toast notifications.
 
 ### 2.5 Form Persistence
 The `BookingModal` implements a "Smart Form" pattern:
@@ -40,5 +43,5 @@ The `BookingModal` implements a "Smart Form" pattern:
 - **Auto-Formatting:** Phone numbers are automatically converted to international format (`+57`) before submission.
 
 ## 3. Performance & Stability
-- **Build Resilience:** Google Fonts are handled with system fallbacks to prevent build failures during network instability.
-- **Script Injection:** Third-party scripts (Bold) are injected programmatically with strict DOM cleanup to avoid race conditions and duplicate elements.
+- **Build Resilience:** Google Fonts are handled with system fallbacks.
+- **Smart Links:** Payments are handled via direct redirection to `checkout.bold.co`, eliminating risks associated with embedded scripts/widgets.
