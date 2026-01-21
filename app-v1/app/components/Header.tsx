@@ -126,7 +126,7 @@ export default function Header() {
                         href="https://wa.me/573147995791"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hidden md:flex group border border-white/20 items-center justify-between pl-4 pr-1.75 py-2.5 rounded-full hover:bg-white hover:text-slate-950 transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105 header-reveal"
+                        className="hidden md:flex group border border-white/20 items-center justify-between pl-4 pr-1.75 py-2.5 rounded-full hover:bg-white hover:text-slate-950 transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105 active:scale-95 header-reveal"
                     >
                         <span className="text-sm">{t.common.contact}</span>
                         <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 group-hover:bg-blue-500 group-hover:text-white transition-all shrink-0">

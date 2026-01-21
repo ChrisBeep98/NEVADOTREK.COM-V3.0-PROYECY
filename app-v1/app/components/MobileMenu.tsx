@@ -155,7 +155,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                         href="https://wa.me/573147995791"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between border border-border pl-4 pr-1.5 py-2 rounded-full hover:bg-foreground hover:text-background transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105"
+                        className="group flex items-center justify-between border border-border pl-4 pr-1.5 py-2 rounded-full hover:bg-foreground hover:text-background transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105 active:scale-95"
                     >
                         <span className="text-sm">{t.common.contact}</span>
                         <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all shrink-0">
