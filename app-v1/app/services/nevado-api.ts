@@ -153,11 +153,16 @@ export async function getBookingStatus(bookingId: string): Promise<{ status: str
 
 /**
  * Fetches list of active tours.
+ * @param forceRefresh If true, adds a timestamp to bypass CDN/Browser cache.
  */
-export async function getTours(): Promise<Tour[]> {
+export async function getTours(forceRefresh = false): Promise<Tour[]> {
     try {
-        const response = await fetchWithRetry(`${API_BASE_URL}/tours`, {
-            next: { revalidate: 300 } // 5 minutes cache
+        const url = forceRefresh 
+            ? `${API_BASE_URL}/tours?t=${Date.now()}` 
+            : `${API_BASE_URL}/tours`;
+
+        const response = await fetchWithRetry(url, {
+            next: { revalidate: forceRefresh ? 0 : 300 } 
         });
 
         if (!response.ok) {

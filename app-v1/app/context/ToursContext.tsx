@@ -17,9 +17,11 @@ export function ToursProvider({ children, initialTours = [] }: { children: React
     const [loading, setLoading] = useState(initialTours.length === 0);
 
     const refreshTours = async () => {
-        setLoading(true);
+        // Don't set loading to true if we already have data (silent update)
+        if (tours.length === 0) setLoading(true);
         try {
-            const data = await getTours();
+            // Force refresh from API to bypass cache
+            const data = await getTours(true);
             setTours(data);
         } catch (error) {
             console.error("Error refreshing tours:", error);
@@ -28,13 +30,12 @@ export function ToursProvider({ children, initialTours = [] }: { children: React
         }
     };
 
-    // If we didn't get initial tours, fetch them
+    // Always fetch fresh data on mount to ensure client has latest version,
+    // even if initialTours (static) were provided.
     useEffect(() => {
-        if (initialTours.length === 0) {
-            refreshTours();
-        }
+        refreshTours();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialTours.length]);
+    }, []);
 
     return (
         <ToursContext.Provider value={{ tours, loading, refreshTours }}>
