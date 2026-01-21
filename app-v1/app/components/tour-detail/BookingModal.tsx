@@ -236,6 +236,13 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
     
     const publicDepartures = departures.filter(d => (d.maxPax - (d.currentPax || 0)) > 0);
 
+    // Auto-switch to Private if no public departures available
+    useEffect(() => {
+        if (isOpen && publicDepartures.length === 0) {
+            setMode('private');
+        }
+    }, [isOpen, publicDepartures.length]);
+
     // Check for payment return (Vanilla JS for safety - Legacy Redirect Support)
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -1020,42 +1027,76 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                 <>
                                     {step === 0 && (
                                 <div className="space-y-8 animate-in fade-in duration-500">
-                                    <div className="flex gap-8 border-b border-border max-w-fit">
-                                        <button onClick={() => setMode('public')} className={`pb-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative flex items-center gap-2 ${mode === 'public' ? 'text-foreground' : 'text-muted hover:text-foreground/40'}`}>
-                                            <Users className={`w-3 h-3 transition-transform ${mode === 'public' ? 'scale-110' : 'scale-100 opacity-50'}`} />
+                                    <div className="flex gap-3">
+                                        <button 
+                                            onClick={() => setMode('public')} 
+                                            className={`px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 rounded-full flex items-center gap-2.5 border ${
+                                                mode === 'public' 
+                                                    ? 'bg-white dark:bg-white/10 text-foreground border-transparent shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none scale-105' 
+                                                    : 'bg-transparent text-muted border-slate-200 dark:border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/5'
+                                            }`}
+                                        >
+                                            <Users className={`w-3.5 h-3.5 transition-colors ${mode === 'public' ? 'text-cyan-500' : 'text-muted'}`} />
                                             <span>{t.booking_modal.mode_group}</span>
-                                            {mode === 'public' && <div className="absolute bottom-0 left-0 w-full h-px bg-foreground"></div>}
                                         </button>
-                                        <button onClick={() => setMode('private')} className={`pb-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative flex items-center gap-2 ${mode === 'private' ? 'text-foreground' : 'text-muted hover:text-foreground/40'}`}>
-                                            <Crown className={`w-3 h-3 transition-transform ${mode === 'private' ? 'scale-110' : 'scale-100 opacity-50'}`} />
+                                        <button 
+                                            onClick={() => setMode('private')} 
+                                            className={`px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 rounded-full flex items-center gap-2.5 border ${
+                                                mode === 'private' 
+                                                    ? 'bg-white dark:bg-white/10 text-foreground border-transparent shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none scale-105' 
+                                                    : 'bg-transparent text-muted border-slate-200 dark:border-white/10 hover:border-amber-400/50 hover:bg-amber-400/5'
+                                            }`}
+                                        >
+                                            <Crown className={`w-3.5 h-3.5 transition-colors ${mode === 'private' ? 'text-amber-400' : 'text-muted'}`} />
                                             <span>{t.booking_modal.mode_private}</span>
-                                            {mode === 'private' && <div className="absolute bottom-0 left-0 w-full h-px bg-foreground"></div>}
                                         </button>
                                     </div>
 
                                     {mode === 'public' ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-2 md:gap-3">
-                                    {publicDepartures.map((dep) => {
-                                                const isSelected = selectedDeparture?.departureId === dep.departureId;
-                                                const date = new Date(dep.date._seconds * 1000);
-                                                const price = effectiveTour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || effectiveTour.pricingTiers[0].priceCOP;
-                                                return (
-                                                    <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-white/40 dark:bg-white/5 text-foreground border border-slate-200 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
-                                                        <div className="flex items-center gap-1.5 mb-2">
-                                                            <CalendarIcon className={`w-2.5 h-2.5 ${isSelected ? 'opacity-60' : 'text-muted'}`} />
-                                                            <span className={`text-[9px] font-bold uppercase tracking-wider ${isSelected ? 'opacity-60' : 'text-muted'}`}>{date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'short' }).toUpperCase()}</span>
-                                                        </div>
-                                                        <span className="text-3xl font-bold leading-none tracking-tighter mb-1">{date.getDate()}</span>
-                                                        <span className={`text-[9px] font-bold uppercase tracking-widest mb-3 ${isSelected ? 'text-background/60' : 'text-emerald-400'}`}>
-                                                            {t.booking_modal.slots_left.replace('{count}', (dep.maxPax - (dep.currentPax || 0)).toString())}
-                                                        </span>
-                                                        <span className="text-xs font-bold font-mono tracking-tighter mt-auto">{formatMoney(price)}</span>
-                                                    </button>
-                                                )
-                                            })}
-                                        </div>
+                                        publicDepartures.length > 0 ? (
+                                            <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-2 md:gap-3">
+                                                {publicDepartures.map((dep) => {
+                                                    const isSelected = selectedDeparture?.departureId === dep.departureId;
+                                                    const date = new Date(dep.date._seconds * 1000);
+                                                    const price = effectiveTour.pricingTiers.find(t => (dep.currentPax + 1) >= t.minPax && (dep.currentPax + 1) <= t.maxPax)?.priceCOP || effectiveTour.pricingTiers[0].priceCOP;
+                                                    return (
+                                                        <button key={dep.departureId} onClick={() => setSelectedDeparture(dep)} className={`flex flex-col p-4 md:p-5 transition-all duration-300 text-left rounded-xl ${isSelected ? 'bg-foreground text-background shadow-lg scale-[1.02]' : 'bg-white/40 dark:bg-white/5 text-foreground border border-slate-200 dark:border-white/10 md:border-transparent hover:border-cyan-500/30 hover:bg-white/10'}`}>
+                                                            <div className="flex items-center gap-1.5 mb-2">
+                                                                <CalendarIcon className={`w-2.5 h-2.5 ${isSelected ? 'opacity-60' : 'text-muted'}`} />
+                                                                <span className={`text-[9px] font-bold uppercase tracking-wider ${isSelected ? 'opacity-60' : 'text-muted'}`}>{date.toLocaleDateString(lang === 'ES' ? 'es-ES' : 'en-US', { month: 'short' }).toUpperCase()}</span>
+                                                            </div>
+                                                            <span className="text-3xl font-bold leading-none tracking-tighter mb-1">{date.getDate()}</span>
+                                                            <span className={`text-[9px] font-bold uppercase tracking-widest mb-3 ${isSelected ? 'text-background/60' : 'text-emerald-400'}`}>
+                                                                {t.booking_modal.slots_left.replace('{count}', (dep.maxPax - (dep.currentPax || 0)).toString())}
+                                                            </span>
+                                                            <span className="text-xs font-bold font-mono tracking-tighter mt-auto">{formatMoney(price)}</span>
+                                                        </button>
+                                                    )
+                                                })}
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-slate-200 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-white/5 text-center">
+                                                <div className="w-12 h-12 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-4">
+                                                    <CalendarIcon className="w-5 h-5 text-muted" />
+                                                </div>
+                                                <h4 className="text-sm font-bold text-foreground uppercase tracking-wider mb-2">
+                                                    {lang === 'ES' ? 'Sin fechas programadas' : 'No scheduled dates'}
+                                                </h4>
+                                                <p className="text-[11px] text-muted max-w-xs mb-6 leading-relaxed">
+                                                    {lang === 'ES' 
+                                                        ? 'Por el momento no tenemos salidas grupales activas para esta ruta. Te recomendamos la opción privada.'
+                                                        : 'We currently have no active group departures for this route. We recommend the private option.'}
+                                                </p>
+                                                <button 
+                                                    onClick={() => setMode('private')}
+                                                    className="px-6 py-2.5 bg-foreground text-background rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                                >
+                                                    {lang === 'ES' ? 'Reservar Privado' : 'Book Private'}
+                                                </button>
+                                            </div>
+                                        )
                                     ) : (
-                                        <div className="max-w-md animate-in fade-in duration-500">
+                                        <div className="max-w-md">
                                             <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-4">
                                                 <span className="text-xl font-bold text-foreground tracking-tight uppercase tabular-nums">{getMonthName(viewDate)}</span>
                                                 <div className="flex items-center bg-surface border border-border rounded-lg p-0.5 shadow-sm">
