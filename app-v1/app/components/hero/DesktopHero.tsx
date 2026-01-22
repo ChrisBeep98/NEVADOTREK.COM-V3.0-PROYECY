@@ -281,7 +281,7 @@ export default function DesktopHero() {
                     ref={contentGroupRef} 
                     className="relative z-[70] flex flex-col justify-center items-start md:items-center text-left md:text-center px-3 md:px-4 w-full"
                 >
-                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-4 md:mb-2 w-full">
+                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-bold italic text-white leading-[0.9] tracking-tighter mix-blend-overlay drop-shadow-lg mb-4 md:mb-2 w-full">
                         {/* Mobile: Stacked | Desktop: Inline/Flex */}
                         <div className="flex justify-start md:justify-center gap-[0.05em] flex-wrap overflow-hidden py-1 md:py-2">
                             {t.hero.message.title_line1.split("").map((char, i) => (
