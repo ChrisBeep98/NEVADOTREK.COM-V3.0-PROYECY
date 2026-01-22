@@ -181,44 +181,44 @@ export default function DesktopHero() {
                     
                     {/* Background Layers (Slowest, smallest, lowest opacity) */}
                     <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '180s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[45vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[40vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15" style={{ animationDuration: '200s', animationDelay: '-80s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[40vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[35vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25" style={{ animationDuration: '160s', animationDelay: '-40s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[50vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[44vw] h-auto object-contain" />
                     </div>
 
                     {/* Mid Layers (Medium speed, medium opacity) */}
                     <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '140s', animationDelay: '-25s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[35vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[31vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '120s', animationDelay: '-65s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[38vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[34vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35" style={{ animationDuration: '130s', animationDelay: '-15s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[30vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[26vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45" style={{ animationDuration: '110s', animationDelay: '-95s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[42vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[37vw] h-auto object-contain" />
                     </div>
 
                     {/* Foreground Layers (Fastest, brightest, sharpest) */}
                     <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '90s', animationDelay: '-35s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[33vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[29vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60" style={{ animationDuration: '80s', animationDelay: '-55s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[28vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[25vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85" style={{ animationDuration: '70s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[36vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[32vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90" style={{ animationDuration: '60s', animationDelay: '-85s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[31vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[27vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '150s', animationDelay: '-110s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[48vw] h-auto object-contain" />
+                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[42vw] h-auto object-contain" />
                     </div>
                     
                     <style jsx>{`
