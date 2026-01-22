@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { Aperture, ArrowRight, ChevronDown, Radio } from 'lucide-react';
-import Header from '../Header';
+import { ArrowRight, MountainSnow, Compass, Thermometer, Wind } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Link from 'next/link';
 
@@ -15,293 +14,235 @@ const VIDEO_URL = "https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/6
 
 export default function DesktopHero() {
     const { t } = useLanguage();
-
-    const monolithRef = useRef<HTMLDivElement>(null);
-    const innerContentRef = useRef<HTMLDivElement>(null);
-    const textFrontRef = useRef<HTMLHeadingElement>(null);
-    const statusRef = useRef<HTMLSpanElement>(null);
-    const scrollRingRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const heroSectionRef = useRef<HTMLElement>(null);
+    
     const containerRef = useRef<HTMLDivElement>(null);
-    const liveIndicatorRef = useRef<HTMLDivElement>(null);
-    const rightRailRef = useRef<HTMLDivElement>(null);
+    const heroSectionRef = useRef<HTMLElement>(null);
+    const contentGroupRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
-    useEffect(() => {
-        const msgs = [`${t.hero.status.alt}: 4500M`, `${t.hero.status.temp}: -15C`, `${t.hero.status.wind}: 40KT`, `${t.hero.status.o2}: 88%`];
-        if (statusRef.current) statusRef.current.innerText = msgs[0];
-        let i = 0;
-        const interval = setInterval(() => {
-            i = (i + 1) % msgs.length;
-            if (statusRef.current) statusRef.current.innerText = msgs[i];
-        }, 3000);
-        return () => clearInterval(interval);
-    }, [t.hero.status]);
-
-    useEffect(() => {
-        if (videoRef.current) videoRef.current.play().catch(() => {});
-    }, []);
+    const [weather] = useState({ temp: -5, wind: 12 });
 
     useGSAP(() => {
-        const monolith = monolithRef.current;
-        const inner = innerContentRef.current;
-        const textFront = textFrontRef.current;
-        const liveIndicator = liveIndicatorRef.current;
+        const tl = gsap.timeline();
 
-        if (!monolith || !inner || !textFront) return;
-
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-
-        const startScaleX = 0.28;
-        const startScaleY = 0.65;
-
-        // 1. Subtle Cinematic Entry (Optimized)
-        // We set the scale immediately to match the layout requirements.
-        // Then we just fade it in with a slight vertical drift.
-        // This avoids heavy scaling operations during the critical first render.
-        gsap.set(monolith, { scaleX: startScaleX, scaleY: startScaleY });
-
-        gsap.fromTo(monolith,
-            { 
-                opacity: 0, 
-                y: 40,
-                force3D: true
-            },
-            { 
-                opacity: 1, 
-                y: 0, 
-                duration: 1.8, 
-                ease: "power2.out" 
-            }
+        tl.fromTo(videoRef.current, 
+            { scale: 1.1, filter: "brightness(0)" },
+            { scale: 1.05, filter: "brightness(1)", duration: 2, ease: "power2.out" }
         );
 
-        // 2. Monolith UI Details Reveal (REC & Info)
-        // Subtle fade-in for the technical details inside/around the monolith
-        const uiTargets: (string | HTMLDivElement)[] = [".monolith-ui"];
-        if (liveIndicator) uiTargets.push(liveIndicator);
-        
-        gsap.fromTo(uiTargets,
-            { opacity: 0, y: 10 },
-            { opacity: 1, y: 0, duration: 1, delay: 0.5, stagger: 0.2, ease: "power2.out" }
-        );
+        tl.from(".corner-ui", {
+            y: -20,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.1,
+            ease: "power3.out"
+        }, "-=1.5");
 
-        const tl = gsap.timeline({
+        tl.from(".hero-char", {
+            y: 100,
+            opacity: 0,
+            rotateX: -90,
+            stagger: 0.03,
+            duration: 1.2,
+            ease: "expo.out"
+        }, "-=1");
+
+        tl.from(".hero-meta-line", { scaleY: 0, transformOrigin: "top", duration: 0.8, ease: "power3.inOut" }, "-=0.8");
+        tl.from(".hero-tagline", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
+        tl.from(".hero-btn", { y: 20, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6");
+
+        gsap.to(contentGroupRef.current, {
+            y: -150,
+            ease: "none",
             scrollTrigger: {
                 trigger: heroSectionRef.current,
                 start: "top top",
-                end: "+=150%",
-                pin: true,
-                scrub: 0.5,
-                fastScrollEnd: true,
-                preventOverlaps: true
+                end: "bottom top",
+                scrub: true
             }
         });
 
-        tl.fromTo(monolith,
-            { scaleX: startScaleX, scaleY: startScaleY, borderRadius: "4px" },
-            { scaleX: 1, scaleY: 1, borderRadius: "0px", ease: "none", duration: 1 },
-            0
-        );
-
-        tl.fromTo(inner,
-            { scaleX: 1 / startScaleX, scaleY: 1 / startScaleY },
-            { scaleX: 1, scaleY: 1, ease: "none", duration: 1 },
-            0
-        );
-
-        const initialMarginX = (w * (1 - startScaleX)) / 2;
-        const initialMarginY = (h * (1 - startScaleY)) / 2;
-
-        // Animate Live Indicator to corner
-        if (liveIndicator) {
-            tl.fromTo(liveIndicator,
-                { right: "36%", top: "18%" },
-                { right: "1.5rem", top: "1.5rem", ease: "none", duration: 1 },
-                0
-            );
-        }
-
-        // Animate TREK text to fade out to the right on scroll
-        tl.to(textFront, 
-            { x: 100, opacity: 0, ease: "power1.out", duration: 0.5 }, 
-            0
-        );
-
-        // Remove textFront from the quick fade-out group to let it ride the corner
-        tl.to([".monolith-ui", "#dynamic-message", ".scroll-indicator-container"], {
-            opacity: 0, y: -40, duration: 0.5
-        }, 0);
-
-        if (scrollRingRef.current) {
-            const chevrons = scrollRingRef.current.querySelectorAll('.scroll-chevron');
-            
-            const tl = gsap.timeline({ repeat: -1 });
-            
-            tl.fromTo(chevrons, 
-                { y: -10, opacity: 0 },
-                { y: 5, opacity: 1, duration: 0.8, stagger: 0.4, ease: "power2.out" }
-            ).to(chevrons, 
-                { y: 20, opacity: 0, duration: 0.8, stagger: 0.4, ease: "power2.in" },
-                "-=0.4"
-            );
-        }
-
-        // Right Rail (Minimalist Entry)
-        if (rightRailRef.current) {
-            gsap.fromTo(rightRailRef.current, 
-                { opacity: 0, height: 0 },
-                { opacity: 1, height: "auto", duration: 1.5, delay: 0.5, ease: "power3.out" }
-            );
-
-            // Subtle Color Flow
-            gsap.to(rightRailRef.current, {
-                filter: "hue-rotate(360deg) saturate(1.5)",
-                duration: 20,
-                repeat: -1,
-                ease: "none"
-            });
-        }
-
-        // HUD Entrance Animation
-        gsap.from(".hud-accent", {
-            scale: 0,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.15,
-            delay: 0.8,
-            ease: "back.out(2)",
-            clearProps: "all"
+        gsap.to(videoRef.current, {
+            y: 50,
+            scale: 1.15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: heroSectionRef.current,
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
         });
-
-        // TREK Text Reveal Animation (On Load) - Soft Fade & Lift
-        const trekTitle = textFrontRef.current?.querySelector("h1");
-        if (trekTitle) {
-            gsap.fromTo(trekTitle,
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1.4, ease: "power2.out", delay: 0.3 }
-            );
-        }
-
-        // New Masked Slide-Up Reveal for "Un Paraíso En Salento"
-        gsap.fromTo(".hero-text-reveal", 
-            { y: 60, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: "power3.out", delay: 0.9 }
-        );
-
-        // Tagline Reveal
-        gsap.fromTo(".hero-tagline-reveal",
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1.0 }
-        );
-
-        // Hero Button Reveal
-        gsap.fromTo(".hero-button-reveal",
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, ease: "power2.out", delay: 1.1 }
-        );
 
     }, { scope: containerRef });
 
     return (
-        <div ref={containerRef} className="hidden md:block relative bg-[#040918] text-slate-300 antialiased overflow-x-hidden">
-            
-
-            <header ref={heroSectionRef} className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-[#040918]">
-
-                <div className="absolute inset-0 z-0 select-none pointer-events-none">
-                    <video autoPlay muted loop playsInline className="w-full h-full object-cover scale-[1.1] blur-xl opacity-40">
+        <div ref={containerRef} className="hidden md:block bg-[#02040a] text-white relative h-screen z-40 overflow-x-clip">
+            <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center">
+                
+                <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
+                    <video 
+                        ref={videoRef}
+                        autoPlay muted loop playsInline 
+                        className="w-full h-full object-cover will-change-transform"
+                    >
                         <source src={VIDEO_URL} type="video/mp4" />
                     </video>
+                    <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none mix-blend-overlay"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 pointer-events-none"></div>
                 </div>
 
-                <div className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none">
-
-                    <div
-                        ref={monolithRef}
-                        className="relative w-full h-full overflow-hidden bg-slate-900 shadow-2xl transform-gpu will-change-transform"
-                        style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)' }}
-                    >
-                        <div ref={innerContentRef} className="absolute inset-0 w-full h-full transform-gpu will-change-transform">
-
-                            <video ref={videoRef} autoPlay muted loop playsInline className="w-full h-full object-cover">
-                                <source src={VIDEO_URL} type="video/mp4" />
-                            </video>
-
-                            <div className="monolith-ui absolute inset-0">
-                                <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-white/20"></div>
-                                <div className="absolute bottom-10 left-10 text-[10px] text-white font-mono tracking-widest uppercase opacity-60">Exp. 2025</div>
+                <div className="absolute inset-0 z-10 pointer-events-none p-[var(--spacing-frame)] flex flex-col justify-between overflow-hidden">
+                    <div className="flex justify-between items-start">
+                        <div className="corner-ui flex flex-col">
+                            <span className="text-[10px] font-mono tracking-[0.3em] text-cyan-400 uppercase mb-1">Est. 2025</span>
+                            <div className="flex items-center gap-2">
+                                <MountainSnow className="w-4 h-4 text-white/80" />
+                                <span className="text-xs font-bold tracking-widest text-white/90">THE ANDEAN EXPERIENCE</span>
+                            </div>
+                        </div>
+                        
+                        <div className="corner-ui flex items-center gap-6">
+                            <div className="flex items-center gap-2 text-xs font-mono text-white/70">
+                                <Thermometer className="w-3.5 h-3.5" />
+                                <span>{weather.temp}°C</span>
+                            </div>
+                            <div className="w-px h-3 bg-white/20"></div>
+                            <div className="flex items-center gap-2 text-xs font-mono text-white/70">
+                                <Wind className="w-3.5 h-3.5" />
+                                <span>{weather.wind}KT</span>
                             </div>
                         </div>
                     </div>
-
-                    {/* Live Indicator (Animated to corner) */}
-                    <div ref={liveIndicatorRef} className="absolute top-[18%] right-[36%] flex flex-col items-end gap-1 z-40 pointer-events-none mix-blend-overlay will-change-transform">
-                        <div className="flex items-center gap-2 px-2 py-1 rounded border border-white/10 bg-black/20 backdrop-blur-sm">
-                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
-                            <span className="text-[10px] font-mono font-bold tracking-widest text-white">REC</span>
-                        </div>
-                        <span ref={statusRef} className="text-[9px] font-mono text-white/50 tracking-widest uppercase text-right pr-2"></span>
-                    </div>
-
-                    <div ref={textFrontRef} style={{ right: "18%", bottom: "14.7%" }} className="absolute z-20 select-none pointer-events-none mix-blend-overlay will-change-transform flex flex-col items-end group">
-                        {/* Technical Frame Accents */}
-                        <div className="hud-accent absolute -top-6 -left-6 w-8 h-8 border-t border-l border-white/20" />
-                        
-                        <h1 className="text-[12vw] font-bold text-white leading-[0.8] tracking-tighter">
-                            TREK
-                        </h1>
-                        
-                        <div className="hud-accent flex items-center gap-4 mt-4">
-                            <div className="hud-accent w-8 h-[1px] bg-white/20" />
-                            <span className="text-[10px] font-mono tracking-[0.3em] text-white/50">
-                                4.6372° N // 75.5708° W
+                    
+                    <div className="flex justify-between items-end">
+                        <div className="corner-ui flex items-center gap-3 group">
+                            <div className="w-[1px] h-8 bg-gradient-to-b from-cyan-500 to-transparent group-hover:h-12 transition-all duration-500"></div>
+                            <span className="text-[10px] font-mono tracking-widest uppercase text-white/50 group-hover:text-cyan-400 transition-colors">
+                                Scroll to Explore
                             </span>
                         </div>
-
-                        <div className="hud-accent absolute -bottom-6 -right-6 w-8 h-8 border-b border-r border-white/20" />
-                    </div>
-                </div>
-
-                <div id="dynamic-message" className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-center pl-3 lg:pl-32">
-                    <div className="flex flex-col gap-8 items-start">
-                        <h2 className="text-3xl md:text-5xl lg:text-[4vw] font-medium text-white uppercase leading-[0.9] tracking-tighter italic mix-blend-difference flex flex-col">
-                            <div className="overflow-hidden"><span className="hero-text-reveal block">{t.hero.message.title_line1}</span></div>
-                            <div className="overflow-hidden"><span className="hero-text-reveal block">{t.hero.message.title_line2}</span></div>
-                            <div className="overflow-hidden"><span className="hero-text-reveal block">{t.hero.message.title_line3}</span></div>
-                            <div className="overflow-hidden"><span className="hero-text-reveal block">{t.hero.message.title_line4}</span></div>
-                        </h2>
                         
-                        <p className="hero-tagline-reveal text-sm md:text-xl text-white/60 tracking-[0.1em] font-light mix-blend-difference whitespace-pre-line leading-relaxed">
-                            {t.hero.message.tagline}
-                        </p>
-
-                        <div className="pointer-events-auto hero-button-reveal">
-                            <Link href="/tours" className="btn-primary group w-fit pl-8 pr-2 py-2 gap-4 cursor-pointer">
-                                <span>{t.common.explore_tours}</span>
-                                <div className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors duration-300">
-                                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                                </div>
-                            </Link>
+                        <div className="corner-ui text-right">
+                             <div className="flex items-center justify-end gap-2 mb-2">
+                                <Compass className="w-3 h-3 text-cyan-400 animate-spin-slow" />
+                                <span className="text-[9px] font-mono tracking-widest text-cyan-400">LOC: 4.63°N 75.57°W</span>
+                             </div>
+                             <div className="w-48 h-[1px] bg-white/10 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-white/40 w-full h-full -translate-x-full animate-[shimmer_3s_infinite]"></div>
+                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="scroll-indicator-container absolute bottom-12 left-8 lg:left-32 hidden md:flex flex-col items-center z-30 mix-blend-difference pointer-events-none">
-                    <div ref={scrollRingRef} className="flex flex-col items-center -gap-1 opacity-70">
-                        <ChevronDown className="scroll-chevron w-5 h-5 text-white" />
-                        <ChevronDown className="scroll-chevron w-5 h-5 text-white -mt-3" />
+                <div 
+                    ref={contentGroupRef} 
+                    className="relative z-20 flex flex-col justify-center items-center text-center px-4"
+                >
+                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-8">
+                        <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
+                            {t.hero.message.title_line1.split("").map((char, i) => (
+                                <span key={`l1-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
+                            ))}
+                        </div>
+                        <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2 text-cyan-100/90">
+                            {t.hero.message.title_line2.split("").map((char, i) => (
+                                <span key={`l2-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
+                            ))}
+                        </div>
+                        <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
+                            {(t.hero.message.title_line3 + " " + t.hero.message.title_line4).split("").map((char, i) => (
+                                <span key={`l3-${i}`} className="hero-char inline-block origin-bottom">{char === " " ? "\u00A0" : char}</span>
+                            ))}
+                        </div>
+                    </h2>
+
+                    <div className="hero-meta-line w-px h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-8 opacity-80"></div>
+
+                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-10">
+                        {t.hero.message.tagline}
+                    </p>
+
+                    <div className="hero-btn pointer-events-auto">
+                        <Link href="/tours" className="group relative flex items-center gap-5 pl-8 pr-2 py-2 bg-white/5 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300">
+                            <span className="text-sm font-bold tracking-[0.2em] text-white uppercase group-hover:text-cyan-400 transition-colors">
+                                {t.common.explore_tours}
+                            </span>
+                            <div className="w-10 h-10 rounded-full bg-cyan-400 text-black flex items-center justify-center group-hover:rotate-[-45deg] group-hover:scale-110 transition-all duration-300 shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+                                <ArrowRight className="w-5 h-5" />
+                            </div>
+                        </Link>
                     </div>
                 </div>
 
-                {/* Vertical Data Rail (Right) - Variant 4: Minimalist Structural */}
-                <div ref={rightRailRef} className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-4 z-30 mix-blend-screen pointer-events-none select-none">
-                    <div className="text-xs font-light text-cyan-400/80">+</div>
-                    <div className="w-[1px] h-32 bg-gradient-to-b from-cyan-400 via-emerald-400 to-blue-500 opacity-60"></div>
-                    <span className="text-[10px] font-mono tracking-[0.2em] [writing-mode:vertical-rl] rotate-180 bg-gradient-to-b from-cyan-200 via-emerald-200 to-blue-300 bg-clip-text text-transparent opacity-90 font-semibold">
-                        COL - QND
-                    </span>
+                {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (12 Layers, GPU Optimized) --- */}
+                <div className="absolute bottom-[-15%] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
+                    
+                    {/* Background Layers (Very Slow, Faint) */}
+                    <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '140s', animationDelay: '-10s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[45vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15" style={{ animationDuration: '160s', animationDelay: '-80s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[40vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25" style={{ animationDuration: '130s', animationDelay: '-40s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[50vw] h-auto" />
+                    </div>
+
+                    {/* Mid Layers (Balanced) */}
+                    <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '110s', animationDelay: '-25s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[35vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '95s', animationDelay: '-65s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[38vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35" style={{ animationDuration: '105s', animationDelay: '-15s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[30vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45" style={{ animationDuration: '85s', animationDelay: '-95s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[42vw] h-auto" />
+                    </div>
+
+                    {/* Foreground Layers (Faster, Sharper) */}
+                    <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '75s', animationDelay: '-35s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[33vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60" style={{ animationDuration: '65s', animationDelay: '-55s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[28vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85" style={{ animationDuration: '55s', animationDelay: '-10s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[36vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90" style={{ animationDuration: '45s', animationDelay: '-85s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[31vw] h-auto" />
+                    </div>
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '125s', animationDelay: '-110s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[48vw] h-auto" />
+                    </div>
+                    
+                    <style jsx>{`
+                        @keyframes cloud-travel-optimized {
+                            from { transform: translateX(-100%) translateZ(0); }
+                            to { transform: translateX(100vw) translateZ(0); }
+                        }
+                        .animate-cloud { 
+                            animation: cloud-travel-optimized linear infinite; 
+                            will-change: transform;
+                            backface-visibility: hidden;
+                            /* Normalización Radical: 
+                               1. Grayscale elimina tintes originales.
+                               2. Contrast(0.8) suaviza sombras internas de los PNGs.
+                               3. Brightness(1.4) unifica los blancos.
+                            */
+                            filter: grayscale(1) contrast(0.8) brightness(1.4);
+                            /* Mix-blend-mode: screen hace que la nube sea aditiva (como luz/niebla real) */
+                            mix-blend-mode: screen;
+                        }
+                    `}</style>
                 </div>
+
+                <div className="absolute bottom-0 left-0 w-full h-[25vh] z-40 pointer-events-none select-none bg-gradient-to-t from-[#02040a] via-[#02040a]/40 to-transparent"></div>
 
             </header>
         </div>
