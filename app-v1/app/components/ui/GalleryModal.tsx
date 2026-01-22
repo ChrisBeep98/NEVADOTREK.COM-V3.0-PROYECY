@@ -15,34 +15,46 @@ interface GalleryModalProps {
 export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0 }: GalleryModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
     const [isZoomed, setIsZoomed] = useState(false);
-    // UI State only (cursor updates), logic uses refs
+    
+    // UI State for cursor/ticker control
     const [isDraggingUI, setIsDraggingUI] = useState(false);
     
     // Animation Refs
     const modalRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
-    const bgImageRef = useRef<HTMLImageElement>(null); // NEW: Ambient Background Ref
+    const bgImageRef = useRef<HTMLImageElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const controlsRef = useRef<HTMLDivElement>(null);
     
-    // Performance Refs (Logic Bypass)
+    // Logic Refs
     const isDraggingRef = useRef(false);
     const dragOrigin = useRef({ x: 0, y: 0 });
-    const imagePos = useRef({ x: 0, y: 0 }); // Last committed position
+    const imagePos = useRef({ x: 0, y: 0 }); // Committed position (start of drag)
+    const currentDrag = useRef({ x: 0, y: 0 }); // Current delta from origin
+    
+    // Mirror state to ref for stable Ticker access
+    const isZoomedRef = useRef(false);
+    
+    // GSAP Setters
     const xSetter = useRef<((value: number) => void) | null>(null);
     const ySetter = useRef<((value: number) => void) | null>(null);
     
+    useEffect(() => {
+        isZoomedRef.current = isZoomed;
+    }, [isZoomed]);
+
     // Reset state on open
     useEffect(() => {
         if (isOpen) {
             setCurrentIndex(initialIndex);
             setIsZoomed(false);
             imagePos.current = { x: 0, y: 0 };
+            currentDrag.current = { x: 0, y: 0 };
             isDraggingRef.current = false;
         }
     }, [isOpen, initialIndex]);
 
-    // Initialize QuickSetters for High-Performance Dragging
+    // Initialize QuickSetters
     useEffect(() => {
         if (imageRef.current) {
             xSetter.current = gsap.quickSetter(imageRef.current, "x", "px");
@@ -50,10 +62,37 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         }
     }, [isOpen]); 
 
+    // --- GAME LOOP (High Frequency) ---
+    const tick = useCallback(() => {
+        if (!xSetter.current || !ySetter.current) return;
+
+        const dx = currentDrag.current.x;
+        const dy = currentDrag.current.y;
+
+        if (isZoomedRef.current) {
+            // Panning: Absolute Position = Start + Delta
+            xSetter.current(imagePos.current.x + dx);
+            ySetter.current(imagePos.current.y + dy);
+        } else {
+            // Swipe Hint: Just Delta
+            xSetter.current(dx);
+        }
+    }, []); // No deps, stable function
+
+    // Ticker Management
+    useEffect(() => {
+        if (isDraggingUI) {
+            gsap.ticker.add(tick);
+        } else {
+            gsap.ticker.remove(tick);
+        }
+        return () => gsap.ticker.remove(tick);
+    }, [isDraggingUI, tick]);
+
+
     // --- ANIMATIONS ---
     useGSAP(() => {
         if (isOpen) {
-            // Cinematic Entrance
             const tl = gsap.timeline();
             tl.to(modalRef.current, { autoAlpha: 1, duration: 0.01 }) 
               .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" })
@@ -66,19 +105,17 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         }
     }, [isOpen]);
 
-    // Image Slide Transition
     useGSAP(() => {
         if (!isOpen || !imageRef.current) return;
         
         setIsZoomed(false);
         imagePos.current = { x: 0, y: 0 };
+        currentDrag.current = { x: 0, y: 0 };
         isDraggingRef.current = false;
         
-        // Reset QuickSetters
         if (xSetter.current) xSetter.current(0);
         if (ySetter.current) ySetter.current(0);
 
-        // Animate Main Image
         gsap.fromTo(imageRef.current,
             { autoAlpha: 0, scale: 0.96, x: 0, y: 0 }, 
             { 
@@ -92,12 +129,11 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
             }
         );
 
-        // Animate Ambient Background (More visible)
         if (bgImageRef.current) {
             gsap.fromTo(bgImageRef.current,
                 { opacity: 0, scale: 1.3 },
                 { 
-                    opacity: 0.7, // Increased opacity
+                    opacity: 0.7, 
                     scale: 1.25, 
                     duration: 0.8, 
                     ease: "power2.out",
@@ -107,7 +143,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         }
     }, [currentIndex, isOpen]);
 
-    // Zoom Animation
     useGSAP(() => {
         if (!imageRef.current) return;
         
@@ -121,7 +156,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         });
     }, [isZoomed]);
 
-    // --- NAVIGATION LOGIC ---
     const handleClose = useCallback(() => {
         const tl = gsap.timeline({ onComplete: onClose });
         tl.to([imageRef.current, controlsRef.current], { opacity: 0, scale: 0.98, duration: 0.25 })
@@ -132,7 +166,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     const nextImage = useCallback(() => setCurrentIndex(prev => (prev + 1) % images.length), [images.length]);
     const prevImage = useCallback(() => setCurrentIndex(prev => (prev - 1 + images.length) % images.length), [images.length]);
 
-    // Keyboard
     useEffect(() => {
         if (!isOpen) return;
         const handleKey = (e: KeyboardEvent) => {
@@ -146,13 +179,14 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         return () => window.removeEventListener('keydown', handleKey);
     }, [isOpen, isZoomed, handleClose, nextImage, prevImage]);
 
-    // --- OPTIMIZED GESTURES ---
+    // --- GESTURES ---
     const handlePointerDown = (e: React.PointerEvent) => {
         if (e.button !== 0) return;
         
         isDraggingRef.current = true;
         dragOrigin.current = { x: e.clientX, y: e.clientY };
-        setIsDraggingUI(true);
+        currentDrag.current = { x: 0, y: 0 }; // Reset
+        setIsDraggingUI(true); // Start Ticker
         
         if (imageRef.current) {
             imageRef.current.style.willChange = 'transform';
@@ -164,49 +198,39 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         if (!isDraggingRef.current) return;
         e.preventDefault(); 
         
-        const dx = e.clientX - dragOrigin.current.x;
-        const dy = e.clientY - dragOrigin.current.y;
-
-        if (isZoomed) {
-            // HIGH PERFORMANCE PANNING
-            const targetX = imagePos.current.x + dx;
-            const targetY = imagePos.current.y + dy;
-            
-            if (xSetter.current) xSetter.current(targetX);
-            if (ySetter.current) ySetter.current(targetY);
-        } else {
-            // HIGH REACTIVITY SWIPE HINT (1:1 tracking, No Rotation)
-            if (xSetter.current) xSetter.current(dx);
-        }
+        // LIGHTWEIGHT INPUT CAPTURE
+        currentDrag.current = {
+            x: e.clientX - dragOrigin.current.x,
+            y: e.clientY - dragOrigin.current.y
+        };
     };
 
     const handlePointerUp = (e: React.PointerEvent) => {
         if (!isDraggingRef.current) return;
         isDraggingRef.current = false;
-        setIsDraggingUI(false);
+        setIsDraggingUI(false); // Stop Ticker
         
         if (imageRef.current) {
             imageRef.current.style.willChange = 'auto'; 
             imageRef.current.style.cursor = isZoomed ? 'grab' : 'zoom-in';
         }
 
-        const dx = e.clientX - dragOrigin.current.x;
-        const dy = e.clientY - dragOrigin.current.y;
+        const dx = currentDrag.current.x;
+        const dy = currentDrag.current.y;
         
         const totalDist = Math.hypot(dx, dy);
         if (totalDist < 5) return;
 
         if (isZoomed) {
+            // Commit final position
             imagePos.current = { 
                 x: imagePos.current.x + dx, 
                 y: imagePos.current.y + dy 
             };
         } else {
-            // FAST SWIPE LOGIC
             const swipeThreshold = 60; 
             
             if (Math.abs(dx) > swipeThreshold) {
-                // High-Speed Swipe Out
                 gsap.to(imageRef.current, {
                     x: dx > 0 ? 500 : -500,
                     autoAlpha: 0,
@@ -218,7 +242,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                     }
                 });
             } else {
-                // Snappy Back
                 gsap.to(imageRef.current, { 
                     x: 0, 
                     duration: 0.4, 
@@ -250,25 +273,20 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
             ref={modalRef} 
             className="fixed inset-0 z-[9999] flex items-center justify-center invisible overflow-hidden bg-black"
         >
-            {/* 1. AMBIENT BACKGROUND SYSTEM */}
             <div 
                 ref={overlayRef} 
                 className="absolute inset-0 overflow-hidden"
                 onClick={handleClose}
             >
-                {/* The Atmospheric Image - Visible Layer */}
                 <img
                     ref={bgImageRef}
                     src={images[currentIndex]}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover blur-[40px] scale-125 opacity-70 will-change-transform pointer-events-none select-none"
                 />
-                
-                {/* Contrast Layer (Darkening Tint) - On top of image */}
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none"></div>
             </div>
 
-            {/* 2. Main Viewport */}
             <div 
                 className="relative z-10 w-full h-full flex items-center justify-center touch-none"
                 onPointerDown={handlePointerDown}
@@ -290,10 +308,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                 />
             </div>
 
-            {/* 3. UI Layer (Pointer events strict) */}
             <div ref={controlsRef} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 md:p-8">
-                
-                {/* Top Bar */}
                 <div className="flex justify-between items-start">
                     <div className="flex flex-col gap-1 pointer-events-auto">
                         <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/50 uppercase">Gallery Mode</span>
@@ -319,7 +334,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                     </div>
                 </div>
 
-                {/* Bottom Navigation (Desktop Arrows) */}
                 {!isZoomed && (
                     <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 flex justify-between pointer-events-none">
                         <button 
@@ -338,7 +352,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                     </div>
                 )}
 
-                {/* Thumbnails (Bottom) */}
                 <div className="w-full flex justify-center pb-safe md:pb-0 pointer-events-auto">
                     <div className="flex gap-2 p-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 hover:bg-black/60 transition-colors">
                          {images.map((_, idx) => (
