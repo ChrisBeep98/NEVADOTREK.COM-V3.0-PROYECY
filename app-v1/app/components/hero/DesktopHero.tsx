@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowRight, MountainSnow, Compass, Thermometer, Wind } from 'lucide-react';
+import { ArrowRight, MountainSnow, Compass, Thermometer, Wind, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Link from 'next/link';
 
@@ -175,27 +175,34 @@ export default function DesktopHero() {
                     <div className="corner-ui absolute left-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 pl-8">
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                         <div className="flex flex-col gap-1 items-center">
-                            <span className="text-[10px] font-mono font-bold text-white/40 tracking-[0.5em] [writing-mode:vertical-lr] rotate-180">2026</span>
+                            <span className="text-[10px] font-mono font-bold text-white/40 tracking-[0.5em] [writing-mode:vertical-lr]">2026</span>
                         </div>
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                     </div>
                     
                     <div className="flex justify-between items-end">
-                        <div className="corner-ui flex items-center gap-3 group">
-                            <div className="w-[1px] h-8 bg-gradient-to-b from-cyan-500 to-transparent group-hover:h-12 transition-all duration-500"></div>
-                            <span className="text-[10px] font-mono tracking-widest uppercase text-white/50 group-hover:text-cyan-400 transition-colors">
-                                Scroll to Explore
-                            </span>
+                        {/* Scroll Indicator - Minimal Tech Capsule with Chevron */}
+                        <div className="corner-ui flex flex-col items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+                            <div className="relative w-5 h-9 rounded-full border border-white/10 bg-white/5 backdrop-blur-[2px] flex justify-center pt-1.5 group-hover:border-cyan-400/40 transition-colors duration-500 shadow-lg shadow-black/20">
+                                <div className="w-1 h-1.5 bg-cyan-400 rounded-full animate-scroll-shuttle shadow-[0_0_8px_rgba(34,211,238,0.8)] will-change-transform"></div>
+                            </div>
+                            
+                            <ChevronDown className="w-3.5 h-3.5 text-white/30 group-hover:text-cyan-400 group-hover:translate-y-0.5 transition-all duration-500" />
+                            
+                            <style jsx>{`
+                                @keyframes scroll-shuttle {
+                                    0% { transform: translateY(0); opacity: 0; }
+                                    20% { opacity: 1; }
+                                    100% { transform: translateY(14px); opacity: 0; }
+                                }
+                                .animate-scroll-shuttle {
+                                    animation: scroll-shuttle 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                                }
+                            `}</style>
                         </div>
                         
                         <div className="corner-ui text-right">
-                             <div className="flex items-center justify-end gap-2 mb-2">
-                                <Compass className="w-3 h-3 text-cyan-400 animate-spin-slow" />
-                                <span className="text-[9px] font-mono tracking-widest text-cyan-400">LOC: 4.63°N 75.57°W</span>
-                             </div>
-                             <div className="w-48 h-[1px] bg-white/10 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-white/40 w-full h-full -translate-x-full animate-[shimmer_3s_infinite]"></div>
-                             </div>
+                             {/* Location detail removed as requested */}
                         </div>
                     </div>
 
