@@ -191,12 +191,10 @@ export default function DesktopHero() {
                     </p>
 
                     <div className="hero-btn pointer-events-auto">
-                        <Link href="/tours" className="group relative flex items-center gap-5 pl-8 pr-2 py-2 bg-white/5 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300">
-                            <span className="text-sm font-bold tracking-[0.2em] text-white uppercase group-hover:text-cyan-400 transition-colors">
-                                {t.common.explore_tours}
-                            </span>
-                            <div className="w-10 h-10 rounded-full bg-cyan-400 text-black flex items-center justify-center group-hover:rotate-[-45deg] group-hover:scale-110 transition-all duration-300 shadow-[0_0_15px_rgba(34,211,238,0.4)]">
-                                <ArrowRight className="w-5 h-5" />
+                        <Link href="/tours" className="btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] px-6 group flex items-center gap-4">
+                            <span>{t.common.explore_tours}</span>
+                            <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
+                                <ArrowRight className="w-3.5 h-3.5" />
                             </div>
                         </Link>
                     </div>
