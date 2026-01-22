@@ -90,7 +90,7 @@ export default function Header() {
                         {/* Language Toggle */}
                         <button
                             onClick={toggleLang}
-                            className="w-9 h-9 rounded-full border border-white/20 hover:bg-white/10 hover:border-cyan-400/50 flex items-center justify-center transition-all pointer-events-auto"
+                            className="w-[38px] h-[38px] rounded-full border border-white/20 hover:bg-white/10 hover:border-cyan-400/50 flex items-center justify-center transition-all pointer-events-auto"
                             aria-label="Switch Language"
                         >
                             <span className="text-[10px] font-bold tracking-widest translate-y-[1px]">
@@ -101,7 +101,7 @@ export default function Header() {
                         {/* Theme Toggle */}
                         <button 
                             onClick={toggleTheme}
-                            className="w-9 h-9 rounded-full border border-white/20 hover:bg-white/10 hover:border-cyan-400/50 flex items-center justify-center transition-all pointer-events-auto"
+                            className="w-[38px] h-[38px] rounded-full border border-white/20 hover:bg-white/10 hover:border-cyan-400/50 flex items-center justify-center transition-all pointer-events-auto"
                             aria-label="Toggle Theme"
                         >
                             {isDark ? (
@@ -114,7 +114,7 @@ export default function Header() {
                         {/* Hamburger Button (Mobile Only) */}
                         <button 
                             onClick={() => setIsMenuOpen(true)}
-                            className="md:hidden w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-cyan-500/50 transition-all pointer-events-auto"
+                            className="md:hidden w-[38px] h-[38px] rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-cyan-500/50 transition-all pointer-events-auto"
                             aria-label="Open Menu"
                         >
                             <Menu className="w-4 h-4" />

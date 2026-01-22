@@ -75,7 +75,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     <button
                         ref={(el) => { headerButtonsRef.current[0] = el; }}
                         onClick={toggleLang}
-                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
+                        className="w-[38px] h-[38px] rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
                         aria-label="Switch Language"
                     >
                         <span className="text-[10px] font-bold tracking-widest">
@@ -87,7 +87,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     <button
                         ref={(el) => { headerButtonsRef.current[1] = el; }}
                         onClick={toggleTheme}
-                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
+                        className="w-[38px] h-[38px] rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 transition-colors"
                         aria-label="Toggle Theme"
                     >
                         {isDark ? <Sun className="w-4 h-4 text-cyan-500" /> : <Moon className="w-4 h-4 text-cyan-500" />}
@@ -97,7 +97,7 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     <button
                         ref={(el) => { headerButtonsRef.current[2] = el; }}
                         onClick={onClose}
-                        className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface transition-transform active:scale-90"
+                        className="w-[38px] h-[38px] rounded-full border border-border flex items-center justify-center bg-surface transition-transform active:scale-90"
                         aria-label="Close menu"
                     >
                         <X className="w-4 h-4" />

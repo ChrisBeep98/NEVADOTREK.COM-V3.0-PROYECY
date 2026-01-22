@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Mountain, Map, Flame, Zap } from 'lucide-react';
+import { Mountain, Map, Flame, Zap, Award, ShieldCheck } from 'lucide-react';
 import BookingModal from './BookingModal';
 import TourNavigation from './TourNavigation';
 import { useLanguage } from '../../context/LanguageContext';
@@ -22,6 +22,14 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
     const imageRef = useRef<HTMLImageElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+
+    const handleChipClick = (id: string) => {
+        if (window.innerWidth < 768) { 
+            setActiveTooltip(id);
+            setTimeout(() => setActiveTooltip(null), 2500);
+        }
+    };
 
     // Auto-open modal if returning from payment (Vanilla JS to avoid Suspense issues)
     useEffect(() => {
@@ -123,13 +131,24 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     {/* LEFT: Main Typography */}
                     <div className="flex-1">
                         {/* Meta Badge - LIQUID GLASS UPDATE */}
-                        <div className="flex items-center gap-4 mb-6 hero-text-reveal">
-                            <div className="h-10 px-5 flex items-center gap-3 rounded-full bg-white/[0.02] border border-white/10 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
-                                <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/20" />
-                                <span className="text-sm font-medium tracking-[0.04em] text-slate-300">
+                        <div className="flex items-center gap-4 mb-6 hero-text-reveal relative">
+                            {/* Chip: High Demand */}
+                            <div className="relative">
+                                <div className={`absolute -top-10 left-0 bg-white/10 backdrop-blur-xl border border-white/20 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-wide text-white whitespace-nowrap transition-all duration-300 pointer-events-none z-50 ${activeTooltip === 'hot' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                                     {t.tour_detail.header.hot_tour}
-                                </span>
+                                    <div className="absolute bottom-[-4px] left-4 w-2 h-2 bg-white/10 border-r border-b border-white/20 rotate-45 transform"></div>
+                                </div>
+                                <button 
+                                    onClick={() => handleChipClick('hot')}
+                                    className="h-10 w-10 md:w-auto md:px-5 flex items-center justify-center md:justify-start md:gap-3 rounded-full bg-white/[0.02] border border-white/10 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] active:bg-white/10 transition-colors"
+                                >
+                                    <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500/20" />
+                                    <span className="hidden md:block text-sm font-medium tracking-[0.04em] text-slate-300">
+                                        {t.tour_detail.header.hot_tour}
+                                    </span>
+                                </button>
                             </div>
+
                             <span className="hidden md:block text-xs font-mono text-slate-500 tracking-widest">
                                 Season 2025 • high altitude
                             </span>
@@ -216,7 +235,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                 </div>
 
                 {/* Mobile Scroll Indicator (Nano-Mouse) */}
-                <div className="lg:hidden absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20">
+                <div className="lg:hidden absolute bottom-10 left-3 flex flex-col items-center gap-3 z-20">
                     <div className="w-[20px] h-[32px] rounded-full border border-white/20 flex justify-center pt-2 bg-white/[0.01] backdrop-blur-[2px]">
                         <div className="w-[2px] h-[4px] bg-cyan-400 rounded-full animate-bounce shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
                     </div>
