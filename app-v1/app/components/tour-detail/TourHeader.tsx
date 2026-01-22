@@ -7,7 +7,6 @@ import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
 import { Mountain, Map, Flame, Zap, Award, ShieldCheck, ChevronDown } from 'lucide-react';
-import BookingModal from './BookingModal';
 import TourNavigation from './TourNavigation';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -15,13 +14,18 @@ if (typeof window !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function TourHeader({ tour, departures }: { tour: Tour; departures: Departure[] }) {
+interface TourHeaderProps {
+    tour: Tour;
+    departures: Departure[];
+    onBookNow: () => void;
+}
+
+export default function TourHeader({ tour, departures, onBookNow }: TourHeaderProps) {
     const { t, lang } = useLanguage();
     const l = lang.toLowerCase() as 'es' | 'en';
     const containerRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
     const handleChipClick = (id: string) => {
@@ -30,23 +34,6 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
             setTimeout(() => setActiveTooltip(null), 2500);
         }
     };
-
-    // Auto-open modal if returning from payment (Vanilla JS to avoid Suspense issues)
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const params = new URLSearchParams(window.location.search);
-            const paymentStatus = params.get('payment_status');
-            console.log("TourHeader - Payment Status:", paymentStatus, "isModalOpen:", isModalOpen); // DEBUG
-
-            if (paymentStatus === 'approved') {
-                console.log("TourHeader - Opening modal for approved payment"); // DEBUG
-                // Small delay to avoid synchronous setState
-                setTimeout(() => {
-                    setIsModalOpen(true);
-                }, 100);
-            }
-        }
-    }, []);
 
     useGSAP(() => {
         const tl = gsap.timeline();
@@ -100,7 +87,7 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
 
             {/* --- FIXED ACTION BUTTON (The Conversion Point) --- */}
             <button 
-                onClick={() => setIsModalOpen(true)}
+                onClick={onBookNow}
                 className="fixed bottom-[var(--spacing-frame)] lg:bottom-auto lg:top-24 right-[var(--spacing-frame)] z-40 btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] hero-text-reveal px-6 group flex items-center gap-4"
             >
                 <span>{t.tour_detail.header.book_slot}</span>
@@ -249,8 +236,6 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
                     }
                 `}</style>
             </div>
-
-            <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} tour={tour} departures={departures} />
         </div>
     );
 }

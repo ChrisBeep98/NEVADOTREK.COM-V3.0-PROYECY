@@ -18,7 +18,13 @@ const THEME_COLORS = {
     purple: '#a855f7',
 };
 
-export default function TourDepartures({ departures }: { departures: Departure[]; tourId: string }) {
+interface TourDeparturesProps {
+    departures: Departure[];
+    tourId: string;
+    onSelectDeparture: (departure: Departure) => void;
+}
+
+export default function TourDepartures({ departures, tourId, onSelectDeparture }: TourDeparturesProps) {
     const { t, lang } = useLanguage();
     const containerRef = useRef<HTMLDivElement>(null);
     const getDynamicPrice = (currentPax: number, tiers: { minPax: number; maxPax: number; priceCOP: number; }[]) => {
@@ -102,10 +108,11 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                         const currentPrice = getDynamicPrice(dep.currentPax, dep.pricingSnapshot);
 
                         return (
-                            <div 
+                            <button 
                                 key={dep.departureId} 
+                                onClick={() => onSelectDeparture(dep)}
                                 data-available={available}
-                                className="expedition-frame relative py-8 md:py-14 px-6 md:px-4 mb-3 md:mb-0 group cursor-pointer bg-surface md:bg-transparent border border-border md:border-none rounded-[6px] md:rounded-none transition-all duration-500 md:hover:bg-surface active:scale-[0.98] md:active:scale-100 md:hover:translate-x-2"
+                                className="expedition-frame relative py-8 md:py-14 px-6 md:px-4 mb-3 md:mb-0 group cursor-pointer bg-surface md:bg-transparent border border-border md:border-none rounded-[6px] md:rounded-none transition-all duration-500 md:hover:bg-surface active:scale-[0.98] md:active:scale-100 md:hover:translate-x-2 w-full text-left"
                             >
                                 {/* Desktop Separators */}
                                 <div className="bracket-line-top absolute top-0 left-0 h-px bg-border origin-left hidden md:block"></div>
@@ -167,7 +174,7 @@ export default function TourDepartures({ departures }: { departures: Departure[]
                                     </div>
 
                                 </div>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>

@@ -14,6 +14,9 @@ interface BookingModalProps {
     onClose: () => void;
     tour: Tour;
     departures?: Departure[];
+    initialMode?: 'public' | 'private';
+    initialDeparture?: Departure | null;
+    initialStep?: number;
 }
 
 interface UserData {
@@ -25,15 +28,32 @@ interface UserData {
     pax: number;
 }
 
-export default function BookingModal({ isOpen, onClose, tour, departures = [] }: BookingModalProps) {
+export default function BookingModal({ 
+    isOpen, 
+    onClose, 
+    tour, 
+    departures = [], 
+    initialMode = 'public', 
+    initialDeparture = null, 
+    initialStep = 0 
+}: BookingModalProps) {
     const { t, lang } = useLanguage();
     const l = lang.toLowerCase() as 'es' | 'en';
     const modalRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     
-    const [step, setStep] = useState(0); 
-    const [mode, setMode] = useState<'public' | 'private'>('public');
-    const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(null);
+    const [step, setStep] = useState(initialStep); 
+    const [mode, setMode] = useState<'public' | 'private'>(initialMode);
+    const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(initialDeparture);
+    
+    // Sync state when props change (Deep Linking)
+    useEffect(() => {
+        if (isOpen) {
+            setMode(initialMode);
+            if (initialDeparture) setSelectedDeparture(initialDeparture);
+            if (initialStep !== undefined) setStep(initialStep);
+        }
+    }, [isOpen, initialMode, initialDeparture, initialStep]);
     
     // Booking Flow State
     const [realBookingId, setRealBookingId] = useState<string | null>(null);
