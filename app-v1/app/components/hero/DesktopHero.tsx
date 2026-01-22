@@ -201,9 +201,9 @@ export default function DesktopHero() {
     }, { scope: containerRef });
 
     return (
-        // Changed: Removed 'hidden md:block' to allow visibility on mobile
-        <div ref={containerRef} className="bg-[#02040a] text-white relative h-screen z-40 overflow-x-clip">
-            <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center overflow-hidden">
+        // Outer container now uses theme background for the rounded corners "leak"
+        <div ref={containerRef} className="bg-background text-white relative h-screen z-40 overflow-x-clip">
+            <header ref={heroSectionRef} className="bg-[#02040a] relative h-full w-full flex items-center justify-center overflow-hidden rounded-b-[32px] md:rounded-none">
                 
                 <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
                     <video 
