@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tour, Departure } from '../../types/api';
 import Header from '../Header';
-import { Mountain, Map, Flame, Zap, Award, ShieldCheck } from 'lucide-react';
+import { Mountain, Map, Flame, Zap, Award, ShieldCheck, ChevronDown } from 'lucide-react';
 import BookingModal from './BookingModal';
 import TourNavigation from './TourNavigation';
 import { useLanguage } from '../../context/LanguageContext';
@@ -234,12 +234,20 @@ export default function TourHeader({ tour, departures }: { tour: Tour; departure
 
                 </div>
 
-                {/* Mobile Scroll Indicator (Nano-Mouse) */}
-                <div className="lg:hidden absolute bottom-10 left-3 flex flex-col items-center gap-3 z-20">
-                    <div className="w-[20px] h-[32px] rounded-full border border-white/20 flex justify-center pt-2 bg-white/[0.01] backdrop-blur-[2px]">
-                        <div className="w-[2px] h-[4px] bg-cyan-400 rounded-full animate-bounce shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
+                {/* Mobile Scroll Indicator (Sleek Cascading Line) */}
+                <div className="lg:hidden absolute bottom-10 left-3 flex flex-col items-center gap-3 z-20 pointer-events-none opacity-80">
+                    <div className="relative w-px h-12 bg-white/10 overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-[scroll-down-line_2s_infinite] shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
                     </div>
+                    <ChevronDown className="w-4 h-4 text-cyan-400 animate-pulse" />
                 </div>
+
+                <style jsx>{`
+                    @keyframes scroll-down-line {
+                        0% { transform: translateY(-100%); }
+                        100% { transform: translateY(100%); }
+                    }
+                `}</style>
             </div>
 
             <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} tour={tour} departures={departures} />
