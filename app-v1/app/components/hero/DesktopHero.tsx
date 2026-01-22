@@ -28,14 +28,14 @@ const AtmosphericWord = ({ words, className }: { words: string[], className?: st
         // 1. CONDENSE (Enter)
         tl.fromTo(chars, 
             { 
-                opacity: 0, 
+                autoAlpha: 0, 
                 filter: "blur(12px)", 
                 y: 15,
                 scale: 1.1,
                 rotateX: -45
             },
             { 
-                opacity: 1, 
+                autoAlpha: 1, 
                 filter: "blur(0px)", 
                 y: 0, 
                 scale: 1,
@@ -48,7 +48,7 @@ const AtmosphericWord = ({ words, className }: { words: string[], className?: st
 
         // 2. DISSOLVE (Exit)
         tl.to(chars, {
-            opacity: 0,
+            autoAlpha: 0,
             filter: "blur(15px)",
             y: -15,
             scale: 1.1,
@@ -71,7 +71,7 @@ const AtmosphericWord = ({ words, className }: { words: string[], className?: st
             {currentWord.split("").map((char, i) => (
                 <span 
                     key={`${index}-${i}`} 
-                    className="inline-block origin-center will-change-transform will-change-filter backface-hidden"
+                    className="inline-block origin-center will-change-transform will-change-filter backface-hidden invisible"
                 >
                     {char}
                 </span>
@@ -96,14 +96,14 @@ export default function DesktopHero() {
 
         // Initial Video Reveal
         tl.fromTo(videoRef.current, 
-            { scale: 1.1, filter: "brightness(0)" },
-            { scale: 1.05, filter: "brightness(1)", duration: 2, ease: "power2.out" }
+            { scale: 1.1, filter: "brightness(0)", autoAlpha: 0 },
+            { scale: 1.05, filter: "brightness(1)", autoAlpha: 1, duration: 2, ease: "power2.out" }
         );
 
-        // Corner UI Elements (Desktop only usually, but we animate them anyway, they are hidden via CSS on mobile)
+        // Corner UI Elements
         tl.from(".corner-ui", {
             y: -20,
-            opacity: 0,
+            autoAlpha: 0,
             duration: 1,
             stagger: 0.1,
             ease: "power3.out"
@@ -112,7 +112,7 @@ export default function DesktopHero() {
         // Main Title Characters
         tl.from(".hero-char", {
             y: 100,
-            opacity: 0,
+            autoAlpha: 0,
             rotateX: -90,
             stagger: 0.03,
             duration: 1.2,
@@ -120,13 +120,13 @@ export default function DesktopHero() {
         }, "-=1");
 
         // Meta Line, Tagline, Button
-        tl.from(".hero-meta-line", { scaleY: 0, transformOrigin: "top", duration: 0.8, ease: "power3.inOut" }, "-=0.8");
-        tl.from(".hero-tagline", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
-        tl.from(".hero-btn", { y: 20, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6");
+        tl.from(".hero-meta-line", { scaleY: 0, transformOrigin: "top", autoAlpha: 0, duration: 0.8, ease: "power3.inOut" }, "-=0.8");
+        tl.from(".hero-tagline", { y: 20, autoAlpha: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
+        tl.from(".hero-btn", { y: 20, autoAlpha: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6");
 
         // Cloud Entrance
         tl.from(".animate-cloud", {
-            opacity: 0,
+            autoAlpha: 0,
             y: 40,
             stagger: {
                 each: 0.05,
@@ -162,7 +162,7 @@ export default function DesktopHero() {
 
         // Magnetic Button (Desktop mainly)
         const btn = buttonRef.current;
-        if (btn && window.matchMedia("(min-width: 768px)").matches) { // Only enable magnet on desktop
+        if (btn && window.matchMedia("(min-width: 768px)").matches) { 
             const magnetStrength = 0.15;
             const magnetArea = 50;
 
@@ -209,7 +209,7 @@ export default function DesktopHero() {
                     <video 
                         ref={videoRef}
                         autoPlay muted loop playsInline 
-                        className="w-full h-full object-cover will-change-transform"
+                        className="w-full h-full object-cover will-change-transform invisible"
                     >
                         <source src={VIDEO_URL} type="video/mp4" />
                     </video>
@@ -231,7 +231,7 @@ export default function DesktopHero() {
                     </div>
 
                     {/* Left Year Label - Hidden on Mobile */}
-                    <div className="corner-ui hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 flex-col items-center gap-6 pl-8">
+                    <div className="corner-ui hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 flex-col items-center gap-6 pl-8 invisible">
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                         <div className="flex flex-col gap-1 items-center">
                             <span className="text-[10px] font-mono font-bold text-white/40 tracking-[0.5em] [writing-mode:vertical-lr]">2026</span>
@@ -241,19 +241,19 @@ export default function DesktopHero() {
                     
                     <div className="flex justify-between items-end w-full">
                          {/* Scroll Indicator - Centered on Mobile, Left on Desktop */}
-                        <div className="corner-ui flex flex-col items-center gap-2 group cursor-pointer w-full md:w-auto" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+                        <div className="corner-ui flex flex-col items-center gap-2 group cursor-pointer w-full md:w-auto invisible" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
                             <div className="relative w-5 h-9 rounded-full border border-white/10 bg-white/5 backdrop-blur-[2px] flex justify-center pt-1.5 group-hover:border-cyan-400/40 transition-colors duration-500 shadow-lg shadow-black/20">
                                 <div className="w-1 h-1.5 bg-cyan-400 rounded-full animate-scroll-shuttle shadow-[0_0_8px_rgba(34,211,238,0.8)] will-change-transform"></div>
                             </div>
                             <ChevronDown className="w-3.5 h-3.5 text-white/30 group-hover:text-cyan-400 group-hover:translate-y-0.5 transition-all duration-500" />
                         </div>
                         
-                        <div className="corner-ui text-right hidden md:block">
+                        <div className="corner-ui text-right hidden md:block invisible">
                         </div>
                     </div>
 
                     {/* Right Weather Widget - Hidden on Mobile */}
-                    <div className="corner-ui hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 flex-col items-center gap-6 pr-8">
+                    <div className="corner-ui hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 flex-col items-center gap-6 pr-8 invisible">
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                         
                         <div className="flex flex-col gap-4">
@@ -281,11 +281,11 @@ export default function DesktopHero() {
                     ref={contentGroupRef} 
                     className="relative z-[70] flex flex-col justify-center items-start md:items-center text-left md:text-center px-3 md:px-4 w-full"
                 >
-                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-bold italic text-white leading-[0.9] tracking-tighter mix-blend-overlay drop-shadow-lg mb-4 md:mb-2 w-full">
+                    <h2 className="text-6xl md:text-7xl lg:text-[7rem] font-bold italic text-white leading-[0.9] tracking-tighter mix-blend-overlay drop-shadow-lg mb-4 md:mb-2 w-full">
                         {/* Mobile: Stacked | Desktop: Inline/Flex */}
                         <div className="flex justify-start md:justify-center gap-[0.05em] flex-wrap overflow-hidden py-1 md:py-2">
                             {t.hero.message.title_line1.split("").map((char, i) => (
-                                <span key={`l1-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
+                                <span key={`l1-${i}`} className="hero-char inline-block origin-bottom invisible">{char}</span>
                             ))}
                         </div>
                         
@@ -296,21 +296,21 @@ export default function DesktopHero() {
 
                         <div className="flex justify-start md:justify-center gap-[0.05em] flex-wrap overflow-hidden py-1 md:py-2">
                             {(t.hero.message.title_line3 + " " + t.hero.message.title_line4).split("").map((char, i) => (
-                                <span key={`l3-${i}`} className="hero-char inline-block origin-bottom">{char === " " ? "\u00A0" : char}</span>
+                                <span key={`l3-${i}`} className="hero-char inline-block origin-bottom invisible">{char === " " ? "\u00A0" : char}</span>
                             ))}
                         </div>
                     </h2>
 
                     {/* Gradient Line - Hidden on Mobile or Adjusted */}
-                    <div className="hero-meta-line w-px h-12 md:h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-6 md:mb-4 opacity-80 hidden md:block"></div>
-                    <div className="hero-meta-line w-16 h-px bg-gradient-to-r from-cyan-400 to-transparent mb-6 opacity-80 md:hidden ml-1"></div>
+                    <div className="hero-meta-line w-px h-12 md:h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-6 md:mb-4 opacity-80 hidden md:block invisible"></div>
+                    <div className="hero-meta-line w-16 h-px bg-gradient-to-r from-cyan-400 to-transparent mb-6 opacity-80 md:hidden ml-1 invisible"></div>
 
 
-                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-8 md:mb-6 whitespace-pre-line w-full md:w-auto">
+                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-8 md:mb-6 whitespace-pre-line w-full md:w-auto invisible">
                         {t.hero.message.tagline_prefix} <span className="italic font-semibold text-white/90">{t.hero.message.tagline_highlight}</span>
                     </p>
 
-                    <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60] self-start md:self-center">
+                    <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60] self-start md:self-center invisible">
                         <Link href="/tours" className="btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] px-6 group flex items-center gap-4">
                             <span>{t.common.explore_tours}</span>
                             <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
@@ -323,44 +323,44 @@ export default function DesktopHero() {
                 <div className="absolute bottom-[-5%] md:bottom-[-15%] mb-[20px] left-0 w-full h-[50vh] md:h-[45vh] z-50 pointer-events-none select-none overflow-visible">
                     
                     {/* Background Layers (Slowest, smallest, lowest opacity) */}
-                    <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '150s', animationDelay: '-10s' }}>
+                    <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20 invisible" style={{ animationDuration: '150s', animationDelay: '-10s' }}>
                          <img src="/images/cloud-hero-1.webp" alt="" className="w-[110vw] md:w-[40vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15" style={{ animationDuration: '170s', animationDelay: '-80s' }}>
+                    <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15 invisible" style={{ animationDuration: '170s', animationDelay: '-80s' }}>
                          <img src="/images/cloud-hero-3.webp" alt="" className="w-[100vw] md:w-[35vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25" style={{ animationDuration: '135s', animationDelay: '-40s' }}>
+                    <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25 invisible" style={{ animationDuration: '135s', animationDelay: '-40s' }}>
                          <img src="/images/cloud-hero-4.webp" alt="" className="w-[120vw] md:w-[44vw] h-auto object-contain" />
                     </div>
 
                     {/* Mid Layers (Medium speed, medium opacity) */}
-                    <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '115s', animationDelay: '-25s' }}>
+                    <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40 invisible" style={{ animationDuration: '115s', animationDelay: '-25s' }}>
                          <img src="/images/cloud-hero-2.webp" alt="" className="w-[90vw] md:w-[31vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '100s', animationDelay: '-65s' }}>
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50 invisible" style={{ animationDuration: '100s', animationDelay: '-65s' }}>
                          <img src="/images/cloud-hero-1.webp" alt="" className="w-[100vw] md:w-[34vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35" style={{ animationDuration: '110s', animationDelay: '-15s' }}>
+                    <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35 invisible" style={{ animationDuration: '110s', animationDelay: '-15s' }}>
                          <img src="/images/cloud-hero-3.webp" alt="" className="w-[80vw] md:w-[26vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45" style={{ animationDuration: '90s', animationDelay: '-95s' }}>
+                    <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45 invisible" style={{ animationDuration: '90s', animationDelay: '-95s' }}>
                          <img src="/images/cloud-hero-4.webp" alt="" className="w-[105vw] md:w-[37vw] h-auto object-contain" />
                     </div>
 
                     {/* Foreground Layers (Fastest, brightest, sharpest) */}
-                    <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '75s', animationDelay: '-35s' }}>
+                    <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70 invisible" style={{ animationDuration: '75s', animationDelay: '-35s' }}>
                          <img src="/images/cloud-hero-2.webp" alt="" className="w-[90vw] md:w-[29vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60" style={{ animationDuration: '65s', animationDelay: '-55s' }}>
+                    <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60 invisible" style={{ animationDuration: '65s', animationDelay: '-55s' }}>
                          <img src="/images/cloud-hero-1.webp" alt="" className="w-[80vw] md:w-[25vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85" style={{ animationDuration: '55s', animationDelay: '-10s' }}>
+                    <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85 invisible" style={{ animationDuration: '55s', animationDelay: '-10s' }}>
                          <img src="/images/cloud-hero-3.webp" alt="" className="w-[95vw] md:w-[32vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90" style={{ animationDuration: '45s', animationDelay: '-85s' }}>
+                    <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90 invisible" style={{ animationDuration: '45s', animationDelay: '-85s' }}>
                          <img src="/images/cloud-hero-4.webp" alt="" className="w-[85vw] md:w-[27vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '125s', animationDelay: '-110s' }}>
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50 invisible" style={{ animationDuration: '125s', animationDelay: '-110s' }}>
                          <img src="/images/cloud-hero-2.webp" alt="" className="w-[115vw] md:w-[42vw] h-auto object-contain" />
                     </div>
                     
