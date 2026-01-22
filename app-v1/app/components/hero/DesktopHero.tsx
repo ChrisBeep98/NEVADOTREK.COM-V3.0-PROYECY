@@ -227,13 +227,15 @@ export default function DesktopHero() {
                     ref={contentGroupRef} 
                     className="relative z-[70] flex flex-col justify-center items-center text-center px-4"
                 >
-                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-2">
+                    {/* Main Title: Reduced font weight + Italic 'Paradise' (Playfair Display) */}
+                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-extrabold text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-2">
                         <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
                             {t.hero.message.title_line1.split("").map((char, i) => (
                                 <span key={`l1-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
                             ))}
                         </div>
-                        <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2 text-cyan-100/90">
+                        {/* Line 2: Paradise (Playfair Display Italic Serif effect) */}
+                        <div className="flex justify-center gap-[0.01em] flex-wrap overflow-hidden py-2 text-cyan-100/90 italic font-serif lowercase tracking-normal">
                             {t.hero.message.title_line2.split("").map((char, i) => (
                                 <span key={`l2-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
                             ))}
