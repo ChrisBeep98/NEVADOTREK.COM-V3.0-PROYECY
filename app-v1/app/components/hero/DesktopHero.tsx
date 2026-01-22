@@ -19,11 +19,14 @@ export default function DesktopHero() {
     const heroSectionRef = useRef<HTMLElement>(null);
     const contentGroupRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const buttonRef = useRef<HTMLDivElement>(null);
 
     const [weather] = useState({ temp: -5, wind: 12 });
 
     useGSAP(() => {
         const tl = gsap.timeline();
+
+        // ... (existing timeline logic) ...
 
         tl.fromTo(videoRef.current, 
             { scale: 1.1, filter: "brightness(0)" },
@@ -86,12 +89,61 @@ export default function DesktopHero() {
             }
         });
 
+        // --- MAGNETIC BUTTON EFFECT ---
+        const btn = buttonRef.current;
+        if (btn) {
+            const magnetStrength = 0.15; // Refined: Much more subtle
+            const magnetArea = 50; // Precise: Only activates when very close
+
+            const handleMouseMove = (e: MouseEvent) => {
+                const rect = btn.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                const deltaX = e.clientX - centerX;
+                const deltaY = e.clientY - centerY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                if (distance < magnetArea + Math.max(rect.width, rect.height)) {
+                    gsap.to(btn, {
+                        x: deltaX * magnetStrength,
+                        y: deltaY * magnetStrength,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                } else {
+                    gsap.to(btn, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                }
+            };
+
+            const handleMouseLeave = () => {
+                gsap.to(btn, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            };
+
+            window.addEventListener('mousemove', handleMouseMove);
+            // Cleanup in return mainly if component unmounts, but this is a page hero
+            return () => {
+                window.removeEventListener('mousemove', handleMouseMove);
+            };
+        }
+
     }, { scope: containerRef });
 
     return (
         <div ref={containerRef} className="hidden md:block bg-[#02040a] text-white relative h-screen z-40 overflow-x-clip">
             <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center overflow-hidden">
                 
+                {/* ... (Video and Overlays remain same) ... */}
                 <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
                     <video 
                         ref={videoRef}
@@ -106,6 +158,7 @@ export default function DesktopHero() {
                 </div>
 
                 <div className="absolute inset-0 z-10 pointer-events-none p-[var(--spacing-frame)] flex flex-col justify-between overflow-hidden">
+                    {/* ... (Corner UI remains same) ... */}
                     <div className="flex justify-between items-start">
                         {/* Empty Space for Balance */}
                     </div>
@@ -166,7 +219,7 @@ export default function DesktopHero() {
                     ref={contentGroupRef} 
                     className="relative z-20 flex flex-col justify-center items-center text-center px-4"
                 >
-                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-8">
+                    <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-2">
                         <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
                             {t.hero.message.title_line1.split("").map((char, i) => (
                                 <span key={`l1-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
@@ -184,13 +237,13 @@ export default function DesktopHero() {
                         </div>
                     </h2>
 
-                    <div className="hero-meta-line w-px h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-8 opacity-80"></div>
+                    <div className="hero-meta-line w-px h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-4 opacity-80"></div>
 
-                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-10">
+                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-6">
                         {t.hero.message.tagline}
                     </p>
 
-                    <div className="hero-btn pointer-events-auto">
+                    <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60]">
                         <Link href="/tours" className="btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] px-6 group flex items-center gap-4">
                             <span>{t.common.explore_tours}</span>
                             <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
@@ -199,6 +252,7 @@ export default function DesktopHero() {
                         </Link>
                     </div>
                 </div>
+
 
                 {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (Optimized Parallax) --- */}
                 <div className="absolute bottom-[-15%] mb-[20px] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
