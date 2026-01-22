@@ -12,6 +12,76 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const VIDEO_URL = "https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4";
 
+// --- ATMOSPHERIC WORD COMPONENT (Refined Cycle) ---
+const AtmosphericWord = ({ words }: { words: string[] }) => {
+    const [index, setIndex] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        if (!containerRef.current) return;
+        
+        const chars = containerRef.current.children;
+        // Kill any ongoing animations on these elements to prevent conflict
+        gsap.killTweensOf(chars);
+
+        const tl = gsap.timeline();
+
+        // 1. CONDENSE (Enter) - Fog condensing into clear text
+        tl.fromTo(chars, 
+            { 
+                opacity: 0, 
+                filter: "blur(12px)", 
+                y: 15,
+                scale: 1.1,
+                rotateX: -45
+            },
+            { 
+                opacity: 1, 
+                filter: "blur(0px)", 
+                y: 0, 
+                scale: 1,
+                rotateX: 0,
+                duration: 1.2, 
+                stagger: { amount: 0.5, from: "random" },
+                ease: "power2.out"
+            }
+        );
+
+        // 2. DISSOLVE (Exit) - Text evaporating into fog
+        tl.to(chars, {
+            opacity: 0,
+            filter: "blur(15px)",
+            y: -15,
+            scale: 1.1,
+            rotateX: 45,
+            duration: 1.0,
+            stagger: { amount: 0.3, from: "random" },
+            ease: "power2.in",
+            delay: 3.0, // Hold time
+            onComplete: () => {
+                setIndex((prev) => (prev + 1) % words.length);
+            }
+        });
+
+    }, { scope: containerRef, dependencies: [index] });
+
+    // Use current index to get word
+    const currentWord = words[index] || "";
+
+    return (
+        <div ref={containerRef} className="flex justify-center gap-[0.05em] min-w-[200px] sm:min-w-[300px] perspective-[500px]">
+            {currentWord.split("").map((char, i) => (
+                <span 
+                    key={`${index}-${i}`} 
+                    className="inline-block origin-center will-change-transform will-change-filter backface-hidden"
+                >
+                    {char}
+                </span>
+            ))}
+        </div>
+    );
+};
+
 export default function DesktopHero() {
     const { t } = useLanguage();
     
@@ -26,13 +96,13 @@ export default function DesktopHero() {
     useGSAP(() => {
         const tl = gsap.timeline();
 
-        // ... (existing timeline logic) ...
-
+        // Initial Video Reveal
         tl.fromTo(videoRef.current, 
             { scale: 1.1, filter: "brightness(0)" },
             { scale: 1.05, filter: "brightness(1)", duration: 2, ease: "power2.out" }
         );
 
+        // Corner UI Elements
         tl.from(".corner-ui", {
             y: -20,
             opacity: 0,
@@ -41,6 +111,7 @@ export default function DesktopHero() {
             ease: "power3.out"
         }, "-=1.5");
 
+        // Main Title Characters (Static Parts)
         tl.from(".hero-char", {
             y: 100,
             opacity: 0,
@@ -50,11 +121,12 @@ export default function DesktopHero() {
             ease: "expo.out"
         }, "-=1");
 
+        // Meta Line, Tagline, Button
         tl.from(".hero-meta-line", { scaleY: 0, transformOrigin: "top", duration: 0.8, ease: "power3.inOut" }, "-=0.8");
         tl.from(".hero-tagline", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
         tl.from(".hero-btn", { y: 20, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6");
 
-        // 4. Cloud Reveal (Atmospheric Entrance)
+        // Cloud Entrance
         tl.from(".animate-cloud", {
             opacity: 0,
             y: 40,
@@ -66,6 +138,7 @@ export default function DesktopHero() {
             ease: "power2.out"
         }, "-=1.2");
 
+        // Parallax Scroll Effects
         gsap.to(contentGroupRef.current, {
             y: -150,
             ease: "none",
@@ -92,8 +165,8 @@ export default function DesktopHero() {
         // --- MAGNETIC BUTTON EFFECT ---
         const btn = buttonRef.current;
         if (btn) {
-            const magnetStrength = 0.15; // Refined: Much more subtle
-            const magnetArea = 50; // Precise: Only activates when very close
+            const magnetStrength = 0.15;
+            const magnetArea = 50;
 
             const handleMouseMove = (e: MouseEvent) => {
                 const rect = btn.getBoundingClientRect();
@@ -131,7 +204,6 @@ export default function DesktopHero() {
             };
 
             window.addEventListener('mousemove', handleMouseMove);
-            // Cleanup in return mainly if component unmounts, but this is a page hero
             return () => {
                 window.removeEventListener('mousemove', handleMouseMove);
             };
@@ -143,7 +215,6 @@ export default function DesktopHero() {
         <div ref={containerRef} className="hidden md:block bg-[#02040a] text-white relative h-screen z-40 overflow-x-clip">
             <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center overflow-hidden">
                 
-                {/* ... (Video and Overlays remain same) ... */}
                 <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
                     <video 
                         ref={videoRef}
@@ -156,7 +227,6 @@ export default function DesktopHero() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 pointer-events-none"></div>
                     
-                    {/* Radial Vignette Overlay */}
                     <div 
                         className="absolute inset-0 pointer-events-none"
                         style={{
@@ -166,12 +236,9 @@ export default function DesktopHero() {
                 </div>
 
                 <div className="absolute inset-0 z-10 pointer-events-none p-[var(--spacing-frame)] flex flex-col justify-between overflow-hidden">
-                    {/* ... (Corner UI remains same) ... */}
                     <div className="flex justify-between items-start">
-                        {/* Empty Space for Balance */}
                     </div>
 
-                    {/* Left-Center Vertical Year Label */}
                     <div className="corner-ui absolute left-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 pl-8">
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                         <div className="flex flex-col gap-1 items-center">
@@ -181,7 +248,6 @@ export default function DesktopHero() {
                     </div>
                     
                     <div className="flex justify-between items-end">
-                        {/* Scroll Indicator - Minimal Tech Capsule with Chevron */}
                         <div className="corner-ui flex flex-col items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
                             <div className="relative w-5 h-9 rounded-full border border-white/10 bg-white/5 backdrop-blur-[2px] flex justify-center pt-1.5 group-hover:border-cyan-400/40 transition-colors duration-500 shadow-lg shadow-black/20">
                                 <div className="w-1 h-1.5 bg-cyan-400 rounded-full animate-scroll-shuttle shadow-[0_0_8px_rgba(34,211,238,0.8)] will-change-transform"></div>
@@ -202,11 +268,9 @@ export default function DesktopHero() {
                         </div>
                         
                         <div className="corner-ui text-right">
-                             {/* Location detail removed as requested */}
                         </div>
                     </div>
 
-                    {/* Right-Center Vertical Weather Widget */}
                     <div className="corner-ui absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 pr-8">
                         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                         
@@ -240,10 +304,8 @@ export default function DesktopHero() {
                                 <span key={`l1-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
                             ))}
                         </div>
-                        <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2 text-cyan-100/90">
-                            {t.hero.message.title_line2.split("").map((char, i) => (
-                                <span key={`l2-${i}`} className="hero-char inline-block origin-bottom">{char}</span>
-                            ))}
+                        <div className="flex justify-center gap-[0.01em] py-2 text-cyan-100/90 font-mono italic">
+                            <AtmosphericWord words={t.hero.message.accent_words || [t.hero.message.title_line2]} />
                         </div>
                         <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
                             {(t.hero.message.title_line3 + " " + t.hero.message.title_line4).split("").map((char, i) => (
@@ -268,11 +330,8 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-
-                {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (Optimized Parallax) --- */}
                 <div className="absolute bottom-[-15%] mb-[20px] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
                     
-                    {/* Background Layers (Slowest, smallest, lowest opacity) */}
                     <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '180s', animationDelay: '-10s' }}>
                          <img src="/images/cloud-hero-1.webp" alt="" className="w-[40vw] h-auto object-contain" />
                     </div>
@@ -283,7 +342,6 @@ export default function DesktopHero() {
                          <img src="/images/cloud-hero-4.webp" alt="" className="w-[44vw] h-auto object-contain" />
                     </div>
 
-                    {/* Mid Layers (Medium speed, medium opacity) */}
                     <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '140s', animationDelay: '-25s' }}>
                          <img src="/images/cloud-hero-2.webp" alt="" className="w-[31vw] h-auto object-contain" />
                     </div>
@@ -297,7 +355,6 @@ export default function DesktopHero() {
                          <img src="/images/cloud-hero-4.webp" alt="" className="w-[37vw] h-auto object-contain" />
                     </div>
 
-                    {/* Foreground Layers (Fastest, brightest, sharpest) */}
                     <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '90s', animationDelay: '-35s' }}>
                          <img src="/images/cloud-hero-2.webp" alt="" className="w-[29vw] h-auto object-contain" />
                     </div>
@@ -323,24 +380,14 @@ export default function DesktopHero() {
                             animation: cloud-travel-optimized linear infinite; 
                             will-change: transform;
                             backface-visibility: hidden;
-                            /* Optimization: Filters are now baked into the WebP files */
-                            /* filter: grayscale(1) contrast(1.2) brightness(3.8); <-- REMOVED */
                             mix-blend-mode: screen;
                         }
                     `}</style>
                 </div>
 
-                {/* --- PROFESSIONAL ATMOSPHERIC SEAM (Transparent Silk Update) --- */}
                 <div className="absolute bottom-0 left-0 w-full h-[30vh] z-50 pointer-events-none select-none">
-                    
-                    {/* Layer 1: The 'Seam Eraser' (Masked Blur) */}
-                    {/* This layer blurs without adding black, just softening whatever is behind it */}
                     <div className="absolute bottom-0 w-full h-full backdrop-blur-[4px] [mask-image:linear-gradient(to_top,black,transparent_80%)] opacity-40"></div>
-                    
-                    {/* Layer 2: Precision Edge Softener */}
                     <div className="absolute bottom-0 w-full h-[10vh] translate-y-1/2 backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black_50%,transparent)] opacity-50"></div>
-
-                    {/* Layer 3: Ultra-Soft Shadow Buffer (Very Transparent) */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-[#02040a]/20 to-transparent opacity-40"></div>
                 </div>
 
