@@ -230,8 +230,8 @@ export default function DesktopHero() {
                             animation: cloud-travel-optimized linear infinite; 
                             will-change: transform;
                             backface-visibility: hidden;
-                            /* Cinematic Filter: Ultra-White Atmosphere */
-                            filter: grayscale(1) contrast(1.2) brightness(3.8);
+                            /* Optimization: Filters are now baked into the WebP files */
+                            /* filter: grayscale(1) contrast(1.2) brightness(3.8); <-- REMOVED */
                             mix-blend-mode: screen;
                         }
                     `}</style>
