@@ -8,6 +8,12 @@ import { ArrowRight, MountainSnow, Compass, Thermometer, Wind, ChevronDown } fro
 import { useLanguage } from '../../context/LanguageContext';
 import Link from 'next/link';
 
+// Static Imports for GitHub Pages Compatibility
+import cloudHero1 from '../../../public/images/cloud-hero-1.webp';
+import cloudHero2 from '../../../public/images/cloud-hero-2.webp';
+import cloudHero3 from '../../../public/images/cloud-hero-3.webp';
+import cloudHero4 from '../../../public/images/cloud-hero-4.webp';
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const VIDEO_URL = "https://cdn.prod.website-files.com/68cb38dfbae5b4c56edac13a/68cb38e0bae5b4c56edac1c0_2871918-hd_1920_1080_30fps-transcode.mp4";
@@ -324,44 +330,44 @@ export default function DesktopHero() {
                     
                     {/* Background Layers (Slowest, smallest, lowest opacity) */}
                     <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20 invisible" style={{ animationDuration: '150s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[110vw] md:w-[40vw] h-auto object-contain" />
+                         <img src={cloudHero1.src} alt="" className="w-[110vw] md:w-[40vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15 invisible" style={{ animationDuration: '170s', animationDelay: '-80s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[100vw] md:w-[35vw] h-auto object-contain" />
+                         <img src={cloudHero3.src} alt="" className="w-[100vw] md:w-[35vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25 invisible" style={{ animationDuration: '135s', animationDelay: '-40s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[120vw] md:w-[44vw] h-auto object-contain" />
+                         <img src={cloudHero4.src} alt="" className="w-[120vw] md:w-[44vw] h-auto object-contain" />
                     </div>
 
                     {/* Mid Layers (Medium speed, medium opacity) */}
                     <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40 invisible" style={{ animationDuration: '115s', animationDelay: '-25s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[90vw] md:w-[31vw] h-auto object-contain" />
+                         <img src={cloudHero2.src} alt="" className="w-[90vw] md:w-[31vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50 invisible" style={{ animationDuration: '100s', animationDelay: '-65s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[100vw] md:w-[34vw] h-auto object-contain" />
+                         <img src={cloudHero1.src} alt="" className="w-[100vw] md:w-[34vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35 invisible" style={{ animationDuration: '110s', animationDelay: '-15s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[80vw] md:w-[26vw] h-auto object-contain" />
+                         <img src={cloudHero3.src} alt="" className="w-[80vw] md:w-[26vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45 invisible" style={{ animationDuration: '90s', animationDelay: '-95s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[105vw] md:w-[37vw] h-auto object-contain" />
+                         <img src={cloudHero4.src} alt="" className="w-[105vw] md:w-[37vw] h-auto object-contain" />
                     </div>
 
                     {/* Foreground Layers (Fastest, brightest, sharpest) */}
                     <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70 invisible" style={{ animationDuration: '75s', animationDelay: '-35s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[90vw] md:w-[29vw] h-auto object-contain" />
+                         <img src={cloudHero2.src} alt="" className="w-[90vw] md:w-[29vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60 invisible" style={{ animationDuration: '65s', animationDelay: '-55s' }}>
-                         <img src="/images/cloud-hero-1.webp" alt="" className="w-[80vw] md:w-[25vw] h-auto object-contain" />
+                         <img src={cloudHero1.src} alt="" className="w-[80vw] md:w-[25vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85 invisible" style={{ animationDuration: '55s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-3.webp" alt="" className="w-[95vw] md:w-[32vw] h-auto object-contain" />
+                         <img src={cloudHero3.src} alt="" className="w-[95vw] md:w-[32vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90 invisible" style={{ animationDuration: '45s', animationDelay: '-85s' }}>
-                         <img src="/images/cloud-hero-4.webp" alt="" className="w-[85vw] md:w-[27vw] h-auto object-contain" />
+                         <img src={cloudHero4.src} alt="" className="w-[85vw] md:w-[27vw] h-auto object-contain" />
                     </div>
                     <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50 invisible" style={{ animationDuration: '125s', animationDelay: '-110s' }}>
-                         <img src="/images/cloud-hero-2.webp" alt="" className="w-[115vw] md:w-[42vw] h-auto object-contain" />
+                         <img src={cloudHero2.src} alt="" className="w-[115vw] md:w-[42vw] h-auto object-contain" />
                     </div>
                     
                     <style jsx>{`
