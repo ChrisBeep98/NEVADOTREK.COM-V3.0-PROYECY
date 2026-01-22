@@ -21,6 +21,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     // Animation Refs
     const modalRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
+    const bgImageRef = useRef<HTMLImageElement>(null); // NEW: Ambient Background Ref
     const overlayRef = useRef<HTMLDivElement>(null);
     const controlsRef = useRef<HTMLDivElement>(null);
     
@@ -47,7 +48,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
             xSetter.current = gsap.quickSetter(imageRef.current, "x", "px");
             ySetter.current = gsap.quickSetter(imageRef.current, "y", "px");
         }
-    }, [isOpen]); // Re-init on open to ensure ref exists
+    }, [isOpen]); 
 
     // --- ANIMATIONS ---
     useGSAP(() => {
@@ -55,13 +56,13 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
             // Cinematic Entrance
             const tl = gsap.timeline();
             tl.to(modalRef.current, { autoAlpha: 1, duration: 0.01 }) 
-              .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" })
+              .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" })
               .fromTo(imageRef.current, 
                   { opacity: 0, scale: 0.95, y: 20 }, 
-                  { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "expo.out" }, "-=0.3")
+                  { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "expo.out" }, "-=0.8")
               .fromTo(controlsRef.current,
                   { opacity: 0, y: -10 },
-                  { opacity: 1, y: 0, duration: 0.4, delay: 0.1 });
+                  { opacity: 1, y: 0, duration: 0.4, delay: 0.1 }, "-=0.2");
         }
     }, [isOpen]);
 
@@ -77,11 +78,11 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         if (xSetter.current) xSetter.current(0);
         if (ySetter.current) ySetter.current(0);
 
-        // CRITICAL FIX: Hard reset position and visibility
+        // Animate Main Image
         gsap.fromTo(imageRef.current,
-            { autoAlpha: 0, scale: 0.96, x: 0, y: 0 }, // Force X/Y to 0
+            { autoAlpha: 0, scale: 0.96, x: 0, y: 0 }, 
             { 
-                autoAlpha: 1, // Restores visibility: visible
+                autoAlpha: 1, 
                 scale: 1, 
                 x: 0, 
                 y: 0, 
@@ -90,6 +91,20 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                 overwrite: true 
             }
         );
+
+        // Animate Ambient Background (More visible)
+        if (bgImageRef.current) {
+            gsap.fromTo(bgImageRef.current,
+                { opacity: 0, scale: 1.3 },
+                { 
+                    opacity: 0.7, // Increased opacity
+                    scale: 1.25, 
+                    duration: 0.8, 
+                    ease: "power2.out",
+                    overwrite: true 
+                }
+            );
+        }
     }, [currentIndex, isOpen]);
 
     // Zoom Animation
@@ -110,7 +125,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     const handleClose = useCallback(() => {
         const tl = gsap.timeline({ onComplete: onClose });
         tl.to([imageRef.current, controlsRef.current], { opacity: 0, scale: 0.98, duration: 0.25 })
-          .to(overlayRef.current, { opacity: 0, duration: 0.25 }, "<")
+          .to(overlayRef.current, { opacity: 0, duration: 0.3 }, "<")
           .to(modalRef.current, { autoAlpha: 0, duration: 0.1 });
     }, [onClose]);
 
@@ -139,7 +154,6 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         dragOrigin.current = { x: e.clientX, y: e.clientY };
         setIsDraggingUI(true);
         
-        // Performance: Hint browser about incoming transform
         if (imageRef.current) {
             imageRef.current.style.willChange = 'transform';
             imageRef.current.style.cursor = 'grabbing';
@@ -196,7 +210,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                 gsap.to(imageRef.current, {
                     x: dx > 0 ? 500 : -500,
                     autoAlpha: 0,
-                    duration: 0.2, // Snappy exit
+                    duration: 0.2, 
                     ease: "power2.in",
                     onComplete: () => {
                         if (dx > 0) prevImage();
@@ -234,14 +248,27 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     return (
         <div 
             ref={modalRef} 
-            className="fixed inset-0 z-[9999] flex items-center justify-center invisible overflow-hidden"
+            className="fixed inset-0 z-[9999] flex items-center justify-center invisible overflow-hidden bg-black"
         >
+            {/* 1. AMBIENT BACKGROUND SYSTEM */}
             <div 
                 ref={overlayRef} 
-                className="absolute inset-0 bg-[#020202]/95 backdrop-blur-md cursor-pointer"
+                className="absolute inset-0 overflow-hidden"
                 onClick={handleClose}
-            ></div>
+            >
+                {/* The Atmospheric Image - Visible Layer */}
+                <img
+                    ref={bgImageRef}
+                    src={images[currentIndex]}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover blur-[40px] scale-125 opacity-70 will-change-transform pointer-events-none select-none"
+                />
+                
+                {/* Contrast Layer (Darkening Tint) - On top of image */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none"></div>
+            </div>
 
+            {/* 2. Main Viewport */}
             <div 
                 className="relative z-10 w-full h-full flex items-center justify-center touch-none"
                 onPointerDown={handlePointerDown}
@@ -263,7 +290,10 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                 />
             </div>
 
+            {/* 3. UI Layer (Pointer events strict) */}
             <div ref={controlsRef} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 md:p-8">
+                
+                {/* Top Bar */}
                 <div className="flex justify-between items-start">
                     <div className="flex flex-col gap-1 pointer-events-auto">
                         <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/50 uppercase">Gallery Mode</span>
@@ -289,6 +319,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                     </div>
                 </div>
 
+                {/* Bottom Navigation (Desktop Arrows) */}
                 {!isZoomed && (
                     <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 flex justify-between pointer-events-none">
                         <button 
@@ -307,6 +338,7 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                     </div>
                 )}
 
+                {/* Thumbnails (Bottom) */}
                 <div className="w-full flex justify-center pb-safe md:pb-0 pointer-events-auto">
                     <div className="flex gap-2 p-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 hover:bg-black/60 transition-colors">
                          {images.map((_, idx) => (
