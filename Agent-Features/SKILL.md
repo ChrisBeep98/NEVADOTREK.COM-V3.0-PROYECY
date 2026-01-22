@@ -12,7 +12,7 @@ The user provides frontend requirements: a component, page, application, or inte
 
 Before coding, understand the context and commit to a BOLD aesthetic direction:
 - **Purpose**: What problem does this interface solve? Who uses it?
-- **Tone**: For **Nevado Trek**, the tone is **Editorial, Cinematic, High-Altitude, and Premium**. It is **NOT** generic tech, cyberpunk, or SaaS. It is "National Geographic meets Apple".
+- **Tone**: For **Nevado Trek**, the tone is **Editorial, Cinematic, High-Altitude,adventurer and Premium**. It is **NOT** generic turist, simple, or travel generic. It is "National Geographic meets Apple".
 - **Constraints**: Technical requirements (Next.js, Tailwind v4, GSAP, TypeScript).
 - **Differentiation**: What makes this UNFORGETTABLE? What's the one thing someone will remember?
 
@@ -46,7 +46,7 @@ Focus on:
     - Use `backdrop-blur` for overlays but keep them legible.
 
 ### 🚫 Anti-Patterns (Visuals to Avoid)
-- **NO Tech Clichés**: Avoid chips, circuit board lines, radar sweeps, or "hacker" aesthetics unless explicitly requested for a dev tool.
+- **NO web design Clichés**:
 - **NO Generic Gradients**: Do not use the standard "purple-pink" gradient unless it's strictly tied to a brand color.
 - **NO Over-Decoration**: If an element doesn't serve a purpose (emotional or functional), remove it. Simplicity > Decoration.
 - **NO "Standard" Cards**: Don't just slap a border and a shadow. Use glassmorphism, masks, or typographic grouping to separate content.
