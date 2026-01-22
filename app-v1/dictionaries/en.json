@@ -38,7 +38,8 @@
       "accent_words": ["PARADISE", "REFUGE", "SANCTUARY", "LEGACY"],
       "title_line3": "In",
       "title_line4": "Salento",
-      "tagline": "Explore the frontier\nof the wild.",
+      "tagline_prefix": "Discover the frontier\nof the",
+      "tagline_highlight": "wild.",
       "description": "Discover routes designed to connect with the essence of the Andes. From day hikes to high mountain expeditions."
     }
   },

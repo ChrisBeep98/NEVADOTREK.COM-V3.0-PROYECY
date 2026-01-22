@@ -38,7 +38,8 @@
       "accent_words": ["PARAÍSO", "REFUGIO", "ORIGEN", "LEGADO"],
       "title_line3": "En",
       "title_line4": "Salento",
-      "tagline": "Explora la frontera\nde lo salvaje.",
+      "tagline_prefix": "Descubre la frontera\nde lo",
+      "tagline_highlight": "salvaje.",
       "description": "Descubre rutas diseñadas para conectar con la esencia de los Andes. Desde caminatas de un día hasta expediciones de alta montaña."
     }
   },

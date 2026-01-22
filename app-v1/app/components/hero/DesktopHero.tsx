@@ -316,8 +316,8 @@ export default function DesktopHero() {
 
                     <div className="hero-meta-line w-px h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-4 opacity-80"></div>
 
-                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-6">
-                        {t.hero.message.tagline}
+                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-6 whitespace-pre-line">
+                        {t.hero.message.tagline_prefix} <span className="italic font-semibold text-white/90">{t.hero.message.tagline_highlight}</span>
                     </p>
 
                     <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60]">
