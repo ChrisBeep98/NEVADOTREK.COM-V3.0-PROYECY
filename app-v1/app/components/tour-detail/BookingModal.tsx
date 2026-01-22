@@ -966,7 +966,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 ) : paymentRejected ? (
                                                                     <div className="flex flex-col gap-2 w-full">
                                                                         <a 
-                                                                            href={`https://wa.me/573103953530?text=${encodeURIComponent(t.booking_modal.actions.whatsapp_msg.replace('{id}', realBookingId || ''))}`}
+                                                                            href={`https://wa.me/573147995791?text=${encodeURIComponent(t.booking_modal.actions.whatsapp_msg.replace('{id}', realBookingId || ''))}`}
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
                                                                             className="h-12 min-h-[48px] w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
@@ -984,7 +984,7 @@ export default function BookingModal({ isOpen, onClose, tour, departures = [] }:
                                                                 ) : (
                                                                     <>
                                                                         <a 
-                                                                            href="https://wa.me/573103953530?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
+                                                                            href="https://wa.me/573147995791?text=Hola,%20tengo%20dudas%20con%20mi%20pago%20de%20la%20reserva..."
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
                                                                             className="h-12 min-h-[48px] flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
