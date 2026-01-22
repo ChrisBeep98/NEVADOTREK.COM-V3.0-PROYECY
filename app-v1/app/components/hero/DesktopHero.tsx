@@ -95,25 +95,16 @@ export default function DesktopHero() {
 
                 <div className="absolute inset-0 z-10 pointer-events-none p-[var(--spacing-frame)] flex flex-col justify-between overflow-hidden">
                     <div className="flex justify-between items-start">
-                        <div className="corner-ui flex flex-col">
-                            <span className="text-[10px] font-mono tracking-[0.3em] text-cyan-400 uppercase mb-1">Est. 2025</span>
-                            <div className="flex items-center gap-2">
-                                <MountainSnow className="w-4 h-4 text-white/80" />
-                                <span className="text-xs font-bold tracking-widest text-white/90">THE ANDEAN EXPERIENCE</span>
-                            </div>
+                        {/* Empty Space for Balance */}
+                    </div>
+
+                    {/* Left-Center Vertical Year Label */}
+                    <div className="corner-ui absolute left-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 pl-8">
+                        <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                        <div className="flex flex-col gap-1 items-center">
+                            <span className="text-[10px] font-mono font-bold text-white/40 tracking-[0.5em] [writing-mode:vertical-lr] rotate-180">2026</span>
                         </div>
-                        
-                        <div className="corner-ui flex items-center gap-6">
-                            <div className="flex items-center gap-2 text-xs font-mono text-white/70">
-                                <Thermometer className="w-3.5 h-3.5" />
-                                <span>{weather.temp}°C</span>
-                            </div>
-                            <div className="w-px h-3 bg-white/20"></div>
-                            <div className="flex items-center gap-2 text-xs font-mono text-white/70">
-                                <Wind className="w-3.5 h-3.5" />
-                                <span>{weather.wind}KT</span>
-                            </div>
-                        </div>
+                        <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                     </div>
                     
                     <div className="flex justify-between items-end">
@@ -133,6 +124,29 @@ export default function DesktopHero() {
                                 <div className="absolute inset-0 bg-white/40 w-full h-full -translate-x-full animate-[shimmer_3s_infinite]"></div>
                              </div>
                         </div>
+                    </div>
+
+                    {/* Right-Center Vertical Weather Widget */}
+                    <div className="corner-ui absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 pr-8">
+                        <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                        
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col items-center gap-1 group cursor-default">
+                                <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:border-cyan-400/30 transition-colors backdrop-blur-sm">
+                                    <Thermometer className="w-4 h-4 text-white/70 group-hover:text-cyan-400 transition-colors" />
+                                </div>
+                                <span className="text-[10px] font-mono font-medium text-white/60 tracking-wider">{weather.temp}°C</span>
+                            </div>
+                            
+                            <div className="flex flex-col items-center gap-1 group cursor-default">
+                                <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:border-cyan-400/30 transition-colors backdrop-blur-sm">
+                                    <Wind className="w-4 h-4 text-white/70 group-hover:text-cyan-400 transition-colors" />
+                                </div>
+                                <span className="text-[10px] font-mono font-medium text-white/60 tracking-wider">{weather.wind}KT</span>
+                            </div>
+                        </div>
+
+                        <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
                     </div>
                 </div>
 
