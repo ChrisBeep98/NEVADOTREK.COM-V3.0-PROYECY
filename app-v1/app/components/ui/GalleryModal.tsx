@@ -29,15 +29,15 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     // Logic Refs
     const isDraggingRef = useRef(false);
     const dragOrigin = useRef({ x: 0, y: 0 });
-    const imagePos = useRef({ x: 0, y: 0 }); // Committed position (start of drag)
+    const imagePos = useRef({ x: 0, y: 0 }); // Last committed position
     const currentDrag = useRef({ x: 0, y: 0 }); // Current delta from origin
     
     // Mirror state to ref for stable Ticker access
     const isZoomedRef = useRef(false);
     
-    // GSAP Setters
-    const xSetter = useRef<((value: number) => void) | null>(null);
-    const ySetter = useRef<((value: number) => void) | null>(null);
+    // GSAP Setters (Typed as Function to satisfy GSAP return type)
+    const xSetter = useRef<Function | null>(null);
+    const ySetter = useRef<Function | null>(null);
     
     useEffect(() => {
         isZoomedRef.current = isZoomed;
