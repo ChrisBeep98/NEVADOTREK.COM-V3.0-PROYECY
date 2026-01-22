@@ -176,90 +176,79 @@ export default function DesktopHero() {
                     </div>
                 </div>
 
-                {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (12 Layers, GPU Optimized) --- */}
+                {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (Optimized Parallax) --- */}
                 <div className="absolute bottom-[-15%] mb-[20px] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
                     
-                    {/* Background Layers (Very Slow, Faint) */}
-                    <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '140s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-1.png" alt="" className="w-[45vw] h-auto" />
+                    {/* Background Layers (Slowest, smallest, lowest opacity) */}
+                    <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '180s', animationDelay: '-10s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[45vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15" style={{ animationDuration: '160s', animationDelay: '-80s' }}>
-                         <img src="/images/cloud-hero-3.png" alt="" className="w-[40vw] h-auto" />
+                    <div className="absolute bottom-[10%] left-0 w-full animate-cloud opacity-15" style={{ animationDuration: '200s', animationDelay: '-80s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[40vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25" style={{ animationDuration: '130s', animationDelay: '-40s' }}>
-                         <img src="/images/cloud-hero-4.png" alt="" className="w-[50vw] h-auto" />
-                    </div>
-
-                    {/* Mid Layers (Balanced) */}
-                    <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '110s', animationDelay: '-25s' }}>
-                         <img src="/images/cloud-hero-2.png" alt="" className="w-[35vw] h-auto" />
-                    </div>
-                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '95s', animationDelay: '-65s' }}>
-                         <img src="/images/cloud-hero-1.png" alt="" className="w-[38vw] h-auto" />
-                    </div>
-                    <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35" style={{ animationDuration: '105s', animationDelay: '-15s' }}>
-                         <img src="/images/cloud-hero-3.png" alt="" className="w-[30vw] h-auto" />
-                    </div>
-                    <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45" style={{ animationDuration: '85s', animationDelay: '-95s' }}>
-                         <img src="/images/cloud-hero-4.png" alt="" className="w-[42vw] h-auto" />
+                    <div className="absolute bottom-0 left-0 w-full animate-cloud opacity-25" style={{ animationDuration: '160s', animationDelay: '-40s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[50vw] h-auto object-contain" />
                     </div>
 
-                    {/* Foreground Layers (Faster, Sharper) */}
-                    <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '75s', animationDelay: '-35s' }}>
-                         <img src="/images/cloud-hero-2.png" alt="" className="w-[33vw] h-auto" />
+                    {/* Mid Layers (Medium speed, medium opacity) */}
+                    <div className="absolute bottom-[2%] left-0 w-full animate-cloud opacity-40" style={{ animationDuration: '140s', animationDelay: '-25s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[35vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60" style={{ animationDuration: '65s', animationDelay: '-55s' }}>
-                         <img src="/images/cloud-hero-1.png" alt="" className="w-[28vw] h-auto" />
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '120s', animationDelay: '-65s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[38vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85" style={{ animationDuration: '55s', animationDelay: '-10s' }}>
-                         <img src="/images/cloud-hero-3.png" alt="" className="w-[36vw] h-auto" />
+                    <div className="absolute bottom-[8%] left-0 w-full animate-cloud opacity-35" style={{ animationDuration: '130s', animationDelay: '-15s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[30vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90" style={{ animationDuration: '45s', animationDelay: '-85s' }}>
-                         <img src="/images/cloud-hero-4.png" alt="" className="w-[31vw] h-auto" />
+                    <div className="absolute bottom-[-2%] left-0 w-full animate-cloud opacity-45" style={{ animationDuration: '110s', animationDelay: '-95s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[42vw] h-auto object-contain" />
                     </div>
-                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '125s', animationDelay: '-110s' }}>
-                         <img src="/images/cloud-hero-2.png" alt="" className="w-[48vw] h-auto" />
+
+                    {/* Foreground Layers (Fastest, brightest, sharpest) */}
+                    <div className="absolute bottom-[-10%] left-0 w-full animate-cloud opacity-70" style={{ animationDuration: '90s', animationDelay: '-35s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[33vw] h-auto object-contain" />
+                    </div>
+                    <div className="absolute bottom-[4%] left-0 w-full animate-cloud opacity-60" style={{ animationDuration: '80s', animationDelay: '-55s' }}>
+                         <img src="/images/cloud-hero-1.png" alt="" className="w-[28vw] h-auto object-contain" />
+                    </div>
+                    <div className="absolute bottom-[-8%] left-0 w-full animate-cloud opacity-85" style={{ animationDuration: '70s', animationDelay: '-10s' }}>
+                         <img src="/images/cloud-hero-3.png" alt="" className="w-[36vw] h-auto object-contain" />
+                    </div>
+                    <div className="absolute bottom-[-4%] left-0 w-full animate-cloud opacity-90" style={{ animationDuration: '60s', animationDelay: '-85s' }}>
+                         <img src="/images/cloud-hero-4.png" alt="" className="w-[31vw] h-auto object-contain" />
+                    </div>
+                    <div className="absolute bottom-[-5%] left-0 w-full animate-cloud opacity-50" style={{ animationDuration: '150s', animationDelay: '-110s' }}>
+                         <img src="/images/cloud-hero-2.png" alt="" className="w-[48vw] h-auto object-contain" />
                     </div>
                     
                     <style jsx>{`
                         @keyframes cloud-travel-optimized {
-                            from { transform: translateX(-100%) translateZ(0); }
-                            to { transform: translateX(100vw) translateZ(0); }
+                            0% { transform: translate3d(-100%, 0, 0); }
+                            100% { transform: translate3d(100vw, 0, 0); }
                         }
                         .animate-cloud { 
                             animation: cloud-travel-optimized linear infinite; 
                             will-change: transform;
                             backface-visibility: hidden;
-                            /* Normalización Radical: 
-                               1. Grayscale elimina tintes originales.
-                               2. Contrast(0.8) suaviza sombras internas de los PNGs.
-                               3. Brightness(1.8) unifica los blancos y les da luz.
-                            */
-                            filter: grayscale(1) contrast(0.8) brightness(1.8);
-                            /* Mix-blend-mode: screen hace que la nube sea aditiva (como luz/niebla real) */
+                            /* Cinematic Filter: Unified Atmosphere */
+                            filter: grayscale(1) contrast(0.85) brightness(2.2) drop-shadow(0 4px 6px rgba(0,0,0,0.1));
                             mix-blend-mode: screen;
                         }
                     `}</style>
                 </div>
 
-                {/* --- PROFESSIONAL ATMOSPHERIC SEAM --- */}
-                <div className="absolute bottom-0 left-0 w-full h-[20vh] z-50 pointer-events-none select-none">
+                {/* --- PROFESSIONAL ATMOSPHERIC SEAM (Transparent Silk Update) --- */}
+                <div className="absolute bottom-0 left-0 w-full h-[30vh] z-50 pointer-events-none select-none">
                     
-                    {/* Layer 1: Deep Base Color (Eased Multi-stop) */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-[#02040a]/60 via-[#02040a]/20 to-transparent"></div>
+                    {/* Layer 1: The 'Seam Eraser' (Masked Blur) */}
+                    {/* This layer blurs without adding black, just softening whatever is behind it */}
+                    <div className="absolute bottom-0 w-full h-full backdrop-blur-[4px] [mask-image:linear-gradient(to_top,black,transparent_80%)] opacity-40"></div>
                     
-                    {/* Layer 2: Progressive Layered Blurs (Ultra-Softened) */}
-                    {/* Level 1: Broad & Subtle */}
-                    <div className="absolute bottom-0 w-full h-full backdrop-blur-[1px] [mask-image:linear-gradient(to_top,black,transparent_70%)] opacity-40"></div>
-                    
-                    {/* Level 2: Medium Seam */}
-                    <div className="absolute bottom-0 w-full h-[12vh] backdrop-blur-[4px] [mask-image:linear-gradient(to_top,transparent,black_10%,black_90%,transparent)] opacity-50"></div>
-                    
-                    {/* Level 3: Tight Precision Seam */}
-                    <div className="absolute bottom-0 w-full h-[6vh] translate-y-1/4 backdrop-blur-[10px] [mask-image:linear-gradient(to_top,transparent,black,transparent)]"></div>
+                    {/* Layer 2: Precision Edge Softener */}
+                    <div className="absolute bottom-0 w-full h-[10vh] translate-y-1/2 backdrop-blur-[12px] [mask-image:linear-gradient(to_top,transparent,black_50%,transparent)] opacity-50"></div>
 
-                    {/* Layer 3: Final Buffer Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-transparent to-transparent opacity-90"></div>
+                    {/* Layer 3: Ultra-Soft Shadow Buffer (Very Transparent) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-[#02040a]/20 to-transparent opacity-40"></div>
                 </div>
 
             </header>
