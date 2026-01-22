@@ -24,7 +24,7 @@
       "wind": "WIND",
       "o2": "O2"
     },
-    "words": ["SILENCE", "ESSENCE", "LIMITS", "SPIRIT"],
+    "words": ["SILENCE", "SANCTUARY", "LIMITS", "SPIRIT"],
     "ui": {
       "live_feed": "LIVE FEED",
       "live_now": ["LIVE", "NOW"],
@@ -35,7 +35,7 @@
       "prefix": "Beyond the edge of the known world, we find our",
       "title_line1": "A",
       "title_line2": "Paradise",
-      "accent_words": ["PARADISE", "REFUGE", "ESSENCE", "LEGACY"],
+      "accent_words": ["PARADISE", "REFUGE", "SANCTUARY", "LEGACY"],
       "title_line3": "In",
       "title_line4": "Salento",
       "tagline": "Explore the frontier\nof the wild.",
