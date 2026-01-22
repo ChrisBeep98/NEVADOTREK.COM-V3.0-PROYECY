@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { X, ChevronLeft, ChevronRight, Minimize2, Maximize2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface GalleryModalProps {
     isOpen: boolean;
@@ -15,7 +15,8 @@ interface GalleryModalProps {
 export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0 }: GalleryModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
     const [isZoomed, setIsZoomed] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
+    // UI State only (cursor updates), logic uses refs
+    const [isDraggingUI, setIsDraggingUI] = useState(false);
     
     // Animation Refs
     const modalRef = useRef<HTMLDivElement>(null);
@@ -23,9 +24,12 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     const overlayRef = useRef<HTMLDivElement>(null);
     const controlsRef = useRef<HTMLDivElement>(null);
     
-    // Drag/Swipe Logic Refs
+    // Performance Refs (Logic Bypass)
+    const isDraggingRef = useRef(false);
     const dragOrigin = useRef({ x: 0, y: 0 });
-    const imagePos = useRef({ x: 0, y: 0 }); // Current XY translation
+    const imagePos = useRef({ x: 0, y: 0 }); // Last committed position
+    const xSetter = useRef<((value: number) => void) | null>(null);
+    const ySetter = useRef<((value: number) => void) | null>(null);
     
     // Reset state on open
     useEffect(() => {
@@ -33,41 +37,55 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
             setCurrentIndex(initialIndex);
             setIsZoomed(false);
             imagePos.current = { x: 0, y: 0 };
+            isDraggingRef.current = false;
         }
     }, [isOpen, initialIndex]);
+
+    // Initialize QuickSetters for High-Performance Dragging
+    useEffect(() => {
+        if (imageRef.current) {
+            xSetter.current = gsap.quickSetter(imageRef.current, "x", "px");
+            ySetter.current = gsap.quickSetter(imageRef.current, "y", "px");
+        }
+    }, [isOpen]); // Re-init on open to ensure ref exists
 
     // --- ANIMATIONS ---
     useGSAP(() => {
         if (isOpen) {
             // Cinematic Entrance
             const tl = gsap.timeline();
-            tl.to(modalRef.current, { autoAlpha: 1, duration: 0.01 }) // Instant visibility container
-              .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" })
+            tl.to(modalRef.current, { autoAlpha: 1, duration: 0.01 }) 
+              .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" })
               .fromTo(imageRef.current, 
                   { opacity: 0, scale: 0.95, y: 20 }, 
-                  { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "expo.out" }, "-=0.4")
+                  { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "expo.out" }, "-=0.3")
               .fromTo(controlsRef.current,
-                  { opacity: 0 },
-                  { opacity: 1, duration: 0.5, delay: 0.2 });
+                  { opacity: 0, y: -10 },
+                  { opacity: 1, y: 0, duration: 0.4, delay: 0.1 });
         }
     }, [isOpen]);
 
-    // Image Slide Transition (When index changes)
+    // Image Slide Transition
     useGSAP(() => {
         if (!isOpen || !imageRef.current) return;
         
-        // Reset Zoom/Pos on change
         setIsZoomed(false);
         imagePos.current = { x: 0, y: 0 };
+        isDraggingRef.current = false;
         
+        // Reset QuickSetters
+        if (xSetter.current) xSetter.current(0);
+        if (ySetter.current) ySetter.current(0);
+
+        // CRITICAL FIX: Hard reset position and visibility
         gsap.fromTo(imageRef.current,
-            { opacity: 0, scale: 0.98 },
+            { autoAlpha: 0, scale: 0.96, x: 0, y: 0 }, // Force X/Y to 0
             { 
-                opacity: 1, 
+                autoAlpha: 1, // Restores visibility: visible
                 scale: 1, 
                 x: 0, 
                 y: 0, 
-                duration: 0.5, 
+                duration: 0.4, 
                 ease: "power2.out",
                 overwrite: true 
             }
@@ -79,29 +97,27 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         if (!imageRef.current) return;
         
         gsap.to(imageRef.current, {
-            scale: isZoomed ? 1.75 : 1, // Luxurious zoom level
+            scale: isZoomed ? 2 : 1, 
             x: isZoomed ? imagePos.current.x : 0,
             y: isZoomed ? imagePos.current.y : 0,
             duration: 0.5,
-            ease: "expo.out"
+            ease: "expo.out",
+            overwrite: "auto"
         });
-        
-        // Change cursor
-        imageRef.current.style.cursor = isZoomed ? 'grab' : 'zoom-in';
     }, [isZoomed]);
 
     // --- NAVIGATION LOGIC ---
     const handleClose = useCallback(() => {
         const tl = gsap.timeline({ onComplete: onClose });
-        tl.to([imageRef.current, controlsRef.current], { opacity: 0, duration: 0.3 })
-          .to(overlayRef.current, { opacity: 0, duration: 0.3 }, "<")
+        tl.to([imageRef.current, controlsRef.current], { opacity: 0, scale: 0.98, duration: 0.25 })
+          .to(overlayRef.current, { opacity: 0, duration: 0.25 }, "<")
           .to(modalRef.current, { autoAlpha: 0, duration: 0.1 });
     }, [onClose]);
 
     const nextImage = useCallback(() => setCurrentIndex(prev => (prev + 1) % images.length), [images.length]);
     const prevImage = useCallback(() => setCurrentIndex(prev => (prev - 1 + images.length) % images.length), [images.length]);
 
-    // Keyboard Support
+    // Keyboard
     useEffect(() => {
         if (!isOpen) return;
         const handleKey = (e: KeyboardEvent) => {
@@ -115,67 +131,102 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
         return () => window.removeEventListener('keydown', handleKey);
     }, [isOpen, isZoomed, handleClose, nextImage, prevImage]);
 
-    // --- GESTURES (SWIPE & PAN) ---
+    // --- OPTIMIZED GESTURES ---
     const handlePointerDown = (e: React.PointerEvent) => {
-        setIsDragging(true);
+        if (e.button !== 0) return;
+        
+        isDraggingRef.current = true;
         dragOrigin.current = { x: e.clientX, y: e.clientY };
-        // If zoomed, we pan. If not zoomed, we swipe.
+        setIsDraggingUI(true);
+        
+        // Performance: Hint browser about incoming transform
+        if (imageRef.current) {
+            imageRef.current.style.willChange = 'transform';
+            imageRef.current.style.cursor = 'grabbing';
+        }
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {
-        if (!isDragging) return;
-        e.preventDefault();
+        if (!isDraggingRef.current) return;
+        e.preventDefault(); 
         
         const dx = e.clientX - dragOrigin.current.x;
         const dy = e.clientY - dragOrigin.current.y;
 
-        if (isZoomed && imageRef.current) {
-            // PANNING LOGIC
-            const newX = imagePos.current.x + dx;
-            const newY = imagePos.current.y + dy;
+        if (isZoomed) {
+            // HIGH PERFORMANCE PANNING
+            const targetX = imagePos.current.x + dx;
+            const targetY = imagePos.current.y + dy;
             
-            gsap.set(imageRef.current, { x: newX, y: newY });
-            
-            // Update ref for next frame/release
-            // (In a full physics engine we'd update state on Up, but direct set is faster for 60fps)
+            if (xSetter.current) xSetter.current(targetX);
+            if (ySetter.current) ySetter.current(targetY);
         } else {
-            // SWIPE HINT LOGIC (Visual feedback only)
-            // Move image slightly to show resistance
-             gsap.set(imageRef.current, { x: dx * 0.4 });
+            // HIGH REACTIVITY SWIPE HINT (1:1 tracking, No Rotation)
+            if (xSetter.current) xSetter.current(dx);
         }
     };
 
     const handlePointerUp = (e: React.PointerEvent) => {
-        setIsDragging(false);
+        if (!isDraggingRef.current) return;
+        isDraggingRef.current = false;
+        setIsDraggingUI(false);
+        
+        if (imageRef.current) {
+            imageRef.current.style.willChange = 'auto'; 
+            imageRef.current.style.cursor = isZoomed ? 'grab' : 'zoom-in';
+        }
+
         const dx = e.clientX - dragOrigin.current.x;
         const dy = e.clientY - dragOrigin.current.y;
+        
+        const totalDist = Math.hypot(dx, dy);
+        if (totalDist < 5) return;
 
         if (isZoomed) {
-            // Commit new position
-            imagePos.current = { x: imagePos.current.x + dx, y: imagePos.current.y + dy };
-            
-            // Update cursor
-            if (imageRef.current) imageRef.current.style.cursor = 'grab';
+            imagePos.current = { 
+                x: imagePos.current.x + dx, 
+                y: imagePos.current.y + dy 
+            };
         } else {
-            // SNAP BACK OR NAVIGATE
-            if (Math.abs(dx) > 100) { // Swipe Threshold
-                if (dx > 0) prevImage();
-                else nextImage();
+            // FAST SWIPE LOGIC
+            const swipeThreshold = 60; 
+            
+            if (Math.abs(dx) > swipeThreshold) {
+                // High-Speed Swipe Out
+                gsap.to(imageRef.current, {
+                    x: dx > 0 ? 500 : -500,
+                    autoAlpha: 0,
+                    duration: 0.2, // Snappy exit
+                    ease: "power2.in",
+                    onComplete: () => {
+                        if (dx > 0) prevImage();
+                        else nextImage();
+                    }
+                });
             } else {
-                // Snap back to center
-                gsap.to(imageRef.current, { x: 0, duration: 0.3, ease: "power2.out" });
+                // Snappy Back
+                gsap.to(imageRef.current, { 
+                    x: 0, 
+                    duration: 0.4, 
+                    ease: "back.out(1.2)" 
+                });
             }
         }
     };
 
     const toggleZoom = (e: React.MouseEvent) => {
-        if (isDragging) return; // Don't zoom if we were dragging
+        if (isDraggingRef.current) return;
         
-        // Don't toggle if dragging slightly occurred (click threshold)
-        const moveDist = Math.hypot(e.clientX - dragOrigin.current.x, e.clientY - dragOrigin.current.y);
-        if (moveDist > 5) return;
+        const dx = e.clientX - dragOrigin.current.x;
+        const dy = e.clientY - dragOrigin.current.y;
+        if (Math.hypot(dx, dy) > 5) return;
 
-        setIsZoomed(!isZoomed);
+        const newZoomState = !isZoomed;
+        setIsZoomed(newZoomState);
+        
+        if (!newZoomState) {
+            imagePos.current = { x: 0, y: 0 };
+        }
     };
 
     if (!isOpen) return null;
@@ -183,16 +234,14 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
     return (
         <div 
             ref={modalRef} 
-            className="fixed inset-0 z-[100] flex items-center justify-center invisible overflow-hidden"
+            className="fixed inset-0 z-[9999] flex items-center justify-center invisible overflow-hidden"
         >
-            {/* 1. The Void Backdrop */}
             <div 
                 ref={overlayRef} 
-                className="absolute inset-0 bg-[#050505]/98 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#020202]/95 backdrop-blur-md cursor-pointer"
                 onClick={handleClose}
             ></div>
 
-            {/* 2. Main Viewport */}
             <div 
                 className="relative z-10 w-full h-full flex items-center justify-center touch-none"
                 onPointerDown={handlePointerDown}
@@ -203,62 +252,77 @@ export default function GalleryModal({ isOpen, onClose, images, initialIndex = 0
                 <img 
                     ref={imageRef}
                     src={images[currentIndex]} 
-                    alt={`Gallery ${currentIndex}`}
-                    className="max-h-[90vh] max-w-[95vw] object-contain select-none will-change-transform shadow-2xl"
-                    onClick={toggleZoom}
+                    alt={`Gallery ${currentIndex + 1}`}
+                    loading="eager"
                     draggable={false}
+                    className={`
+                        max-h-[90vh] max-w-[95vw] md:max-w-[90vw] object-contain select-none shadow-2xl transition-cursor duration-200
+                        ${isZoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in active:cursor-grabbing'}
+                    `}
+                    onClick={toggleZoom}
                 />
             </div>
 
-            {/* 3. Minimal UI Layer (Pointer Events pass through where possible) */}
-            <div ref={controlsRef} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-6 md:p-10">
-                
-                {/* Header */}
+            <div ref={controlsRef} className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 md:p-8">
                 <div className="flex justify-between items-start">
-                    <div className="flex flex-col">
-                        <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] text-white/40 uppercase">Gallery</span>
-                        <span className="text-sm md:text-base font-medium text-white tracking-widest tabular-nums">
-                            {currentIndex + 1} <span className="text-white/20">—</span> {images.length}
+                    <div className="flex flex-col gap-1 pointer-events-auto">
+                        <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/50 uppercase">Gallery Mode</span>
+                        <span className="text-sm md:text-lg font-bold text-white tracking-widest tabular-nums font-mono">
+                            {String(currentIndex + 1).padStart(2, '0')} <span className="text-white/20">/</span> {String(images.length).padStart(2, '0')}
                         </span>
                     </div>
-                    <button 
-                        onClick={handleClose} 
-                        className="pointer-events-auto group p-2 -mr-2 text-white/50 hover:text-white transition-colors"
-                    >
-                        <X className="w-6 h-6 md:w-8 md:h-8 transition-transform duration-500 group-hover:rotate-90" strokeWidth={1.5} />
-                    </button>
+                    
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); setIsZoomed(!isZoomed); }}
+                            className="pointer-events-auto hidden md:flex p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all backdrop-blur-md border border-white/5 group"
+                        >
+                            {isZoomed ? <ZoomOut className="w-5 h-5" /> : <ZoomIn className="w-5 h-5" />}
+                        </button>
+
+                        <button 
+                            onClick={handleClose} 
+                            className="pointer-events-auto p-3 -mr-2 text-white/60 hover:text-white transition-colors hover:rotate-90 duration-500"
+                        >
+                            <X className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1} />
+                        </button>
+                    </div>
                 </div>
 
-                {/* Footer / Thumbnails (Only visible on bottom hover area ideally, but for now fixed minimal) */}
-                <div className="w-full flex justify-center pb-4 md:pb-0">
-                    <div className="hidden md:flex gap-1.5 p-2 bg-white/5 backdrop-blur-md rounded-full border border-white/5 pointer-events-auto transition-opacity duration-300 hover:opacity-100 opacity-60">
+                {!isZoomed && (
+                    <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 flex justify-between pointer-events-none">
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                            className="hidden md:flex pointer-events-auto w-14 h-14 items-center justify-center rounded-full bg-black/20 hover:bg-white/10 text-white/40 hover:text-white backdrop-blur-sm border border-transparent hover:border-white/10 transition-all group"
+                        >
+                            <ChevronLeft className="w-8 h-8 group-hover:-translate-x-0.5 transition-transform" strokeWidth={1} />
+                        </button>
+                        
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                            className="hidden md:flex pointer-events-auto w-14 h-14 items-center justify-center rounded-full bg-black/20 hover:bg-white/10 text-white/40 hover:text-white backdrop-blur-sm border border-transparent hover:border-white/10 transition-all group"
+                        >
+                            <ChevronRight className="w-8 h-8 group-hover:translate-x-0.5 transition-transform" strokeWidth={1} />
+                        </button>
+                    </div>
+                )}
+
+                <div className="w-full flex justify-center pb-safe md:pb-0 pointer-events-auto">
+                    <div className="flex gap-2 p-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 hover:bg-black/60 transition-colors">
                          {images.map((_, idx) => (
                              <button 
                                 key={idx}
-                                onClick={() => setCurrentIndex(idx)}
-                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-white scale-125' : 'bg-white/20 hover:bg-white/50'}`}
+                                onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
+                                className={`
+                                    w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all duration-300 
+                                    ${idx === currentIndex 
+                                        ? 'bg-white scale-125 shadow-[0_0_8px_rgba(255,255,255,0.5)]' 
+                                        : 'bg-white/20 hover:bg-white/50 scale-100'}
+                                `}
                              />
                          ))}
                     </div>
                 </div>
-
-                {/* Desktop Navigation Arrows (Hover Zones) */}
-                {!isZoomed && (
-                    <>
-                        <button 
-                            onClick={prevImage} 
-                            className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 pointer-events-auto w-12 h-12 items-center justify-center rounded-full text-white/20 hover:text-white hover:bg-white/5 transition-all"
-                        >
-                            <ChevronLeft className="w-8 h-8" strokeWidth={1} />
-                        </button>
-                        <button 
-                            onClick={nextImage} 
-                            className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 pointer-events-auto w-12 h-12 items-center justify-center rounded-full text-white/20 hover:text-white hover:bg-white/5 transition-all"
-                        >
-                            <ChevronRight className="w-8 h-8" strokeWidth={1} />
-                        </button>
-                    </>
-                )}
             </div>
         </div>
     );
