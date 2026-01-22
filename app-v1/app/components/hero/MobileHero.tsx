@@ -59,7 +59,7 @@ export default function MobileHero() {
 
     return (
         <div ref={containerRef} className="md:hidden relative bg-[#040918] text-slate-300 antialiased overflow-hidden">
-            <Header />
+            
 
             <section className="relative h-screen w-full overflow-hidden flex flex-col">
 

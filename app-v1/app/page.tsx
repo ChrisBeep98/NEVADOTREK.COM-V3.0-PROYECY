@@ -7,6 +7,7 @@ import FeatureImage from "./components/FeatureImage";
 import TestimonialsSection from "./components/TestimonialsSection";
 import BookingCTA from "./components/BookingCTA";
 import FooterWithWidget from "./components/FooterWithWidget";
+import Header from "./components/Header";
 import { getTours } from "./services/nevado-api";
 
 export default async function Home() {
@@ -14,6 +15,7 @@ export default async function Home() {
 
   return (
     <main className="bg-background">
+      <Header />
       <DesktopHero />
       <MobileHero />
       <IntroSection />

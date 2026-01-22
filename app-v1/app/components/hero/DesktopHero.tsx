@@ -205,7 +205,7 @@ export default function DesktopHero() {
 
     return (
         <div ref={containerRef} className="hidden md:block relative bg-[#040918] text-slate-300 antialiased overflow-x-hidden">
-            <Header />
+            
 
             <header ref={heroSectionRef} className="relative h-screen w-full overflow-hidden flex flex-col justify-center items-center bg-[#040918]">
 
