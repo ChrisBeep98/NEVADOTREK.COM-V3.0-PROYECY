@@ -155,6 +155,14 @@ export default function DesktopHero() {
                     <div className="absolute inset-0 bg-noise opacity-[0.04] pointer-events-none mix-blend-overlay"></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 pointer-events-none"></div>
+                    
+                    {/* Radial Vignette Overlay */}
+                    <div 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            background: 'radial-gradient(circle, transparent 40%, rgba(2, 4, 10, 0.65) 100%)'
+                        }}
+                    ></div>
                 </div>
 
                 <div className="absolute inset-0 z-10 pointer-events-none p-[var(--spacing-frame)] flex flex-col justify-between overflow-hidden">
