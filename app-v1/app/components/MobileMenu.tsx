@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from 'react';
-import { X, Sun, Moon, MessageCircle } from 'lucide-react';
+import { X, Sun, Moon, MessageCircle, Phone, Instagram, Facebook } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import Link from 'next/link';
 import gsap from 'gsap';
@@ -146,19 +146,49 @@ export default function MobileMenu({ isOpen, onClose, isDark, toggleTheme }: Mob
                     className="w-full h-[1px] bg-border/50 my-10 origin-right"
                 />
 
-                {/* Contact - Desktop Header Style */}
+                {/* Contact Area */}
                 <div 
                     ref={contactButtonWrapperRef}
-                    className="self-end"
+                    className="self-end flex flex-col items-end gap-4 w-full"
                 >
+                    {/* Social Bubbles */}
+                    <div className="flex gap-3">
+                        <a 
+                            href="tel:+573147995791" 
+                            className="w-[44px] h-[44px] rounded-full border border-border flex items-center justify-center bg-surface hover:border-cyan-500/50 hover:text-cyan-500 transition-all active:scale-95"
+                            aria-label="Call Us"
+                        >
+                            <Phone className="w-4 h-4" />
+                        </a>
+                        <a 
+                            href="https://instagram.com/nevadotrek" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-[44px] h-[44px] rounded-full border border-border flex items-center justify-center bg-surface hover:border-pink-500/50 hover:text-pink-500 transition-all active:scale-95"
+                            aria-label="Instagram"
+                        >
+                            <Instagram className="w-4 h-4" />
+                        </a>
+                        <a 
+                            href="https://facebook.com/nevadotrek" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-[44px] h-[44px] rounded-full border border-border flex items-center justify-center bg-surface hover:border-blue-600/50 hover:text-blue-600 transition-all active:scale-95"
+                            aria-label="Facebook"
+                        >
+                            <Facebook className="w-4 h-4" />
+                        </a>
+                    </div>
+
+                    {/* Main WhatsApp Button */}
                     <a 
                         href="https://wa.me/573147995791"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between border border-border pl-4 pr-1.5 py-2 rounded-full hover:bg-foreground hover:text-background transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105 active:scale-95"
+                        className="group flex items-center justify-between border border-border pl-4 pr-1.5 py-2 rounded-full hover:bg-foreground hover:text-background transition-all font-normal text-[11px] tracking-[0.05em] capitalize h-[44px] w-[160px] hover:scale-105 active:scale-95 shadow-lg"
                     >
                         <span className="text-sm">{t.common.contact}</span>
-                        <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
                             <MessageCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
                         </div>
                     </a>
