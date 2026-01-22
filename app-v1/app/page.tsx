@@ -1,4 +1,4 @@
-import { DesktopHero, MobileHero } from "./components/hero";
+import { DesktopHero } from "./components/hero";
 import IntroSection from "./components/IntroSection";
 import ExpeditionsGrid from "./components/ExpeditionsGrid";
 import TextMarquee from "./components/TextMarquee";
@@ -17,7 +17,6 @@ export default async function Home() {
     <main className="bg-background">
       <Header />
       <DesktopHero />
-      <MobileHero />
       <IntroSection />
       <div className="relative z-30">
         
