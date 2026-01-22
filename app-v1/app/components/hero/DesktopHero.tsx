@@ -78,7 +78,7 @@ export default function DesktopHero() {
 
     return (
         <div ref={containerRef} className="hidden md:block bg-[#02040a] text-white relative h-screen z-40 overflow-x-clip">
-            <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center">
+            <header ref={heroSectionRef} className="relative h-full w-full flex items-center justify-center overflow-hidden">
                 
                 <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
                     <video 
@@ -177,7 +177,7 @@ export default function DesktopHero() {
                 </div>
 
                 {/* --- LAYER 4: ULTRA-DENSE CLOUD SEA (12 Layers, GPU Optimized) --- */}
-                <div className="absolute bottom-[-15%] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
+                <div className="absolute bottom-[-15%] mb-[20px] left-0 w-full h-[45vh] z-50 pointer-events-none select-none overflow-visible">
                     
                     {/* Background Layers (Very Slow, Faint) */}
                     <div className="absolute bottom-[5%] left-0 w-full animate-cloud opacity-20" style={{ animationDuration: '140s', animationDelay: '-10s' }}>
@@ -233,16 +233,34 @@ export default function DesktopHero() {
                             /* Normalización Radical: 
                                1. Grayscale elimina tintes originales.
                                2. Contrast(0.8) suaviza sombras internas de los PNGs.
-                               3. Brightness(1.4) unifica los blancos.
+                               3. Brightness(1.8) unifica los blancos y les da luz.
                             */
-                            filter: grayscale(1) contrast(0.8) brightness(1.4);
+                            filter: grayscale(1) contrast(0.8) brightness(1.8);
                             /* Mix-blend-mode: screen hace que la nube sea aditiva (como luz/niebla real) */
                             mix-blend-mode: screen;
                         }
                     `}</style>
                 </div>
 
-                <div className="absolute bottom-0 left-0 w-full h-[25vh] z-40 pointer-events-none select-none bg-gradient-to-t from-[#02040a] via-[#02040a]/40 to-transparent"></div>
+                {/* --- PROFESSIONAL ATMOSPHERIC SEAM --- */}
+                <div className="absolute bottom-0 left-0 w-full h-[20vh] z-50 pointer-events-none select-none">
+                    
+                    {/* Layer 1: Deep Base Color (Eased Multi-stop) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-[#02040a]/60 via-[#02040a]/20 to-transparent"></div>
+                    
+                    {/* Layer 2: Progressive Layered Blurs (Ultra-Softened) */}
+                    {/* Level 1: Broad & Subtle */}
+                    <div className="absolute bottom-0 w-full h-full backdrop-blur-[1px] [mask-image:linear-gradient(to_top,black,transparent_70%)] opacity-40"></div>
+                    
+                    {/* Level 2: Medium Seam */}
+                    <div className="absolute bottom-0 w-full h-[12vh] backdrop-blur-[4px] [mask-image:linear-gradient(to_top,transparent,black_10%,black_90%,transparent)] opacity-50"></div>
+                    
+                    {/* Level 3: Tight Precision Seam */}
+                    <div className="absolute bottom-0 w-full h-[6vh] translate-y-1/4 backdrop-blur-[10px] [mask-image:linear-gradient(to_top,transparent,black,transparent)]"></div>
+
+                    {/* Layer 3: Final Buffer Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040a] via-transparent to-transparent opacity-90"></div>
+                </div>
 
             </header>
         </div>
