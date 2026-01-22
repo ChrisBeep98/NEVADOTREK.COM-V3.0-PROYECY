@@ -225,7 +225,7 @@ export default function DesktopHero() {
 
                 <div 
                     ref={contentGroupRef} 
-                    className="relative z-20 flex flex-col justify-center items-center text-center px-4"
+                    className="relative z-[70] flex flex-col justify-center items-center text-center px-4"
                 >
                     <h2 className="text-5xl md:text-7xl lg:text-[7rem] font-black text-white leading-[0.9] tracking-tighter uppercase mix-blend-overlay drop-shadow-lg mb-2">
                         <div className="flex justify-center gap-[0.05em] flex-wrap overflow-hidden py-2">
