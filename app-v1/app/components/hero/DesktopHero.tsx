@@ -230,8 +230,8 @@ export default function DesktopHero() {
                             animation: cloud-travel-optimized linear infinite; 
                             will-change: transform;
                             backface-visibility: hidden;
-                            /* Cinematic Filter: Unified Atmosphere */
-                            filter: grayscale(1) contrast(0.85) brightness(2.2) drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+                            /* Cinematic Filter: Ultra-White Atmosphere */
+                            filter: grayscale(1) contrast(1.2) brightness(3.8);
                             mix-blend-mode: screen;
                         }
                     `}</style>
