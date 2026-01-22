@@ -51,6 +51,18 @@ export default function DesktopHero() {
         tl.from(".hero-tagline", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6");
         tl.from(".hero-btn", { y: 20, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6");
 
+        // 4. Cloud Reveal (Atmospheric Entrance)
+        tl.from(".animate-cloud", {
+            opacity: 0,
+            y: 40,
+            stagger: {
+                each: 0.05,
+                from: "random"
+            },
+            duration: 2,
+            ease: "power2.out"
+        }, "-=1.2");
+
         gsap.to(contentGroupRef.current, {
             y: -150,
             ease: "none",
