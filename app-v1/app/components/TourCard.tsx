@@ -67,6 +67,7 @@ export default function TourCard({ tour, index, className = '', lang, nextDate }
         <Link 
             href={`/tours/${tour.tourId}`}
             ref={cardRef}
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             className={`group relative rounded-xl overflow-hidden bg-slate-900 cursor-pointer block shadow-2xl shadow-black/40 will-change-transform max-h-[520px] md:max-h-none ${className}`}
         >
             {/* Imagen Original con Hover scale sutil */}
