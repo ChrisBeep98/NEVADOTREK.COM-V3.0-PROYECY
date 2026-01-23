@@ -1,16 +1,15 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
-const repoName = "NEVADOTREK.COM-V3.0-PROYECY";
-
 const nextConfig: NextConfig = {
   output: "export",
   images: {
-    unoptimized: true,
+    unoptimized: true, // Necesario para GitHub Pages estático
   },
-  // Solo aplicar basePath y assetPrefix en producción (GitHub Pages)
-  basePath: isProd ? `/${repoName}` : "",
-  assetPrefix: isProd ? `/${repoName}/` : "",
+  // Al usar un dominio personalizado (nevadotrek.com), 
+  // NO necesitamos basePath ni assetPrefix. La raíz es '/'.
+  basePath: "",
+  assetPrefix: "",
+  trailingSlash: true, // Recomendado para exportaciones estáticas para evitar problemas de rutas
 };
 
 export default nextConfig;

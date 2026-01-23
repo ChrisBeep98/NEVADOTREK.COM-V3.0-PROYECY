@@ -254,7 +254,10 @@ export default function DesktopHero() {
                             <ChevronDown className="w-3.5 h-3.5 text-white/30 group-hover:text-cyan-400 group-hover:translate-y-0.5 transition-all duration-500" />
                         </div>
                         
-                        <div className="corner-ui text-right hidden md:block invisible">
+                        <div className="corner-ui text-right invisible absolute bottom-3 right-3 md:static pointer-events-auto">
+                            <span className="text-[12px] font-mono font-bold text-white/30 tracking-widest uppercase hover:text-cyan-400/80 transition-colors cursor-help" title="Registro Nacional de Turismo">
+                                RNT: 05645453
+                            </span>
                         </div>
                     </div>
 
