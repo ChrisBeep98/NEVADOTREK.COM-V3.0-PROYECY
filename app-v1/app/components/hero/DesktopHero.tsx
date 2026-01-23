@@ -287,7 +287,7 @@ export default function DesktopHero() {
                     ref={contentGroupRef} 
                     className="relative z-[70] flex flex-col justify-center items-start md:items-center text-left md:text-center px-3 md:px-4 w-full"
                 >
-                    <h2 className="text-6xl md:text-7xl lg:text-[7rem] font-bold italic text-white leading-[0.9] tracking-tighter mix-blend-overlay drop-shadow-lg mb-4 md:mb-2 w-full">
+                    <h2 className="text-6xl md:text-7xl lg:text-[min(7.5rem,12vh)] font-bold italic text-white leading-[0.9] tracking-tighter mix-blend-overlay drop-shadow-lg mb-4 md:mb-10 w-full">
                         {/* Mobile: Stacked | Desktop: Inline/Flex */}
                         <div className="flex justify-start md:justify-center gap-[0.05em] flex-wrap overflow-hidden py-1 md:py-2">
                             {t.hero.message.title_line1.split("").map((char, i) => (
@@ -307,16 +307,11 @@ export default function DesktopHero() {
                         </div>
                     </h2>
 
-                    {/* Gradient Line - Hidden on Mobile or Adjusted */}
-                    <div className="hero-meta-line w-px h-12 md:h-16 bg-gradient-to-b from-cyan-400 to-transparent mb-6 md:mb-4 opacity-80 hidden md:block invisible"></div>
+                    {/* Horizontal Line for Mobile Only */}
                     <div className="hero-meta-line w-16 h-px bg-gradient-to-r from-cyan-400 to-transparent mb-6 opacity-80 md:hidden ml-1 invisible"></div>
 
 
-                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md mb-8 md:mb-6 whitespace-pre-line w-full md:w-auto invisible">
-                        {t.hero.message.tagline_prefix} <span className="italic font-semibold text-white/90">{t.hero.message.tagline_highlight}</span>
-                    </p>
-
-                    <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60] self-start md:self-center invisible">
+                    <div ref={buttonRef} className="hero-btn pointer-events-auto relative z-[60] self-start md:self-center mb-10 md:mb-14 invisible">
                         <Link href="/tours" className="btn-primary !w-auto !h-[56px] shadow-[0_30px_60px_rgba(0,0,0,0.2)] px-6 group flex items-center gap-4">
                             <span>{t.common.explore_tours}</span>
                             <div className="w-8 h-8 rounded-full bg-slate-950/5 flex items-center justify-center transition-transform group-hover:scale-110">
@@ -324,6 +319,10 @@ export default function DesktopHero() {
                             </div>
                         </Link>
                     </div>
+
+                    <p className="hero-tagline text-lg md:text-2xl text-slate-200 font-light max-w-2xl leading-relaxed drop-shadow-md whitespace-pre-line w-full md:w-auto invisible">
+                        {t.hero.message.tagline_prefix} <span className="italic font-semibold text-white/90">{t.hero.message.tagline_highlight}</span>
+                    </p>
                 </div>
 
                 <div className="absolute bottom-[-5%] md:bottom-[-15%] mb-[20px] left-0 w-full h-[50vh] md:h-[45vh] z-50 pointer-events-none select-none overflow-visible">
