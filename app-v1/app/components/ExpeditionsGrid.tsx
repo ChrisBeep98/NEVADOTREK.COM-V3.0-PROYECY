@@ -108,6 +108,7 @@ export default function ExpeditionsGrid({ initialTours }: ExpeditionsGridProps) 
                             index={index}
                             className={getGridClass(index)}
                             lang={lang}
+                            nextDate={(tour as any).nextDepartureDate} 
                         />
                     ))}
                 </div>

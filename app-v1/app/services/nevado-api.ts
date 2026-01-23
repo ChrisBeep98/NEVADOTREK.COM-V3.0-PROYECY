@@ -189,6 +189,15 @@ export async function getTourById(id: string): Promise<Tour | undefined> {
  * Fetches all available departures for a specific tour.
  */
 export async function getDeparturesByTourId(tourId: string): Promise<Departure[]> {
+    const allDepartures = await getAllActiveDepartures();
+    return allDepartures.filter(dep => dep.tourId === tourId);
+}
+
+/**
+ * Fetches ALL active future departures.
+ * Use this to map departures to tours in listings efficiently.
+ */
+export async function getAllActiveDepartures(): Promise<Departure[]> {
     try {
         const response = await fetchWithRetry(`${API_BASE_URL}/departures`, {
             next: { revalidate: 300 }
@@ -200,15 +209,14 @@ export async function getDeparturesByTourId(tourId: string): Promise<Departure[]
 
         const departures: Departure[] = await response.json();
         
-        // Filter by tourId, future dates, and open status
+        // Filter by future dates and open status
         const now = Math.floor(Date.now() / 1000);
         return departures.filter(dep => 
-            dep.tourId === tourId && 
             dep.date._seconds > now &&
             dep.status === 'open'
         ).sort((a, b) => a.date._seconds - b.date._seconds);
     } catch (error) {
-        console.error("Error fetching departures:", error);
+        console.error("Error fetching all departures:", error);
         return [];
     }
 }

@@ -18,9 +18,10 @@ interface TourCardProps {
     index: number;
     className?: string;
     lang: 'ES' | 'EN';
+    nextDate?: string; // New optional prop for upcoming departure
 }
 
-export default function TourCard({ tour, index, className = '', lang }: TourCardProps) {
+export default function TourCard({ tour, index, className = '', lang, nextDate }: TourCardProps) {
     const cardRef = useRef<HTMLAnchorElement>(null);
     const l = lang.toLowerCase() as 'es' | 'en';
 
@@ -48,20 +49,19 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
         const diff = (tour.difficulty || 'medium').toLowerCase();
         
         // Colores específicos para dificultades altas
-        if (diff.includes('hard')) return { accent: "text-orange-400", badge: "text-orange-500" };
-        if (diff.includes('extreme')) return { accent: "text-blue-400", badge: "text-blue-500" };
-        if (diff.includes('technical')) return { accent: "text-purple-400", badge: "text-purple-500" };
+        if (diff.includes('hard')) return { accent: "text-orange-400", badge: "text-orange-500", badgeBg: "bg-orange-500/10 border-orange-500/20" };
+        if (diff.includes('extreme')) return { accent: "text-blue-400", badge: "text-blue-500", badgeBg: "bg-blue-500/10 border-blue-500/20" };
+        if (diff.includes('technical')) return { accent: "text-purple-400", badge: "text-purple-500", badgeBg: "bg-purple-500/10 border-purple-500/20" };
 
         // Rotación para el resto (Medium/Easy) para garantizar variedad
-        // Patrón: Cyan -> Purple -> Orange -> Blue
         const rotation = index % 4;
-        if (rotation === 0) return { accent: "text-cyan-400", badge: "text-cyan-500" };
-        if (rotation === 1) return { accent: "text-purple-400", badge: "text-purple-500" };
-        if (rotation === 2) return { accent: "text-orange-400", badge: "text-orange-500" };
-        return { accent: "text-blue-400", badge: "text-blue-500" };
+        if (rotation === 0) return { accent: "text-cyan-400", badge: "text-cyan-500", badgeBg: "bg-cyan-500/10 border-cyan-500/20" };
+        if (rotation === 1) return { accent: "text-purple-400", badge: "text-purple-500", badgeBg: "bg-purple-500/10 border-purple-500/20" };
+        if (rotation === 2) return { accent: "text-orange-400", badge: "text-orange-500", badgeBg: "bg-orange-500/10 border-orange-500/20" };
+        return { accent: "text-blue-400", badge: "text-blue-500", badgeBg: "bg-blue-500/10 border-blue-500/20" };
     };
 
-    const { accent: accentColor, badge: badgeColor } = getThemeColors();
+    const { accent: accentColor, badge: badgeColor, badgeBg } = getThemeColors();
 
     return (
         <Link 
@@ -79,15 +79,24 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
             {/* Gradiente Original */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-70"></div>
             
-            {/* Badge Original (Top Right) */}
-            <div className="absolute top-6 right-6 z-20">
-                <span className="text-journal-data px-3 py-1.5 rounded-md bg-white/10 backdrop-blur border border-white/10 text-white uppercase">
+            {/* Badges (Top Right) */}
+            <div className="absolute top-4 right-4 z-20 flex gap-2">
+                {/* Next Date Chip (Liquid Glass) */}
+                {nextDate && (
+                    <span className="inline-flex items-center justify-center gap-1.5 h-8 px-4 rounded-[8px] bg-white/10 backdrop-blur-md border border-white/10 text-white shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                        <Calendar width={10} className="text-white/80" />
+                        <span className="text-[10px] font-medium tracking-wide uppercase leading-none">{nextDate}</span>
+                    </span>
+                )}
+                
+                {/* Difficulty Badge (Liquid Glass) */}
+                <span className="inline-flex items-center justify-center h-8 px-4 rounded-[8px] bg-white/10 backdrop-blur-md border border-white/10 text-white shadow-[0_4px_12px_rgba(0,0,0,0.08)] text-[10px] font-medium tracking-wide uppercase leading-none">
                     {tour.difficulty}
                 </span>
             </div>
 
             {/* Contenido Original (Bottom) */}
-            <div className="absolute bottom-0 left-0 p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <div className="absolute bottom-0 left-0 p-6 px-4 md:p-8 z-20 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                 {/* Sub-label formato original */}
                 <span className={`text-sub-label ${accentColor} mb-3 block`}>
                     0{index + 1} {'//'} {tour.name[l].split(' ').slice(0, 2).join(' ').toUpperCase()}
@@ -100,7 +109,7 @@ export default function TourCard({ tour, index, className = '', lang }: TourCard
 
                 {/* Acordeón Original (h-0 -> h-auto) */}
                 <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
-                    <p className="text-body-std text-slate-400 mb-4 pt-4 border-t border-white/10">
+                    <p className="text-body-std text-white/90 mb-4 pt-4 border-t border-white/10">
                         {tour.shortDescription[l]}
                     </p>
                     

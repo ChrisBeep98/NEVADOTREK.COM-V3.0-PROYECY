@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Tour } from '../types/api';
-import { getTours } from '../services/nevado-api';
+import { getTours, getAllActiveDepartures } from '../services/nevado-api';
 
 interface ToursContextType {
     tours: Tour[];
@@ -17,12 +17,28 @@ export function ToursProvider({ children, initialTours = [] }: { children: React
     const [loading, setLoading] = useState(initialTours.length === 0);
 
     const refreshTours = async () => {
-        // Don't set loading to true if we already have data (silent update)
         if (tours.length === 0) setLoading(true);
         try {
-            // Force refresh from API to bypass cache
-            const data = await getTours(true);
-            setTours(data);
+            // Fetch both in parallel
+            const [toursData, departuresData] = await Promise.all([
+                getTours(true),
+                getAllActiveDepartures()
+            ]);
+
+            // Enrich tours with real departure dates
+            const enrichedTours = toursData.map(tour => {
+                const nextDep = departuresData.find(d => d.tourId === tour.tourId);
+                let formattedDate = undefined;
+
+                if (nextDep) {
+                    const date = new Date(nextDep.date._seconds * 1000);
+                    formattedDate = date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }).toUpperCase();
+                }
+
+                return { ...tour, nextDepartureDate: formattedDate };
+            });
+
+            setTours(enrichedTours);
         } catch (error) {
             console.error("Error refreshing tours:", error);
         } finally {

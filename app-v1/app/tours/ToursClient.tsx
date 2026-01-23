@@ -332,6 +332,7 @@ export default function ToursClient() {
                                             index={index} 
                                             lang={lang} 
                                             className="h-[700px]"
+                                            nextDate={(tour as any).nextDepartureDate}
                                         />
                                     </div>
                                 ))}
